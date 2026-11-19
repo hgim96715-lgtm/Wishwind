@@ -1,0 +1,634 @@
+{
+ "version": 1,
+ "cases": [
+  {
+   "slug": "gayang-station-missing",
+   "content": {
+    "title": "가양역 20대 여성 실종 사건",
+    "summary": "2022년 6월 서울 강서구 가양역 근처에서 20대 여성이 연락이 끊긴 뒤 지금까지 찾지 못한 사건",
+    "overview": "2022년 6월 27일 밤 서울 강서구 가양역 근처에서 20대 여성 A씨의 연락이 끊겼습니다. 마지막으로 확인된 곳은 가양대교 쪽이었고, 그날 A씨의 집에는 구급차가 출동하기도 했습니다. 경찰은 A씨가 쓴 것으로 보이는 메모를 확인했고 범죄 정황은 없다고 밝혔지만, A씨는 아직 발견되지 않았습니다. 가족이 SNS로 제보를 부탁하자 사건이 크게 알려졌고, 그 과정에서 가족이 악성 문자를 받는 일도 있었습니다. 같은 무렵 가양역 근처에서 실종 사건이 잇따르면서 성인 실종 수사 체계에 대한 문제 제기도 나왔습니다.",
+    "victimCountNote": "1명 실종",
+    "country": "KR",
+    "category": "MISSING",
+    "status": "UNSOLVED",
+    "location": "서울특별시 강서구 가양역 인근",
+    "occurredAt": "2022-06-27",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "2022-06-27",
+      "occurredAtPrecision": "DAY",
+      "title": "가양역 근처에서 연락 끊김",
+      "description": "마지막 위치는 가양대교 쪽으로 확인됐습니다."
+     },
+     {
+      "occurredAt": "2022-06-27",
+      "occurredAtPrecision": "DAY",
+      "title": "집에 구급차 출동",
+      "description": "A씨가 신고했다는 연락을 받고 구급대가 집으로 출동했습니다."
+     },
+     {
+      "occurredAt": "2022-07-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "가족의 공개 제보 요청",
+      "description": "가족이 SNS로 제보를 부탁하면서 사건이 널리 알려졌습니다."
+     },
+     {
+      "occurredAt": "2022-07-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "본인 것으로 보이는 메모 확인",
+      "description": "경찰은 범죄 정황은 아직 없다고 밝혔습니다."
+     },
+     {
+      "occurredAt": "2022-07-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "가족에게 악성 문자",
+      "description": "가족을 범인으로 몰아가는 악성 문자가 이어졌습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "20대 여성 A씨",
+      "gender": "FEMALE",
+      "status": "MISSING"
+     }
+    ],
+    "suspects": [],
+    "questions": [
+     {
+      "question": "범죄 정황이 없는 성인 실종에도 초기에 충분한 수색이 이뤄지려면 어떤 제도가 필요할까요?"
+     },
+     {
+      "question": "실종자 가족이 공개 제보를 부탁할 때 악성 댓글과 문자로부터 어떻게 보호할 수 있을까요?"
+     },
+     {
+      "question": "실종 보도가 추측과 사생활 노출로 번지지 않으려면 언론은 어떤 원칙을 지켜야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://newstomato.com/ReadNews.aspx?no=1132711",
+     "title": "\"실종 당일 자택에 구급차 오더니\" 가양역 인근서 20대 여성 실종",
+     "publisher": "뉴스토마토",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2022-06-30"
+    },
+    {
+     "url": "https://newstomato.com/ReadNews.aspx?no=1133259",
+     "title": "가양역 실종 여성 유서 발견...마지막 목격, 가양대교",
+     "publisher": "뉴스토마토",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://newstomato.com/ReadNews.aspx?no=1133694",
+     "title": "\"언니가 범인이죠?\" 가양역 실종 피해자 언니가 받은 악성문자",
+     "publisher": "뉴스토마토",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://journalist.or.kr/news/article.html?no=51865",
+     "title": "'알 권리'인가 '뉴스거리'인가… 원칙 없이 정보 쏟아내는 실종 보도",
+     "publisher": "기자협회보",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "jeonbuk-vet-student-missing",
+   "content": {
+    "title": "전북대 수의대생 이윤희 실종 사건",
+    "summary": "2006년 6월 전주에서 종강 모임 뒤 원룸으로 돌아간 전북대 수의대생 이윤희 씨가 사라져 지금까지 찾지 못한 사건",
+    "overview": "2006년 6월 5일 밤 전북대 수의학과 학생 이윤희 씨(당시 29세)는 종강 모임에 참석한 뒤 전주 덕진동 원룸으로 돌아갔습니다. 다음 날 새벽 이 씨의 컴퓨터에서 '성추행', '112' 같은 검색 기록이 남았고, 그 뒤로 이 씨는 연락이 끊겼습니다. 가족이 며칠 뒤 원룸을 찾았을 때 이 씨는 없었고, 컴퓨터 기록이 지워지거나 바뀐 흔적이 있다는 의혹도 나왔습니다. 아버지는 20년 가까이 전단과 등신대를 들고 거리에서 딸을 찾고 있습니다.",
+    "victimCountNote": "1명 실종",
+    "country": "KR",
+    "category": "MISSING",
+    "status": "UNSOLVED",
+    "location": "전북특별자치도 전주시 덕진구",
+    "occurredAt": "2006-06-06",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "2006-06-05",
+      "occurredAtPrecision": "DAY",
+      "title": "종강 모임 뒤 원룸으로 귀가"
+     },
+     {
+      "occurredAt": "2006-06-06",
+      "occurredAtPrecision": "DAY",
+      "title": "새벽 '성추행'·'112' 검색 기록",
+      "description": "이 기록 뒤로 이 씨의 행적이 확인되지 않았습니다."
+     },
+     {
+      "occurredAt": "2006-06-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "가족의 실종 신고"
+     },
+     {
+      "occurredAt": "2024-04-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "아버지의 거리 호소 계속",
+      "description": "18년이 지나도록 전단을 들고 딸을 찾고 있다고 알려졌습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "이윤희",
+      "age": 29,
+      "gender": "FEMALE",
+      "status": "MISSING"
+     }
+    ],
+    "suspects": [],
+    "questions": [
+     {
+      "question": "새벽에 '112'를 검색했지만 신고까지 이어지지 않았다면 그 짧은 사이 무슨 일이 있었을까요?"
+     },
+     {
+      "question": "실종 직후 컴퓨터·휴대전화 같은 디지털 기록을 보존하려면 초동 수사에서 무엇을 먼저 해야 할까요?"
+     },
+     {
+      "question": "혼자 사는 사람이 위험을 느낄 때 조용히 도움을 청할 수 있는 방법에는 무엇이 있을까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.segye.com/newsView/20240416517188",
+     "title": "전북대 수의대생 이윤희 씨 실종 18년, 가족의 호소",
+     "publisher": "세계일보",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2024-04-16"
+    },
+    {
+     "url": "https://v.daum.net/v/20240417065403876",
+     "title": "\"실종 직전 '성추행' 검색한 딸, 18년째 못 돌아와\"..노부모의 하소연",
+     "publisher": "다음뉴스",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2024-04-17"
+    },
+    {
+     "url": "https://m.seoul.co.kr/news/2025/11/09/20251109500045",
+     "title": "'성추행, 112'… 사라지기 직전 3분간의 검색, 그날 밤 원룸에선 무슨 일이",
+     "publisher": "서울신문",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2025-11-09"
+    },
+    {
+     "url": "https://www.khan.co.kr/article/20100316143852A/",
+     "title": "전북대 수의대생 실종 사건",
+     "publisher": "경향신문",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2010-03-16"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "조작된 컴퓨터 기록, 범인의 흔적일까? 전북대 수의대생 이윤희 씨 실종사건 | 그알 캐비닛",
+     "platform": "유튜브",
+     "creator": "그것이 알고싶다",
+     "url": "https://www.youtube.com/watch?v=F981InycYZc",
+     "note": "SBS 「그것이 알고싶다」 공식 채널 영상입니다."
+    },
+    {
+     "kind": "YOUTUBE",
+     "title": "컴퓨터 로그기록의 비밀, 이윤희씨 실종 미스터리 | 그알 미씽",
+     "platform": "유튜브",
+     "creator": "그것이 알고싶다",
+     "url": "https://www.youtube.com/watch?v=5TwcgQmvdKg",
+     "note": "SBS 「그것이 알고싶다」 공식 채널 영상입니다."
+    }
+   ]
+  },
+  {
+   "slug": "song-hye-hee-missing",
+   "content": {
+    "title": "송혜희 실종 사건",
+    "summary": "1999년 2월 평택에서 막차 버스에서 내린 고3 송혜희 양이 사라졌고, 25년 동안 딸을 찾던 아버지가 2024년 세상을 떠난 사건",
+    "overview": "1999년 2월 13일 밤 경기도 평택 송탄에서 고등학교 3학년 송혜희 양(당시 17세)이 집 근처 정류장에서 막차 버스를 내린 뒤 사라졌습니다. 아버지 송길용 씨는 생업을 접고 전국에 '송혜희 좀 찾아주세요' 현수막과 전단을 붙이며 딸을 찾았고, 그 현수막은 많은 사람에게 알려졌습니다. 송길용 씨는 25년 동안 딸을 찾다가 2024년 8월 교통사고로 숨졌습니다. 송혜희 양은 아직 찾지 못했습니다.",
+    "victimCountNote": "1명 실종",
+    "country": "KR",
+    "category": "MISSING",
+    "status": "UNSOLVED",
+    "location": "경기도 평택시 송탄",
+    "occurredAt": "1999-02-13",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "1999-02-13",
+      "occurredAtPrecision": "DAY",
+      "title": "막차 버스에서 내린 뒤 실종",
+      "description": "집 근처 정류장에서 내린 것이 마지막 모습이었습니다."
+     },
+     {
+      "occurredAt": "1999-02-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "아버지의 전국 현수막·전단 시작",
+      "description": "생업을 접고 전국을 다니며 딸을 찾았습니다."
+     },
+     {
+      "occurredAt": "2024-08-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "아버지 송길용 씨 별세",
+      "description": "25년 동안 딸을 찾다가 교통사고로 숨졌습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "송혜희",
+      "age": 17,
+      "gender": "FEMALE",
+      "status": "MISSING"
+     }
+    ],
+    "suspects": [],
+    "questions": [
+     {
+      "question": "늦은 밤 정류장에서 집까지 걸어가는 짧은 길을 더 안전하게 만들려면 무엇이 필요할까요?"
+     },
+     {
+      "question": "오래된 실종 사건의 가족이 혼자 짐을 지지 않도록 국가와 지역 사회는 어떤 도움을 줄 수 있을까요?"
+     },
+     {
+      "question": "장기 실종자를 찾는 데 DNA 등록과 나이 변환 사진은 어떻게 쓰일 수 있을까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.segye.com/newsView/20240902504204",
+     "title": "송혜희 아버지 송길용 씨 별세",
+     "publisher": "세계일보",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2024-09-02"
+    },
+    {
+     "url": "https://www.twig24.com/news/world/2024/08/28/20240828500078",
+     "title": "\"송혜희 좀 찾아주세요!\" 25년간 딸 찾아다닌 71세父, 교통사고로 딸 못 만나고 별세",
+     "publisher": "서울신문",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2024-08-28"
+    },
+    {
+     "url": "https://www.koreatimes.co.kr/www/nation/2024/08/281_381419.html",
+     "title": "Father who searched 25 years for missing daughter dies",
+     "publisher": "The Korea Times",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2024-08-28"
+    },
+    {
+     "url": "https://www.wikitree.co.kr/articles/1144338",
+     "title": "[다시 만날 내일] \"어린아이만의 일이 아니다…\" 막차 귀갓길에 사라진 고3",
+     "publisher": "위키트리",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "[꼬꼬무 223회 요약#1] 같은 버스, 같은 버스정류장에서 사라진 두 여자...",
+     "platform": "유튜브",
+     "creator": "달리 [SBS DALI]",
+     "url": "https://www.youtube.com/watch?v=ftkFqt1Y41I",
+     "note": "SBS 「꼬리에 꼬리를 무는 그날 이야기」 공식 채널 요약 영상입니다."
+    },
+    {
+     "kind": "YOUTUBE",
+     "title": "\"실종된 송혜희 좀 찾아주세요\" 잊을 수도 포기할 수도 없다 | 실종 - 돌아오지 않는 사람들",
+     "platform": "유튜브",
+     "creator": "KBS 다큐",
+     "url": "https://www.youtube.com/watch?v=nNXpOuwCSoM",
+     "note": "KBS 다큐 공식 채널 영상입니다 (2015년 방송)."
+    }
+   ]
+  },
+  {
+   "slug": "nakdong-riverside-murder",
+   "content": {
+    "title": "낙동강변 살인 사건",
+    "summary": "1990년 부산 낙동강변에서 여성이 살해된 뒤, 고문으로 자백한 두 사람이 21년을 복역하고 2021년 재심에서 무죄를 받은 사건. 진범은 밝혀지지 않음",
+    "overview": "1990년 1월 4일 부산 사상구 엄궁동 낙동강변에서 차에 타고 있던 여성이 괴한에게 살해됐습니다. 1년여 뒤 경찰은 다른 일로 붙잡힌 두 남성을 범인으로 지목했고, 두 사람은 물고문 등 가혹행위 끝에 범행을 자백했습니다. 법원은 자백을 근거로 무기징역을 확정했고, 두 사람은 21년을 복역한 뒤 2013년 풀려났습니다. 2021년 2월 4일 부산고법은 재심에서 '고문으로 얻은 자백은 증거가 될 수 없다'며 두 사람에게 무죄를 선고했고, 2022년에는 국가가 72억 원을 배상하라는 1심 판결이 나왔습니다. 진짜 범인은 아직 밝혀지지 않았습니다.",
+    "victimCountNote": "1명 사망",
+    "country": "KR",
+    "category": "MURDER",
+    "status": "UNSOLVED",
+    "location": "부산광역시 사상구 엄궁동 낙동강변",
+    "occurredAt": "1990-01-04",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "1990-01-04",
+      "occurredAtPrecision": "DAY",
+      "title": "낙동강변에서 여성 피살"
+     },
+     {
+      "occurredAt": "1991-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "두 남성 체포와 고문 자백",
+      "description": "경찰 조사 과정에서 물고문 등 가혹행위가 있었다는 사실이 재심에서 인정됐습니다."
+     },
+     {
+      "occurredAt": "1993-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "무기징역 확정"
+     },
+     {
+      "occurredAt": "2013-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "21년 복역 뒤 출소"
+     },
+     {
+      "occurredAt": "2021-02-04",
+      "occurredAtPrecision": "DAY",
+      "title": "재심 무죄",
+      "description": "부산고법이 고문에 의한 자백을 증거에서 배제하고 무죄를 선고했습니다."
+     },
+     {
+      "occurredAt": "2022-09-28",
+      "occurredAtPrecision": "DAY",
+      "title": "국가배상 1심 72억 원",
+      "description": "법원이 국가의 책임을 인정했습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "30대 여성",
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "alias": "누명을 쓴 2명",
+      "status": "ACQUITTED",
+      "charges": "강도살인 (재심에서 무죄)",
+      "sentences": [
+       {
+        "courtLevel": "SUPREME",
+        "courtName": "대법원",
+        "type": "LIFE",
+        "penalty": "무기징역 (2021년 재심에서 무죄)",
+        "isFinal": false
+       },
+       {
+        "courtLevel": "OTHER",
+        "courtName": "부산고등법원 (재심)",
+        "type": "ACQUITTAL",
+        "penalty": "무죄",
+        "isFinal": true,
+        "decidedAt": "2021-02-04"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "자백만으로 유죄가 되지 않도록 수사와 재판에서 어떤 장치가 필요할까요?"
+     },
+     {
+      "question": "억울하게 옥살이를 한 사람이 다시 일상으로 돌아오려면 배상 말고 어떤 지원이 필요할까요?"
+     },
+     {
+      "question": "30년이 넘게 지난 지금, 진짜 범인은 그날 강변에서 어떻게 사라졌을까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.khan.co.kr/article/202102041050001",
+     "title": "'낙동강변 살인사건' 재심 무죄",
+     "publisher": "경향신문",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2021-02-04"
+    },
+    {
+     "url": "https://mobile.newsis.com/view/NISX20221013_0002047429",
+     "title": "1심에서 총 72억원 배상 판결",
+     "publisher": "뉴시스",
+     "type": "NEWS_AGENCY",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2022-10-13"
+    },
+    {
+     "url": "https://www.journalist.or.kr/news/article.html?no=49232",
+     "title": "\"사형 구형 살인사건, 유일한 증거는 자백 뿐… 뭔가 이상했죠\"",
+     "publisher": "기자협회보",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://v.daum.net/v/20220928181154882",
+     "title": "'낙동강변 살인사건' 누명..법원 \"피해자들에 72억원 배상\"",
+     "publisher": "다음뉴스",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2022-09-28"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "[꼬꼬무 80회 요약] 형사들이 찾아온 날, 그날부터 우린 살인범이었다... 명예를 되찾기 위한 두 남자의 '재심' 투쟁",
+     "platform": "유튜브",
+     "creator": "달리 [SBS DALI]",
+     "url": "https://www.youtube.com/watch?v=tWUDJWbdRhk",
+     "note": "SBS 「꼬리에 꼬리를 무는 그날 이야기」 공식 채널 요약 영상입니다."
+    },
+    {
+     "kind": "YOUTUBE",
+     "title": "철저히 계획된 '살인자 만들기', 낙동강변 살인사건의 진범은 누구인가｜짧은 그알",
+     "platform": "유튜브",
+     "creator": "그것이 알고싶다",
+     "url": "https://www.youtube.com/watch?v=FPGti7jGhkY",
+     "note": "SBS 「그것이 알고싶다」 공식 채널 영상입니다."
+    }
+   ]
+  },
+  {
+   "slug": "yakchon-ogeori-taxi-murder",
+   "content": {
+    "title": "익산 약촌오거리 택시기사 살인 사건",
+    "summary": "2000년 익산에서 택시기사가 살해된 뒤 15세 소년이 누명을 쓰고 10년을 복역했고, 2016년 재심 무죄 뒤 진범에게 징역 15년이 확정된 사건",
+    "overview": "2000년 8월 10일 새벽 전북 익산시 약촌오거리에서 40대 택시기사가 흉기에 찔려 숨졌습니다. 경찰은 현장 근처를 지나던 15세 소년을 범인으로 몰았고, 소년은 여관에 붙잡혀 폭행을 당한 끝에 자백했습니다. 소년은 징역 10년을 복역했습니다. 2003년 진범으로 의심되는 사람의 자백이 나왔지만 기소되지 않았습니다. 2016년 11월 17일 광주고법은 재심에서 소년이었던 그에게 무죄를 선고했고, 이후 진범이 붙잡혀 2018년 징역 15년이 확정됐습니다. 2021년 법원은 국가가 16억 원을 배상하라고 판결했습니다. 이 사건은 영화 「재심」(2017)의 바탕이 됐습니다.",
+    "victimCountNote": "1명 사망",
+    "country": "KR",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "전북특별자치도 익산시 약촌오거리",
+    "occurredAt": "2000-08-10",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "2016-11-17",
+    "timeline": [
+     {
+      "occurredAt": "2000-08-10",
+      "occurredAtPrecision": "DAY",
+      "title": "택시기사 피살"
+     },
+     {
+      "occurredAt": "2000-08-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "15세 소년 강압 자백",
+      "description": "여관에 붙잡혀 폭행을 당하며 자백한 사실이 재심에서 드러났습니다."
+     },
+     {
+      "occurredAt": "2003-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "진범 의심 인물 자백했지만 불기소"
+     },
+     {
+      "occurredAt": "2010-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "소년이었던 그가 10년 복역 뒤 출소"
+     },
+     {
+      "occurredAt": "2016-11-17",
+      "occurredAtPrecision": "DAY",
+      "title": "재심 무죄",
+      "description": "광주고법이 무죄를 선고했습니다."
+     },
+     {
+      "occurredAt": "2018-03-27",
+      "occurredAtPrecision": "DAY",
+      "title": "진범 1심 징역 15년"
+     },
+     {
+      "occurredAt": "2021-01-13",
+      "occurredAtPrecision": "DAY",
+      "title": "국가배상 16억 원 판결"
+     }
+    ],
+    "victims": [
+     {
+      "alias": "40대 택시기사",
+      "gender": "MALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "alias": "누명을 쓴 당시 15세 소년",
+      "status": "ACQUITTED",
+      "charges": "강도살인 (재심에서 무죄)",
+      "sentences": [
+       {
+        "courtLevel": "APPEAL",
+        "courtName": "광주고등법원",
+        "type": "IMPRISONMENT",
+        "penalty": "징역 10년 (2016년 재심에서 무죄)",
+        "isFinal": false
+       },
+       {
+        "courtLevel": "OTHER",
+        "courtName": "광주고등법원 (재심)",
+        "type": "ACQUITTAL",
+        "penalty": "무죄",
+        "isFinal": true,
+        "decidedAt": "2016-11-17"
+       }
+      ]
+     },
+     {
+      "alias": "진범 김 모 씨",
+      "status": "CONVICTED",
+      "charges": "강도살인",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "courtName": "전주지방법원 군산지원",
+        "type": "IMPRISONMENT",
+        "penalty": "징역 15년",
+        "isFinal": false,
+        "decidedAt": "2018-03-27"
+       },
+       {
+        "courtLevel": "SUPREME",
+        "courtName": "대법원",
+        "type": "IMPRISONMENT",
+        "penalty": "징역 15년 확정",
+        "isFinal": true
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "미성년자를 조사할 때 보호자와 변호인이 반드시 함께하도록 하려면 무엇이 바뀌어야 할까요?"
+     },
+     {
+      "question": "진범의 자백이 나온 2003년부터 재심 무죄까지 13년이 걸렸습니다. 잘못된 판결을 더 빨리 바로잡으려면 무엇이 달라져야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://m.seoul.co.kr/news/2018/03/27/20180327500094",
+     "title": "익산 약촌오거리사건 진범 18년 만에 단죄",
+     "publisher": "서울신문",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2018-03-27"
+    },
+    {
+     "url": "https://mobile.newsis.com/view/NISX20180327_0000263566",
+     "title": "약촌오거리 살인사건 진범 징역 15년",
+     "publisher": "뉴시스",
+     "type": "NEWS_AGENCY",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2018-03-27"
+    },
+    {
+     "url": "https://news.tf.co.kr/read/life/1837140.htm",
+     "title": "'약촌 오거리 살인누명' 16억 배상 판결…\"국가,승복해야\"(종합)",
+     "publisher": "더팩트",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2021-01-13"
+    },
+    {
+     "url": "https://www.lawtimes.co.kr/news/141552",
+     "title": "[판결] 사건발생 18년 만에… '약촌오거리 살인' 진범 징역 15년 확정",
+     "publisher": "법률신문",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.segye.com/newsView/20251028513550",
+     "title": "조서 허위 작성·자백 강요 등 검찰수사 적법성 문제점 지적",
+     "publisher": "세계일보",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "경찰에게 끌려간 곳은 여관이었다.. 영화 '재심' 실화! 약촌오거리 살인사건 | 그알 캐비닛",
+     "platform": "유튜브",
+     "creator": "그것이 알고싶다",
+     "url": "https://www.youtube.com/watch?v=fDhs6CFGXxU",
+     "note": "SBS 「그것이 알고싶다」 공식 채널 영상입니다."
+    }
+   ]
+  }
+ ]
+}

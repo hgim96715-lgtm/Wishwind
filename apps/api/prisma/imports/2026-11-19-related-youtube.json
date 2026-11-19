@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "cases": [
+    { "slug": "daegu-frog-boys", "related": [
+      { "kind": "YOUTUBE", "title": "[꼬꼬무 110회 요약] 온 국민이 함께 기다린 아이들, 끝나지 않은 그날 이야기", "platform": "유튜브", "creator": "SBS 교양 공식 채널 (달리)", "url": "https://www.youtube.com/watch?v=jjwUDg_-r6A", "note": "SBS 「꼬리에 꼬리를 무는 그날 이야기」 요약본입니다." },
+      { "kind": "YOUTUBE", "title": "끝나지 않은 이야기 '나는 개구리 소년의 아버지'입니다", "platform": "유튜브", "creator": "KBS 교양", "url": "https://www.youtube.com/watch?v=bO3-NvTL1bk", "releaseYear": 2018, "note": "남겨진 가족의 이야기를 담은 KBS 방송입니다." }
+    ]},
+    { "slug": "hwaseong-serial-murders", "related": [
+      { "kind": "YOUTUBE", "title": "이춘재의 시그니처 분석! 화성연쇄살인사건 1부", "platform": "유튜브", "creator": "그것이 알고싶다 (SBS 공식)", "url": "https://www.youtube.com/watch?v=QkJjBcLNdfA" },
+      { "kind": "YOUTUBE", "title": "이춘재 여죄 추적! 화성연쇄살인사건 2부", "platform": "유튜브", "creator": "그것이 알고싶다 (SBS 공식)", "url": "https://www.youtube.com/watch?v=IlT3w6q_MAo" },
+      { "kind": "YOUTUBE", "title": "34년만에 마주한 범인, 연쇄살인범 '이춘재'", "platform": "유튜브", "creator": "그것이 알고싶다 (SBS 공식)", "url": "https://www.youtube.com/watch?v=hONphATdzTI" }
+    ]},
+    { "slug": "lee-hyeongho-kidnapping", "related": [
+      { "kind": "YOUTUBE", "title": "[꼬꼬무 177회 요약] 치밀한 범죄자의 침착한 목소리 이형호 유괴 사건", "platform": "유튜브", "creator": "SBS 교양 공식 채널 (달리)", "url": "https://www.youtube.com/watch?v=Jq7qMes4hVc", "note": "SBS 「꼬리에 꼬리를 무는 그날 이야기」 요약본입니다." }
+    ]},
+    { "slug": "busan-seomyeon-assault", "related": [
+      { "kind": "YOUTUBE", "title": "부산 돌려차기 사건의 진실", "platform": "유튜브", "creator": "그것이 알고싶다 (SBS 공식)", "url": "https://www.youtube.com/watch?v=1Ew1BI-qh6A" }
+    ]},
+    { "slug": "yangcheon-adopted-child-abuse", "related": [
+      { "kind": "YOUTUBE", "title": "'정인이 사건'으로 드러난 입양 절차 문제...입양, 국가는 없었다 (시사기획 창 329회)", "platform": "유튜브", "creator": "KBS시사", "url": "https://www.youtube.com/watch?v=WyfOfH1mOqM", "releaseYear": 2021, "note": "입양·아동학대 대응 제도의 문제를 짚은 KBS 시사 프로그램 전체 영상입니다." }
+    ]},
+    { "slug": "itaewon-burger-king-murder", "related": [
+      { "kind": "YOUTUBE", "title": "[꼬꼬무2] 범인 잡는데 20년, 이태원 살인사건 두 용의자의 거짓말", "platform": "유튜브", "creator": "SBS", "url": "https://www.youtube.com/watch?v=qmNpLuU3BlU", "note": "SBS 「꼬리에 꼬리를 무는 그날 이야기」 요약본입니다." }
+    ]},
+    { "slug": "yoo-young-chul-serial-murders", "related": [
+      { "kind": "YOUTUBE", "title": "\"신이 나를 버렸다\" 범죄의 이유 자백한 유영철", "platform": "유튜브", "creator": "SBS STORY", "url": "https://www.youtube.com/watch?v=XCM_1T88hNY" }
+    ]},
+    { "slug": "nth-room-digital-sex-crimes", "related": [
+      { "kind": "YOUTUBE", "title": "N번방 '박사' 조주빈이 SBS PD에게 직접 한 협박은? (그알저알 EP.49)", "platform": "유튜브", "creator": "그것이 알고싶다 (SBS 공식)", "url": "https://www.youtube.com/watch?v=UwBHUzNW9_s", "note": "취재한 PD들이 뒷이야기를 전하는 영상입니다." }
+    ]},
+    { "slug": "db-cooper-hijacking", "related": [
+      { "kind": "YOUTUBE", "title": "The Skyjacker That Got Away: D.B. Cooper (Full Episode)", "platform": "유튜브", "creator": "National Geographic", "url": "https://www.youtube.com/watch?v=nKu_3kp_EIY", "language": "en", "note": "내셔널지오그래픽 다큐멘터리 전체 영상입니다 (영어)." },
+      { "kind": "YOUTUBE", "title": "FBI closes unsolved D. B. Cooper hijacking case", "platform": "유튜브", "creator": "CBS Mornings", "url": "https://www.youtube.com/watch?v=5_Z-SzCUdM4", "language": "en", "releaseYear": 2016, "note": "FBI가 수사 종결을 발표했을 때의 미국 방송 보도입니다 (영어)." }
+    ]}
+  ]
+}

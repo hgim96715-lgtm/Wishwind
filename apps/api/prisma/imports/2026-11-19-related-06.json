@@ -1,0 +1,245 @@
+{
+ "version": 1,
+ "cases": [
+  {
+   "slug": "jijonpa",
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "[꼬꼬무 5회 요약] 살인공장 지존파, 그들은 누구?",
+     "platform": "유튜브",
+     "creator": "SBS 교양 공식 채널 (달리)",
+     "url": "https://www.youtube.com/watch?v=DGt5LkiBwi8",
+     "note": "SBS 「꼬리에 꼬리를 무는 그날 이야기」 요약본입니다."
+    },
+    {
+     "kind": "YOUTUBE",
+     "title": "[꼬꼬무] 요약 '악마들의 살인공장' 지존파",
+     "platform": "유튜브",
+     "creator": "SBS NOW",
+     "url": "https://www.youtube.com/watch?v=uSZQpqcvy2Q",
+     "note": "SBS 「꼬리에 꼬리를 무는 그날 이야기」 요약본입니다."
+    }
+   ]
+  },
+  {
+   "slug": "daegu-subway-fire",
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "[꼬꼬무 27회 요약] 대구지하철 화재 참사는 예견된 것이었다",
+     "platform": "유튜브",
+     "creator": "SBS 교양 공식 채널 (달리)",
+     "url": "https://www.youtube.com/watch?v=0zD9L13J2p8",
+     "note": "SBS 「꼬리에 꼬리를 무는 그날 이야기」 요약본입니다."
+    },
+    {
+     "kind": "YOUTUBE",
+     "title": "예견된 참사.. 그날 승객들이 탈출할 수 없었던 이유는?",
+     "platform": "유튜브",
+     "creator": "SBS 그것이 알고싶다 공식 채널",
+     "url": "https://www.youtube.com/watch?v=2Z03cL-r-Z0",
+     "note": "SBS 「그것이 알고싶다」 영상입니다."
+    }
+   ]
+  },
+  {
+   "slug": "jo-du-sun",
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "그가 곧 출소한다, 아동 성폭행범 조두순",
+     "platform": "유튜브",
+     "creator": "SBS 그것이 알고싶다 공식 채널",
+     "url": "https://www.youtube.com/watch?v=dz9dJF_GCtQ",
+     "note": "SBS 「그것이 알고싶다」 영상입니다."
+    }
+   ]
+  },
+  {
+   "slug": "jeong-nam-gyu",
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "[꼬꼬무2 6회 요약] 쾌락형 연쇄살인범 정남규",
+     "platform": "유튜브",
+     "creator": "SBS 교양 공식 채널 (달리)",
+     "url": "https://www.youtube.com/watch?v=8STKggh6328",
+     "note": "SBS 「꼬리에 꼬리를 무는 그날 이야기」 요약본입니다."
+    },
+    {
+     "kind": "YOUTUBE",
+     "title": "살인중독 연쇄살인마 정남규",
+     "platform": "유튜브",
+     "creator": "SBS 그것이 알고싶다 공식 채널",
+     "url": "https://www.youtube.com/watch?v=MkZdMOTI-fU",
+     "note": "SBS 「그것이 알고싶다」 영상입니다."
+    }
+   ]
+  },
+  {
+   "slug": "busan-schoolgirl-kim-gil-tae",
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "[꼬꼬무 195회 요약] 김길태를 무너트린 경찰 측 최후의 수단은?",
+     "platform": "유튜브",
+     "creator": "SBS 교양 공식 채널 (달리)",
+     "url": "https://www.youtube.com/watch?v=ObtAFpR4NAE",
+     "note": "SBS 「꼬리에 꼬리를 무는 그날 이야기」 요약본입니다."
+    },
+    {
+     "kind": "YOUTUBE",
+     "title": "연쇄 성폭행이 부른 살인! 연쇄 성범죄자 김길태",
+     "platform": "유튜브",
+     "creator": "SBS 그것이 알고싶다 공식 채널",
+     "url": "https://www.youtube.com/watch?v=TTJFr-bqDyk",
+     "note": "SBS 「그것이 알고싶다」 영상입니다."
+    }
+   ]
+  },
+  {
+   "slug": "gangnam-station-toilet-murder",
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "죽어도 바뀌지 않은 세상, 강남역 살인사건 그후 4년",
+     "platform": "유튜브",
+     "creator": "SBS 그것이 알고싶다 공식 채널",
+     "url": "https://www.youtube.com/watch?v=gRuNl67xakE",
+     "note": "SBS 「그것이 알고싶다」 영상입니다."
+    }
+   ]
+  },
+  {
+   "slug": "jeju-ex-husband-murder",
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "고유정의 살인, 과연 전 남편이 첫 희생자였을까?",
+     "platform": "유튜브",
+     "creator": "SBS 그것이 알고싶다 공식 채널",
+     "url": "https://www.youtube.com/watch?v=pr2fU-5324E",
+     "note": "SBS 「그것이 알고싶다」 영상입니다."
+    }
+   ]
+  },
+  {
+   "slug": "jinju-apartment-arson-attack",
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "[뉴스룸 모아보기] '진주 아파트' 묻지마 범죄",
+     "platform": "유튜브",
+     "creator": "JTBC News",
+     "url": "https://www.youtube.com/watch?v=EIZfoAy6iuc",
+     "note": "JTBC 뉴스룸 보도 모음입니다."
+    }
+   ]
+  },
+  {
+   "slug": "suwon-oh-won-chun-murder",
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "[스모킹 건] 64회 \"부부싸움 같은데\" - 오원춘 사건",
+     "platform": "유튜브",
+     "creator": "KBS 스모킹건",
+     "url": "https://www.youtube.com/watch?v=kQw2DgB_KJg",
+     "note": "KBS 「스모킹건」 영상입니다."
+    }
+   ]
+  },
+  {
+   "slug": "kang-ho-sun-serial-murders",
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "[꼬꼬무 182회 요약] 아직 밝혀지지 않은 두 명의 피해자, 강호순이 숨긴 진실",
+     "platform": "유튜브",
+     "creator": "SBS 교양 공식 채널 (달리)",
+     "url": "https://www.youtube.com/watch?v=-b6bChS4hQg",
+     "note": "SBS 「꼬리에 꼬리를 무는 그날 이야기」 요약본입니다."
+    }
+   ]
+  },
+  {
+   "slug": "lee-ki-young-paju-murders",
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "살인범이 던진 '동거녀 시신 유기 장소'의 힌트?! 짧은 그알",
+     "platform": "유튜브",
+     "creator": "SBS 그것이 알고싶다 공식 채널",
+     "url": "https://www.youtube.com/watch?v=Oj6Nb0RdtwQ",
+     "note": "SBS 「그것이 알고싶다」 영상입니다."
+    }
+   ]
+  },
+  {
+   "slug": "molar-father-schoolgirl-murder",
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "'천사 아빠'의 잔혹한 두 얼굴, 어금니 아빠 이영학 살인사건",
+     "platform": "유튜브",
+     "creator": "SBS 그것이 알고싶다 공식 채널",
+     "url": "https://www.youtube.com/watch?v=bRpTAAZPXzU",
+     "note": "SBS 「그것이 알고싶다」 영상입니다."
+    }
+   ]
+  },
+  {
+   "slug": "incheon-elementary-student-murder",
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "전 국민을 충격에 빠뜨린 인천 초등생 살인사건",
+     "platform": "유튜브",
+     "creator": "SBS 그것이 알고싶다 공식 채널",
+     "url": "https://www.youtube.com/watch?v=z0cmheKD6sM",
+     "note": "SBS 「그것이 알고싶다」 영상입니다."
+    }
+   ]
+  },
+  {
+   "slug": "nowon-three-women-murder",
+   "related": [
+    {
+     "kind": "YOUTUBE",
+     "title": "스토킹 피해자가 더 있다?! 살인범 김태현의 정체 | 짧은 그알",
+     "platform": "유튜브",
+     "creator": "SBS 그것이 알고싶다 공식 채널",
+     "url": "https://www.youtube.com/watch?v=LCBSUuq2u3E",
+     "note": "SBS 「그것이 알고싶다」 영상입니다."
+    }
+   ]
+  },
+  {
+   "slug": "jeffrey-dahmer",
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "살인자와의 대화: 제프리 다머 테이프",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81173345",
+     "releaseYear": 2022,
+     "note": "변호인단이 녹음한 진술 테이프를 바탕으로 한 3부작 다큐멘터리입니다."
+    }
+   ]
+  },
+  {
+   "slug": "madeleine-mccann-disappearance",
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "매들린 매캔 실종 사건",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/80194956",
+     "releaseYear": 2019,
+     "note": "8부작 다큐멘터리 시리즈입니다."
+    }
+   ]
+  }
+ ]
+}

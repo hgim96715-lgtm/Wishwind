@@ -1,0 +1,1165 @@
+{
+ "version": 1,
+ "cases": [
+  {
+   "slug": "ted-bundy",
+   "content": {
+    "title": "테드 번디 연쇄살인 사건",
+    "summary": "1970년대 미국 여러 주에서 젊은 여성들을 살해한 테드 번디가 플로리다에서 사형 선고를 받고 1989년 집행된 사건",
+    "overview": "테드 번디는 1974년부터 1978년까지 워싱턴, 유타, 콜로라도, 플로리다 등에서 젊은 여성들을 납치해 살해했습니다. 다친 척하거나 경찰인 척하며 피해자에게 접근했고, 두 차례 구치소에서 달아나기도 했습니다. 1978년 플로리다에서 붙잡혀 대학 기숙사 살인과 12세 여자아이 살해로 사형을 선고받았습니다. 집행 전 30명을 살해했다고 털어놓았고, 1989년 1월 24일 플로리다 주립교도소에서 사형이 집행됐습니다.",
+    "victimCountNote": "본인 진술 30명 (확인 불가)",
+    "country": "US",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "미국 워싱턴주·유타주·콜로라도주·플로리다주",
+    "occurredAt": "1974-01-01",
+    "occurredAtPrecision": "YEAR",
+    "solvedAt": "1978-02-15",
+    "timeline": [
+     {
+      "occurredAt": "1974-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "워싱턴주에서 여성 실종이 이어짐"
+     },
+     {
+      "occurredAt": "1977-12-30",
+      "occurredAtPrecision": "DAY",
+      "title": "콜로라도 구치소 탈옥",
+      "description": "두 번째로 달아나 플로리다로 향했습니다."
+     },
+     {
+      "occurredAt": "1978-02-15",
+      "occurredAtPrecision": "DAY",
+      "title": "플로리다에서 체포"
+     },
+     {
+      "occurredAt": "1979-07-31",
+      "occurredAtPrecision": "DAY",
+      "title": "대학 기숙사 살인 사형 선고",
+      "description": "마이애미 법원에서 사형이 선고됐습니다."
+     },
+     {
+      "occurredAt": "1989-01-24",
+      "occurredAtPrecision": "DAY",
+      "title": "사형 집행",
+      "description": "플로리다 주립교도소에서 집행됐습니다."
+     }
+    ],
+    "victims": [],
+    "suspects": [
+     {
+      "name": "Ted Bundy",
+      "status": "CONVICTED",
+      "charges": "살인",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "courtName": "플로리다주 법원",
+        "type": "DEATH",
+        "penalty": "사형 (1989-01-24 집행)",
+        "isFinal": true
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "도움을 청하는 낯선 사람에게 친절을 베풀면서도 안전을 지키려면 어떻게 해야 할까요?"
+     },
+     {
+      "question": "여러 주에 흩어진 사건을 하나로 잇기 위해 수사 기관끼리 어떤 정보를 나눠야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.upi.com/Archives/1989/01/24/Urgent/6819601621200/",
+     "title": "Ted Bundy executed",
+     "publisher": "UPI",
+     "type": "NEWS_AGENCY",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "1989-01-24"
+    },
+    {
+     "url": "https://komonews.com/news/local/serial-killer-ted-bundy-dies-in-the-electric-chair-in-florida-on-jan-24-1989",
+     "title": "30 years later: Serial killer Ted Bundy executed on Jan. 24, 1989",
+     "publisher": "KOMO News",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2019-01-24"
+    },
+    {
+     "url": "https://www.jaxdailyrecord.com/article/ted-bundy-how-he-was-brought-to-justice",
+     "title": "Ted Bundy: How he was brought to justice",
+     "publisher": "Jacksonville Daily Record",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "살인자와의 대화: 테드 번디 테이프",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/80226612",
+     "releaseYear": 2019,
+     "note": "번디가 사형수로 있을 때 녹음된 인터뷰를 바탕으로 한 4부작 다큐멘터리입니다."
+    }
+   ]
+  },
+  {
+   "slug": "night-stalker-richard-ramirez",
+   "content": {
+    "title": "나이트 스토커 연쇄살인 사건",
+    "summary": "1984~1985년 미국 로스앤젤레스 일대에서 밤에 집에 침입해 13명을 살해한 리처드 라미레스에게 사형이 선고된 사건",
+    "overview": "리처드 라미레스는 1984년부터 1985년까지 로스앤젤레스와 샌프란시스코 일대에서 밤에 주택에 침입해 사람들을 살해하고 성폭행했습니다. 언론은 그를 '나이트 스토커'라고 불렀습니다. 1985년 8월 31일 신문에 얼굴이 실린 뒤 이스트 로스앤젤레스에서 주민들에게 붙잡혔습니다. 1989년 살인 13건 등으로 유죄 평결을 받고 사형이 선고됐으며, 2013년 사형수로 수감 중 병으로 숨졌습니다.",
+    "victimCountNote": "살인 13건 유죄",
+    "country": "US",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "미국 캘리포니아주 로스앤젤레스 일대",
+    "occurredAt": "1984-06-28",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "1985-08-31",
+    "timeline": [
+     {
+      "occurredAt": "1985-08-31",
+      "occurredAtPrecision": "DAY",
+      "title": "주민들에게 붙잡혀 체포",
+      "description": "신문에 얼굴이 공개된 날 주민들이 붙잡아 경찰에 넘겼습니다."
+     },
+     {
+      "occurredAt": "1989-11-07",
+      "occurredAtPrecision": "DAY",
+      "title": "사형 선고"
+     },
+     {
+      "occurredAt": "2013-06-07",
+      "occurredAtPrecision": "DAY",
+      "title": "수감 중 사망",
+      "description": "사형이 집행되기 전 병으로 숨졌습니다."
+     }
+    ],
+    "victims": [],
+    "suspects": [
+     {
+      "name": "Richard Ramirez",
+      "status": "CONVICTED",
+      "charges": "살인 13건, 살인미수, 성폭행, 강도 등",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "courtName": "로스앤젤레스 카운티 상급법원",
+        "type": "DEATH",
+        "penalty": "사형",
+        "isFinal": true,
+        "decidedAt": "1989-11-07"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "여름밤 열어 둔 창문처럼 생활 속 빈틈을 이용한 침입을 줄이려면 어떤 방법이 있을까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.britannica.com/biography/Richard-Ramirez",
+     "title": "Richard Ramirez",
+     "publisher": "Encyclopaedia Britannica",
+     "type": "OTHER",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://wnyc.org/story/297657-night-stalker-richard-ramirez-dies-in-prison/",
+     "title": "'Night Stalker' Richard Ramirez Dies In Prison",
+     "publisher": "WNYC",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2013-06-07"
+    },
+    {
+     "url": "https://www.cbsnews.com/losangeles/pictures/nightstalker-richard-ramirez/",
+     "title": "Nightstalker Richard Ramirez",
+     "publisher": "CBS Los Angeles",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "나이트 스토커: 연쇄살인범 추적기",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81025701",
+     "releaseYear": 2021,
+     "note": "수사를 맡았던 형사들의 증언으로 구성한 4부작 다큐멘터리입니다."
+    }
+   ]
+  },
+  {
+   "slug": "gabby-petito",
+   "content": {
+    "title": "개비 퍼티토 사건",
+    "summary": "2021년 남자친구와 캠핑카 여행을 떠난 22세 개비 퍼티토가 실종된 뒤 숨진 채 발견되고, FBI가 남자친구의 메모에서 범행 인정을 확인한 사건",
+    "overview": "22세 개비 퍼티토는 2021년 여름 남자친구와 캠핑카를 타고 미국 서부를 여행하며 SNS에 기록을 올렸습니다. 남자친구가 혼자 플로리다 집으로 돌아온 뒤 가족이 2021년 9월 11일 실종 신고를 했고, 9월 19일 와이오밍주 그랜드티턴 국립공원 근처에서 시신이 발견됐습니다. 남자친구는 플로리다의 자연보호구역으로 사라졌다가 10월 숨진 채 발견됐습니다. 2022년 1월 FBI는 그가 남긴 수첩에서 퍼티토를 숨지게 했다고 인정한 내용을 확인했다고 밝히며 수사를 마무리했습니다. 여행 중 유타주에서 경찰이 두 사람의 다툼 신고로 출동했지만 가정폭력 위험을 제대로 살피지 못했다는 비판이 이어졌습니다.",
+    "country": "US",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "미국 와이오밍주 그랜드티턴 국립공원 인근",
+    "occurredAt": "2021-08-01",
+    "occurredAtPrecision": "MONTH",
+    "solvedAt": "2022-01-21",
+    "timeline": [
+     {
+      "occurredAt": "2021-08-12",
+      "occurredAtPrecision": "DAY",
+      "title": "유타주 모압에서 경찰 출동",
+      "description": "두 사람의 다툼 신고로 경찰이 출동했지만 입건하지 않았습니다."
+     },
+     {
+      "occurredAt": "2021-09-11",
+      "occurredAtPrecision": "DAY",
+      "title": "가족의 실종 신고"
+     },
+     {
+      "occurredAt": "2021-09-19",
+      "occurredAtPrecision": "DAY",
+      "title": "시신 발견",
+      "description": "그랜드티턴 국립공원 근처에서 발견됐습니다."
+     },
+     {
+      "occurredAt": "2021-10-20",
+      "occurredAtPrecision": "DAY",
+      "title": "남자친구 숨진 채 발견",
+      "description": "플로리다 자연보호구역에서 발견됐습니다."
+     },
+     {
+      "occurredAt": "2022-01-21",
+      "occurredAtPrecision": "DAY",
+      "title": "FBI 수사 결과 발표",
+      "description": "수첩에 범행을 인정하는 내용이 있었다고 밝혔습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "개비 퍼티토",
+      "age": 22,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "alias": "동행한 남자친구",
+      "status": "DECEASED",
+      "charges": "FBI는 그가 사망에 책임이 있다고 결론 내렸습니다 (사망으로 기소되지 않음)",
+      "sentences": []
+     }
+    ],
+    "questions": [
+     {
+      "question": "연인 사이 다툼 신고에 출동한 경찰이 가정폭력 위험을 놓치지 않으려면 무엇을 확인해야 할까요?"
+     },
+     {
+      "question": "SNS 속 행복해 보이는 모습 뒤에 있는 관계의 위험 신호를 주변 사람은 어떻게 알아챌 수 있을까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.npr.org/2022/01/22/1075058668/fbi-gabby-petito-brian-laundrie",
+     "title": "Brian Laundrie wrote that he killed Gabby Petito, the FBI says",
+     "publisher": "NPR",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2022-01-22"
+    },
+    {
+     "url": "https://www.upi.com/Top_News/US/2022/01/21/Brian-Laundrie-Gabby-Petito-FBI/1681642807400/",
+     "title": "Brian Laundrie claimed responsibility for Gabby Petito's death",
+     "publisher": "UPI",
+     "type": "NEWS_AGENCY",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2022-01-21"
+    },
+    {
+     "url": "https://abc7ny.com/post/gabby-petito-brian-laundrie-fbi-missing/11495846/",
+     "title": "Brian Laundrie claimed responsibility for Gabby Petito's death in notebook, FBI reveals",
+     "publisher": "ABC7 New York",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2022-01-21"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "아메리칸 머더: 개비 퍼티토",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81733794",
+     "releaseYear": 2025,
+     "note": "3부작 다큐멘터리 시리즈입니다."
+    }
+   ]
+  },
+  {
+   "slug": "chris-watts-family-murders",
+   "content": {
+    "title": "콜로라도 일가족 살해 사건 (크리스 와츠 사건)",
+    "summary": "2018년 미국 콜로라도주에서 남편이 임신 중인 아내와 두 딸을 살해하고 가족이 실종됐다고 거짓말한 사건",
+    "overview": "2018년 8월 13일 콜로라도주 프레더릭에서 임신 15주였던 34세 여성과 4세, 3세 딸이 사라졌습니다. 남편 크리스 와츠는 방송 인터뷰에서 가족이 돌아오길 바란다고 말했지만, 며칠 뒤 범행을 인정했습니다. 아내의 시신은 그가 일하던 석유 시추지 근처에, 두 딸의 시신은 원유 탱크 안에서 발견됐습니다. 2018년 11월 유죄를 인정해 사형을 피했고, 가석방 없는 종신형 5건 등이 선고됐습니다.",
+    "victimCountNote": "사망 3명 (태아 별도)",
+    "country": "US",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "미국 콜로라도주 프레더릭",
+    "occurredAt": "2018-08-13",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "2018-11-19",
+    "timeline": [
+     {
+      "occurredAt": "2018-08-13",
+      "occurredAtPrecision": "DAY",
+      "title": "아내와 두 딸 실종 신고"
+     },
+     {
+      "occurredAt": "2018-08-15",
+      "occurredAtPrecision": "DAY",
+      "title": "체포",
+      "description": "거짓말 탐지 조사 뒤 범행을 인정했습니다."
+     },
+     {
+      "occurredAt": "2018-11-06",
+      "occurredAtPrecision": "DAY",
+      "title": "유죄 인정"
+     },
+     {
+      "occurredAt": "2018-11-19",
+      "occurredAtPrecision": "DAY",
+      "title": "종신형 선고",
+      "description": "가석방 없는 종신형이 선고됐습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "34세 아내 (임신 중)",
+      "age": 34,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     },
+     {
+      "alias": "4세 딸",
+      "age": 4,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     },
+     {
+      "alias": "3세 딸",
+      "age": 3,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "Chris Watts",
+      "status": "CONVICTED",
+      "charges": "1급 살인, 불법 임신중절 등",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "courtName": "웰드 카운티 지방법원",
+        "type": "LIFE",
+        "penalty": "가석방 없는 종신형 5건과 징역 84년",
+        "isFinal": true,
+        "decidedAt": "2018-11-19"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "겉으로 평범해 보이는 가정 안의 위기를 주변에서 알아채려면 어떤 신호를 살펴야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.cpr.org/2018/11/19/christopher-watts-receives-3-consecutive-life-sentences-for-killing-wife-2-daughters/",
+     "title": "Christopher Watts receives consecutive life sentences for killing wife, 2 daughters",
+     "publisher": "Colorado Public Radio",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2018-11-19"
+    },
+    {
+     "url": "https://www.kunc.org/news/2018-11-19/watts-sentenced-to-life-for-killing-pregnant-wife-2-daughters",
+     "title": "Watts sentenced to life for killing pregnant wife, 2 daughters",
+     "publisher": "KUNC",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2018-11-19"
+    },
+    {
+     "url": "https://abc7ny.com/christopher-watts-chris-sentencing-murder/4718014",
+     "title": "Chris Watts gets life in prison for Colorado murders of pregnant wife, daughters",
+     "publisher": "ABC7 New York",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2018-11-19"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "아메리칸 머더: 이웃집 가족",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81130130",
+     "releaseYear": 2020,
+     "note": "실제 영상과 메시지 기록으로 구성한 다큐멘터리 영화입니다."
+    }
+   ]
+  },
+  {
+   "slug": "elisa-lam-cecil-hotel",
+   "content": {
+    "title": "세실 호텔 엘리사 램 실종·사망 사건",
+    "summary": "2013년 미국 로스앤젤레스 세실 호텔에 묵던 21세 캐나다 대학생이 사라졌다가 옥상 물탱크에서 숨진 채 발견된 사건",
+    "overview": "캐나다 밴쿠버에서 온 21세 대학생 엘리사 램은 2013년 1월 말 로스앤젤레스 세실 호텔에 머물다 연락이 끊겼습니다. 경찰이 공개한 엘리베이터 CCTV 영상 속 이상한 행동이 인터넷에 퍼지며 여러 음모론이 생겼습니다. 2월 19일 투숙객들이 수돗물 이상을 신고하면서 옥상 물탱크에서 시신이 발견됐습니다. 검시 당국은 같은 해 6월 양극성 장애가 영향을 준 사고성 익사로 결론 내렸고, 범죄 흔적은 없었다고 밝혔습니다.",
+    "country": "US",
+    "category": "MISSING",
+    "status": "SOLVED",
+    "location": "미국 캘리포니아주 로스앤젤레스 세실 호텔",
+    "occurredAt": "2013-01-31",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "2013-06-20",
+    "timeline": [
+     {
+      "occurredAt": "2013-01-31",
+      "occurredAtPrecision": "DAY",
+      "title": "연락 끊김",
+      "description": "호텔에 묵던 중 가족과 연락이 끊겼습니다."
+     },
+     {
+      "occurredAt": "2013-02-19",
+      "occurredAtPrecision": "DAY",
+      "title": "옥상 물탱크에서 발견"
+     },
+     {
+      "occurredAt": "2013-06-20",
+      "occurredAtPrecision": "DAY",
+      "title": "검시 결과 발표",
+      "description": "양극성 장애가 영향을 준 사고성 익사로 결론 났습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "엘리사 램",
+      "age": 21,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [],
+    "questions": [
+     {
+      "question": "혼자 여행하는 사람이 정신 건강 위기를 겪을 때 숙소와 주변은 어떻게 도울 수 있을까요?"
+     },
+     {
+      "question": "실종 사건 영상이 퍼질 때 음모론이 유족에게 상처가 되지 않으려면 어떻게 해야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.startribune.com/coroner-canadian-woman-s-death-in-los-angeles-hotel-roof-water-tank-was-accidental-drowning/212406141",
+     "title": "Coroner: Canadian woman's death in Los Angeles hotel roof water tank was accidental drowning",
+     "publisher": "Star Tribune",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2013-06-20"
+    },
+    {
+     "url": "https://nbclosangeles.com/news/local/tourist-cecil-hotel-water-tank-drowning-death/1972136",
+     "title": "Death of Tourist in Hotel Water Tank Ruled Accidental Drowning",
+     "publisher": "NBC Los Angeles",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2013-06-20"
+    },
+    {
+     "url": "https://www.theglobeandmail.com/news/british-columbia/vancouver-students-mysterious-la-death-deemed-accidental/article12726013/",
+     "title": "Vancouver student's mysterious L.A. death deemed accidental",
+     "publisher": "The Globe and Mail",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2013-06-20"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "사건 현장: 세실 호텔 실종 사건",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81183727",
+     "releaseYear": 2021,
+     "note": "4부작 다큐멘터리입니다. 음모론을 다룬 방식에 대해 비판도 있었습니다."
+    }
+   ]
+  },
+  {
+   "slug": "jill-dando-murder",
+   "content": {
+    "title": "질 댄도 피살 사건",
+    "summary": "1999년 영국 BBC 범죄 프로그램 진행자 질 댄도가 런던 자택 앞에서 총에 맞아 숨졌고, 유죄 판결이 재심에서 뒤집혀 지금까지 범인이 밝혀지지 않은 사건",
+    "overview": "BBC 「크라임워치」를 진행하던 37세 질 댄도는 1999년 4월 26일 오전 런던 풀럼의 자택 현관 앞에서 머리에 총을 맞고 숨졌습니다. 2001년 근처에 살던 남성이 살인죄로 유죄 판결을 받았지만, 핵심 증거였던 총기 발사 잔여물의 신빙성이 문제가 되면서 2007년 판결이 취소됐고 2008년 재심에서 무죄가 선고됐습니다. 런던 경찰청은 새로운 단서가 있으면 수사하겠다는 입장이지만 범인은 밝혀지지 않았습니다.",
+    "country": "GB",
+    "category": "MURDER",
+    "status": "UNSOLVED",
+    "location": "영국 런던 풀럼",
+    "occurredAt": "1999-04-26",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "1999-04-26",
+      "occurredAtPrecision": "DAY",
+      "title": "자택 앞에서 총격",
+      "description": "현관 앞에서 총에 맞아 숨졌습니다."
+     },
+     {
+      "occurredAt": "2001-07-02",
+      "occurredAtPrecision": "DAY",
+      "title": "이웃 남성 유죄 판결"
+     },
+     {
+      "occurredAt": "2007-11-15",
+      "occurredAtPrecision": "DAY",
+      "title": "항소법원 유죄 판결 취소",
+      "description": "총기 발사 잔여물 증거의 신빙성이 문제가 됐습니다."
+     },
+     {
+      "occurredAt": "2008-08-01",
+      "occurredAtPrecision": "DAY",
+      "title": "재심 무죄",
+      "description": "재심에서 무죄가 선고됐습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "질 댄도",
+      "age": 37,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "alias": "재심에서 무죄를 받은 이웃 남성",
+      "status": "ACQUITTED",
+      "charges": "살인",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "courtName": "런던 중앙형사법원",
+        "type": "LIFE",
+        "penalty": "종신형",
+        "isFinal": false,
+        "decidedAt": "2001-07-02"
+       },
+       {
+        "courtLevel": "OTHER",
+        "courtName": "런던 중앙형사법원 (재심)",
+        "type": "ACQUITTAL",
+        "penalty": "무죄",
+        "isFinal": true,
+        "decidedAt": "2008-08-01"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "단 한 번의 총격, 목격자 없는 현관 앞, 범인은 어떻게 그 시간에 그녀가 올 것을 알았을까요?"
+     },
+     {
+      "question": "과학 증거 하나에 기대 유죄가 나오는 일을 막으려면 법정은 무엇을 더 따져야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://planetradio.co.uk/mfr/uk/news/25-years-since-jill-dando-murder-met-police-open-to-any-new-lines-of-enquiry/",
+     "title": "25 years since Jill Dando's murder - Met Police 'open' to any new lines of enquiry",
+     "publisher": "Planet Radio",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2024-04-26"
+    },
+    {
+     "url": "https://cpj.org/data/people/jill-dando/",
+     "title": "Jill Dando",
+     "publisher": "Committee to Protect Journalists",
+     "type": "OTHER",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.theweek.co.uk/94727/who-killed-jill-dando-six-theories-behind-her-murder",
+     "title": "Who killed Jill Dando?",
+     "publisher": "The Week",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "누가 질 댄도를 죽였나?",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81594933",
+     "releaseYear": 2023,
+     "note": "3부작 다큐멘터리입니다."
+    }
+   ]
+  },
+  {
+   "slug": "cathy-cesnik-murder",
+   "content": {
+    "title": "캐시 세스닉 수녀 피살 사건",
+    "summary": "1969년 미국 볼티모어에서 고등학교 교사였던 26세 수녀가 실종된 뒤 숨진 채 발견됐고, 지금까지 범인이 밝혀지지 않은 사건",
+    "overview": "볼티모어의 가톨릭 여고에서 영어를 가르치던 26세 캐서린 세스닉 수녀는 1969년 11월 7일 저녁 쇼핑을 나갔다가 돌아오지 않았습니다. 시신은 두 달 뒤인 1970년 1월 3일 교외 공터에서 발견됐습니다. 이후 학교 졸업생들은 당시 학교 사제에게 성적 학대를 당했고, 수녀가 이를 알고 있었다고 증언했습니다. 넷플릭스 다큐멘터리 「더 키퍼스」로 다시 주목받았고, 수사기관은 DNA 대조 등으로 수사를 이어 갔지만 범인은 밝혀지지 않았습니다.",
+    "country": "US",
+    "category": "MURDER",
+    "status": "UNSOLVED",
+    "location": "미국 메릴랜드주 볼티모어",
+    "occurredAt": "1969-11-07",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "1969-11-07",
+      "occurredAtPrecision": "DAY",
+      "title": "쇼핑 후 실종"
+     },
+     {
+      "occurredAt": "1970-01-03",
+      "occurredAtPrecision": "DAY",
+      "title": "교외 공터에서 시신 발견"
+     },
+     {
+      "occurredAt": "2017-05-19",
+      "occurredAtPrecision": "DAY",
+      "title": "넷플릭스 「더 키퍼스」 공개",
+      "description": "졸업생들의 학대 증언이 알려지며 사건이 다시 주목받았습니다."
+     },
+     {
+      "occurredAt": "2023-12-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "FBI 유해 발굴 보도",
+      "description": "다른 인물과의 DNA 대조를 위해 무덤을 발굴한다는 보도가 나왔습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "캐서린 세스닉 수녀",
+      "age": 26,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [],
+    "questions": [
+     {
+      "question": "학생들의 학대 피해를 알게 된 교사가 그 사실을 안전하게 알릴 수 있는 길은 무엇이어야 할까요?"
+     },
+     {
+      "question": "쇼핑을 마치고 집 근처까지 돌아온 그녀에게 그날 밤 무슨 일이 있었을까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.wmar2news.com/five-years-after-the-keepers-the-murder-of-sister-cathy-cesnik-remains-unsolved",
+     "title": "Five years after 'The Keepers,' the murder of Sister Cathy Cesnik remains unsolved",
+     "publisher": "WMAR-2 News",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2022-05-19"
+    },
+    {
+     "url": "https://thedailyrecord.com/2023/12/13/fbi-to-exhume-body-from-unsolved-1969-baltimore-killing-examined-in-netflixs-the-keepers/",
+     "title": "FBI to exhume body from unsolved 1969 Baltimore killing examined in Netflix's 'The Keepers'",
+     "publisher": "The Daily Record",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2023-12-13"
+    },
+    {
+     "url": "https://www.rollingstone.com/tv/tv-features/the-keepers-inside-netflixs-compelling-new-true-crime-docuseries-122052/",
+     "title": "'The Keepers': Inside Netflix's Compelling New True-Crime Docuseries",
+     "publisher": "Rolling Stone",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2017-05-19"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "더 키퍼스",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/80122179",
+     "releaseYear": 2017,
+     "note": "수녀의 죽음과 학교 내 학대 의혹을 다룬 7부작 다큐멘터리입니다."
+    }
+   ]
+  },
+  {
+   "slug": "son-of-sam",
+   "content": {
+    "title": "'샘의 아들' 연쇄 총격 사건",
+    "summary": "1976~1977년 미국 뉴욕에서 밤에 주차된 차 안의 젊은이들을 총으로 쏴 6명을 숨지게 한 데이비드 버코위츠 사건",
+    "overview": "1976년 7월부터 1977년 7월까지 뉴욕 브롱크스, 퀸스, 브루클린에서 밤에 차에 앉아 있던 젊은 남녀들이 44구경 권총에 맞는 사건이 이어졌습니다. 범인은 경찰과 신문사에 '샘의 아들'이라고 서명한 편지를 보냈습니다. 6명이 숨지고 7명이 다쳤습니다. 1977년 8월 10일 범행 현장 근처에 세워 둔 차의 주차위반 딱지가 단서가 되어 데이비드 버코위츠가 체포됐습니다. 그는 유죄를 인정해 1978년 각각 징역 25년~종신형을 선고받았습니다. 범죄자가 자기 범죄 이야기로 돈을 벌지 못하게 하는 '샘의 아들 법'이 이 사건에서 나왔습니다.",
+    "victimCountNote": "사망 6명, 부상 7명",
+    "country": "US",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "미국 뉴욕시",
+    "occurredAt": "1976-07-29",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "1977-08-10",
+    "timeline": [
+     {
+      "occurredAt": "1976-07-29",
+      "occurredAtPrecision": "DAY",
+      "title": "첫 총격"
+     },
+     {
+      "occurredAt": "1977-08-10",
+      "occurredAtPrecision": "DAY",
+      "title": "체포",
+      "description": "주차위반 딱지가 단서가 됐습니다."
+     },
+     {
+      "occurredAt": "1978-06-12",
+      "occurredAtPrecision": "DAY",
+      "title": "형 선고",
+      "description": "살인 6건에 각각 징역 25년~종신형이 선고됐습니다."
+     }
+    ],
+    "victims": [],
+    "suspects": [
+     {
+      "name": "David Berkowitz",
+      "status": "CONVICTED",
+      "charges": "2급 살인 6건 등",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "courtName": "뉴욕주 법원",
+        "type": "LIFE",
+        "penalty": "살인 6건에 각각 징역 25년~종신형",
+        "isFinal": true,
+        "decidedAt": "1978-06-12"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "주차위반 딱지처럼 작은 행정 기록이 수사에 쓰이려면 기관 사이에 어떤 연결이 필요할까요?"
+     },
+     {
+      "question": "범죄자가 자기 범죄 이야기로 돈을 버는 것을 막는 제도는 어디까지 필요할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.britannica.com/biography/David-Berkowitz",
+     "title": "David Berkowitz",
+     "publisher": "Encyclopaedia Britannica",
+     "type": "OTHER",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.pressreader.com/usa/the-day/20170810/281956017882425",
+     "title": "'Son of Sam' killer arrested 40 years ago this week",
+     "publisher": "The Day (AP)",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2017-08-10"
+    },
+    {
+     "url": "https://www.yahoo.com/news/articles/son-sam-struck-fear-york-202200287.html",
+     "title": "The Son of Sam Struck Fear Into New York City. A Parking Ticket Led to His Capture",
+     "publisher": "Yahoo News",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "샘의 아들들: 어둠 속으로",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81059887",
+     "releaseYear": 2021,
+     "note": "4부작 다큐멘터리입니다."
+    }
+   ]
+  },
+  {
+   "slug": "teresa-halbach-murder",
+   "content": {
+    "title": "테레사 홀백 살인 사건 (메이킹 어 머더러)",
+    "summary": "2005년 미국 위스콘신주에서 25세 사진작가가 살해된 사건으로, 과거 누명을 벗었던 남성과 그의 조카가 유죄 판결을 받았지만 수사 방식 논란이 이어진 사건",
+    "overview": "2005년 10월 31일 25세 사진작가 테레사 홀백이 자동차 사진을 찍으러 위스콘신주 매니토웍 카운티의 한 폐차장에 갔다가 실종됐습니다. 폐차장 주인 스티븐 에이버리는 1985년 성폭행 사건으로 18년을 복역하다 2003년 DNA로 누명을 벗은 사람이었습니다. 2007년 에이버리는 살인죄로 가석방 없는 종신형을, 당시 16세였던 조카 브렌던 대시는 자백을 근거로 종신형을 선고받았습니다. 넷플릭스 「메이킹 어 머더러」는 증거 조작 의혹과 미성년자 자백 과정을 다뤘고, 대시의 자백을 둘러싼 법정 다툼은 연방 항소법원까지 이어졌지만 두 사람의 유죄는 유지됐습니다.",
+    "country": "US",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "미국 위스콘신주 매니토웍 카운티",
+    "occurredAt": "2005-10-31",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "2007-03-18",
+    "timeline": [
+     {
+      "occurredAt": "2005-10-31",
+      "occurredAtPrecision": "DAY",
+      "title": "폐차장 방문 후 실종"
+     },
+     {
+      "occurredAt": "2007-03-18",
+      "occurredAtPrecision": "DAY",
+      "title": "에이버리 유죄 평결"
+     },
+     {
+      "occurredAt": "2007-04-25",
+      "occurredAtPrecision": "DAY",
+      "title": "대시 유죄 평결"
+     },
+     {
+      "occurredAt": "2015-12-18",
+      "occurredAtPrecision": "DAY",
+      "title": "넷플릭스 「메이킹 어 머더러」 공개"
+     },
+     {
+      "occurredAt": "2017-12-08",
+      "occurredAtPrecision": "DAY",
+      "title": "연방 항소법원, 대시 유죄 유지",
+      "description": "전원합의체가 자백의 증거능력을 인정했습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "테레사 홀백",
+      "age": 25,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "Steven Avery",
+      "status": "CONVICTED",
+      "charges": "1급 고의 살인",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "courtName": "매니토웍 카운티 순회법원",
+        "type": "LIFE",
+        "penalty": "가석방 없는 종신형",
+        "isFinal": true,
+        "decidedAt": "2007-06-01"
+       }
+      ]
+     },
+     {
+      "name": "Brendan Dassey",
+      "status": "CONVICTED",
+      "charges": "1급 고의 살인 공범 등",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "courtName": "매니토웍 카운티 순회법원",
+        "type": "LIFE",
+        "penalty": "종신형 (2048년 가석방 심사 가능)",
+        "isFinal": true
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "지적 능력이 낮은 미성년자를 조사할 때 보호자와 변호인이 반드시 함께해야 할까요?"
+     },
+     {
+      "question": "과거 누명 사건과 얽힌 수사기관이 같은 사람을 다시 수사할 때 어떤 장치가 필요할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.semissourian.com/news/man-wrongly-imprisoned-for-rape-is-convicted-of-murdering-photographer-1194284",
+     "title": "Man wrongly imprisoned for rape is convicted of murdering photographer",
+     "publisher": "Southeast Missourian (AP)",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2007-03-19"
+    },
+    {
+     "url": "https://www.britannica.com/biography/Steven-Avery",
+     "title": "Steven Avery",
+     "publisher": "Encyclopaedia Britannica",
+     "type": "OTHER",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://goodmorningamerica.com/news/story/making-murderer-steven-avery-guilty-deeper-netflix-series-36420677",
+     "title": "'Making a Murderer': Is Steven Avery Guilty?",
+     "publisher": "ABC News",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "메이킹 어 머더러",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/80000770",
+     "releaseYear": 2015,
+     "note": "수사와 재판 과정을 10년 넘게 따라간 다큐멘터리 시리즈입니다. 피고인 측 시각이 강하다는 비판도 있습니다."
+    }
+   ]
+  },
+  {
+   "slug": "kathleen-peterson-staircase",
+   "content": {
+    "title": "캐슬린 피터슨 계단 사망 사건",
+    "summary": "2001년 미국 노스캐롤라이나주에서 여성이 자택 계단 아래 숨진 채 발견되고, 남편의 살인 유죄가 뒤집힌 뒤 앨퍼드 플리로 마무리된 사건",
+    "overview": "2001년 12월 9일 노스캐롤라이나주 더럼에서 48세 캐슬린 피터슨이 자택 계단 아래에서 피를 흘린 채 숨진 채 발견됐습니다. 남편이자 소설가인 마이클 피터슨은 아내가 계단에서 떨어졌다고 신고했지만, 2003년 살인죄로 종신형을 선고받았습니다. 2011년 주 수사국 혈흔 분석가가 법정에서 오해를 부르는 증언을 한 사실이 드러나 재판이 다시 열리게 됐습니다. 2017년 그는 무죄를 주장하면서도 유죄 판결에 충분한 증거가 있음을 인정하는 앨퍼드 플리로 고의성 없는 살인죄를 받아들였고, 이미 복역한 기간으로 형이 끝났습니다.",
+    "country": "US",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "미국 노스캐롤라이나주 더럼",
+    "occurredAt": "2001-12-09",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "2017-02-24",
+    "timeline": [
+     {
+      "occurredAt": "2001-12-09",
+      "occurredAtPrecision": "DAY",
+      "title": "계단 아래에서 숨진 채 발견"
+     },
+     {
+      "occurredAt": "2003-10-10",
+      "occurredAtPrecision": "DAY",
+      "title": "1급 살인 유죄, 종신형"
+     },
+     {
+      "occurredAt": "2011-12-16",
+      "occurredAtPrecision": "DAY",
+      "title": "재심 결정",
+      "description": "혈흔 분석가의 증언 문제가 드러났습니다."
+     },
+     {
+      "occurredAt": "2017-02-24",
+      "occurredAtPrecision": "DAY",
+      "title": "앨퍼드 플리",
+      "description": "고의성 없는 살인죄를 받아들이고 복역 기간으로 형이 끝났습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "캐슬린 피터슨",
+      "age": 48,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "Michael Peterson",
+      "status": "CONVICTED",
+      "charges": "고의성 없는 살인 (앨퍼드 플리)",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "courtName": "더럼 카운티 상급법원",
+        "type": "LIFE",
+        "penalty": "1급 살인 종신형 (2011년 재심 결정으로 취소)",
+        "isFinal": false,
+        "decidedAt": "2003-10-10"
+       },
+       {
+        "courtLevel": "OTHER",
+        "courtName": "더럼 카운티 상급법원 (재심 전 합의)",
+        "type": "IMPRISONMENT",
+        "penalty": "고의성 없는 살인, 이미 복역한 기간으로 형 종료",
+        "isFinal": true,
+        "decidedAt": "2017-02-24"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "수사기관 소속 감정인의 증언을 법정이 어떻게 검증해야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.wral.com/story/michael-peterson-walks-free-after-15-year-murder-case-ends-with-plea-deal/16546848/",
+     "title": "Mike Peterson walks free as 15-year murder case ends with plea deal",
+     "publisher": "WRAL",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2017-02-24"
+    },
+    {
+     "url": "https://lasvegassun.com/news/2017/feb/24/plea-in-wifes-staircase-death-lets-man-maintain-in/",
+     "title": "Plea in wife's staircase death lets man maintain innocence",
+     "publisher": "Las Vegas Sun (AP)",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2017-02-24"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "계단 (The Staircase)",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/80233441",
+     "releaseYear": 2018,
+     "note": "재판 과정을 오랜 기간 따라간 다큐멘터리 시리즈입니다."
+    }
+   ]
+  },
+  {
+   "slug": "denise-huskins-kidnapping",
+   "content": {
+    "title": "데니스 허스킨스 납치 사건 (발레이호 납치 사건)",
+    "summary": "2015년 미국 캘리포니아주에서 납치된 여성을 경찰이 '자작극'으로 몰았다가, 다른 사건으로 진범이 잡히며 사실로 드러난 사건",
+    "overview": "2015년 3월 23일 새벽 캘리포니아주 발레이호의 집에 괴한이 침입해 남자친구를 묶고 데니스 허스킨스를 납치했습니다. 이틀 뒤 그녀는 남부 헌팅턴비치에서 풀려났지만, 발레이호 경찰은 기자회견에서 영화 「나를 찾아줘」 같은 자작극이라고 발표했습니다. 같은 해 6월 다른 주택 침입 사건으로 붙잡힌 전직 변호사 매슈 멀러가 진범으로 밝혀졌습니다. 그는 2017년 연방법원에서 징역 40년을 선고받았고, 발레이호 경찰은 2021년 피해자들에게 공식 사과했습니다.",
+    "country": "US",
+    "category": "KIDNAPPING",
+    "status": "SOLVED",
+    "location": "미국 캘리포니아주 발레이호",
+    "occurredAt": "2015-03-23",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "2015-06-08",
+    "timeline": [
+     {
+      "occurredAt": "2015-03-23",
+      "occurredAtPrecision": "DAY",
+      "title": "주택 침입과 납치"
+     },
+     {
+      "occurredAt": "2015-03-25",
+      "occurredAtPrecision": "DAY",
+      "title": "석방, 경찰의 '자작극' 발표"
+     },
+     {
+      "occurredAt": "2015-06-08",
+      "occurredAtPrecision": "DAY",
+      "title": "진범 체포",
+      "description": "다른 주택 침입 사건으로 붙잡힌 남성이 범인으로 밝혀졌습니다."
+     },
+     {
+      "occurredAt": "2017-03-16",
+      "occurredAtPrecision": "DAY",
+      "title": "연방법원 징역 40년"
+     },
+     {
+      "occurredAt": "2021-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "경찰 공식 사과"
+     }
+    ],
+    "victims": [
+     {
+      "alias": "데니스 허스킨스",
+      "age": 29,
+      "gender": "FEMALE",
+      "status": "FOUND_ALIVE"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "Matthew Muller",
+      "status": "CONVICTED",
+      "charges": "납치",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "courtName": "캘리포니아 동부 연방지방법원",
+        "type": "IMPRISONMENT",
+        "penalty": "징역 40년",
+        "isFinal": true,
+        "decidedAt": "2017-03-16"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "피해자의 말을 믿지 않는 수사가 2차 피해가 되지 않게 하려면 어떤 원칙이 필요할까요?"
+     },
+     {
+      "question": "경찰이 수사 중인 사건을 언론에 공개할 때 지켜야 할 선은 어디일까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.ktvu.com/news/matthew-muller-ex-lawyer-gets-40-years-federal-prison-in-denise-huskins-kidnap-case",
+     "title": "Matthew Muller: Ex-lawyer gets 40 years federal prison in Denise Huskins kidnap case",
+     "publisher": "KTVU",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2017-03-16"
+    },
+    {
+     "url": "https://abc7news.com/vallejo-pd-apologizes-6+-years-after-calling-kidnapping-a-hoax/10744429/",
+     "title": "Vallejo PD apologizes more than 6 years after calling kidnapping a hoax",
+     "publisher": "ABC7 News",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.cbsnews.com/amp/news/disbarred-attorney-sentenced-in-bizarre-kidnap-wrongly-called-gone-girl-hoax",
+     "title": "Disbarred attorney sentenced in bizarre kidnap wrongly called \"Gone Girl\" hoax",
+     "publisher": "CBS News",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2017-03-16"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "아메리칸 나이트메어",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81620853",
+     "releaseYear": 2024,
+     "note": "피해자 시점에서 사건과 경찰 수사를 다룬 3부작 다큐멘터리입니다."
+    }
+   ]
+  }
+ ]
+}

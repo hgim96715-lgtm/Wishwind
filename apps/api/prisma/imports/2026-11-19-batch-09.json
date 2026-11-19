@@ -1,0 +1,784 @@
+{
+ "version": 1,
+ "cases": [
+  {
+   "slug": "kyoto-animation-arson",
+   "content": {
+    "title": "교토 애니메이션 방화 사건",
+    "summary": "2019년 7월 교토 애니메이션 제1스튜디오에 불을 질러 36명이 숨진 사건으로, 아오바 신지의 사형이 2025년 확정됐습니다",
+    "overview": "2019년 7월 18일 교토시에 있는 애니메이션 제작사 교토 애니메이션의 제1스튜디오에 아오바 신지가 불을 질렀습니다. 건물 안에 있던 약 70명 가운데 36명이 숨지고 32명이 다쳤습니다. 2024년 1월 교토지방재판소 재판원 재판은 아오바가 망상장애의 영향으로 원한을 품었지만 형사 책임 능력은 있었다고 보고 사형을 선고했습니다. 변호인이 오사카고등재판소에 항소했지만, 아오바가 2025년 1월 27일 항소를 취하해 사형이 확정됐습니다. 변호인은 취하가 효력이 없다고 다퉜지만, 오사카고등재판소는 2026년 3월 17일 아오바가 취하의 뜻을 이해하고 있었다며 취하가 유효하다고 판단했습니다.",
+    "victimCountNote": "36명 사망, 32명 부상",
+    "country": "JP",
+    "category": "ARSON",
+    "status": "SOLVED",
+    "location": "일본 교토부 교토시",
+    "occurredAt": "2019-07-18",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "2019-07-18",
+      "occurredAtPrecision": "DAY",
+      "title": "제1스튜디오 방화",
+      "description": "36명이 숨지고 32명이 다쳤습니다."
+     },
+     {
+      "occurredAt": "2024-01-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "1심 사형 선고",
+      "description": "교토지방재판소가 형사 책임 능력이 있었다고 판단했습니다."
+     },
+     {
+      "occurredAt": "2025-01-27",
+      "occurredAtPrecision": "DAY",
+      "title": "항소 취하로 사형 확정"
+     },
+     {
+      "occurredAt": "2026-03-17",
+      "occurredAtPrecision": "DAY",
+      "title": "오사카고등재판소, 항소 취하 유효 판단"
+     }
+    ],
+    "victims": [
+     {
+      "alias": "교토 애니메이션 직원 등 36명",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "青葉真司",
+      "alias": "아오바 신지",
+      "status": "CONVICTED",
+      "charges": "살인, 방화 등",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "DEATH",
+        "penalty": "사형 (2025년 1월 항소 취하로 확정)",
+        "isFinal": true,
+        "courtName": "교토지방재판소"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "많은 사람이 일하는 건물에서 불이 빠르게 번질 때 대피를 돕는 설계에는 무엇이 있을까요?"
+     },
+     {
+      "question": "특정 대상에 대한 원한과 망상을 키워 가는 사람을 일찍 돕기 위해 어떤 지원이 필요할까요?"
+     },
+     {
+      "question": "대형 참사 뒤 피해자와 유족, 동료들의 회복을 돕는 일에는 무엇이 있을까요?"
+     }
+    ],
+    "solvedAt": "2025-01-27"
+   },
+   "sources": [
+    {
+     "url": "https://japantimes.co.jp/news/2025/01/28/japan/crime-legal/kyoani-death-penalty-finalized",
+     "title": "KyoAni arsonist's death penalty finalized",
+     "publisher": "The Japan Times",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2025-01-28"
+    },
+    {
+     "url": "https://www.nippon.com/en/news/yjj2026031700701",
+     "title": "Court rules KyoAni arsonist's appeal withdrawal valid",
+     "publisher": "Jiji Press (nippon.com)",
+     "type": "NEWS_AGENCY",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-03-17"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "wakayama-curry-poisoning",
+   "content": {
+    "title": "와카야마 독극물 카레 사건",
+    "summary": "1998년 여름 와카야마시 마을 축제의 카레에 비소가 들어가 4명이 숨지고 63명이 중독된 사건으로, 하야시 마스미의 사형이 2009년 확정됐습니다",
+    "overview": "1998년 여름 와카야마시의 한 마을 여름 축제에서 나눠 준 카레에 비소가 섞여 있었습니다. 카레를 먹은 주민 4명이 숨지고 63명이 중독됐습니다. 경찰은 전 보험 설계사 하야시 마스미를 체포했고, 그는 보험금을 노리고 남편과 지인을 독살하려 한 혐의로도 기소됐습니다. 재판에서 범행을 직접 보여 주는 증거나 뚜렷한 동기는 나오지 않았지만, 1심과 2심은 사형을 선고했고 최고재판소는 2009년 4월 21일 상고를 기각해 사형을 확정했습니다. 하야시는 확정 뒤에도 진범이 따로 있다며 무죄를 주장하고 있습니다.",
+    "victimCountNote": "4명 사망, 63명 중독",
+    "country": "JP",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "일본 와카야마현 와카야마시",
+    "occurredAt": "1998-07-01",
+    "occurredAtPrecision": "MONTH",
+    "timeline": [
+     {
+      "occurredAt": "1998-07-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "여름 축제 카레에 비소 혼입",
+      "description": "4명이 숨지고 63명이 중독됐습니다."
+     },
+     {
+      "occurredAt": "2009-04-21",
+      "occurredAtPrecision": "DAY",
+      "title": "최고재판소 사형 확정",
+      "description": "하야시는 무죄를 주장하고 있습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "축제에 참여한 주민 4명",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "林眞須美",
+      "alias": "하야시 마스미",
+      "status": "CONVICTED",
+      "charges": "살인, 살인미수 (본인은 무죄 주장)",
+      "sentences": [
+       {
+        "courtLevel": "SUPREME",
+        "type": "DEATH",
+        "penalty": "사형 (상고 기각)",
+        "isFinal": true,
+        "courtName": "최고재판소",
+        "decidedAt": "2009-04-21"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "여러 사람이 함께 먹는 음식을 만들 때 누군가 몰래 손대지 못하게 하려면 어떤 관리가 필요할까요?"
+     },
+     {
+      "question": "직접 증거 없이 정황 증거로 유죄를 판단할 때 오판을 막으려면 무엇이 필요할까요?"
+     },
+     {
+      "question": "집단 중독이 생겼을 때 원인 물질을 빨리 밝혀 피해를 줄이려면 의료와 수사는 어떻게 협력해야 할까요?"
+     }
+    ],
+    "solvedAt": "2009-04-21"
+   },
+   "sources": [
+    {
+     "url": "https://www.japantimes.co.jp/news/2009/04/22/national/hayashis-death-penalty-finalized/",
+     "title": "Hayashi's death penalty finalized",
+     "publisher": "The Japan Times",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2009-04-22"
+    },
+    {
+     "url": "https://www.washingtontimes.com/news/2009/apr/21/japan-court-upholds-death-for-curry-poisoner/",
+     "title": "Japan court upholds death for curry poisoner",
+     "publisher": "The Washington Times",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2009-04-21"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "lucie-blackman-case",
+   "content": {
+    "title": "루시 블랙맨 사건",
+    "summary": "2000년 도쿄에서 일하던 영국인 여성 루시 블랙맨을 납치하고 시신을 훼손·유기한 혐의 등으로 오바라 조지의 무기징역이 확정된 사건",
+    "overview": "2000년 도쿄에서 일하던 영국인 여성 루시 블랙맨이 실종됐고, 이후 시신이 훼손된 채 발견됐습니다. 경찰은 여러 여성에게 약물을 먹이고 성폭행한 혐의로 오바라 조지를 수사했습니다. 도쿄지방재판소는 다른 여성 9명에 대한 성폭행 등으로 무기징역을 선고했지만, 블랙맨 사건은 무죄로 봤습니다. 9명 가운데 호주 여성 한 명은 약물 과다로 숨졌습니다. 도쿄고등재판소는 2008년 12월 16일 블랙맨을 납치하고 시신을 훼손·유기한 부분을 유죄로 뒤집었지만, 사망 원인이 밝혀지지 않아 사망에 대한 책임은 인정하지 않고 무기징역을 유지했습니다. 최고재판소는 2010년 12월 오바라의 이의를 기각해 형이 확정됐습니다.",
+    "victimCountNote": "루시 블랙맨 1명 사망 (다른 여성 9명 성폭행 피해, 그중 1명 사망)",
+    "country": "JP",
+    "category": "SEXUAL_CRIME",
+    "status": "SOLVED",
+    "location": "일본 도쿄 일대",
+    "occurredAt": "2000-07-01",
+    "occurredAtPrecision": "YEAR",
+    "timeline": [
+     {
+      "occurredAt": "2000-07-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "루시 블랙맨 실종"
+     },
+     {
+      "occurredAt": "2008-12-16",
+      "occurredAtPrecision": "DAY",
+      "title": "도쿄고등재판소, 블랙맨 납치·시신 훼손 유죄",
+      "description": "사망 원인은 밝혀지지 않았습니다."
+     },
+     {
+      "occurredAt": "2010-12-17",
+      "occurredAtPrecision": "DAY",
+      "title": "최고재판소, 무기징역 확정"
+     }
+    ],
+    "victims": [
+     {
+      "name": "Lucie Blackman",
+      "alias": "루시 블랙맨",
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "織原城二",
+      "alias": "오바라 조지",
+      "status": "CONVICTED",
+      "charges": "약취, 사체 훼손·유기, 여성 9명 성폭행 등",
+      "sentences": [
+       {
+        "courtLevel": "APPEAL",
+        "type": "LIFE",
+        "penalty": "무기징역 (블랙맨 납치·시신 훼손 유죄로 변경)",
+        "isFinal": false,
+        "courtName": "도쿄고등재판소",
+        "decidedAt": "2008-12-16"
+       },
+       {
+        "courtLevel": "SUPREME",
+        "type": "LIFE",
+        "penalty": "무기징역 확정",
+        "isFinal": true,
+        "courtName": "최고재판소",
+        "decidedAt": "2010-12-17"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "외국에서 일하는 젊은 여성이 위험한 일자리나 만남에서 도움을 청할 곳은 어디일까요?"
+     },
+     {
+      "question": "약물을 이용한 성범죄 피해자가 빨리 신고하고 증거를 남기려면 어떤 지원이 필요할까요?"
+     },
+     {
+      "question": "외국인 피해자 가족이 다른 나라 수사와 재판을 따라가려면 어떤 도움이 필요할까요?"
+     }
+    ],
+    "solvedAt": "2010-12-17"
+   },
+   "sources": [
+    {
+     "url": "https://japantimes.co.jp/news/2010/12/19/national/top-court-finalizes-obara-life-sentence",
+     "title": "Top court finalizes Obara life sentence",
+     "publisher": "The Japan Times",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2010-12-19"
+    },
+    {
+     "url": "https://japantimes.co.jp/news/2008/12/17/national/high-court-obara-buried-blackman",
+     "title": "High court: Obara buried Blackman",
+     "publisher": "The Japan Times",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2008-12-17"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "300-million-yen-robbery",
+   "content": {
+    "title": "3억 엔 사건",
+    "summary": "1968년 도쿄 후추에서 경찰관으로 위장한 남자가 공장 직원 보너스 약 3억 엔을 실은 현금 수송차를 통째로 빼앗아 간 미제 사건",
+    "overview": "1968년 12월 10일 비 오는 아침, 도쿄 후추시에서 도시바 공장 직원들의 보너스를 싣고 가던 은행 현금 수송차를 오토바이를 탄 경찰관 차림의 남자가 멈춰 세웠습니다. 그는 지점장 집이 폭파됐고 차에 다이너마이트가 설치됐다고 속인 뒤 차 밑에서 연기를 피웠고, 직원 4명이 피한 사이 차를 몰고 달아났습니다. 빼앗긴 돈은 2억 9,400만 엔이 넘었습니다. 범인은 돈을 다른 훔친 차로 옮겼고, 현장에는 많은 유류품이 남았습니다. 경찰은 몽타주를 배포하고 수많은 사람을 조사했지만 범인을 찾지 못했고, 공소시효는 1975년 12월에 끝났습니다.",
+    "victimCountNote": "인명 피해 없음 (현금 약 3억 엔 강탈)",
+    "country": "JP",
+    "category": "ROBBERY",
+    "status": "UNSOLVED",
+    "location": "일본 도쿄도 후추시",
+    "occurredAt": "1968-12-10",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "1968-12-10",
+      "occurredAtPrecision": "DAY",
+      "title": "현금 수송차 강탈",
+      "description": "경찰관 차림의 남자가 폭탄이 있다고 속였습니다."
+     },
+     {
+      "occurredAt": "1975-12-10",
+      "occurredAtPrecision": "MONTH",
+      "title": "공소시효 만료",
+      "description": "범인은 끝내 밝혀지지 않았습니다."
+     }
+    ],
+    "victims": [],
+    "suspects": [],
+    "questions": [
+     {
+      "question": "제복을 입은 사람의 지시를 받을 때 진짜인지 확인하는 방법에는 무엇이 있을까요?"
+     },
+     {
+      "question": "현금을 운반하는 사람이 위급 상황을 꾸며 낸 속임수에 대응하려면 어떤 규칙이 필요할까요?"
+     },
+     {
+      "question": "현장에 유류품을 그렇게 많이 남긴 범인은 어떻게 추적을 피할 수 있었을까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.tokyoweekender.com/japan-life/5-of-japans-most-famous-unsolved-crimes/",
+     "title": "5 of Japan's Most Famous Unsolved Crimes",
+     "publisher": "Tokyo Weekender",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2018-12-07"
+    },
+    {
+     "url": "https://cdn4.i-scmp.com/news/asia/east-asia/article/2177413/who-was-mysterious-motorcyclist-behind-infamous-japanese-heist",
+     "title": "Who was the mysterious motorcyclist behind infamous Japanese heist?",
+     "publisher": "South China Morning Post",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "fred-rosemary-west-murders",
+   "content": {
+    "title": "프레드·로즈메리 웨스트 연쇄살인 사건",
+    "summary": "1967~1987년 영국 글로스터에서 프레드와 로즈메리 웨스트 부부가 젊은 여성과 자녀 등을 살해해 집에 묻은 사건으로, 로즈메리 웨스트는 가석방 없는 종신형을 받았습니다",
+    "overview": "1994년 2월 영국 글로스터 크롬웰가 25번지의 집에서 경찰이 땅을 파기 시작했고, 이 집과 주변에서 여러 피해자의 유해가 나왔습니다. 피해자 가운데는 부부의 딸 헤더(16세)와 젊은 여성들이 있었습니다. 프레드 웨스트는 1994년 3월, 로즈메리 웨스트는 같은 해 4월 체포됐습니다. 프레드 웨스트는 12건의 살인 혐의로 기소됐지만 재판을 앞둔 1995년 1월 1일 구치소에서 스스로 목숨을 끊었습니다. 로즈메리 웨스트는 1995년 11월 22일 윈체스터 형사법원에서 10건의 살인 모두 유죄 평결을 받아 종신형을 선고받았고, 항소는 1996년 기각됐습니다. 이후 내무장관이 평생 석방되지 않는 종신형으로 정했습니다. 실제 피해자 수는 더 많을 수 있다는 지적이 있습니다.",
+    "victimCountNote": "12명 사망 확인 (로즈메리 웨스트는 그중 10건 유죄), 실제 피해자 수는 확인 불가",
+    "country": "GB",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "영국 글로스터 크롬웰가 25번지",
+    "occurredAt": "1967-01-01",
+    "occurredAtPrecision": "YEAR",
+    "timeline": [
+     {
+      "occurredAt": "1987-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "딸 헤더 웨스트 사망"
+     },
+     {
+      "occurredAt": "1994-02-26",
+      "occurredAtPrecision": "DAY",
+      "title": "크롬웰가 25번지 발굴 시작"
+     },
+     {
+      "occurredAt": "1994-03-01",
+      "occurredAtPrecision": "DAY",
+      "title": "프레드 웨스트 체포"
+     },
+     {
+      "occurredAt": "1994-04-25",
+      "occurredAtPrecision": "DAY",
+      "title": "로즈메리 웨스트 체포"
+     },
+     {
+      "occurredAt": "1995-01-01",
+      "occurredAtPrecision": "DAY",
+      "title": "프레드 웨스트, 재판 전 구치소에서 사망"
+     },
+     {
+      "occurredAt": "1995-11-22",
+      "occurredAtPrecision": "DAY",
+      "title": "로즈메리 웨스트 10건 유죄 평결, 종신형"
+     },
+     {
+      "occurredAt": "1996-03-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "항소 기각"
+     }
+    ],
+    "victims": [
+     {
+      "alias": "헤더 웨스트 등 젊은 여성과 아이들",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "Rosemary West",
+      "alias": "로즈메리 웨스트",
+      "status": "CONVICTED",
+      "charges": "살인 10건",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "LIFE",
+        "penalty": "종신형 (평생 석방 불가)",
+        "isFinal": true,
+        "courtName": "윈체스터 형사법원",
+        "decidedAt": "1995-11-22"
+       }
+      ]
+     },
+     {
+      "name": "Fred West",
+      "alias": "프레드 웨스트",
+      "status": "DECEASED",
+      "charges": "살인 12건 (재판 전 사망)",
+      "sentences": []
+     }
+    ],
+    "questions": [
+     {
+      "question": "가정 안에서 벌어지는 아동 학대를 이웃과 학교가 더 일찍 알아차리려면 무엇이 필요할까요?"
+     },
+     {
+      "question": "실종 신고가 없는 젊은 사람이 사라졌을 때도 찾을 수 있도록 하려면 어떤 체계가 필요할까요?"
+     },
+     {
+      "question": "앞선 폭행 사건에서 가벼운 처분으로 끝났던 일을 다시 살펴볼 장치가 있었다면 무엇이 달라졌을까요?"
+     }
+    ],
+    "solvedAt": "1995-11-22"
+   },
+   "sources": [
+    {
+     "url": "https://www.irishtimes.com/news/west-to-spend-life-in-jail-1.92731",
+     "title": "West to spend life in jail",
+     "publisher": "The Irish Times",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "1997-07-29"
+    },
+    {
+     "url": "https://www.crimeandinvestigation.co.uk/crime-files/rosemary-west/trial",
+     "title": "Rosemary West: The Trial",
+     "publisher": "Crime+Investigation",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "london-7-7-bombings",
+   "content": {
+    "title": "런던 7·7 테러",
+    "summary": "2005년 7월 7일 런던 지하철 열차 3대와 버스 1대에서 자살 폭탄 테러가 일어나 52명이 숨진 사건",
+    "overview": "2005년 7월 7일 아침 런던의 지하철 열차 3대와 버스 1대에서 잇따라 폭탄이 터졌습니다. 폭탄을 몸에 지닌 4명이 스스로 터뜨린 자살 테러였고, 계획을 이끈 사람은 모하마드 시디크 칸으로 알려졌습니다. 이 테러로 52명이 숨지고 약 700명이 다쳤습니다. 5개월 반 동안 이어진 검시 심리 끝에 헤더 할렛 판사는 2011년 5월 6일 52명 모두 불법적으로 살해됐다고 판단했고, 기관의 잘못이 사망을 불렀다고 볼 수는 없다고 결론지었습니다. 판사는 정보기관과 구급 체계 등에 9가지 개선 권고를 냈고, 내무장관은 이를 검토해 의회에 보고하겠다고 밝혔습니다.",
+    "victimCountNote": "52명 사망, 약 700명 부상",
+    "country": "GB",
+    "category": "TERROR",
+    "status": "SOLVED",
+    "location": "영국 런던 지하철·버스",
+    "occurredAt": "2005-07-07",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "2005-07-07",
+      "occurredAtPrecision": "DAY",
+      "title": "지하철 3곳과 버스 1곳에서 폭발"
+     },
+     {
+      "occurredAt": "2011-05-06",
+      "occurredAtPrecision": "DAY",
+      "title": "검시 판결: 52명 불법 살해, 개선 권고 9건"
+     },
+     {
+      "occurredAt": "2011-05-09",
+      "occurredAtPrecision": "DAY",
+      "title": "내무장관, 권고 검토 성명"
+     }
+    ],
+    "victims": [
+     {
+      "alias": "출근길 승객 등 52명",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "Mohammad Sidique Khan",
+      "alias": "모하마드 시디크 칸 (계획 주도)",
+      "status": "DECEASED",
+      "charges": "자살 폭탄 테러 (현장에서 사망)",
+      "sentences": []
+     },
+     {
+      "alias": "함께 폭탄을 터뜨린 3명",
+      "status": "DECEASED",
+      "charges": "자살 폭탄 테러 (현장에서 사망)",
+      "sentences": []
+     }
+    ],
+    "questions": [
+     {
+      "question": "지하철처럼 사람이 많은 곳에서 폭발이 일어났을 때 부상자를 빨리 구하려면 구조 체계는 어떻게 준비돼야 할까요?"
+     },
+     {
+      "question": "자기 나라에서 자란 젊은이가 극단주의에 빠지지 않도록 지역 사회가 할 수 있는 일은 무엇일까요?"
+     },
+     {
+      "question": "검시 심리에서 나온 개선 권고가 실제로 지켜지는지 확인하려면 어떤 장치가 필요할까요?"
+     }
+    ],
+    "solvedAt": "2011-05-06"
+   },
+   "sources": [
+    {
+     "url": "https://www.aljazeera.com/news/2011/5/6/london-bombings-victims-unlawfully-killed",
+     "title": "London bombings victims 'unlawfully killed'",
+     "publisher": "Al Jazeera",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2011-05-06"
+    },
+    {
+     "url": "https://www.gov.uk/government/speeches/home-secretary-written-statement-on-the-london-7-7-inquest",
+     "title": "Home Secretary written statement on the London 7/7 inquest",
+     "publisher": "GOV.UK (Home Office)",
+     "type": "GOVERNMENT",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2011-05-09"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "lockerbie-bombing",
+   "content": {
+    "title": "로커비 팬암 103편 폭파 사건",
+    "summary": "1988년 12월 스코틀랜드 로커비 상공에서 팬암 103편이 폭파돼 270명이 숨진 사건으로, 폭탄 제조 혐의를 받는 리비아 전직 정보요원의 미국 재판이 진행 중입니다",
+    "overview": "1988년 12월 21일 런던을 떠나 뉴욕으로 가던 팬암 103편이 스코틀랜드 로커비 상공에서 폭발했습니다. 탑승자 259명과 지상 주민 11명 등 270명이 숨졌습니다. 2001년 네덜란드 캠프 자이스트에 마련된 스코틀랜드 특별 법정은 리비아인 압델바셋 알메그라히에게 종신형(최소 27년)을 선고했고, 함께 기소된 다른 리비아인은 무죄를 선고했습니다. 알메그라히는 2009년 말기 암으로 풀려난 뒤 2012년 리비아에서 숨졌고, 아들이 낸 재심 항소는 2021년 1월 15일 기각됐습니다. 미국은 2020년 12월 폭탄을 만든 혐의로 리비아 전직 정보요원 아부 아길라 마수드를 기소했고, 그는 2022년 미국으로 넘겨져 혐의를 부인하고 있습니다. 워싱턴 연방법원 재판은 2026년 8월 배심원 선정을 앞두고 새 증거 문제로 미뤄졌습니다.",
+    "victimCountNote": "270명 사망 (탑승자 259명, 지상 11명)",
+    "country": "GB",
+    "category": "TERROR",
+    "status": "IN_PROGRESS",
+    "location": "영국 스코틀랜드 로커비",
+    "occurredAt": "1988-12-21",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "1988-12-21",
+      "occurredAtPrecision": "DAY",
+      "title": "팬암 103편 폭발"
+     },
+     {
+      "occurredAt": "2001-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "알메그라히 유죄, 공범 혐의자 무죄"
+     },
+     {
+      "occurredAt": "2009-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "알메그라히, 말기 암으로 석방"
+     },
+     {
+      "occurredAt": "2012-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "알메그라히 사망"
+     },
+     {
+      "occurredAt": "2020-12-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "미국, 폭탄 제조 혐의로 마수드 기소"
+     },
+     {
+      "occurredAt": "2021-01-15",
+      "occurredAtPrecision": "DAY",
+      "title": "알메그라히 재심 항소 기각"
+     },
+     {
+      "occurredAt": "2022-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "마수드, 미국으로 이송"
+     },
+     {
+      "occurredAt": "2026-08-25",
+      "occurredAtPrecision": "DAY",
+      "title": "미국 재판 연기",
+      "description": "새 증거 문제로 배심원 선정이 미뤄졌습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "탑승자와 로커비 주민 270명",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "Abdelbaset al-Megrahi",
+      "alias": "압델바셋 알메그라히",
+      "status": "CONVICTED",
+      "charges": "살인 (2012년 사망)",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "LIFE",
+        "penalty": "종신형 (최소 27년)",
+        "isFinal": true,
+        "courtName": "스코틀랜드 특별 법정 (캠프 자이스트)"
+       }
+      ]
+     },
+     {
+      "alias": "함께 기소된 리비아인 (무죄)",
+      "status": "ACQUITTED",
+      "charges": "살인",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "ACQUITTAL",
+        "penalty": "무죄",
+        "isFinal": true,
+        "courtName": "스코틀랜드 특별 법정 (캠프 자이스트)"
+       }
+      ]
+     },
+     {
+      "name": "Abu Agila Mohammad Mas'ud Kheir Al-Marimi",
+      "alias": "아부 아길라 마수드",
+      "status": "INDICTED",
+      "charges": "항공기 파괴 관련 혐의 (본인은 부인)",
+      "sentences": []
+     }
+    ],
+    "questions": [
+     {
+      "question": "비행기에 실리는 짐에 폭발물이 섞이지 않도록 하려면 보안 검색은 어떻게 달라져야 할까요?"
+     },
+     {
+      "question": "여러 나라가 얽힌 테러 사건에서 유족이 진실을 알 수 있도록 각국은 어떻게 협력해야 할까요?"
+     },
+     {
+      "question": "수십 년이 지난 사건에서도 증거를 잘 보존하려면 어떤 기록 관리가 필요할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.itv.com/news/border/2021-01-15/appeal-against-lockerbie-bombers-conviction-fails",
+     "title": "Appeal against Lockerbie bomber's conviction fails",
+     "publisher": "ITV News",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2021-01-15"
+    },
+    {
+     "url": "https://www.abc.net.au/news/2026-08-25/lockerbie-trial-delayed/107077878",
+     "title": "Lockerbie bombing trial delayed",
+     "publisher": "ABC News (Reuters)",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-08-25"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "vinton-county-siders-children",
+   "content": {
+    "title": "오하이오 사이더스 가족 사건",
+    "summary": "2026년 6월 미국 오하이오주 햄든의 한 집에서 아이 16명이 좁은 방에 갇힌 채 발견돼 부모와 조부모 4명이 아동 방임 혐의로 기소된 사건",
+    "overview": "2026년 6월 30일 오하이오주 빈턴 카운티 햄든 마을의 한 주택에서 수색영장을 집행하던 수사관들이 1살 반부터 18세까지의 아이 16명을 발견했습니다. 아이들은 주로 가로세로 3.5m쯤 되는 방 하나에서 지냈고, 일부는 말을 거의 하지 못했으며 7명은 콜럼버스의 병원으로 옮겨졌습니다. 이 수색은 다른 지역의 아동 성범죄 수사에서 나온 정보로 이어졌습니다. 오하이오 법무장관은 가족이 남부 오하이오를 옮겨 다니며 의료와 행정 기록을 피했다고 밝혔습니다. 빈턴 카운티 대배심은 2026년 8월 21일 조부 게리 사이더스 시니어, 조모 크리스티나 사이더스, 부모 게리 사이더스 주니어와 엘리자베스 사이더스를 아동 방임 혐의로 기소했고, 부모에게는 별도 사건의 성범죄 혐의도 적용됐습니다. 네 사람은 혐의에 대해 무죄 답변이 등록된 상태로 재판을 기다리고 있습니다.",
+    "victimCountNote": "아동 16명 구조",
+    "country": "US",
+    "category": "OTHER",
+    "status": "IN_PROGRESS",
+    "location": "미국 오하이오주 빈턴 카운티 햄든",
+    "occurredAt": "2026-06-30",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "2026-06-30",
+      "occurredAtPrecision": "DAY",
+      "title": "수색 중 아이 16명 발견",
+      "description": "7명이 병원으로 옮겨졌습니다."
+     },
+     {
+      "occurredAt": "2026-07-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "네 사람 법정 출석, 무죄 답변 등록"
+     },
+     {
+      "occurredAt": "2026-08-21",
+      "occurredAtPrecision": "DAY",
+      "title": "대배심, 4명 아동 방임 혐의 기소"
+     }
+    ],
+    "victims": [
+     {
+      "alias": "1살 반~18세 아이 16명",
+      "status": "FOUND_ALIVE"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "Gary Siders Jr.",
+      "alias": "게리 사이더스 주니어 (아버지)",
+      "status": "INDICTED",
+      "charges": "아동 방임 19건, 별도 사건 성범죄 혐의 (재판 중)",
+      "sentences": []
+     },
+     {
+      "name": "Elizabeth Siders",
+      "alias": "엘리자베스 사이더스 (어머니)",
+      "status": "INDICTED",
+      "charges": "아동 방임 19건, 별도 사건 성범죄 혐의 (재판 중)",
+      "sentences": []
+     },
+     {
+      "name": "Gary Siders Sr.",
+      "alias": "게리 사이더스 시니어 (할아버지)",
+      "status": "INDICTED",
+      "charges": "아동 방임 16건 (재판 중)",
+      "sentences": []
+     },
+     {
+      "name": "Christina Siders",
+      "alias": "크리스티나 사이더스 (할머니)",
+      "status": "INDICTED",
+      "charges": "아동 방임 (재판 중)",
+      "sentences": []
+     }
+    ],
+    "questions": [
+     {
+      "question": "학교에 오랫동안 나오지 않는 아이를 끝까지 확인하려면 학교와 아동보호 기관은 어떻게 협력해야 할까요?"
+     },
+     {
+      "question": "이사를 자주 다니며 기록을 피하는 가정의 아이를 놓치지 않으려면 어떤 장치가 필요할까요?"
+     },
+     {
+      "question": "오랫동안 갇혀 지낸 아이들이 회복하려면 어떤 도움이 필요할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://local12.com/news/nation-world/grand-jury-issues-indictments-child-sex-abuse-endangerment-cases-vinton-county-siders-family-brandon-henderson-josh-saunders",
+     "title": "Grand jury issues indictments in 'horrific' Ohio child sex abuse, endangerment cases",
+     "publisher": "WKRC Local 12",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-08-21"
+    },
+    {
+     "url": "https://www.whio.com/news/local/4-indicted-after-16-children-found-deplorable-conditions/YWWPUJOBQVAZDHFULQAPERS3EY/",
+     "title": "4 indicted after 16 children found in deplorable conditions",
+     "publisher": "WHIO",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-08-22"
+    },
+    {
+     "url": "https://www.fox19.com/2026/08/21/sex-abuse-investigation-led-discovery-16-kids-living-third-world-conditions/",
+     "title": "Sex abuse investigation led to discovery of 16 kids living in 'third world' conditions",
+     "publisher": "FOX19",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-08-21"
+    }
+   ],
+   "claims": [],
+   "related": []
+  }
+ ]
+}

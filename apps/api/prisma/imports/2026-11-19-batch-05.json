@@ -1,0 +1,1175 @@
+{
+ "version": 1,
+ "cases": [
+  {
+   "slug": "jo-du-sun",
+   "content": {
+    "title": "안산 초등학생 성폭행 사건 (조두순 사건)",
+    "summary": "2008년 경기 안산에서 8세 여자아이를 성폭행해 크게 다치게 한 조두순이 징역 12년을 확정받고 2020년 출소한 사건",
+    "overview": "2008년 12월 경기 안산시에서 등교하던 8세 여자아이가 교회 화장실로 끌려가 성폭행을 당하고 크게 다쳤습니다. 가해자 조두순은 징역 12년이 확정됐고, 범행 당시 술에 취해 있었다는 이유로 심신미약이 인정되면서 형량이 낮다는 비판이 컸습니다. 이 사건 뒤 주취 감경을 제한하는 법 개정과 아동 성범죄 처벌 강화 논의가 이어졌습니다. 조두순은 2020년 12월 12일 만기 출소했습니다.",
+    "country": "KR",
+    "category": "SEXUAL_CRIME",
+    "status": "SOLVED",
+    "location": "경기도 안산시 단원구",
+    "occurredAt": "2008-12-11",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "2009-09-24",
+    "timeline": [
+     {
+      "occurredAt": "2008-12-11",
+      "occurredAtPrecision": "DAY",
+      "title": "범행",
+      "description": "등교하던 8세 아이가 교회 화장실에서 성폭행을 당했습니다."
+     },
+     {
+      "occurredAt": "2009-09-24",
+      "occurredAtPrecision": "DAY",
+      "title": "징역 12년 확정",
+      "description": "대법원에서 징역 12년이 확정됐습니다."
+     },
+     {
+      "occurredAt": "2020-12-12",
+      "occurredAtPrecision": "DAY",
+      "title": "만기 출소",
+      "description": "형기를 마치고 출소했고, 전자발찌를 차고 보호관찰을 받게 됐습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "8세 여자아이",
+      "age": 8,
+      "gender": "FEMALE",
+      "status": "INJURED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "조두순",
+      "status": "CONVICTED",
+      "charges": "특정범죄가중처벌법 위반(강간상해)",
+      "sentences": [
+       {
+        "courtLevel": "SUPREME",
+        "type": "IMPRISONMENT",
+        "penalty": "징역 12년",
+        "isFinal": true,
+        "courtName": "대법원",
+        "decidedAt": "2009-09-24"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "술에 취했다는 이유로 형을 줄여 주는 제도는 어떻게 바뀌어야 할까요?"
+     },
+     {
+      "question": "아동 성범죄자가 출소한 뒤 지역 사회는 어떻게 아이들을 지킬 수 있을까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.segye.com/content/html/2009/09/30/20090930004476.html",
+     "title": "조두순 사건 징역 12년 확정 관련 보도",
+     "publisher": "세계일보",
+     "type": "NEWS",
+     "publishedAt": "2009-09-30",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.ajunews.com/view/20200903081018977",
+     "title": "조두순 출소 앞두고 관련 보도",
+     "publisher": "아주경제",
+     "type": "NEWS",
+     "publishedAt": "2020-09-03",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.ytn.co.kr/_ln/0103_202012121215223953",
+     "title": "조두순 만기 출소",
+     "publisher": "YTN",
+     "type": "BROADCAST",
+     "publishedAt": "2020-12-12",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": []
+  },
+  {
+   "slug": "jeong-nam-gyu",
+   "content": {
+    "title": "정남규 연쇄살인 사건",
+    "summary": "2004년부터 2006년까지 서울 서남부와 경기 일대에서 13명을 살해한 정남규에게 사형이 확정된 사건",
+    "overview": "정남규는 2004년부터 2006년까지 서울 서남부와 경기 일대에서 주로 새벽에 혼자 다니는 사람이나 주택에 침입해 13명을 살해하고 20명을 다치게 했습니다. 2006년 4월 서울 신길동 주택에 침입했다가 집주인과 몸싸움 끝에 붙잡혔습니다. 2007년 대법원에서 사형이 확정됐고, 2009년 11월 서울구치소에서 스스로 목숨을 끊었습니다.",
+    "victimCountNote": "사망 13명, 부상 20명",
+    "country": "KR",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "서울 서남부·경기 일대",
+    "occurredAt": "2004-01-01",
+    "occurredAtPrecision": "YEAR",
+    "solvedAt": "2007-04-12",
+    "timeline": [
+     {
+      "occurredAt": "2004-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "연쇄 범행 시작",
+      "description": "서울 서남부를 중심으로 범행이 이어졌습니다."
+     },
+     {
+      "occurredAt": "2006-04-22",
+      "occurredAtPrecision": "DAY",
+      "title": "검거",
+      "description": "주택에 침입했다가 집주인에게 제압돼 붙잡혔습니다."
+     },
+     {
+      "occurredAt": "2007-04-12",
+      "occurredAtPrecision": "DAY",
+      "title": "사형 확정",
+      "description": "대법원에서 사형이 확정됐습니다."
+     },
+     {
+      "occurredAt": "2009-11-21",
+      "occurredAtPrecision": "DAY",
+      "title": "구치소에서 사망",
+      "description": "서울구치소에서 스스로 목숨을 끊었습니다."
+     }
+    ],
+    "victims": [],
+    "suspects": [
+     {
+      "name": "정남규",
+      "status": "CONVICTED",
+      "charges": "살인, 살인미수, 강도 등",
+      "sentences": [
+       {
+        "courtLevel": "SUPREME",
+        "type": "DEATH",
+        "penalty": "사형",
+        "isFinal": true,
+        "courtName": "대법원",
+        "decidedAt": "2007-04-12"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "새벽 시간 주택가 골목의 안전을 지키려면 어떤 장치가 필요할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.mt.co.kr/society/2026/04/12/2026040315531579255",
+     "title": "정남규 연쇄살인 사건 다시 보기",
+     "publisher": "머니투데이",
+     "type": "NEWS",
+     "publishedAt": "2026-04-12",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.tenasia.co.kr/article/2022052883884",
+     "title": "정남규 연쇄살인 사건 관련 보도",
+     "publisher": "텐아시아",
+     "type": "NEWS",
+     "publishedAt": "2022-05-28",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": []
+  },
+  {
+   "slug": "jijonpa",
+   "content": {
+    "title": "지존파 연쇄살인 사건",
+    "summary": "1993년부터 1994년까지 '부자를 증오한다'며 조직을 만들어 5명을 살해한 지존파 조직원 6명이 사형된 사건",
+    "overview": "지존파는 1993년 결성돼 '부자를 증오한다'는 구호 아래 사람을 납치하고 살해했습니다. 전남 영광의 아지트에 시신을 태우는 소각로까지 만들어 두었습니다. 1994년 9월 납치됐던 여성이 탈출해 경찰에 신고하면서 조직원들이 붙잡혔습니다. 조직원 6명에게 사형이 확정됐고 1995년 11월 2일 형이 집행됐습니다.",
+    "victimCountNote": "사망 5명",
+    "country": "KR",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "전라남도 영광군 등",
+    "occurredAt": "1993-01-01",
+    "occurredAtPrecision": "YEAR",
+    "solvedAt": "1994-09-01",
+    "timeline": [
+     {
+      "occurredAt": "1993-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "조직 결성"
+     },
+     {
+      "occurredAt": "1994-09-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "탈출한 피해자의 신고로 검거",
+      "description": "납치됐던 여성이 탈출해 신고하면서 조직원들이 붙잡혔습니다."
+     },
+     {
+      "occurredAt": "1995-11-02",
+      "occurredAtPrecision": "DAY",
+      "title": "사형 집행",
+      "description": "조직원 6명에게 사형이 집행됐습니다."
+     }
+    ],
+    "victims": [],
+    "suspects": [
+     {
+      "alias": "지존파 조직원 6명",
+      "status": "CONVICTED",
+      "charges": "살인, 강도, 납치 등",
+      "sentences": [
+       {
+        "courtLevel": "SUPREME",
+        "type": "DEATH",
+        "penalty": "사형 (1995-11-02 집행)",
+        "isFinal": true,
+        "courtName": "대법원"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "납치된 사람이 도움을 청했을 때 바로 대응할 수 있는 신고 체계는 어떻게 갖춰져야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.seoul.co.kr/news/1994/10/20/19941020023001",
+     "title": "지존파 사건 관련 보도",
+     "publisher": "서울신문",
+     "type": "NEWS",
+     "publishedAt": "1994-10-20",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.mt.co.kr/society/2016/09/19/2016091814230359325",
+     "title": "지존파 사건 다시 보기",
+     "publisher": "머니투데이",
+     "type": "NEWS",
+     "publishedAt": "2016-09-19",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.sidae.com/article/2025102916244457033",
+     "title": "지존파 사건 관련 보도",
+     "publisher": "시사매거진",
+     "type": "NEWS",
+     "publishedAt": "2025-10-29",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": []
+  },
+  {
+   "slug": "daegu-subway-fire",
+   "content": {
+    "title": "대구 지하철 참사",
+    "summary": "2003년 대구 지하철 중앙로역에서 50대 남성이 전동차에 불을 질러 192명이 숨진 사건",
+    "overview": "2003년 2월 18일 오전 대구 지하철 1호선 중앙로역에 들어온 전동차 안에서 50대 남성이 휘발유에 불을 붙였습니다. 불은 맞은편에 들어온 전동차로 옮겨붙었고, 기관사가 전원 열쇠를 뽑고 대피하면서 문이 닫힌 객차 안에서 많은 사람이 빠져나오지 못했습니다. 192명이 숨지고 151명이 다쳤습니다. 방화범은 무기징역을 선고받고 복역 중 2004년 숨졌습니다. 이 참사 뒤 전동차 내장재를 불에 타지 않는 재료로 바꾸고 비상 대응 매뉴얼을 고쳤습니다.",
+    "victimCountNote": "사망 192명, 부상 151명",
+    "country": "KR",
+    "category": "ARSON",
+    "status": "SOLVED",
+    "location": "대구광역시 중구 중앙로역",
+    "occurredAt": "2003-02-18",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "2003-02-18",
+    "timeline": [
+     {
+      "occurredAt": "2003-02-18",
+      "occurredAtPrecision": "DAY",
+      "title": "방화와 화재",
+      "description": "전동차 안에서 불을 질렀고 맞은편 전동차까지 불이 번졌습니다."
+     },
+     {
+      "occurredAt": "2003-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "무기징역 선고",
+      "description": "방화범에게 무기징역이 선고됐습니다."
+     },
+     {
+      "occurredAt": "2004-08-30",
+      "occurredAtPrecision": "DAY",
+      "title": "방화범 사망",
+      "description": "방화범이 복역 중 숨졌습니다."
+     }
+    ],
+    "victims": [],
+    "suspects": [
+     {
+      "alias": "50대 방화범",
+      "status": "CONVICTED",
+      "charges": "현주건조물방화치사 등",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "LIFE",
+        "penalty": "무기징역",
+        "isFinal": true,
+        "courtName": "대구지방법원"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "지하철 같은 닫힌 공간에서 불이 났을 때 승객이 스스로 문을 열고 대피할 수 있게 하려면 무엇이 필요할까요?"
+     },
+     {
+      "question": "참사 뒤 바뀐 안전 기준이 지금도 잘 지켜지는지 어떻게 확인해야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.mt.co.kr/society/2026/02/18/2026021313055824429",
+     "title": "대구 지하철 참사 23주기",
+     "publisher": "머니투데이",
+     "type": "NEWS",
+     "publishedAt": "2026-02-18",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.koreaherald.com/article/3231020",
+     "title": "Daegu subway fire anniversary",
+     "publisher": "The Korea Herald",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://m.seoul.co.kr/news/2003/02/19/20030219002001",
+     "title": "대구 지하철 방화 참사 보도",
+     "publisher": "서울신문",
+     "type": "NEWS",
+     "publishedAt": "2003-02-19",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": []
+  },
+  {
+   "slug": "busan-schoolgirl-kim-gil-tae",
+   "content": {
+    "title": "부산 여중생 납치 살인 사건 (김길태 사건)",
+    "summary": "2010년 부산 사상구에서 13세 여중생을 납치해 살해한 김길태에게 무기징역이 확정된 사건",
+    "overview": "2010년 2월 부산 사상구의 집에 있던 13세 여중생이 사라졌고, 며칠 뒤 이웃 빈집 물탱크에서 숨진 채 발견됐습니다. 경찰은 공개수배 끝에 3월 김길태를 붙잡았습니다. 1심은 사형을 선고했으나 항소심은 무기징역으로 형을 낮췄고, 대법원에서 무기징역이 확정됐습니다. 이 사건 뒤 재개발 지역 빈집 관리와 성범죄자 관리 강화가 논의됐습니다.",
+    "country": "KR",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "부산광역시 사상구",
+    "occurredAt": "2010-02-24",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "2010-03-10",
+    "timeline": [
+     {
+      "occurredAt": "2010-02-24",
+      "occurredAtPrecision": "DAY",
+      "title": "실종",
+      "description": "집에 있던 13세 여중생이 사라졌습니다."
+     },
+     {
+      "occurredAt": "2010-03-06",
+      "occurredAtPrecision": "DAY",
+      "title": "숨진 채 발견",
+      "description": "이웃 빈집 물탱크에서 발견됐습니다."
+     },
+     {
+      "occurredAt": "2010-03-10",
+      "occurredAtPrecision": "DAY",
+      "title": "검거",
+      "description": "공개수배 끝에 붙잡혔습니다."
+     },
+     {
+      "occurredAt": "2010-12-15",
+      "occurredAtPrecision": "DAY",
+      "title": "항소심 무기징역",
+      "description": "항소심에서 1심 사형이 무기징역으로 바뀌었습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "13세 여중생",
+      "age": 13,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "김길태",
+      "status": "CONVICTED",
+      "charges": "성폭력범죄처벌법 위반(강간 등 살인) 등",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "DEATH",
+        "penalty": "사형",
+        "isFinal": false,
+        "courtName": "부산지방법원"
+       },
+       {
+        "courtLevel": "APPEAL",
+        "type": "LIFE",
+        "penalty": "무기징역",
+        "isFinal": false,
+        "courtName": "부산고등법원",
+        "decidedAt": "2010-12-15"
+       },
+       {
+        "courtLevel": "SUPREME",
+        "type": "LIFE",
+        "penalty": "무기징역",
+        "isFinal": true,
+        "courtName": "대법원"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "재개발 지역에 오래 비어 있는 집을 어떻게 관리해야 범죄 장소가 되지 않을까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://m.seoul.co.kr/news/2010/12/15/20101215800082",
+     "title": "김길태 항소심 무기징역",
+     "publisher": "서울신문",
+     "type": "NEWS",
+     "publishedAt": "2010-12-15",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.khan.co.kr/article/20100331174845A/",
+     "title": "김길태 사건 관련 보도",
+     "publisher": "경향신문",
+     "type": "NEWS",
+     "publishedAt": "2010-03-31",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.newdaily.co.kr/site/data/html/2010/06/09/2010060900031.html",
+     "title": "김길태 1심 관련 보도",
+     "publisher": "뉴데일리",
+     "type": "NEWS",
+     "publishedAt": "2010-06-09",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": []
+  },
+  {
+   "slug": "gangnam-station-toilet-murder",
+   "content": {
+    "title": "강남역 공용화장실 살인 사건",
+    "summary": "2016년 서울 서초동 상가 공용화장실에서 처음 보는 20대 여성을 살해한 30대 남성에게 징역 30년이 확정된 사건",
+    "overview": "2016년 5월 17일 새벽 서울 강남역 근처 상가 건물의 남녀 공용화장실에서 23세 여성이 처음 보는 30대 남성에게 살해됐습니다. 가해자는 조현병 치료 이력이 있었고, 화장실에서 기다리다 여성이 들어오자 범행했습니다. 1심은 징역 30년과 치료감호, 전자발찌 부착을 선고했고 2017년 대법원에서 확정됐습니다. 사건 뒤 강남역 10번 출구에 추모 메모가 이어졌고, 공용화장실 분리와 여성 대상 범죄에 대한 논의가 커졌습니다.",
+    "country": "KR",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "서울특별시 서초구 서초동",
+    "occurredAt": "2016-05-17",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "2017-04-13",
+    "timeline": [
+     {
+      "occurredAt": "2016-05-17",
+      "occurredAtPrecision": "DAY",
+      "title": "범행",
+      "description": "상가 공용화장실에서 23세 여성이 살해됐습니다."
+     },
+     {
+      "occurredAt": "2016-10-14",
+      "occurredAtPrecision": "DAY",
+      "title": "1심 징역 30년",
+      "description": "징역 30년, 치료감호, 전자발찌 부착 20년이 선고됐습니다."
+     },
+     {
+      "occurredAt": "2017-04-13",
+      "occurredAtPrecision": "DAY",
+      "title": "대법원 확정",
+      "description": "대법원에서 징역 30년이 확정됐습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "23세 여성",
+      "age": 23,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "alias": "34세 남성",
+      "status": "CONVICTED",
+      "charges": "살인",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "IMPRISONMENT",
+        "penalty": "징역 30년, 치료감호, 전자발찌 20년",
+        "isFinal": false,
+        "courtName": "서울중앙지방법원",
+        "decidedAt": "2016-10-14"
+       },
+       {
+        "courtLevel": "SUPREME",
+        "type": "IMPRISONMENT",
+        "penalty": "징역 30년",
+        "isFinal": true,
+        "courtName": "대법원",
+        "decidedAt": "2017-04-13"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "남녀 공용화장실처럼 위험이 큰 공간은 어떻게 바꿔야 할까요?"
+     },
+     {
+      "question": "치료를 중단한 정신질환자가 다시 치료받도록 돕는 체계는 어떻게 만들어야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.busan.com/view/busan/view.php?code=20161014000131",
+     "title": "강남역 살인사건 징역 30년 선고",
+     "publisher": "부산일보",
+     "type": "NEWS",
+     "publishedAt": "2016-10-14",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.sidae.com/article/2017041314288095629",
+     "title": "강남역 묻지마 살인사건 징역 30년 확정",
+     "publisher": "시사매거진",
+     "type": "NEWS",
+     "publishedAt": "2017-04-13",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://m.seoul.co.kr/news/2016/10/23/20161023500058",
+     "title": "강남역 살인 사건 5개월, 끝나지 않은 논란",
+     "publisher": "서울신문",
+     "type": "NEWS",
+     "publishedAt": "2016-10-23",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": []
+  },
+  {
+   "slug": "laura-bradbury",
+   "content": {
+    "title": "로라 브래드버리 실종 사건",
+    "summary": "1984년 미국 조슈아트리 캠핑장에서 3세 여자아이가 사라졌고, 유해는 DNA로 확인됐지만 어떻게 숨졌는지는 밝혀지지 않은 사건",
+    "overview": "1984년 10월 18일 미국 캘리포니아주 조슈아트리 국립공원 캠핑장에서 3세 로라 앤 브래드버리가 오빠를 따라 화장실 쪽으로 가다가 사라졌습니다. 가족과 수색대가 몇 주 동안 찾았고 로라는 우유팩에 실린 초기 실종 아동 중 한 명이 됐습니다. 이후 캠핑장 근처 사막에서 발견된 작은 두개골 조각이 DNA 검사로 로라의 것으로 확인됐지만, 누가 어떻게 데려갔는지는 아직 밝혀지지 않았습니다. 2026년 11월 자신이 로라라고 주장하는 여성이 가족을 찾아왔다는 보도가 나왔지만, DNA 검사 결과는 없고 가족은 받아들이지 않고 있습니다.",
+    "country": "US",
+    "category": "MISSING",
+    "status": "UNSOLVED",
+    "location": "미국 캘리포니아주 조슈아트리 국립공원",
+    "occurredAt": "1984-10-18",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "1984-10-18",
+      "occurredAtPrecision": "DAY",
+      "title": "캠핑장에서 실종",
+      "description": "오빠를 따라가다 사라졌습니다."
+     },
+     {
+      "occurredAt": null,
+      "occurredAtPrecision": "UNKNOWN",
+      "title": "유해 일부 발견",
+      "description": "캠핑장에서 몇 킬로미터 떨어진 사막에서 작은 두개골 조각이 발견됐습니다."
+     },
+     {
+      "occurredAt": "2010-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "DNA로 신원 확인",
+      "description": "추가 DNA 검사로 로라의 유해로 확인됐습니다."
+     },
+     {
+      "occurredAt": "2026-11-17",
+      "occurredAtPrecision": "DAY",
+      "title": "확인되지 않은 주장 보도",
+      "description": "자신이 로라라고 주장하는 여성이 나타났다는 보도가 나왔으나, 가족은 받아들이지 않았고 DNA 검사 결과도 없습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "로라 앤 브래드버리",
+      "age": 3,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [],
+    "questions": [
+     {
+      "question": "캠핑장 화장실까지 몇 걸음 사이에 아이가 사라졌다면 그 짧은 시간에 무슨 일이 있었을까요?"
+     },
+     {
+      "question": "넓은 자연 공원에서 아이를 잃어버렸을 때 처음 몇 시간 안에 무엇을 해야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.koreadaily.com/article/20261118133722819",
+     "title": "42년 전 사라진 딸이 돌아왔다",
+     "publisher": "미주중앙일보",
+     "type": "NEWS",
+     "publishedAt": "2026-11-18",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.upi.com/Archives/1989/01/26/Bones-may-unravel-Bradbury-mystery/3798601794000/",
+     "title": "Bones may unravel Bradbury mystery",
+     "publisher": "UPI",
+     "type": "NEWS_AGENCY",
+     "publishedAt": "1989-01-26",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://wp.sbcounty.gov/sheriff/wp-content/uploads/sites/17/2017/07/Laura_Ann_Bradbury.pdf",
+     "title": "Laura Ann Bradbury",
+     "publisher": "San Bernardino County Sheriff",
+     "type": "GOVERNMENT",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": []
+  },
+  {
+   "slug": "jeffrey-dahmer",
+   "content": {
+    "title": "제프리 다머 연쇄살인 사건",
+    "summary": "1978년부터 1991년까지 미국 밀워키 등에서 17명을 살해한 제프리 다머에게 연속 종신형 15건이 선고된 사건",
+    "overview": "제프리 다머는 1978년부터 1991년까지 미국 오하이오주와 위스콘신주 밀워키에서 젊은 남성과 소년 17명을 살해했습니다. 1991년 7월 탈출한 남성이 경찰을 데려오면서 붙잡혔습니다. 1992년 2월 위스콘신주 법원에서 연속 종신형 15건을 선고받았고, 1994년 11월 교도소에서 다른 수감자에게 살해됐습니다. 그 전에 피해자 한 명이 다머의 집에서 도망쳐 나왔을 때 경찰이 돌려보낸 일이 있어 경찰 대응과 소수자 피해자에 대한 무관심이 비판받았습니다.",
+    "victimCountNote": "사망 17명",
+    "country": "US",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "미국 위스콘신주 밀워키 등",
+    "occurredAt": "1978-01-01",
+    "occurredAtPrecision": "YEAR",
+    "solvedAt": "1991-07-22",
+    "timeline": [
+     {
+      "occurredAt": "1991-07-22",
+      "occurredAtPrecision": "DAY",
+      "title": "검거",
+      "description": "탈출한 남성이 경찰을 데려오면서 체포됐습니다."
+     },
+     {
+      "occurredAt": "1992-02-17",
+      "occurredAtPrecision": "DAY",
+      "title": "연속 종신형 15건",
+      "description": "위스콘신주 법원에서 선고됐습니다."
+     },
+     {
+      "occurredAt": "1994-11-28",
+      "occurredAtPrecision": "DAY",
+      "title": "교도소에서 사망",
+      "description": "다른 수감자에게 살해됐습니다."
+     }
+    ],
+    "victims": [],
+    "suspects": [
+     {
+      "name": "Jeffrey Dahmer",
+      "status": "CONVICTED",
+      "charges": "살인",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "LIFE",
+        "penalty": "연속 종신형 15건",
+        "isFinal": true,
+        "courtName": "밀워키 카운티 순회법원",
+        "decidedAt": "1992-02-17"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "도움을 청하는 사람이 사회적 약자일 때 경찰이 신고를 가볍게 넘기지 않게 하려면 무엇이 필요할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.cbsnews.com/news/on-this-day-february-17th-1992-serial-killer-jeffrey-dahmer-sentenced",
+     "title": "Feb. 17th, 1992: Serial killer Jeffrey Dahmer sentenced",
+     "publisher": "CBS News",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.deseret.com/1992/2/17/18968194/dahmer-sentenced-to-15-consecutive-life-terms-in-prison/",
+     "title": "Dahmer sentenced to 15 consecutive life terms in prison",
+     "publisher": "Deseret News",
+     "type": "NEWS",
+     "publishedAt": "1992-02-17",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.britannica.com/biography/Jeffrey-Dahmer",
+     "title": "Jeffrey Dahmer",
+     "publisher": "Encyclopaedia Britannica",
+     "type": "OTHER",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": []
+  },
+  {
+   "slug": "sandy-hook",
+   "content": {
+    "title": "샌디훅 초등학교 총기 난사 사건",
+    "summary": "2012년 미국 코네티컷주 뉴타운의 초등학교에서 20세 남성이 총을 쏴 어린이 20명과 교직원 6명이 숨진 사건",
+    "overview": "2012년 12월 14일 아침 20세 남성이 집에서 어머니를 살해한 뒤 샌디훅 초등학교에 들어가 총을 쐈습니다. 6~7세 어린이 20명과 교직원 6명이 숨졌고, 범인은 경찰이 도착하자 스스로 목숨을 끊었습니다. 미국 역사상 가장 많은 사망자를 낸 초등학교 총격 사건 중 하나로, 총기 규제와 학교 안전 논의가 크게 일었습니다.",
+    "victimCountNote": "사망 26명 (학교), 범인의 어머니 별도",
+    "country": "US",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "미국 코네티컷주 뉴타운",
+    "occurredAt": "2012-12-14",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "2012-12-14",
+    "timeline": [
+     {
+      "occurredAt": "2012-12-14",
+      "occurredAtPrecision": "DAY",
+      "title": "총격",
+      "description": "학교에 들어가 총을 쐈고 26명이 숨졌습니다. 범인은 현장에서 스스로 목숨을 끊었습니다."
+     }
+    ],
+    "victims": [],
+    "suspects": [
+     {
+      "alias": "20세 남성",
+      "status": "DECEASED",
+      "charges": "살인",
+      "sentences": []
+     }
+    ],
+    "questions": [
+     {
+      "question": "학교가 외부인의 침입을 막으면서도 열린 공간으로 남으려면 어떻게 해야 할까요?"
+     },
+     {
+      "question": "총기를 집에 두는 가정에서 보관 책임은 어디까지 져야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.upi.com/Top_News/US/2012/12/14/26-killed-in-Conn-school-shooting/UPI-81401355505575/",
+     "title": "26 killed in Conn. school shooting",
+     "publisher": "UPI",
+     "type": "NEWS_AGENCY",
+     "publishedAt": "2012-12-14",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://abc13.com/post/newtown-sandy-hook-elementary-school-mass-shooting-victim/1655903/",
+     "title": "Remembering the Sandy Hook Elementary School shooting victims",
+     "publisher": "ABC13",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.britannica.com/event/Newtown-shootings-of-2012",
+     "title": "Sandy Hook Elementary School shooting",
+     "publisher": "Encyclopaedia Britannica",
+     "type": "OTHER",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": []
+  },
+  {
+   "slug": "christchurch-mosque-attack",
+   "content": {
+    "title": "크라이스트처치 모스크 테러",
+    "summary": "2019년 뉴질랜드 크라이스트처치의 모스크 2곳에서 총격 테러로 51명이 숨지고, 범인에게 가석방 없는 종신형이 선고된 사건",
+    "overview": "2019년 3월 15일 금요 예배 시간에 호주 국적 남성이 뉴질랜드 크라이스트처치의 알누르 모스크와 린우드 이슬람 센터에서 총을 쐈습니다. 51명이 숨지고 40명이 다쳤으며, 범인은 범행을 인터넷으로 생중계했습니다. 2020년 8월 크라이스트처치 고등법원은 뉴질랜드에서 처음으로 가석방 없는 종신형을 선고했습니다. 사건 뒤 뉴질랜드는 반자동 소총을 금지했고, 온라인 테러 영상 확산을 막기 위한 '크라이스트처치 콜' 국제 협약이 만들어졌습니다.",
+    "victimCountNote": "사망 51명, 부상 40명",
+    "country": "OTHER",
+    "category": "TERROR",
+    "status": "SOLVED",
+    "location": "뉴질랜드 크라이스트처치",
+    "occurredAt": "2019-03-15",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "2020-08-27",
+    "timeline": [
+     {
+      "occurredAt": "2019-03-15",
+      "occurredAtPrecision": "DAY",
+      "title": "모스크 2곳 총격",
+      "description": "예배 중이던 사람들에게 총을 쐈고 현장에서 체포됐습니다."
+     },
+     {
+      "occurredAt": "2020-08-27",
+      "occurredAtPrecision": "DAY",
+      "title": "가석방 없는 종신형",
+      "description": "크라이스트처치 고등법원에서 선고됐습니다."
+     }
+    ],
+    "victims": [],
+    "suspects": [
+     {
+      "alias": "호주 국적 남성",
+      "status": "CONVICTED",
+      "charges": "살인 51건, 살인미수 40건, 테러 행위",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "LIFE",
+        "penalty": "가석방 없는 종신형",
+        "isFinal": true,
+        "courtName": "크라이스트처치 고등법원",
+        "decidedAt": "2020-08-27"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "범행을 생중계하는 영상이 퍼지지 않게 하려면 플랫폼은 무엇을 해야 할까요?"
+     },
+     {
+      "question": "온라인에서 혐오가 커지는 것을 일찍 알아채려면 어떻게 해야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.rnz.co.nz/news/national/424583/christchurch-mosque-attacks-terrorist-sentenced-to-life-in-jail-without-parole",
+     "title": "Christchurch mosque attacks: Terrorist sentenced to life in jail without parole",
+     "publisher": "RNZ",
+     "type": "BROADCAST",
+     "publishedAt": "2020-08-27",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.cbc.ca/1.5701637",
+     "title": "New Zealand mosque shooter sentenced to life without parole",
+     "publisher": "CBC",
+     "type": "BROADCAST",
+     "publishedAt": "2020-08-27",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.washingtontimes.com/news/2020/aug/26/new-zealand-mosque-shooter-sentenced-to-life-witho/",
+     "title": "New Zealand mosque shooter sentenced to life without parole",
+     "publisher": "Associated Press",
+     "type": "NEWS_AGENCY",
+     "publishedAt": "2020-08-26",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": []
+  },
+  {
+   "slug": "fritzl-case",
+   "content": {
+    "title": "오스트리아 암슈테텐 감금 사건 (프리츨 사건)",
+    "summary": "오스트리아 암슈테텐에서 아버지가 딸을 24년 동안 지하실에 가두고 학대한 사실이 2008년 드러나 종신형이 선고된 사건",
+    "overview": "요제프 프리츨은 1984년 18세이던 딸을 집 지하에 만든 밀실에 가두고 24년 동안 성폭행했습니다. 딸은 지하실에서 아이 7명을 낳았고 그중 1명은 태어난 지 며칠 만에 숨졌습니다. 2008년 4월 지하에 있던 큰딸이 위독해 병원에 옮겨지면서 사건이 드러났습니다. 2009년 3월 장크트푈텐 법원은 살인(신생아 방치 사망), 강간, 감금 등으로 종신형과 정신과 시설 수용을 선고했습니다.",
+    "country": "OTHER",
+    "category": "KIDNAPPING",
+    "status": "SOLVED",
+    "location": "오스트리아 암슈테텐",
+    "occurredAt": "1984-08-28",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "2009-03-19",
+    "timeline": [
+     {
+      "occurredAt": "1984-08-28",
+      "occurredAtPrecision": "DAY",
+      "title": "지하실 감금 시작",
+      "description": "18세 딸을 지하 밀실에 가뒀습니다."
+     },
+     {
+      "occurredAt": "2008-04-26",
+      "occurredAtPrecision": "DAY",
+      "title": "사건 발각과 체포",
+      "description": "지하의 큰딸이 병원에 옮겨진 것을 계기로 드러났습니다."
+     },
+     {
+      "occurredAt": "2009-03-19",
+      "occurredAtPrecision": "DAY",
+      "title": "종신형 선고",
+      "description": "장크트푈텐 법원에서 선고됐습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "딸 (감금 당시 18세)",
+      "age": 18,
+      "gender": "FEMALE",
+      "status": "FOUND_ALIVE"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "Josef Fritzl",
+      "status": "CONVICTED",
+      "charges": "살인, 강간, 감금, 노예화, 근친상간 등",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "LIFE",
+        "penalty": "종신형, 정신과 시설 수용",
+        "isFinal": true,
+        "courtName": "장크트푈텐 지방법원",
+        "decidedAt": "2009-03-19"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "가족 안에서 오래 이어지는 학대를 이웃과 기관이 알아차리려면 어떤 신호를 봐야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.aljazeera.com/news/2009/3/20/austrias-fritzl-sentenced-for-life",
+     "title": "Austria's Fritzl sentenced for life",
+     "publisher": "Al Jazeera",
+     "type": "BROADCAST",
+     "publishedAt": "2009-03-20",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://abcnews.go.com/International/story?id=7121257",
+     "title": "Fritzl Gets Life Sentence for Murder, Rape, Imprisonment",
+     "publisher": "ABC News",
+     "type": "BROADCAST",
+     "publishedAt": "2009-03-19",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.upi.com/Top_News/2009/03/19/Man-sent-to-psych-hospital-in-incest-case/66621237471506/",
+     "title": "Man sent to psych hospital in incest case",
+     "publisher": "UPI",
+     "type": "NEWS_AGENCY",
+     "publishedAt": "2009-03-19",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": []
+  },
+  {
+   "slug": "ikeda-elementary-school",
+   "content": {
+    "title": "오사카 이케다 초등학교 살상 사건",
+    "summary": "2001년 일본 오사카 이케다시의 초등학교에 남성이 침입해 흉기로 어린이 8명을 살해한 사건",
+    "overview": "2001년 6월 8일 오전 오사카교육대학 부속 이케다 초등학교에 37세 남성이 들어와 흉기를 휘둘렀습니다. 1~2학년 어린이 8명이 숨지고 어린이와 교사 15명이 다쳤습니다. 범인은 2003년 사형을 선고받았고 항소하지 않아 확정됐으며, 2004년 9월 사형이 집행됐습니다. 이 사건 뒤 일본 학교에서는 외부인 출입 관리와 방범 훈련이 크게 강화됐습니다.",
+    "victimCountNote": "사망 8명, 부상 15명",
+    "country": "JP",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "일본 오사카부 이케다시",
+    "occurredAt": "2001-06-08",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "2003-08-28",
+    "timeline": [
+     {
+      "occurredAt": "2001-06-08",
+      "occurredAtPrecision": "DAY",
+      "title": "학교 침입과 흉기 난동",
+      "description": "현장에서 교사들에게 제압돼 체포됐습니다."
+     },
+     {
+      "occurredAt": "2003-08-28",
+      "occurredAtPrecision": "DAY",
+      "title": "사형 선고",
+      "description": "오사카지방법원에서 사형이 선고됐고 항소하지 않아 확정됐습니다."
+     },
+     {
+      "occurredAt": "2004-09-14",
+      "occurredAtPrecision": "DAY",
+      "title": "사형 집행"
+     }
+    ],
+    "victims": [],
+    "suspects": [
+     {
+      "name": "宅間守 (다쿠마 마모루)",
+      "status": "CONVICTED",
+      "charges": "살인, 살인미수 등",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "DEATH",
+        "penalty": "사형 (2004-09-14 집행)",
+        "isFinal": true,
+        "courtName": "오사카지방법원",
+        "decidedAt": "2003-08-28"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "학교가 외부인 출입을 관리하면서도 지역과 단절되지 않으려면 어떻게 해야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.japantimes.co.jp/news/2021/06/08/national/osaka-school-killings-memorial/",
+     "title": "Osaka school killings memorial",
+     "publisher": "The Japan Times",
+     "type": "NEWS",
+     "publishedAt": "2021-06-08",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.japantimes.co.jp/news/2011/06/09/national/osaka-school-marks-10th-anniversary-of-massacre/",
+     "title": "Osaka school marks 10th anniversary of massacre",
+     "publisher": "The Japan Times",
+     "type": "NEWS",
+     "publishedAt": "2011-06-09",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://global.hk01.com/人气话题/60354917/附属池田小学事件-武士后裔求判死刑-报复前妻不果闯校园大屠杀",
+     "title": "附属池田小学事件",
+     "publisher": "HK01",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": []
+  },
+  {
+   "slug": "moors-murders",
+   "content": {
+    "title": "무어스 살인 사건",
+    "summary": "1963년부터 1965년까지 영국 맨체스터 일대에서 어린이와 청소년 5명을 살해한 이언 브래디와 마이라 힌들리에게 종신형이 선고된 사건",
+    "overview": "이언 브래디와 마이라 힌들리는 1963년부터 1965년까지 맨체스터 일대에서 10~17세 어린이와 청소년 5명을 살해하고 여러 명을 새들워스 무어에 묻었습니다. 1966년 5월 체스터 법원에서 종신형을 선고받았습니다. 힌들리는 2002년, 브래디는 2017년 수감 중 숨졌습니다. 피해자 중 12세 키스 베넷의 시신은 끝내 찾지 못했고, 어머니는 2012년 숨질 때까지 아들을 찾았습니다.",
+    "victimCountNote": "사망 5명 (1명 시신 미발견)",
+    "country": "GB",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "영국 맨체스터, 새들워스 무어",
+    "occurredAt": "1963-07-12",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "1966-05-06",
+    "timeline": [
+     {
+      "occurredAt": "1963-07-12",
+      "occurredAtPrecision": "DAY",
+      "title": "첫 번째 피해자 실종"
+     },
+     {
+      "occurredAt": "1965-10-07",
+      "occurredAtPrecision": "DAY",
+      "title": "체포",
+      "description": "범행을 본 처남의 신고로 체포됐습니다."
+     },
+     {
+      "occurredAt": "1966-05-06",
+      "occurredAtPrecision": "DAY",
+      "title": "종신형 선고",
+      "description": "체스터 법원에서 종신형이 선고됐습니다."
+     },
+     {
+      "occurredAt": "2017-05-15",
+      "occurredAtPrecision": "DAY",
+      "title": "브래디 사망",
+      "description": "수감 중 숨졌고, 키스 베넷의 시신 위치는 끝내 밝히지 않았습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "키스 베넷",
+      "age": 12,
+      "gender": "MALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "Ian Brady",
+      "status": "CONVICTED",
+      "charges": "살인",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "LIFE",
+        "penalty": "종신형",
+        "isFinal": true,
+        "courtName": "체스터 순회법원",
+        "decidedAt": "1966-05-06"
+       }
+      ]
+     },
+     {
+      "name": "Myra Hindley",
+      "status": "CONVICTED",
+      "charges": "살인",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "LIFE",
+        "penalty": "종신형",
+        "isFinal": true,
+        "courtName": "체스터 순회법원",
+        "decidedAt": "1966-05-06"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "가해자가 시신 위치를 끝까지 밝히지 않을 때 유족을 위해 제도가 할 수 있는 일은 무엇일까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.aljazeera.com/features/2017/5/21/why-the-moors-murders-should-never-be-forgotten",
+     "title": "Why the Moors Murders 'should never be forgotten'",
+     "publisher": "Al Jazeera",
+     "type": "BROADCAST",
+     "publishedAt": "2017-05-21",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.thejournal.ie/the-moors-murders-a-timeline-561797-Jun2013/",
+     "title": "The Moors murders: a timeline",
+     "publisher": "TheJournal.ie",
+     "type": "NEWS",
+     "publishedAt": "2013-06-01",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://theconversation.com/the-moors-murders-50-years-on-how-brady-and-hindley-became-an-awful-celebrity-template-58665",
+     "title": "The Moors murders 50 years on",
+     "publisher": "The Conversation",
+     "type": "NEWS",
+     "publishedAt": "2016-05-06",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": []
+  }
+ ]
+}

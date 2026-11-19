@@ -1,0 +1,965 @@
+{
+ "version": 1,
+ "cases": [
+  {
+   "slug": "wando-pyeongildo-murder",
+   "content": {
+    "title": "완도 평일도 살인 사건",
+    "summary": "2016년 5월 전남 완도 평일도에서 혼자 살던 80세 남성이 자택에서 숨진 채 발견됐지만 범인을 찾지 못한 사건",
+    "overview": "2016년 5월 16일 전남 완도군 금일읍 평일도의 한 마을에서 혼자 살던 80세 남성이 평소와 달리 마을회관에 나오지 않았고, 이날 오후 자택 안방에서 숨진 채 발견됐습니다. 경찰은 집 안에 있던 아령이 범행에 쓰인 것으로 보고 수사했습니다. 경찰은 이웃 주민을 긴급체포해 조사했지만 증거가 부족해 풀어 줬고, 범행 동기도 밝혀내지 못했습니다. 주민이 많지 않은 섬마을에서 벌어진 일이라 주민들의 불안이 컸고, 2017년 SBS 「그것이 알고 싶다」가 이 사건을 다뤘습니다.",
+    "victimCountNote": "1명 사망",
+    "country": "KR",
+    "category": "MURDER",
+    "status": "UNSOLVED",
+    "location": "전라남도 완도군 금일읍 평일도",
+    "occurredAt": "2016-05-16",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "2016-05-16",
+      "occurredAtPrecision": "DAY",
+      "title": "자택에서 숨진 채 발견",
+      "description": "마을회관에 나오지 않은 피해자를 찾다가 안방에서 발견했습니다."
+     },
+     {
+      "occurredAt": "2016-05-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "이웃 주민 긴급체포 뒤 석방",
+      "description": "증거가 부족해 입건하지 못했습니다."
+     },
+     {
+      "occurredAt": "2017-04-22",
+      "occurredAtPrecision": "DAY",
+      "title": "「그것이 알고 싶다」 방송",
+      "description": "섬 안에 범인이 있을 수 있다는 의문을 다뤘습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "80세 남성",
+      "age": 80,
+      "gender": "MALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [],
+    "questions": [
+     {
+      "question": "외딴 섬마을에서 벌어진 사건의 증거를 빨리 지키려면 초동 수사에서 무엇이 필요할까요?"
+     },
+     {
+      "question": "혼자 사는 어르신의 안부를 이웃이 매일 확인하는 체계는 어떻게 만들 수 있을까요?"
+     },
+     {
+      "question": "범인은 대낮에 사람들 눈에 띄지 않고 어떻게 그 집을 드나들었을까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.sisajournal.com/news/articleView.html?idxno=190310",
+     "title": "섬마을 공포에 떨게 한 한낮의 미스터리",
+     "publisher": "시사저널",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2019-09-17"
+    },
+    {
+     "url": "https://view.asiae.co.kr/article/2017042213114436073",
+     "title": "'그것이 알고 싶다' 평일도 살인사건, 감쪽같이 사라진 범인은 어디에?",
+     "publisher": "아시아경제",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2017-04-22"
+    },
+    {
+     "url": "https://www.sedaily.com/article/11583120",
+     "title": "'그것이 알고 싶다' 전남 평일도 살인사건 다뤄",
+     "publisher": "서울경제",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "seocheon-random-murder",
+   "content": {
+    "title": "서천 묻지마 살인 사건",
+    "summary": "2025년 3월 충남 서천의 길에서 처음 본 40대 여성을 흉기로 살해한 이지현이 1·2심에서 무기징역을 선고받은 사건",
+    "overview": "2025년 3월 2일 밤 충남 서천군 사곡리 도로변에서 일면식 없는 40대 여성이 흉기에 찔려 숨졌습니다. 가족의 신고로 수색하던 경찰은 다음 날 새벽 피해자를 발견했고, CCTV를 분석해 이지현(당시 34세)을 주거지에서 긴급체포했습니다. 충남경찰청은 신상정보 공개를 결정해 이름과 얼굴을 공개했습니다. 검찰은 그가 코인 투자 손실과 대출 거절 뒤 범행 한 달 전 '다 죽이겠다'는 메모를 쓰고 흉기를 준비해 거리를 돌아다녔다고 밝혔습니다. 1심은 2025년 7월 무기징역을 선고했고, 대전고법도 2025년 11월 7일 무기징역을 유지했습니다. 두 판결 모두 전자발찌 부착명령은 받아들이지 않았습니다.",
+    "victimCountNote": "1명 사망",
+    "country": "KR",
+    "category": "MURDER",
+    "status": "IN_PROGRESS",
+    "location": "충청남도 서천군 사곡리",
+    "occurredAt": "2025-03-02",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "2025-03-02",
+      "occurredAtPrecision": "DAY",
+      "title": "길을 걷던 40대 여성 피살"
+     },
+     {
+      "occurredAt": "2025-03-03",
+      "occurredAtPrecision": "DAY",
+      "title": "피해자 발견과 피의자 긴급체포",
+      "description": "CCTV 분석으로 피의자를 찾았습니다."
+     },
+     {
+      "occurredAt": "2025-03-13",
+      "occurredAtPrecision": "DAY",
+      "title": "충남경찰청 신상정보 공개"
+     },
+     {
+      "occurredAt": "2025-07-22",
+      "occurredAtPrecision": "DAY",
+      "title": "1심 무기징역"
+     },
+     {
+      "occurredAt": "2025-11-07",
+      "occurredAtPrecision": "DAY",
+      "title": "2심 무기징역",
+      "description": "대전고법이 1심 형을 유지했습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "40대 여성",
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "이지현",
+      "status": "INDICTED",
+      "charges": "살인, 살인예비",
+      "identityDisclosedAt": "2025-03-13",
+      "identityDisclosureAgency": "충남경찰청",
+      "identityDisclosureSource": "https://www.sedaily.com/article/14038953",
+      "nameExceptionReason": "수사기관(충남경찰청)이 신상정보 공개를 결정해 실명이 공개됨",
+      "nameExceptionDecidedAt": "2026-11-19",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "LIFE",
+        "penalty": "무기징역",
+        "isFinal": false,
+        "decidedAt": "2025-07-22"
+       },
+       {
+        "courtLevel": "APPEAL",
+        "type": "LIFE",
+        "penalty": "무기징역 (1심 유지)",
+        "isFinal": false,
+        "courtName": "대전고등법원",
+        "decidedAt": "2025-11-07"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "'다 죽이겠다'는 메모처럼 범행 전 위험 신호를 주변에서 알아차렸을 때 어디에 알릴 수 있을까요?"
+     },
+     {
+      "question": "밤길에 혼자 걷는 사람을 지키기 위해 인적 드문 도로에는 어떤 안전 장치가 필요할까요?"
+     },
+     {
+      "question": "경제적 위기에 몰린 사람이 극단적인 분노로 치닫지 않도록 사회는 어떤 도움을 줄 수 있을까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.sedaily.com/article/14038953",
+     "title": "서천 '묻지마 흉기 살인' 피의자는 34세 이지현…경찰, 신상정보 공개",
+     "publisher": "서울경제",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2025-03-13"
+    },
+    {
+     "url": "https://www.newspim.com/news/view/20250722000458",
+     "title": "'서천 묻지마 살인' 이지현…1심서 무기징역",
+     "publisher": "뉴스핌",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2025-07-22"
+    },
+    {
+     "url": "https://www.sisajournal.com/news/articleView.html?idxno=352139",
+     "title": "'서천 묻지마 살인' 이지현, 2심도 무기징역…전자발찌 부착명령 기각",
+     "publisher": "시사저널",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2025-11-07"
+    },
+    {
+     "url": "https://www.kyeonggi.com/article/20251107580038",
+     "title": "'서천 묻지마 살인' 이지현 항소심도 무기징역",
+     "publisher": "경기일보",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2025-11-07"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "hwagok-student-stabbing",
+   "content": {
+    "title": "화곡동 여고생 흉기 습격 사건",
+    "summary": "2026년 7월 서울 강서구 화곡동 주택가에서 10대 남학생이 알고 지내던 여고생을 흉기로 다치게 해 1심에서 징역 장기 7년·단기 4년을 선고받은 사건",
+    "overview": "2026년 7월 23일 낮 서울 강서구 화곡동 다세대주택가 골목에서 10대 남학생이 여고생에게 흉기를 휘둘렀습니다. 피해 학생은 배를 다쳤지만 목숨은 건졌습니다. 두 사람은 알고 지내던 사이로 전해졌고, 검찰은 남학생을 살인미수와 스토킹처벌법 위반 혐의로 재판에 넘겼습니다. 서울남부지법은 2026년 10월 27일 공소사실을 모두 유죄로 보고 징역 장기 7년·단기 4년과 스토킹 치료프로그램 이수를 선고했습니다. 아직 확정되지 않았습니다.",
+    "victimCountNote": "1명 부상",
+    "country": "KR",
+    "category": "OTHER",
+    "status": "IN_PROGRESS",
+    "location": "서울특별시 강서구 화곡동",
+    "occurredAt": "2026-07-23",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "2026-07-23",
+      "occurredAtPrecision": "DAY",
+      "title": "골목길에서 흉기 습격"
+     },
+     {
+      "occurredAt": "2026-10-27",
+      "occurredAtPrecision": "DAY",
+      "title": "1심 징역 장기 7년·단기 4년",
+      "description": "서울남부지법이 살인미수·스토킹 혐의를 모두 유죄로 판단했습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "10대 여고생",
+      "gender": "FEMALE",
+      "status": "INJURED"
+     }
+    ],
+    "suspects": [
+     {
+      "alias": "10대 남학생",
+      "status": "INDICTED",
+      "charges": "살인미수, 스토킹범죄처벌법 위반",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "IMPRISONMENT",
+        "penalty": "징역 장기 7년·단기 4년",
+        "isFinal": false,
+        "courtName": "서울남부지방법원",
+        "decidedAt": "2026-10-27"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "학생 사이 스토킹이 시작됐을 때 학교와 경찰이 피해 학생을 함께 보호하려면 무엇이 필요할까요?"
+     },
+     {
+      "question": "친구에게 집착과 위협을 받는 청소년이 부담 없이 도움을 청할 수 있는 창구는 무엇이 있을까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.newspim.com/news/view/20261027001016",
+     "title": "'화곡동 여고생 흉기습격' 10대, 1심서 징역 장기 7년·단기 4년",
+     "publisher": "뉴스핌",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-10-27"
+    },
+    {
+     "url": "https://www.dailian.co.kr/news/view/1706892/",
+     "title": "서울 강서구 여고생 흉기 습격 10대…1심서 징역형 선고",
+     "publisher": "데일리안",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-10-27"
+    },
+    {
+     "url": "https://www.insight.co.kr/news/575727",
+     "title": "화곡동 여고생 흉기 습격 10대...검찰, 징역 장기 7년 구형",
+     "publisher": "인사이트",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "incheon-guwol-stabbing",
+   "content": {
+    "title": "인천 구월동 흉기 난동 사건",
+    "summary": "2026년 10월 인천 남동구 구월동 대형마트에서 50대 남성이 흉기를 휘둘러 여러 명이 다친 혐의로 체포된 사건",
+    "overview": "2026년 10월 13일 오후 인천 남동구 구월동의 대형마트 건물에서 59세 남성이 에스컬레이터를 따라 층을 옮기며 흉기를 휘둘렀다는 신고가 접수됐습니다. 20대 여성 1명이 심정지 상태로 병원에 옮겨져 의식을 찾지 못했고, 다른 시민 여러 명이 어깨와 등을 다쳤습니다. 남성은 현장에서 시민들에게 제지된 뒤 경찰에 체포됐습니다. 그는 과거 살인미수로 복역한 뒤 전자발찌를 차고 보호관찰을 받고 있었고, 범행 약 1시간 전에도 보호관찰관과 함께 있었던 것으로 알려져 전자감독 관리에 대한 지적이 나왔습니다. 경찰은 살인미수 등 혐의로 수사하고 있습니다.",
+    "victimCountNote": "8명 안팎 부상 (보도마다 차이, 1명 위중)",
+    "country": "KR",
+    "category": "OTHER",
+    "status": "IN_PROGRESS",
+    "location": "인천광역시 남동구 구월동",
+    "occurredAt": "2026-10-13",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "2026-10-13",
+      "occurredAtPrecision": "DAY",
+      "title": "대형마트에서 흉기 난동 신고",
+      "description": "시민들이 남성을 제지했고 경찰이 현장에서 체포했습니다."
+     },
+     {
+      "occurredAt": "2026-10-13",
+      "occurredAtPrecision": "DAY",
+      "title": "법무부, 보호관찰 경과 공개",
+      "description": "범행 약 1시간 전까지 보호관찰관이 지도·감독한 사실을 밝히고 사과했습니다."
+     },
+     {
+      "occurredAt": "2026-10-14",
+      "occurredAtPrecision": "DAY",
+      "title": "경찰, 프로파일러 투입",
+      "description": "피의자는 관심을 끌려 했다고 주장했지만 경찰은 납득하기 어렵다고 밝혔습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "20대 여성 (의식불명)",
+      "gender": "FEMALE",
+      "status": "INJURED"
+     },
+     {
+      "alias": "20~50대 시민들",
+      "gender": "UNKNOWN",
+      "status": "INJURED"
+     }
+    ],
+    "suspects": [
+     {
+      "alias": "59세 남성",
+      "status": "ARRESTED",
+      "charges": "살인미수 등 혐의 (수사 중)",
+      "sentences": []
+     }
+    ],
+    "questions": [
+     {
+      "question": "전자발찌를 찬 재범 위험자가 다시 흉기를 들기 전에 막으려면 보호관찰은 무엇을 더 봐야 할까요?"
+     },
+     {
+      "question": "사람이 많은 마트나 상가에서 흉기 난동이 일어났을 때 시민과 직원은 어떻게 대피하고 신고해야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.ytn.co.kr/_ln/0103_202610131451532758",
+     "title": "[속보] 인천 구월동에서 칼부림 신고...\"부상자 다수\"",
+     "publisher": "YTN",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-10-13"
+    },
+    {
+     "url": "https://www.tsisalaw.com/mobile/article.html?no=30766",
+     "title": "인천 칼부림 용의자…보호관찰관과 점심 먹고 70분 뒤 범행",
+     "publisher": "더시사법률",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-10-13"
+    },
+    {
+     "url": "https://www.stnsports.co.kr/news/articleView.html?idxno=324031",
+     "title": "인천 구월동 칼부림 사건 범인 \"관심 끌려 범행\"",
+     "publisher": "STN NEWS",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-10-14"
+    },
+    {
+     "url": "https://www.etoday.co.kr/news/view/2635286",
+     "title": "인천 구월동서 칼부림 신고⋯1명 심정지·7명 부상",
+     "publisher": "이투데이",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-10-13"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "daejeon-galma-villa-murder",
+   "content": {
+    "title": "대전 갈마동 빌라 살인사건",
+    "summary": "2005년 대전 서구 갈마동 빌라에서 26세 여성이 살해된 채 발견됐고, 남성의 DNA가 남았지만 20년째 범인을 찾지 못한 사건",
+    "overview": "2005년 11월 2일 오후 대전 서구 갈마동의 한 빌라 2층에서 귀가한 동거인이 숨진 26세 여성을 발견했습니다. 경찰은 피해자가 며칠 전인 10월 29일 새벽쯤 목이 졸려 숨진 것으로 봤습니다. 현장에는 흰 가루(부침가루)가 뿌려져 있었고, 피해자 몸과 현장에서 남성의 DNA와 발자국이 나왔습니다. 경찰은 택시기사 진술을 토대로 대전 동구 천동 일대를 중심으로 수백 명을 조사하고 DNA를 대조했지만 범인을 찾지 못했습니다.",
+    "victimCountNote": "1명 사망",
+    "country": "KR",
+    "category": "MURDER",
+    "status": "UNSOLVED",
+    "location": "대전광역시 서구 갈마동",
+    "occurredAt": "2005-10-29",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "2005-10-29",
+      "occurredAtPrecision": "DAY",
+      "title": "추정 사망 시각",
+      "description": "경찰은 이날 새벽 살해된 것으로 봤습니다."
+     },
+     {
+      "occurredAt": "2005-11-02",
+      "occurredAtPrecision": "DAY",
+      "title": "동거인이 피해자 발견",
+      "description": "현장에는 부침가루가 뿌려져 있었습니다."
+     },
+     {
+      "occurredAt": "2025-10-30",
+      "occurredAtPrecision": "DAY",
+      "title": "20년째 미제",
+      "description": "남성 DNA가 남아 있지만 일치하는 사람을 찾지 못했습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "26세 여성",
+      "age": 26,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [],
+    "questions": [
+     {
+      "question": "범인은 왜 현장에 부침가루를 뿌렸을까요?"
+     },
+     {
+      "question": "보관 중인 DNA가 있는 오래된 미제 사건을 다시 살펴보려면 어떤 수사 체계가 필요할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://v.daum.net/v/20251030111013008",
+     "title": "[N년전 오늘] \"흰 가루로 뒤덮인 현장, 20년째 미제\"…대전 갈마동 빌라 살인사건",
+     "publisher": "대전일보 (다음뉴스)",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2025-10-30"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "hongcheon-private-kim-dohyeon-death",
+   "content": {
+    "title": "김도현 일병 사망 사건",
+    "summary": "2024년 11월 강원 홍천 아미산에서 훈련 중 경사로에서 굴러떨어진 20세 김도현 일병이 구조가 늦어진 끝에 숨져, 간부들이 업무상과실치사 혐의로 수사를 받은 사건",
+    "overview": "2024년 11월 25일 강원 홍천군 아미산에서 훈련하던 20세 김도현 일병이 무거운 장비를 지고 경사로를 오르다 굴러떨어졌습니다. 119 신고는 발견 뒤 약 27분이 지나서야 이뤄졌고, 김 일병은 그날 저녁 원주의 병원에서 숨졌습니다. 국과수 부검에서는 목뼈 골절과 콩팥 파열이 확인됐습니다. 유족은 선임의 짐까지 나르게 했고 다친 뒤 구조가 늦어졌다며 진상 규명을 요구했고, 군은 간부 3명에 대해 업무상과실치사 혐의 수사를 경찰에 넘겼습니다.",
+    "victimCountNote": "1명 사망",
+    "country": "KR",
+    "category": "OTHER",
+    "status": "IN_PROGRESS",
+    "location": "강원특별자치도 홍천군 아미산",
+    "occurredAt": "2024-11-25",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "2024-11-25",
+      "occurredAtPrecision": "DAY",
+      "title": "훈련 중 경사로에서 추락"
+     },
+     {
+      "occurredAt": "2024-11-25",
+      "occurredAtPrecision": "DAY",
+      "title": "약 27분 뒤 119 신고, 저녁 사망 판정"
+     },
+     {
+      "occurredAt": "2024-12-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "군, 간부 3명 경찰에 수사 의뢰",
+      "description": "업무상과실치사 혐의입니다."
+     },
+     {
+      "occurredAt": "2025-01-31",
+      "occurredAtPrecision": "DAY",
+      "title": "유족 진상 규명 촉구",
+      "description": "구조 지연과 헬기 구조 실패에 대한 의문을 제기했습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "김도현 일병",
+      "age": 20,
+      "gender": "MALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "alias": "군 간부 3명",
+      "status": "SUSPECTED",
+      "charges": "업무상과실치사 혐의 (수사 중)",
+      "sentences": []
+     }
+    ],
+    "questions": [
+     {
+      "question": "훈련 중 다친 장병이 바로 구조받으려면 부대의 응급 대응 절차는 어떻게 바뀌어야 할까요?"
+     },
+     {
+      "question": "군에서 일어난 사망 사건을 유족이 믿을 수 있도록 수사 과정을 투명하게 하려면 무엇이 필요할까요?"
+     },
+     {
+      "question": "선임의 짐을 대신 지게 하는 관행을 없애려면 어떤 장치가 필요할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.segye.com/newsView/20250131502947",
+     "title": "선임 짐 나르다 산 굴러떨어져 사망…\"X됐네\" 30분간 신고 없었다",
+     "publisher": "세계일보",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2025-01-31"
+    },
+    {
+     "url": "https://m.joseilbo.com/news/view.htm?newsid=535778",
+     "title": "선임 짐 포함 37㎏ 장비 지고 산 오르다 사망한 일병…유족 \"27분 방치\"",
+     "publisher": "조세일보",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    },
+    {
+     "url": "https://www.job-post.co.kr/news/articleView.html?idxno=125499",
+     "title": "김도현 일병, 홍천 아미산 훈련 중 숨짐에 유족들 진상 규명 촉구",
+     "publisher": "잡포스트",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "bongcheon-motel-teen-murder",
+   "content": {
+    "title": "봉천동 여중생 모텔 살인사건",
+    "summary": "2015년 서울 관악구 봉천동 모텔에서 성매매 알선 조직에 내몰린 14세 가출 청소년이 성매수 남성에게 살해돼, 가해자에게 징역 40년이 확정된 사건",
+    "overview": "2015년 3월 26일 서울 관악구 봉천동의 한 모텔에서 14세 가출 청소년이 숨졌습니다. 피해자는 성매매를 알선한 일당에게 내몰린 상태였고, 성매수를 한 김 모 씨(당시 38세)가 피해자를 붙잡고 약품을 묻힌 거즈로 입을 막아 숨지게 했습니다. 경찰은 사흘 뒤 김 씨를 체포했습니다. 1심은 살인의 고의를 인정하지 않고 강도치사죄로 징역 30년을 선고했지만, 서울고법은 살인의 고의를 인정해 강도살인죄로 징역 40년을 선고했고 대법원에서 확정됐습니다. 성매매를 알선한 일당도 징역형을 받았습니다.",
+    "victimCountNote": "1명 사망",
+    "country": "KR",
+    "category": "MURDER",
+    "status": "SOLVED",
+    "location": "서울특별시 관악구 봉천동",
+    "occurredAt": "2015-03-26",
+    "occurredAtPrecision": "DAY",
+    "solvedAt": "2015-03-29",
+    "timeline": [
+     {
+      "occurredAt": "2015-03-26",
+      "occurredAtPrecision": "DAY",
+      "title": "모텔에서 14세 청소년 피살"
+     },
+     {
+      "occurredAt": "2015-03-29",
+      "occurredAtPrecision": "DAY",
+      "title": "가해자 체포"
+     },
+     {
+      "occurredAt": "2015-11-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "1심 징역 30년",
+      "description": "강도치사죄를 적용했습니다."
+     },
+     {
+      "occurredAt": "2016-01-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "항소심 징역 40년",
+      "description": "서울고법이 살인 고의를 인정해 강도살인죄를 적용했고, 대법원에서 확정됐습니다."
+     }
+    ],
+    "victims": [
+     {
+      "alias": "14세 가출 청소년",
+      "age": 14,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "alias": "김 모 씨 (당시 38세)",
+      "status": "CONVICTED",
+      "charges": "강도살인",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "type": "IMPRISONMENT",
+        "penalty": "징역 30년 (강도치사)",
+        "isFinal": false
+       },
+       {
+        "courtLevel": "APPEAL",
+        "type": "IMPRISONMENT",
+        "penalty": "징역 40년 (강도살인)",
+        "isFinal": false,
+        "courtName": "서울고등법원"
+       },
+       {
+        "courtLevel": "SUPREME",
+        "type": "IMPRISONMENT",
+        "penalty": "징역 40년 확정",
+        "isFinal": true,
+        "courtName": "대법원"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "집을 나온 청소년이 성착취 조직에 휘말리기 전에 먼저 닿을 수 있는 쉼터와 지원은 어떻게 늘릴 수 있을까요?"
+     },
+     {
+      "question": "미성년자 성매수와 알선을 막으려면 숙박업소와 온라인 플랫폼은 어떤 책임을 져야 할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.mt.co.kr/article/2026072316552777980",
+     "title": "모텔서 살해된 14세 여중생 [뉴스속오늘]",
+     "publisher": "머니투데이",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-07-24"
+    },
+    {
+     "url": "https://www.news1.kr/amp/society/general-society/5451135",
+     "title": "하루 10번 성매매 여중생에 돈 받을 자격 없다며 목 졸라 살해",
+     "publisher": "뉴스1",
+     "type": "NEWS_AGENCY",
+     "accessedAt": "2026-11-19"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "celeste-rivas-hernandez-death",
+   "content": {
+    "title": "셀레스트 리바스 에르난데스 살해 사건 (D4vd 사건)",
+    "summary": "2025년 미국 로스앤젤레스에서 가수 D4vd 명의 테슬라 트렁크에서 14세 셀레스트 리바스 에르난데스의 시신이 발견됐고, D4vd가 살인 혐의로 재판을 앞둔 사건",
+    "overview": "2025년 9월 미국 로스앤젤레스 할리우드의 견인 차량 보관소에서 가수 D4vd(본명 데이비드 앤서니 버크) 명의 테슬라의 앞 트렁크를 열자 시신이 발견됐습니다. 시신은 9월 16일 치과 기록으로 캘리포니아주 레이크엘시노어에 살던 14세 셀레스트 리바스 에르난데스로 확인됐습니다. 그녀가 마지막으로 살아 있는 모습이 확인된 것은 2025년 4월 23일이었습니다. 검시관은 사망을 살인으로 판정했습니다. 경찰은 2026년 4월 16일 버크를 체포했고, 검찰은 1급 살인과 아동 성학대, 시신 훼손 혐의로 기소했습니다. 버크는 무죄를 주장하고 있으며, 법원은 2026년 7월 예비심문 뒤 재판을 열기로 결정했습니다.",
+    "victimCountNote": "1명 사망",
+    "country": "US",
+    "category": "MURDER",
+    "status": "IN_PROGRESS",
+    "location": "미국 캘리포니아주 로스앤젤레스 할리우드",
+    "occurredAt": "2025-04-23",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "2025-04-23",
+      "occurredAtPrecision": "DAY",
+      "title": "마지막 생존 확인"
+     },
+     {
+      "occurredAt": "2025-09-08",
+      "occurredAtPrecision": "DAY",
+      "title": "견인된 테슬라 트렁크에서 시신 발견"
+     },
+     {
+      "occurredAt": "2025-09-16",
+      "occurredAtPrecision": "DAY",
+      "title": "치과 기록으로 신원 확인"
+     },
+     {
+      "occurredAt": "2026-04-16",
+      "occurredAtPrecision": "DAY",
+      "title": "D4vd 체포"
+     },
+     {
+      "occurredAt": "2026-04-20",
+      "occurredAtPrecision": "DAY",
+      "title": "1급 살인 등 혐의로 기소, 무죄 주장"
+     },
+     {
+      "occurredAt": "2026-07-27",
+      "occurredAtPrecision": "DAY",
+      "title": "예비심문 뒤 재판 회부 결정"
+     },
+     {
+      "occurredAt": "2026-10-19",
+      "occurredAtPrecision": "DAY",
+      "title": "공판 전 심리",
+      "description": "다음 기일은 2027년 1월 11일로 잡혔습니다."
+     }
+    ],
+    "victims": [
+     {
+      "name": "Celeste Rivas Hernandez",
+      "alias": "셀레스트 리바스 에르난데스",
+      "age": 14,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "David Anthony Burke (D4vd)",
+      "status": "INDICTED",
+      "charges": "1급 살인, 아동 성학대, 시신 훼손 혐의 (무죄 주장)",
+      "sentences": []
+     }
+    ],
+    "questions": [
+     {
+      "question": "실종 신고된 청소년이 몇 달 동안 발견되지 않을 때 수사와 가족 지원에서 무엇을 놓칠 수 있을까요?"
+     },
+     {
+      "question": "유명인과 미성년 팬 사이의 위험한 관계를 주변 어른들이 어떻게 알아차릴 수 있을까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://abcnews.com/US/d4vd-murder-case-singer-stand-trial-charges-14/story?id=135032550",
+     "title": "D4vd murder case: Singer to stand trial on charges over 14-year-old girl's death",
+     "publisher": "ABC News",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-07-27"
+    },
+    {
+     "url": "https://abc7.com/post/singer-d4vd-charged-murder-timeline-investigation-death-14-year-old-celeste-rivas-hernandez/18908129/",
+     "title": "D4vd charged with murder: Timeline of investigation",
+     "publisher": "ABC7 Los Angeles",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-10-20"
+    },
+    {
+     "url": "https://www.aljazeera.com/news/2026/4/20/d4vd-charged-with-murder-of-14-year-old-celeste-rivas-hernandez",
+     "title": "Singer D4vd charged with murder of 14-year-old Celeste Rivas Hernandez",
+     "publisher": "Al Jazeera",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-04-20"
+    }
+   ],
+   "claims": [],
+   "related": []
+  },
+  {
+   "slug": "mica-miller-death",
+   "content": {
+    "title": "마이카 밀러 사망 사건 (목사 아내의 죽음)",
+    "summary": "2024년 미국 사우스캐롤라이나 목사의 아내 마이카 밀러가 숨진 채 발견돼 자살로 판정됐고, 남편 목사가 사이버스토킹 혐의로 연방 재판을 받고 있는 사건",
+    "overview": "2024년 4월 27일 미국 사우스캐롤라이나주 머틀비치 인근에 살던 30세 마이카 프랜시스 밀러가 노스캐롤라이나주의 한 주립공원에서 머리에 총상을 입고 숨진 채 발견됐습니다. 수사 당국은 사망을 자살로 판정했습니다. 그녀는 숨지기 전 교회 목사였던 남편 존폴 밀러와 이혼과 별거를 신청한 상태였고, 가족은 그녀가 오랫동안 학대와 통제에 시달렸다고 주장했습니다. 연방 대배심은 2025년 12월 남편을 사이버스토킹과 연방 수사관에 대한 허위 진술 혐의로 기소했습니다. 남편은 무죄를 주장하고 있고, 살인 혐의는 적용되지 않았습니다. 넷플릭스 다큐멘터리 「Death of the Pastor's Wife」(2026)가 이 사건을 다뤘습니다.",
+    "victimCountNote": "1명 사망 (자살 판정)",
+    "country": "US",
+    "category": "OTHER",
+    "status": "IN_PROGRESS",
+    "location": "미국 노스캐롤라이나주 로브슨 카운티",
+    "occurredAt": "2024-04-27",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "2023-10-08",
+      "occurredAtPrecision": "DAY",
+      "title": "아내가 이혼 신청",
+      "description": "2024년 2월 기각됐습니다."
+     },
+     {
+      "occurredAt": "2024-04-15",
+      "occurredAtPrecision": "DAY",
+      "title": "별거 신청"
+     },
+     {
+      "occurredAt": "2024-04-27",
+      "occurredAtPrecision": "DAY",
+      "title": "주립공원에서 숨진 채 발견",
+      "description": "당국은 자살로 판정했습니다."
+     },
+     {
+      "occurredAt": "2025-12-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "남편 연방 기소",
+      "description": "사이버스토킹과 허위 진술 혐의입니다."
+     },
+     {
+      "occurredAt": "2026-01-12",
+      "occurredAtPrecision": "DAY",
+      "title": "연방법원 첫 출석, 무죄 주장"
+     },
+     {
+      "occurredAt": "2026-08-01",
+      "occurredAtPrecision": "MONTH",
+      "title": "넷플릭스 다큐멘터리 공개"
+     }
+    ],
+    "victims": [
+     {
+      "name": "Mica Francis Miller",
+      "alias": "마이카 밀러",
+      "age": 30,
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "John-Paul Miller",
+      "status": "INDICTED",
+      "charges": "연방 사이버스토킹, 연방 수사관 허위 진술 혐의 (무죄 주장, 사망과 관련한 살인 혐의는 없음)",
+      "sentences": []
+     }
+    ],
+    "questions": [
+     {
+      "question": "배우자의 지속적인 감시와 통제를 피해자 스스로 학대로 알아차리려면 어떤 정보가 필요할까요?"
+     },
+     {
+      "question": "이혼·별거를 준비하는 시기에 위험이 커지는 피해자를 보호하려면 어떤 지원이 필요할까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.foxcarolina.com/2026/08/30/criminal-charges-pending-against-pastor-featured-netflix-documentary-about-his-wifes-alleged-suicide/",
+     "title": "Criminal charges pending against pastor featured in Netflix documentary",
+     "publisher": "Fox Carolina",
+     "type": "BROADCAST",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-08-30"
+    },
+    {
+     "url": "https://time.com/article/2026/08/21/mica-miller-death-of-pastors-wife-true-story/",
+     "title": "The Heartbreaking True Story of Mica Miller and Netflix's 'Death of the Pastor's Wife'",
+     "publisher": "TIME",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2026-08-25"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "목사 아내의 죽음: 진실은 어디에",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81989322",
+     "releaseYear": 2026,
+     "note": "마이카 밀러의 죽음과 가족의 주장을 다룬 넷플릭스 다큐멘터리입니다."
+    }
+   ]
+  },
+  {
+   "slug": "alice-ku-disappearance",
+   "content": {
+    "title": "앨리스 구 실종 사건",
+    "summary": "2019년 미국에 살던 앨리스 구가 남편과 함께 대만을 여행하던 중 사라졌고, 대만 검찰이 남편에게 살인 혐의 체포영장을 발부한 사건",
+    "overview": "미국 캘리포니아주 마운틴뷰에 살던 앨리스 구는 2019년 11월 23일 남편 하랄트 헤르헨과 함께 대만으로 떠났습니다. 남편은 11월 29일 화롄 기차역 근처에서 아내와 헤어졌다고 말했지만, 그 뒤로 앨리스 구의 행적은 확인되지 않았습니다. 가족은 12월 9일 미국에서 실종 신고를 했습니다. 대만 경찰은 사건을 살인으로 보고 수사했고, 2020년 12월 28일 남편에게 살인 혐의 체포영장이 발부됐지만 그는 미국에 머물러 있어 집행되지 않았습니다. 가족이 낸 민사소송에서 2025년 7월 배심원단은 남편이 2,360만 달러를 배상해야 한다고 평결했습니다. 남편은 혐의를 부인하고 있고, 앨리스 구의 시신은 아직 찾지 못했습니다.",
+    "victimCountNote": "1명 실종",
+    "country": "OTHER",
+    "category": "MISSING",
+    "status": "UNSOLVED",
+    "location": "대만 화롄",
+    "occurredAt": "2019-11-29",
+    "occurredAtPrecision": "DAY",
+    "timeline": [
+     {
+      "occurredAt": "2019-11-23",
+      "occurredAtPrecision": "DAY",
+      "title": "남편과 함께 대만으로 출국"
+     },
+     {
+      "occurredAt": "2019-11-29",
+      "occurredAtPrecision": "DAY",
+      "title": "화롄에서 마지막 행적 (남편 진술)"
+     },
+     {
+      "occurredAt": "2019-12-09",
+      "occurredAtPrecision": "DAY",
+      "title": "미국에서 실종 신고"
+     },
+     {
+      "occurredAt": "2020-12-28",
+      "occurredAtPrecision": "DAY",
+      "title": "대만, 남편에게 살인 혐의 체포영장",
+      "description": "남편이 미국에 있어 집행되지 않았습니다."
+     },
+     {
+      "occurredAt": "2021-01-12",
+      "occurredAtPrecision": "DAY",
+      "title": "가족, 부당사망 민사소송 제기"
+     },
+     {
+      "occurredAt": "2025-07-18",
+      "occurredAtPrecision": "DAY",
+      "title": "민사 배심원단 2,360만 달러 배상 평결"
+     }
+    ],
+    "victims": [
+     {
+      "name": "Alice Ku",
+      "alias": "앨리스 구",
+      "gender": "FEMALE",
+      "status": "MISSING"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "Harald Herchen",
+      "status": "SUSPECTED",
+      "charges": "대만 검찰이 살인 혐의로 체포영장 발부 (미집행, 본인은 부인)",
+      "sentences": []
+     }
+    ],
+    "questions": [
+     {
+      "question": "외국 여행 중 실종된 사람을 찾을 때 두 나라 수사기관은 어떻게 협력해야 할까요?"
+     },
+     {
+      "question": "형사 재판이 열리지 못할 때 민사 소송은 가족에게 어떤 의미가 있을까요?"
+     },
+     {
+      "question": "앨리스 구는 화롄에서 정말 혼자 기차역을 떠났을까요?"
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.paloaltoonline.com/news/2023/02/10/disappeared-without-a-trace-alice-ku-never-returned-from-her-2019-trip-to-taiwan-was-she-murdered/",
+     "title": "Disappeared without a trace: Alice Ku never returned from her 2019 trip to Taiwan",
+     "publisher": "Palo Alto Online",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2023-02-10"
+    },
+    {
+     "url": "https://padailypost.com/2025/07/19/jury-orders-husband-to-pay-23-6-million-over-suspected-death-of-his-wife/",
+     "title": "Jury orders husband to pay $23.6 million over suspected death of his wife",
+     "publisher": "Palo Alto Daily Post",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2025-07-19"
+    }
+   ],
+   "claims": [],
+   "related": []
+  }
+ ]
+}

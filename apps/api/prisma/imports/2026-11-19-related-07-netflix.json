@@ -1,0 +1,161 @@
+{
+ "version": 1,
+ "cases": [
+  {
+   "slug": "ted-bundy",
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "살인자와의 대화: 테드 번디 테이프",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/80226612",
+     "releaseYear": 2019,
+     "note": "번디가 사형수로 있을 때 녹음된 인터뷰를 바탕으로 한 4부작 다큐멘터리입니다."
+    }
+   ]
+  },
+  {
+   "slug": "night-stalker-richard-ramirez",
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "나이트 스토커: 연쇄살인범 추적기",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81025701",
+     "releaseYear": 2021,
+     "note": "수사를 맡았던 형사들의 증언으로 구성한 4부작 다큐멘터리입니다."
+    }
+   ]
+  },
+  {
+   "slug": "gabby-petito",
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "아메리칸 머더: 개비 퍼티토",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81733794",
+     "releaseYear": 2025,
+     "note": "3부작 다큐멘터리 시리즈입니다."
+    }
+   ]
+  },
+  {
+   "slug": "chris-watts-family-murders",
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "아메리칸 머더: 이웃집 가족",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81130130",
+     "releaseYear": 2020,
+     "note": "실제 영상과 메시지 기록으로 구성한 다큐멘터리 영화입니다."
+    }
+   ]
+  },
+  {
+   "slug": "elisa-lam-cecil-hotel",
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "사건 현장: 세실 호텔 실종 사건",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81183727",
+     "releaseYear": 2021,
+     "note": "4부작 다큐멘터리입니다. 음모론을 다룬 방식에 대해 비판도 있었습니다."
+    }
+   ]
+  },
+  {
+   "slug": "jill-dando-murder",
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "누가 질 댄도를 죽였나?",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81594933",
+     "releaseYear": 2023,
+     "note": "3부작 다큐멘터리입니다."
+    }
+   ]
+  },
+  {
+   "slug": "cathy-cesnik-murder",
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "더 키퍼스",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/80122179",
+     "releaseYear": 2017,
+     "note": "수녀의 죽음과 학교 내 학대 의혹을 다룬 7부작 다큐멘터리입니다."
+    }
+   ]
+  },
+  {
+   "slug": "son-of-sam",
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "샘의 아들들: 어둠 속으로",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81059887",
+     "releaseYear": 2021,
+     "note": "4부작 다큐멘터리입니다."
+    }
+   ]
+  },
+  {
+   "slug": "teresa-halbach-murder",
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "메이킹 어 머더러",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/80000770",
+     "releaseYear": 2015,
+     "note": "수사와 재판 과정을 10년 넘게 따라간 다큐멘터리 시리즈입니다. 피고인 측 시각이 강하다는 비판도 있습니다."
+    }
+   ]
+  },
+  {
+   "slug": "kathleen-peterson-staircase",
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "계단 (The Staircase)",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/80233441",
+     "releaseYear": 2018,
+     "note": "재판 과정을 오랜 기간 따라간 다큐멘터리 시리즈입니다."
+    }
+   ]
+  },
+  {
+   "slug": "denise-huskins-kidnapping",
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "아메리칸 나이트메어",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81620853",
+     "releaseYear": 2024,
+     "note": "피해자 시점에서 사건과 경찰 수사를 다룬 3부작 다큐멘터리입니다."
+    }
+   ]
+  },
+  {
+   "slug": "jeffrey-dahmer",
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "살인자와의 대화: 제프리 다머 테이프",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81173345",
+     "releaseYear": 2022,
+     "note": "변호인단이 녹음한 진술 테이프를 바탕으로 한 3부작 다큐멘터리입니다."
+    }
+   ]
+  }
+ ]
+}

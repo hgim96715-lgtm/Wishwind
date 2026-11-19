@@ -1,0 +1,134 @@
+{
+ "version": 1,
+ "cases": [
+  {
+   "slug": "lucie-blackman-case",
+   "content": {
+    "title": "루시 블랙맨 사건",
+    "summary": "2000년 도쿄에서 일하던 영국인 여성 루시 블랙맨을 납치하고 시신을 훼손·유기한 혐의 등으로 오바라 조지의 무기징역이 확정된 사건",
+    "overview": "2000년 도쿄에서 일하던 영국인 여성 루시 블랙맨이 실종됐고, 이후 시신이 훼손된 채 발견됐습니다. 경찰은 여러 여성에게 약물을 먹이고 성폭행한 혐의로 오바라 조지를 수사했습니다. 도쿄지방재판소는 다른 여성 9명에 대한 성폭행 등으로 무기징역을 선고했지만, 블랙맨 사건은 무죄로 봤습니다. 9명 가운데 호주 여성 한 명은 약물 과다로 숨졌습니다. 도쿄고등재판소는 2008년 12월 16일 블랙맨을 납치하고 시신을 훼손·유기한 부분을 유죄로 뒤집었지만, 사망 원인이 밝혀지지 않아 사망에 대한 책임은 인정하지 않고 무기징역을 유지했습니다. 최고재판소는 2010년 12월 오바라의 이의를 기각해 형이 확정됐습니다.",
+    "victimCountNote": "루시 블랙맨 1명 사망 (다른 여성 9명 성폭행 피해, 그중 1명 사망)",
+    "country": "JP",
+    "category": "SEXUAL_CRIME",
+    "status": "SOLVED",
+    "location": "일본 도쿄 일대",
+    "occurredAt": "2000-07-01",
+    "occurredAtPrecision": "YEAR",
+    "timeline": [
+     {
+      "occurredAt": "2000-07-01",
+      "occurredAtPrecision": "YEAR",
+      "title": "루시 블랙맨 실종"
+     },
+     {
+      "occurredAt": "2007-04-24",
+      "occurredAtPrecision": "DAY",
+      "title": "1심 무기징역, 블랙맨 사건은 무죄"
+     },
+     {
+      "occurredAt": "2008-12-16",
+      "occurredAtPrecision": "DAY",
+      "title": "도쿄고등재판소, 블랙맨 납치·시신 훼손 유죄",
+      "description": "사망 원인은 밝혀지지 않았습니다."
+     },
+     {
+      "occurredAt": "2010-12-17",
+      "occurredAtPrecision": "DAY",
+      "title": "최고재판소, 무기징역 확정"
+     }
+    ],
+    "victims": [
+     {
+      "name": "Lucie Blackman",
+      "alias": "루시 블랙맨",
+      "gender": "FEMALE",
+      "status": "DECEASED"
+     }
+    ],
+    "suspects": [
+     {
+      "name": "織原城二",
+      "alias": "오바라 조지",
+      "status": "CONVICTED",
+      "charges": "약취, 사체 훼손·유기, 여성 9명 성폭행 등",
+      "sentences": [
+       {
+        "courtLevel": "FIRST",
+        "courtName": "도쿄지방재판소",
+        "type": "LIFE",
+        "penalty": "무기징역 (블랙맨 사건은 무죄, 다른 성폭행 사건 유죄)",
+        "isFinal": false,
+        "decidedAt": "2007-04-24"
+       },
+       {
+        "courtLevel": "APPEAL",
+        "type": "LIFE",
+        "penalty": "무기징역 (블랙맨 납치·시신 훼손 유죄로 변경)",
+        "isFinal": false,
+        "courtName": "도쿄고등재판소",
+        "decidedAt": "2008-12-16"
+       },
+       {
+        "courtLevel": "SUPREME",
+        "type": "LIFE",
+        "penalty": "무기징역 확정",
+        "isFinal": true,
+        "courtName": "최고재판소",
+        "decidedAt": "2010-12-17"
+       }
+      ]
+     }
+    ],
+    "questions": [
+     {
+      "question": "외국에서 일하는 젊은 여성이 위험한 일자리나 만남에서 도움을 청할 곳은 어디일까요?"
+     },
+     {
+      "question": "약물을 이용한 성범죄 피해자가 빨리 신고하고 증거를 남기려면 어떤 지원이 필요할까요?"
+     },
+     {
+      "question": "외국인 피해자 가족이 다른 나라 수사와 재판을 따라가려면 어떤 도움이 필요할까요?"
+     }
+    ],
+    "solvedAt": "2010-12-17"
+   },
+   "sources": [
+    {
+     "url": "https://japantimes.co.jp/news/2010/12/19/national/top-court-finalizes-obara-life-sentence",
+     "title": "Top court finalizes Obara life sentence",
+     "publisher": "The Japan Times",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2010-12-19"
+    },
+    {
+     "url": "https://japantimes.co.jp/news/2008/12/17/national/high-court-obara-buried-blackman",
+     "title": "High court: Obara buried Blackman",
+     "publisher": "The Japan Times",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2008-12-17"
+    },
+    {
+     "url": "https://www.aljazeera.com/news/2007/4/24/japanese-acquitted-in-hostess-death",
+     "title": "Japanese acquitted in hostess death",
+     "publisher": "Al Jazeera",
+     "type": "NEWS",
+     "accessedAt": "2026-11-19",
+     "publishedAt": "2007-04-24"
+    }
+   ],
+   "claims": [],
+   "related": [
+    {
+     "kind": "DOCUMENTARY",
+     "title": "미싱: 루시 블랙맨 실종 사건",
+     "platform": "넷플릭스",
+     "url": "https://www.netflix.com/title/81671836",
+     "releaseYear": 2023,
+     "note": "루시 블랙맨의 실종과 수사, 재판을 다룬 넷플릭스 다큐멘터리입니다."
+    }
+   ]
+  }
+ ]
+}
