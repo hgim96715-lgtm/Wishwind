@@ -1,3 +1,4 @@
+import { cacheLife, cacheTag } from "next/cache";
 import { API_URL, ApiUnavailableError } from "@/lib/cases/api";
 import type { CaseCategory, CaseStatus, Country } from "@/lib/cases/types";
 
@@ -21,11 +22,25 @@ export interface Briefing {
     url: string;
     title: string;
     titleKo: string | null;
-    region: "KR" | "US" | "GB" | "JP";
+    region: "KR" | "US" | "GB" | "JP" | "CN" | "OTHER";
     publisher: string;
     publishedAt: string | null;
     case: { slug: string; title: string } | null;
   }[];
+  /** 사람들의 생각 게시판 (공개 글만) */
+  board: {
+    question: { id: string; question: string; caseSlug: string; caseTitle: string } | null;
+    notes: {
+      id: string;
+      body: string;
+      createdAt: string;
+      question: string;
+      caseSlug: string;
+      caseTitle: string;
+      forToday: boolean;
+    }[];
+    cheers: { id: string; body: string; createdAt: string }[];
+  };
   recentCases: {
     slug: string;
     title: string;
@@ -69,10 +84,18 @@ export interface Briefing {
   participation: { answers: number; questions: number; votes: number; clouds: number };
 }
 
+/**
+ * 브리핑은 모든 방문자에게 같은 내용 → 서버에서 1분 단위로 캐시해 함께 씀.
+ * 방문자가 늘어도 API·DB 집계는 1분에 한 번 정도만 돌고, 페이지는 캐시된 결과로 바로 그려짐.
+ * (오류는 캐시하지 않으므로 API가 잠깐 꺼져도 다음 요청에서 다시 시도함)
+ */
 export async function getBriefing(): Promise<Briefing> {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("briefing");
   let res: Response;
   try {
-    res = await fetch(`${API_URL}/briefing`, { cache: "no-store" });
+    res = await fetch(`${API_URL}/briefing`);
   } catch (cause) {
     throw new ApiUnavailableError(`API 서버에 연결할 수 없습니다: ${API_URL}`, { cause });
   }

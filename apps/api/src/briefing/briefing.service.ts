@@ -4,6 +4,7 @@ import { BriefingRepository } from './briefing.repository.js';
 
 const POSTS = 30;
 const TOP = 5;
+const NOTES = 3;
 
 /** 브리핑룸에 보이는 것은 모두 공개(PUBLISHED) 데이터만 */
 @Injectable()
@@ -11,7 +12,7 @@ export class BriefingService {
   constructor(private readonly repo: BriefingRepository) {}
 
   async overview() {
-    const [notices, posts, news, recentCases, missing, stats, opinions, participation] = await Promise.all([
+    const [notices, posts, news, recentCases, missing, stats, opinions, participation, board] = await Promise.all([
       this.repo.notices(),
       this.repo.posts(POSTS),
       this.repo.publishedNews(15),
@@ -21,8 +22,41 @@ export class BriefingService {
       this.caseStats(),
       this.opinionStats(),
       this.repo.participationCounts(),
+      this.notesBoard(),
     ]);
-    return { notices, posts, news: news.map(toPublicNews), recentCases, missing, stats, opinions, participation };
+    return { notices, posts, news: news.map(toPublicNews), recentCases, missing, stats, opinions, participation, board };
+  }
+
+  /** 사람들의 생각 게시판: 오늘의 질문 + 그 질문(없으면 최근)의 수사 노트 + 실종방 응원. 공개(PUBLISHED) 글만 */
+  private async notesBoard() {
+    const dayNumber = Math.floor((Date.now() + 9 * 3_600_000) / 86_400_000);
+    const question = await this.repo.questionOfDay(dayNumber);
+    const [own, cheers] = await Promise.all([
+      question ? this.repo.recentAnswers(question.id, NOTES) : Promise.resolve([]),
+      this.repo.recentCheers(6),
+    ]);
+    // 오늘 질문에 답이 적으면 다른 질문의 최근 노트로 채움
+    const extra =
+      own.length < NOTES
+        ? (await this.repo.recentAnswers(null, NOTES * 2)).filter((a) => !own.some((o) => o.id === a.id))
+        : [];
+    const notes = [...own, ...extra].slice(0, NOTES).map((a) => ({
+      id: a.id,
+      body: a.body,
+      createdAt: a.createdAt,
+      question: a.question.question,
+      caseSlug: a.question.case.slug,
+      caseTitle: a.question.case.title,
+      forToday: own.some((o) => o.id === a.id),
+    }));
+    return {
+      question: question
+        ? { id: question.id, question: question.question, caseSlug: question.case.slug, caseTitle: question.case.title }
+        : null,
+      notes,
+      // 같은 응원 문구가 여러 번 있으면 하나만
+      cheers: cheers.filter((c, i) => cheers.findIndex((x) => x.body === c.body) === i).slice(0, 2),
+    };
   }
 
   private async caseStats() {

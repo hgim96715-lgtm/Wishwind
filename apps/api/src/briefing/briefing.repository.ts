@@ -227,6 +227,48 @@ export class BriefingRepository {
     });
   }
 
+  /** 오늘의 질문: 공개 사건의 생각해볼 점 중 하나를 날짜(KST) 기준으로 하루씩 돌려 고름 */
+  async questionOfDay(dayNumber: number) {
+    const where = { isResolved: false, case: { isPublished: true } };
+    const total = await this.prisma.unsolvedQuestion.count({ where });
+    if (total === 0) return null;
+    const [q] = await this.prisma.unsolvedQuestion.findMany({
+      where,
+      orderBy: { id: 'asc' },
+      skip: dayNumber % total,
+      take: 1,
+      select: { id: true, question: true, ...withCase },
+    });
+    return q ?? null;
+  }
+
+  recentAnswers(questionId: string | null, take: number) {
+    return this.prisma.userAnswer.findMany({
+      where: {
+        ...publishedContent,
+        question: { case: { isPublished: true } },
+        ...(questionId ? { questionId } : {}),
+      },
+      orderBy: { createdAt: 'desc' },
+      take,
+      select: {
+        id: true,
+        body: true,
+        createdAt: true,
+        question: { select: { question: true, case: { select: { slug: true, title: true } } } },
+      },
+    });
+  }
+
+  recentCheers(take: number) {
+    return this.prisma.cloudMessage.findMany({
+      where: publishedContent,
+      orderBy: { createdAt: 'desc' },
+      take,
+      select: { id: true, body: true, createdAt: true },
+    });
+  }
+
   participationCounts() {
     return Promise.all([
       this.prisma.userAnswer.count({ where: publishedContent }),

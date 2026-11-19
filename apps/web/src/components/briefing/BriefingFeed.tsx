@@ -1,9 +1,14 @@
 import Link from "next/link";
 import { LuPin } from "react-icons/lu";
+import { TimeAgo } from "@/components/common/TimeAgo";
+import type { BoardItem } from "@/components/briefing/DepartureBoard";
+// 안내판형(DepartureBoard)도 남겨 둠. 같은 items로 바꿔 끼울 수 있음
+import { HeadlineBoard } from "@/components/briefing/HeadlineBoard";
+import { NotesBoard } from "@/components/briefing/NotesBoard";
 import { getBriefing, type Briefing, type BriefingKind, type BriefingPost } from "@/lib/briefing/api";
 import { ApiUnavailableError } from "@/lib/cases/api";
-import { CATEGORY_COLOR, CATEGORY_LABEL, COUNTRY_LABEL, SENTENCE_TYPE_LABEL, STATUS_STAMP } from "@/lib/cases/labels";
-import type { SentenceType } from "@/lib/cases/types";
+import { CATEGORY_COLOR, CATEGORY_LABEL, COUNTRY_LABEL, STATUS_STAMP, caseRoomCountry } from "@/lib/cases/labels";
+import type { Country } from "@/lib/cases/types";
 
 const KIND: Record<BriefingKind, { label: string; color: string; tab: string }> = {
   NOTICE: { label: "공지", color: "#4f78a8", tab: "NOTICE" },
@@ -14,7 +19,49 @@ const KIND: Record<BriefingKind, { label: string; color: string; tab: string }> 
 
 const dateFmt = new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", dateStyle: "medium" });
 const formatDate = (iso: string | null) => (iso ? dateFmt.format(new Date(iso)) : "");
-const penaltyLabel = (p: string) => SENTENCE_TYPE_LABEL[p as SentenceType] ?? p;
+const timeFmt = new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
+const formatTime = (iso: string | null) => (iso ? timeFmt.format(new Date(iso)) : "--:--");
+const BOARD_MAX = 10;
+// API가 아직 board를 주지 않는 경우(배포 순서·캐시)에도 페이지가 깨지지 않도록
+const EMPTY_BOARD: Briefing["board"] = { question: null, notes: [], cheers: [] };
+const POSTS_SHOWN = 3;
+
+/** 새 소식과 브리핑 글을 최근 순으로 섞어 안내판에 올릴 10개를 고름 */
+function boardItems(data: Briefing): BoardItem[] {
+  const news = data.news.map((n) => ({
+    at: n.publishedAt,
+    item: {
+      id: `news-${n.id}`,
+      time: formatTime(n.publishedAt),
+      kind: KIND.NEWS.label,
+      kindColor: KIND.NEWS.color,
+      title: n.titleKo ?? n.title,
+      region: n.region,
+      source: n.publisher,
+      href: n.url,
+      external: true,
+    },
+  }));
+  const posts = data.posts.map((p) => ({
+    at: p.publishedAt,
+    item: {
+      id: `post-${p.id}`,
+      time: formatTime(p.publishedAt),
+      kind: KIND[p.kind].label,
+      kindColor: KIND[p.kind].color,
+      title: p.title,
+      region: "",
+      source: "브리핑룸",
+      href: p.case ? `/cases/${p.case.slug}` : `#post-${p.id}`,
+      external: false,
+    },
+  }));
+  return [...news, ...posts]
+    .sort((a, b) => (b.at ?? "").localeCompare(a.at ?? ""))
+    .slice(0, BOARD_MAX)
+    .map((x) => x.item);
+}
+
 
 export function BriefingSkeleton() {
   return (
@@ -41,13 +88,15 @@ export async function BriefingFeed() {
   return (
     <div className="mt-10 space-y-10">
       {data.notices.length > 0 && <Notices notices={data.notices} />}
-      <RecentCases cases={data.recentCases} />
       <div className="grid gap-10 lg:grid-cols-[1fr_300px]">
-        <section aria-labelledby="feed-title">
+        <section aria-labelledby="feed-title" className="min-w-0">
           <h2 id="feed-title" className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-subtle">
             Today&apos;s Briefing
           </h2>
-          {data.news.length > 0 && <NewsList news={data.news} />}
+          <HeadlineBoard
+            items={boardItems(data)}
+            footer={data.news.length > 0 ? <NewsList news={data.news} /> : undefined}
+          />
           {data.posts.length === 0 ? (
             data.news.length === 0 && (
               <p className="rounded-xl border border-dashed border-line px-4 py-12 text-center text-sm text-muted">
@@ -55,63 +104,87 @@ export async function BriefingFeed() {
               </p>
             )
           ) : (
-            <ul className="space-y-4">
-              {data.posts.map((p) => (
-                <PostCard key={p.id} post={p} />
-              ))}
-            </ul>
+            <>
+              <ul className="space-y-4">
+                {data.posts.slice(0, POSTS_SHOWN).map((p) => (
+                  <PostCard key={p.id} post={p} />
+                ))}
+              </ul>
+              {data.posts.length > POSTS_SHOWN && (
+                <details className="group mt-4">
+                  <summary className="cursor-pointer list-none text-sm text-muted hover:text-foreground">
+                    <span className="group-open:hidden">브리핑 {data.posts.length - POSTS_SHOWN}개 더 보기 ↓</span>
+                    <span className="hidden group-open:inline">접기 ↑</span>
+                  </summary>
+                  <ul className="mt-4 space-y-4">
+                    {data.posts.slice(POSTS_SHOWN).map((p) => (
+                      <PostCard key={p.id} post={p} />
+                    ))}
+                  </ul>
+                </details>
+              )}
+            </>
           )}
-          <Voices opinions={data.opinions} participation={data.participation} />
+          <NotesBoard board={data.board ?? EMPTY_BOARD} participation={data.participation} />
         </section>
         <aside className="space-y-8">
           <CaseStats stats={data.stats} />
           <NewMissing missing={data.missing} />
         </aside>
       </div>
+      <RecentCases cases={data.recentCases} />
     </div>
   );
 }
 
-const relFmt = new Intl.RelativeTimeFormat("ko", { numeric: "auto" });
-function ago(iso: string | null) {
-  if (!iso) return "";
-  const hours = Math.round((new Date(iso).getTime() - Date.now()) / 3_600_000);
-  return Math.abs(hours) < 24 ? relFmt.format(hours, "hour") : relFmt.format(Math.round(hours / 24), "day");
-}
 
-const REGION_FLAG = { KR: "🇰🇷", US: "🇺🇸", GB: "🇬🇧", JP: "🇯🇵" } as const;
+const REGION_FLAG = { KR: "🇰🇷", US: "🇺🇸", GB: "🇬🇧", JP: "🇯🇵", CN: "🇨🇳", OTHER: "🌐" } as const;
 
 /** 기사 본문은 옮기지 않고 제목·언론사·원문 링크만 보여 줌 */
+/** 헤드라인판 아래 한 줄. 펼치면 새 소식 전체 목록 (기사 본문은 옮기지 않고 제목·언론사·원문 링크만) */
 function NewsList({ news }: { news: Briefing["news"] }) {
   return (
-    <div className="mb-6 rounded-xl border border-line bg-surface p-5">
-      <h3 className="flex items-center gap-2 text-sm font-semibold">
-        <span className="font-mono text-xs tracking-wider text-[#3f8f84]">NEWS</span>새 소식
-      </h3>
-      <ul className="mt-3 divide-y divide-line/70">
+    <details className="group border-t border-line px-5 py-2.5">
+      <summary className="flex cursor-pointer list-none items-center gap-2 text-sm text-muted hover:text-foreground">
+        <span className="font-mono text-[11px] tracking-wider text-[#3f8f84]">NEWS</span>
+        <span className="group-open:hidden">새 소식 전체 보기 ({news.length}건) ↓</span>
+        <span className="hidden group-open:inline">접기 ↑</span>
+      </summary>
+      <ul className="mt-1 divide-y divide-line/70">
         {news.map((n) => (
-          <li key={n.id} className="py-2.5">
-            <a href={n.url} target="_blank" rel="noreferrer noopener" className="font-medium leading-snug hover:underline">
-              {n.region !== "KR" && <span className="mr-1">{REGION_FLAG[n.region]}</span>}
-              {n.titleKo ?? n.title}
-            </a>
-            {n.titleKo && n.region !== "KR" && <p className="mt-0.5 text-xs text-subtle">{n.title}</p>}
-            <p className="mt-0.5 text-xs text-subtle">
-              {n.publisher} · {ago(n.publishedAt)}
-              {n.case && (
-                <>
-                  {" · "}
-                  <Link href={`/cases/${n.case.slug}`} className="text-[#c46a4b] hover:underline">
-                    {n.case.title} 사건 파일
-                  </Link>
-                </>
-              )}
-            </p>
-          </li>
+          <NewsItem key={n.id} n={n} />
         ))}
       </ul>
-      <p className="mt-2 text-[11px] text-subtle">기사 내용은 각 언론사 원문에서 확인해 주세요.</p>
-    </div>
+      <p className="mt-1 text-[11px] text-subtle">기사 내용은 각 언론사 원문에서 확인해 주세요.</p>
+    </details>
+  );
+}
+
+function NewsItem({ n }: { n: Briefing["news"][number] }) {
+  return (
+    <li className="py-2.5">
+      <a href={n.url} target="_blank" rel="noreferrer noopener" className="font-medium leading-snug hover:underline">
+        {n.region !== "KR" && <span className="mr-1">{REGION_FLAG[n.region]}</span>}
+        {n.titleKo ?? n.title}
+      </a>
+      <p className="mt-0.5 text-xs text-subtle">
+        {n.publisher}
+        {n.publishedAt && (
+          <>
+            {" · "}
+            <TimeAgo iso={n.publishedAt} />
+          </>
+        )}
+        {n.case && (
+          <>
+            {" · "}
+            <Link href={`/cases/${n.case.slug}`} className="text-[#c46a4b] hover:underline">
+              {n.case.title} 사건 파일
+            </Link>
+          </>
+        )}
+      </p>
+    </li>
   );
 }
 
@@ -144,7 +217,7 @@ function RecentCases({ cases }: { cases: Briefing["recentCases"] }) {
                 >
                   {STATUS_STAMP[c.status].label}
                 </span>
-                <span className="ml-auto text-subtle">{COUNTRY_LABEL[c.country]}</span>
+                <span className="ml-auto text-subtle">{COUNTRY_LABEL[caseRoomCountry(c.country)]}</span>
               </div>
               <p className="mt-2 font-semibold leading-snug">{c.title}</p>
               <p className="mt-1 line-clamp-2 text-sm text-muted">{c.summary}</p>
@@ -184,7 +257,7 @@ function PostCard({ post }: { post: BriefingPost }) {
   const kind = KIND[post.kind];
   const long = post.body.length > 220;
   return (
-    <li className="relative overflow-hidden rounded-xl border border-line bg-surface p-5 pl-6 shadow-[0_1px_0_rgb(47_44_40/0.04)]">
+    <li id={`post-${post.id}`} className="relative scroll-mt-24 overflow-hidden rounded-xl border border-line bg-surface p-5 pl-6 shadow-[0_1px_0_rgb(47_44_40/0.04)]">
       <span aria-hidden className="absolute inset-y-0 left-0 w-1.5" style={{ backgroundColor: kind.color }} />
       <div className="flex flex-wrap items-center gap-2 text-xs">
         <span className="font-mono font-semibold tracking-wider" style={{ color: kind.color }}>
@@ -214,6 +287,17 @@ function PostCard({ post }: { post: BriefingPost }) {
       )}
     </li>
   );
+}
+
+/** 사건방과 같게 중국은 기타로 합쳐 셈 */
+function countryCounts(rows: { key: Country; count: number }[]) {
+  const merged = new Map<Country, number>();
+  for (const r of rows) {
+    const k = caseRoomCountry(r.key);
+    merged.set(k, (merged.get(k) ?? 0) + r.count);
+  }
+  // 기타는 맨 뒤, 나머지는 많은 순
+  return [...merged.entries()].sort(([a, x], [b, y]) => (a === "OTHER" ? 1 : b === "OTHER" ? -1 : y - x));
 }
 
 function CaseStats({ stats }: { stats: Briefing["stats"] }) {
@@ -247,7 +331,7 @@ function CaseStats({ stats }: { stats: Briefing["stats"] }) {
         ))}
       </div>
       <p className="mt-3 text-xs text-subtle">
-        {stats.byCountry.map((c) => `${COUNTRY_LABEL[c.key]} ${c.count}`).join(" · ")}
+        {countryCounts(stats.byCountry).map(([k, n]) => `${COUNTRY_LABEL[k]} ${n}`).join(" · ")}
       </p>
     </section>
   );
@@ -258,7 +342,8 @@ function NewMissing({ missing }: { missing: Briefing["missing"] }) {
   return (
     <section aria-labelledby="missing-title" className="rounded-xl border border-line bg-surface p-5">
       <h2 id="missing-title" className="font-semibold">새로 등록된 실종자</h2>
-      <p className="mt-1 text-xs text-subtle">FBI·경찰청 공개 정보를 바탕으로 합니다.</p>
+      <p className="mt-1 text-sm text-muted">모두가 돌아올 수 있기를 바랍니다.</p>
+      <p className="mt-0.5 text-[11px] text-subtle">FBI·경찰청 공개 정보를 바탕으로 합니다.</p>
       <ul className="mt-4 space-y-3 text-sm">
         {missing.map((m) => (
           <li key={m.id} className="flex items-baseline justify-between gap-3">
@@ -273,97 +358,6 @@ function NewMissing({ missing }: { missing: Briefing["missing"] }) {
       <Link href="/missing" className="mt-4 inline-block text-sm text-[#3f8f84] hover:underline">
         실종방에서 자세히 보기 →
       </Link>
-    </section>
-  );
-}
-
-function Voices({
-  opinions,
-  participation,
-}: {
-  opinions: Briefing["opinions"];
-  participation: Briefing["participation"];
-}) {
-  const empty =
-    opinions.sentenceVotes.length + opinions.curious.length + opinions.mostAnswered.length === 0;
-  return (
-    <section aria-labelledby="voices-title" className="mt-12">
-      <h2 id="voices-title" className="font-mono text-xs uppercase tracking-[0.2em] text-subtle">
-        Investigation Notes
-      </h2>
-      <p className="mt-2 text-lg font-semibold">사람들은 이렇게 생각했습니다</p>
-      <p className="mt-1 text-sm text-muted">
-        지금까지 수사 노트 {participation.answers + participation.questions}개, 형량 의견 {participation.votes}개, 실종방 응원{" "}
-        {participation.clouds}개가 모였습니다.
-      </p>
-      {empty ? (
-        <p className="mt-4 rounded-xl border border-dashed border-line px-4 py-8 text-center text-sm text-muted">
-          아직 모인 의견이 많지 않습니다. 사건방에서 첫 수사 노트를 남겨 주세요.
-        </p>
-      ) : (
-        <div className="mt-5 grid gap-4 sm:grid-cols-2">
-          {opinions.sentenceVotes.length > 0 && (
-            <div className="rounded-xl border border-line bg-surface p-5 sm:col-span-2">
-              <h3 className="text-sm font-semibold">의견이 많이 모인 형량</h3>
-              <ul className="mt-3 space-y-4">
-                {opinions.sentenceVotes.map((v) => {
-                  const total = v.agree + v.disagree;
-                  const pct = total ? Math.round((v.agree / total) * 100) : 0;
-                  return (
-                    <li key={v.sentenceId} className="text-sm">
-                      <div className="flex flex-wrap items-baseline justify-between gap-2">
-                        <Link href={`/cases/${v.caseSlug}`} className="font-medium hover:underline">
-                          {v.caseTitle}
-                        </Link>
-                        <span className="text-xs text-muted">
-                          {penaltyLabel(v.penalty)} · {total}명
-                        </span>
-                      </div>
-                      <div className="mt-1.5 flex h-2 overflow-hidden rounded-full bg-[#c46a4b]/30" aria-hidden>
-                        <div className="bg-[#3f8f84]" style={{ width: `${pct}%` }} />
-                      </div>
-                      <p className="mt-1 text-xs text-muted">
-                        적절하다 {pct}% · 아니다 {100 - pct}%
-                        {v.disagree > 0 && ` (너무 가볍다 ${v.tooLenient}, 너무 무겁다 ${v.tooHarsh})`}
-                      </p>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
-          {opinions.curious.length > 0 && (
-            <div className="rounded-xl border border-line bg-surface p-5">
-              <h3 className="text-sm font-semibold">함께 궁금해한 질문</h3>
-              <ul className="mt-3 space-y-3 text-sm">
-                {opinions.curious.map((q) => (
-                  <li key={q.id}>
-                    <p>“{q.body}”</p>
-                    <Link href={`/cases/${q.case.slug}`} className="text-xs text-muted hover:underline">
-                      {q.case.title} · 나도 궁금해요 {q.curiousCount}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {opinions.mostAnswered.length > 0 && (
-            <div className="rounded-xl border border-line bg-surface p-5">
-              <h3 className="text-sm font-semibold">답이 많이 달린 생각해볼 점</h3>
-              <ul className="mt-3 space-y-3 text-sm">
-                {opinions.mostAnswered.map((q) => (
-                  <li key={q.id}>
-                    <p>{q.question}</p>
-                    <Link href={`/cases/${q.caseSlug}`} className="text-xs text-muted hover:underline">
-                      {q.caseTitle} · 답변 {q.answers}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
     </section>
   );
 }
