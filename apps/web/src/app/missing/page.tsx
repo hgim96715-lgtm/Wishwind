@@ -1,0 +1,54 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Suspense } from "react";
+import { LuArrowLeft } from "react-icons/lu";
+import { MissingExperience } from "@/components/missing/MissingExperience";
+import { ApiUnavailableError } from "@/lib/cases/api";
+import { getAllMissing } from "@/lib/missing/api";
+import { groupByRegion } from "@/lib/missing/regions";
+
+export const metadata: Metadata = {
+  title: "실종방",
+  description: "실종된 사람들이 무사히 집으로 돌아올 수 있도록, 바람개비 정원에서 함께 바람을 모읍니다.",
+};
+
+export default function MissingPage() {
+  return (
+    <main className="relative h-dvh w-full overflow-hidden bg-[#f4e6d4]">
+      <header className="pointer-events-none absolute top-0 left-0 z-20 p-5">
+        <Link
+          href="/"
+          className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1.5 text-sm text-[#6b5a46] backdrop-blur hover:bg-white"
+        >
+          <LuArrowLeft aria-hidden className="size-4" />
+          홈으로
+        </Link>
+        {/* 하늘 색이 시간대마다 바뀌므로(밤엔 어두움) 글자 뒤에 반투명 바탕을 둠 */}
+        <div className="mt-3 rounded-2xl bg-white/70 px-3 py-2 backdrop-blur">
+          <h1 className="text-xl font-semibold text-[#5b4d3c]">실종방</h1>
+          <p className="hidden text-sm text-[#7a6650] sm:block">무사히 집으로 돌아오길 바라며, 함께 길을 놓습니다.</p>
+        </div>
+      </header>
+      <Suspense fallback={<div className="flex h-full items-center justify-center text-[#7a6650]">바닷가 언덕으로 가고 있습니다…</div>}>
+        <MissingPath />
+      </Suspense>
+    </main>
+  );
+}
+
+async function MissingPath() {
+  let people: Awaited<ReturnType<typeof getAllMissing>>;
+  try {
+    people = await getAllMissing();
+  } catch (error) {
+    if (error instanceof ApiUnavailableError) {
+      return (
+        <div className="flex h-full items-center justify-center px-6 text-center text-[#7a6650]">
+          API 서버가 꺼져 있는 것 같습니다. pnpm dev:api로 서버를 켠 뒤 새로고침해 주세요.
+        </div>
+      );
+    }
+    throw error;
+  }
+  return <MissingExperience groups={groupByRegion(people)} />;
+}
