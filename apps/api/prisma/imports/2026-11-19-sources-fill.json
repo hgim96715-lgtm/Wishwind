@@ -1,0 +1,856 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "daegu-frog-boys",
+      "sources": [
+        {
+          "url": "https://www.seoul.co.kr/news/2002/09/28/20020928023005",
+          "title": "‘개구리 소년’ 타살 가능성",
+          "publisher": "서울신문",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2002-09-28"
+        },
+        {
+          "url": "https://www.wikitree.co.kr/articles/986101",
+          "title": "소년 5명 한꺼번에 실종됐다가 유골로... 대한민국 역사상 가장 미스터리한 사건",
+          "publisher": "위키트리",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "lee-hyeongho-kidnapping",
+      "sources": [
+        {
+          "url": "https://www.mt.co.kr/society/2024/01/29/2024012810394189088",
+          "title": "\"애착 없어?\" 60번 협박 전화한 '그놈 목소리'…아이는 이미 죽였다[뉴스속오늘]",
+          "publisher": "머니투데이",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2024-01-29"
+        },
+        {
+          "url": "https://www.etoday.co.kr/news/view/889700",
+          "title": "3대 미제 사건…공소시효 끝났음에도 재조명되는 이유 알아보니",
+          "publisher": "이투데이",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "hwaseong-serial-murders",
+      "sources": [
+        {
+          "url": "https://www.newsis.com/view/NISX20200702_0001081363",
+          "title": "경찰 \"이춘재 살인·강간 23건 확인…개인욕구 해소위해 범행\"(종합2보)",
+          "publisher": "뉴시스",
+          "type": "NEWS_AGENCY",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2020-07-02"
+        },
+        {
+          "url": "https://www.etoday.co.kr/news/view/1913336",
+          "title": "경찰, 이춘재 사건 수사종료…\"'화성연쇄살인' 사건 등 14명 살해, 이춘재는 '사이코패스'\"",
+          "publisher": "이투데이",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2020-07-02"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "itaewon-burger-king-murder",
+      "sources": [
+        {
+          "url": "https://mobile.busan.com/view/busan/view.php?code=20160129000286",
+          "title": "'이태원 살인사건' 패터슨 유죄…징역 20년 선고",
+          "publisher": "부산일보",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2016-01-29"
+        },
+        {
+          "url": "https://www.mt.co.kr/entertainment/2021/06/18/2021061806104454942",
+          "title": "'이태원 살인사건' 패터슨, 20년만에 '징역 20년'…비산흔이 증거",
+          "publisher": "머니투데이",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2021-06-18"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "zodiac-killer",
+      "sources": [
+        {
+          "url": "https://www.rollingstone.com/culture/culture-news/codebreakers-crack-zodiac-killer-unsolved-340-character-cipher-1102927/",
+          "title": "Codebreakers Crack Zodiac Killer’s Unsolved 340-Character Cipher",
+          "publisher": "Rolling Stone",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2020-12-11"
+        },
+        {
+          "url": "https://abc13.com/8694644",
+          "title": "Zodiac Killer's '340 Cipher' sent to San Francisco Chronicle 51 years ago reportedly solved by code experts",
+          "publisher": "ABC13",
+          "type": "BROADCAST",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "setagaya-family-murder",
+      "sources": [
+        {
+          "url": "https://www.japantimes.co.jp/news/2003/12/31/national/despite-raft-of-clues-prints-family-slaying-still-unsolved",
+          "title": "Despite raft of clues, prints, family slaying still unsolved",
+          "publisher": "The Japan Times",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2003-12-31"
+        },
+        {
+          "url": "https://english.adnkronos.com/2025/12/30/ex-police-official-apologizes-over-setagaya-murder-25-years-ago/",
+          "title": "Ex-Police Official Apologizes over Setagaya Murder 25 Years Ago",
+          "publisher": "Adnkronos (Jiji Press)",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2025-12-30"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "black-dahlia",
+      "sources": [
+        {
+          "url": "https://time.com/3657606/black-dahlia-murder-case/",
+          "title": "Black Dahlia murder case",
+          "publisher": "TIME",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19"
+        },
+        {
+          "url": "https://history.com/news/who-killed-the-black-dahlia",
+          "title": "Who Killed the Black Dahlia?",
+          "publisher": "History.com",
+          "type": "OTHER",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "glico-morinaga",
+      "sources": [
+        {
+          "url": "https://japantimes.co.jp/news/2000/02/10/national/npa-admits-defeat-in-glico-morinaga-case",
+          "title": "NPA admits defeat in Glico-Morinaga case",
+          "publisher": "The Japan Times",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2000-02-10"
+        },
+        {
+          "url": "https://crimereads.com/japans-most-notorious-kidnapping-is-still-unsolved/",
+          "title": "Japan's Most Notorious Kidnapping Is Still Unsolved",
+          "publisher": "CrimeReads",
+          "type": "OTHER",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "golden-state-killer",
+      "sources": [
+        {
+          "url": "https://www.gpb.org/news/2020/08/21/golden-state-killer-sentenced-life-in-prison-without-possibility-of-parole",
+          "title": "Golden State Killer Sentenced To Life In Prison Without Possibility Of Parole",
+          "publisher": "GPB (NPR)",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2020-08-21"
+        },
+        {
+          "url": "https://www.voanews.com/usa/golden-state-killer-sentenced-life-26-rapes-slayings",
+          "title": "Golden State Killer Sentenced to Life for 26 Rapes, Slayings",
+          "publisher": "VOA",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2020-08-21"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "jonbenet-ramsey",
+      "sources": [
+        {
+          "url": "https://www.ksl.com/article/50318172/25-years-after-jonbenet-ramsey-killing-investigators-have-tested-almost-1000-dna-samples",
+          "title": "25 years after JonBenet Ramsey killing, investigators have tested almost 1,000 DNA samples",
+          "publisher": "KSL (CNN)",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2021-12-26"
+        },
+        {
+          "url": "https://www.cbsnews.com/amp/colorado/news/jonbenet-ramsey-murder-further-investigation-dna-technology-boulder-colorado",
+          "title": "JonBenet Ramsey murder: Cold case team recommends further investigation into Colorado murder",
+          "publisher": "CBS News Colorado",
+          "type": "BROADCAST",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "seohyeon-station-attack",
+      "sources": [
+        {
+          "url": "https://newstomato.com/ReadNews.aspx?no=1218374",
+          "title": "'분당 흉기난동' 최원종 1심 무기징역",
+          "publisher": "뉴스토마토",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2024-02-01"
+        },
+        {
+          "url": "https://www.twig24.com/news/world/crime-law/2024/08/20/20240820500122",
+          "title": "‘서현역 흉기난동’ 최원종, 2심도 무기징역…항소 기각",
+          "publisher": "트위그",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2024-08-20"
+        },
+        {
+          "url": "https://www.sidae.com/article/2024112017002157152",
+          "title": "'서현역 흉기 난동' 최원종 대법원 무기징역 확정",
+          "publisher": "시대일보",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2024-11-20"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "sillim-station-attack",
+      "sources": [
+        {
+          "url": "https://www.lawtimes.co.kr/news/195526",
+          "title": "[판결] '신림동 흉기난동 살인' 조선, 1심 무기징역",
+          "publisher": "법률신문",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2024-01-31"
+        },
+        {
+          "url": "https://www.dailian.co.kr/news/view/1372003/",
+          "title": "'신림 흉기난동' 조선 2심도 무기징역…\"영원히 격리해야\"",
+          "publisher": "데일리안",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2024-06-14"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "busan-peer-murder",
+      "sources": [
+        {
+          "url": "https://www.newsis.com/view/NISX20240613_0002771057",
+          "title": "'또래 여성 살인' 정유정, 대법서 무기징역 확정",
+          "publisher": "뉴시스",
+          "type": "NEWS_AGENCY",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2024-06-13"
+        },
+        {
+          "url": "https://www.twig24.com/news/world/crime-law/2024/06/13/20240613500046",
+          "title": "대법, ‘또래 여성 살해’ 정유정 무기징역 확정…사회서 영구 격리",
+          "publisher": "트위그",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2024-06-13"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "sindang-station-stalking-murder",
+      "sources": [
+        {
+          "url": "https://www.etoday.co.kr/news/view/2291639",
+          "title": "[종합] ‘신당역 스토킹 보복살인’ 전주환…대법, 무기징역 확정",
+          "publisher": "이투데이",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2023-10-12"
+        },
+        {
+          "url": "https://newstomato.com/ReadNews.aspx?no=1204098",
+          "title": "‘신당역 스토킹 살인범’ 무기징역 확정…유가족 “가석방 안돼”",
+          "publisher": "뉴스토마토",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2023-10-12"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "gapyeong-valley-murder",
+      "sources": [
+        {
+          "url": "https://www.inews24.com/view/1635498",
+          "title": "'남편 계곡 살인범' 이은해 무기징역형 확정[종합]",
+          "publisher": "아이뉴스24",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2023-09-21"
+        },
+        {
+          "url": "https://www.etoday.co.kr/news/view/2286485",
+          "title": "'계곡 살인' 이은해 대법서 무기징역 확정…\"부작위에 의한 살인\"",
+          "publisher": "이투데이",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2023-09-21"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "daejeon-elementary-school-murder",
+      "sources": [
+        {
+          "url": "https://www.hankyung.com/article/202604023492i",
+          "title": "'대전 초등학생 살인' 명재완, 무기징역 확정",
+          "publisher": "한국경제",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2026-04-02"
+        },
+        {
+          "url": "https://www.heraldk.com/article/2026040117455842751",
+          "title": "대전 초등학생 살해교사 명재완, 무기징역 확정 [세상&]",
+          "publisher": "헤럴드경제",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "suncheon-random-murder",
+      "sources": [
+        {
+          "url": "https://www.hankyung.com/article/202509090958i",
+          "title": "일면식 없는 여고생 '묻지마 살인' 박대성 무기징역 확정",
+          "publisher": "한국경제",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2025-09-09"
+        },
+        {
+          "url": "https://www.dailian.co.kr/news/view/1546220/",
+          "title": "'순천 묻지마 살인' 박대성, 사형 면해…무기징역 확정",
+          "publisher": "데일리안",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2025-09-09"
+        }
+      ],
+      "claims": [],
+      "content": {
+        "title": "순천 10대 여성 살인 사건",
+        "summary": "귀가하던 10대 여성을 약 800m 뒤쫓아가 살해한 무차별 범죄",
+        "overview": "2024년 9월 26일 새벽 전남 순천시 조례동에서 박대성이 일면식 없는 10대 여성을 약 800m 뒤쫓아가 흉기로 살해했습니다. 범행 뒤 주점과 노래방을 돌아다니며 추가 범행을 준비한 혐의도 받았습니다. 검찰은 사형을 구형했지만 1심과 2심은 무기징역을 선고했고 대법원이 확정했습니다.",
+        "country": "KR",
+        "category": "MURDER",
+        "status": "SOLVED",
+        "location": "전라남도 순천시 조례동",
+        "occurredAt": "2024-09-26",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": "2025-09-09",
+        "timeline": [
+          {
+            "occurredAt": "2024-09-26",
+            "occurredAtPrecision": "DAY",
+            "title": "귀가하던 10대 여성 피살",
+            "description": "일면식 없는 피해자를 뒤쫓아가 살해했습니다."
+          },
+          {
+            "occurredAt": "2025-05-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "2심 무기징역",
+            "description": "검찰의 항소를 기각했습니다."
+          },
+          {
+            "occurredAt": "2025-09-09",
+            "occurredAtPrecision": "DAY",
+            "title": "대법원 무기징역 확정",
+            "description": "상고를 기각했습니다."
+          }
+        ],
+        "victims": [
+          {
+            "gender": "FEMALE",
+            "status": "DECEASED",
+            "alias": "10대 여성 피해자"
+          }
+        ],
+        "suspects": [
+          {
+            "name": "박대성",
+            "charges": "살인, 살인예비",
+            "status": "CONVICTED",
+            "sentences": [
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "대법원",
+                "type": "LIFE",
+                "penalty": "무기징역",
+                "verdict": "상고를 기각했습니다.",
+                "isFinal": true,
+                "decidedAt": "2025-09-09"
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "무차별 범죄를 막으려면 무엇이 달라져야 할까요?"
+          }
+        ],
+        "circumstances": []
+      }
+    },
+    {
+      "slug": "gwangju-student-murder-2026",
+      "sources": [
+        {
+          "url": "https://mobile.newsis.com/view/NISX20260513_0003628269",
+          "title": "광주경찰, 피의자 신상정보 누리집 게시",
+          "publisher": "뉴시스",
+          "type": "NEWS_AGENCY",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2026-05-13"
+        },
+        {
+          "url": "https://www.wikitree.co.kr/articles/1163060",
+          "title": "[속보] 광주 여고생 살해범 장윤기, 1심 무기징역 선고",
+          "publisher": "위키트리",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2026-09-30"
+        },
+        {
+          "url": "https://www.dailian.co.kr/news/view/1696304",
+          "title": "'여고생 살해' 장윤기, 1심서 무기징역…\"사회와 영구 격리해야\"",
+          "publisher": "데일리안",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2026-09-30"
+        }
+      ],
+      "claims": [],
+      "content": {
+        "title": "광주 여고생 납치 살해 사건",
+        "summary": "귀가하던 고등학생을 납치해 살해하고 도우러 온 학생까지 공격한 혐의로 항소심 재판이 진행 중인 사건입니다.",
+        "overview": "2026년 5월 5일 새벽 광주 광산구 월계동 거리에서 20대 남성이 귀가하던 고등학생을 납치해 성폭행하려다 살해하고, 비명을 듣고 달려온 남학생에게도 흉기를 휘두른 혐의로 기소됐습니다. 1심은 무기징역을 선고했고 검찰과 피고인이 모두 항소해 재판이 이어지고 있습니다.",
+        "country": "KR",
+        "category": "MURDER",
+        "status": "IN_PROGRESS",
+        "location": "광주광역시 광산구 월계동",
+        "occurredAt": "2026-05-05",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": null,
+        "timeline": [
+          {
+            "occurredAt": "2026-05-05",
+            "occurredAtPrecision": "DAY",
+            "title": "고등학생 납치 살해",
+            "description": "도우러 온 남학생도 흉기로 공격당했습니다."
+          },
+          {
+            "occurredAt": "2026-09-30",
+            "occurredAtPrecision": "DAY",
+            "title": "1심 무기징역",
+            "description": "광주지법이 전자장치 부착 30년 등을 함께 명령했습니다."
+          },
+          {
+            "occurredAt": "2026-10-07",
+            "occurredAtPrecision": "DAY",
+            "title": "쌍방 항소",
+            "description": "검찰이 2일, 피고인이 7일 항소했습니다."
+          }
+        ],
+        "victims": [
+          {
+            "gender": "FEMALE",
+            "status": "DECEASED",
+            "alias": "고등학생 피해자"
+          },
+          {
+            "gender": "MALE",
+            "status": "INJURED",
+            "alias": "구조에 나선 남학생"
+          }
+        ],
+        "suspects": [
+          {
+            "alias": "20대 남성 피고인",
+            "charges": "성폭력처벌법 위반(강간 등 살인) 등",
+            "status": "INDICTED",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "광주지방법원",
+                "type": "LIFE",
+                "penalty": "무기징역",
+                "verdict": "항소심이 진행 중입니다.",
+                "isFinal": false,
+                "decidedAt": "2026-09-30"
+              }
+            ],
+            "name": "장윤기",
+            "identityDisclosedAt": "2026-05-13",
+            "identityDisclosureAgency": "광주경찰청",
+            "identityDisclosureSource": "https://mobile.newsis.com/view/NISX20260513_0003628269",
+            "nameExceptionReason": "수사기관(광주경찰청)이 신상정보 공개를 결정해 실명이 공개됨",
+            "nameExceptionDecidedAt": "2026-11-19"
+          }
+        ],
+        "questions": [
+          {
+            "question": "늦은 시간 귀가하는 청소년의 안전을 지키려면 무엇이 필요할까요?"
+          }
+        ],
+        "circumstances": []
+      }
+    },
+    {
+      "slug": "gangbuk-motel-drug-murders",
+      "sources": [
+        {
+          "url": "https://www.heraldk.com/article/2026030821204430144",
+          "title": "‘강북 모텔 연쇄살인’ 피의자 20세 김소영…檢 신상공개",
+          "publisher": "헤럴드경제",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2026-03-08"
+        },
+        {
+          "url": "https://www.ytn.co.kr/_ln/0103_202608271906215848",
+          "title": "법원, '약물 살인' 김소영 1심에서 무기징역 선고",
+          "publisher": "YTN",
+          "type": "BROADCAST",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2026-08-27"
+        }
+      ],
+      "claims": [],
+      "content": {
+        "title": "강북 모텔 약물 연쇄살인 사건",
+        "summary": "약물을 탄 음료로 남성 2명을 숨지게 하고 다른 남성들을 다치게 한 혐의의 사건으로, 항소심이 진행 중입니다.",
+        "overview": "20대 여성이 2025년 12월부터 2026년 2월 사이 서울 강북구 모텔 등에서 벤조디아제핀계 약물을 탄 음료를 남성들에게 건네 2명을 숨지게 하고 다른 피해자들을 다치게 한 혐의로 기소됐습니다. 1심은 살인의 미필적 고의를 인정해 무기징역을 선고했고, 피고인 측은 항소심에서도 살해 의도를 부인하고 있습니다.",
+        "country": "KR",
+        "category": "MURDER",
+        "status": "IN_PROGRESS",
+        "location": "서울특별시 강북구",
+        "occurredAt": "2025-12-01",
+        "occurredAtPrecision": "MONTH",
+        "solvedAt": null,
+        "timeline": [
+          {
+            "occurredAt": "2025-12-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "첫 범행",
+            "description": "약물을 탄 음료를 남성에게 건넨 혐의를 받습니다."
+          },
+          {
+            "occurredAt": "2026-08-27",
+            "occurredAtPrecision": "DAY",
+            "title": "1심 무기징역",
+            "description": "서울북부지법이 전자장치 부착 30년을 함께 명령했습니다. 특수상해 1건은 무죄로 판단했습니다."
+          },
+          {
+            "occurredAt": "2026-09-02",
+            "occurredAtPrecision": "DAY",
+            "title": "쌍방 항소",
+            "description": "검찰과 피고인이 모두 항소했습니다."
+          }
+        ],
+        "victims": [
+          {
+            "gender": "MALE",
+            "status": "DECEASED",
+            "alias": "사망 피해자 1"
+          },
+          {
+            "gender": "MALE",
+            "status": "DECEASED",
+            "alias": "사망 피해자 2"
+          },
+          {
+            "gender": "MALE",
+            "status": "INJURED",
+            "alias": "상해 피해자 1"
+          },
+          {
+            "gender": "MALE",
+            "status": "INJURED",
+            "alias": "상해 피해자 2"
+          },
+          {
+            "gender": "MALE",
+            "status": "INJURED",
+            "alias": "상해 피해자 3"
+          },
+          {
+            "gender": "MALE",
+            "status": "INJURED",
+            "alias": "상해 피해자 4"
+          }
+        ],
+        "suspects": [
+          {
+            "alias": "20대 여성 피고인",
+            "charges": "살인, 특수상해, 마약류관리법 위반",
+            "status": "INDICTED",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "서울북부지방법원",
+                "type": "LIFE",
+                "penalty": "무기징역",
+                "verdict": "항소심이 진행 중입니다.",
+                "isFinal": false,
+                "decidedAt": "2026-08-27"
+              }
+            ],
+            "name": "김소영",
+            "identityDisclosedAt": "2026-03-08",
+            "identityDisclosureAgency": "서울북부지방검찰청",
+            "identityDisclosureSource": "https://www.heraldk.com/article/2026030821204430144",
+            "nameExceptionReason": "수사기관(서울북부지방검찰청)이 신상정보 공개를 결정해 실명이 공개됨",
+            "nameExceptionDecidedAt": "2026-11-19"
+          }
+        ],
+        "questions": [
+          {
+            "question": "약물을 이용한 범죄를 예방하려면 무엇이 필요할까요?"
+          }
+        ],
+        "circumstances": []
+      }
+    },
+    {
+      "slug": "pocheon-schoolgirl-murder",
+      "sources": [
+        {
+          "url": "https://weekly.khan.co.kr/article/6611",
+          "title": "빨간 매니큐어 누가 칠했나",
+          "publisher": "주간경향",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19"
+        },
+        {
+          "url": "https://v.daum.net/v/HX4IHJDgEE",
+          "title": "포천 여중생 살인사건…빨간 매니큐어는 누가 칠했나[그해 오늘]",
+          "publisher": "이데일리",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "idaho-student-murders",
+      "sources": [
+        {
+          "url": "https://www.cbsnews.com/news/bryan-kohberger-sentence-idaho-murders",
+          "title": "Bryan Kohberger sentenced to 4 life terms in prison without parole for Idaho murders",
+          "publisher": "CBS News",
+          "type": "BROADCAST",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2025-07-23"
+        },
+        {
+          "url": "https://whyy.org/articles/bryan-kohberger-sentenced-life-prison-idaho-murder",
+          "title": "Bryan Kohberger sentenced to life in prison for murdering 4 Idaho students",
+          "publisher": "WHYY (AP)",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2025-07-23"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "gilgo-beach-serial-killings",
+      "sources": [
+        {
+          "url": "https://m.washingtontimes.com/news/2026/apr/8/rex-heuermann-gilgo-beach-killer-pleads-guilty-7-murders-admits/",
+          "title": "Rex Heuermann, Gilgo Beach killer, pleads guilty to 7 murders",
+          "publisher": "The Washington Times",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2026-04-08"
+        },
+        {
+          "url": "https://globalnews.ca/news/11909785/rex-heuermann-gilgo-beach-serial-killer-sentenced-life-in-prison/",
+          "title": "Rex Heuermann, Gilgo Beach serial killer, sentenced to life in prison",
+          "publisher": "Global News",
+          "type": "BROADCAST",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "delphi-murders",
+      "sources": [
+        {
+          "url": "https://www.nbcnews.com/news/us-news/delphi-murders-richard-allen-sentenced-130-years-killing-indiana-teens-rcna184960",
+          "title": "Delphi murders: Richard Allen sentenced to 130 years for killing Indiana teens",
+          "publisher": "NBC News",
+          "type": "BROADCAST",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2024-12-20"
+        },
+        {
+          "url": "https://www.wrtv.com/news/delphi/richard-allen-files-appeal-of-delphi-murder-conviction",
+          "title": "Richard Allen files appeal of Delphi murder conviction",
+          "publisher": "WRTV",
+          "type": "BROADCAST",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "kyoto-animation-arson",
+      "sources": [
+        {
+          "url": "https://japantimes.co.jp/news/2025/01/28/japan/crime-legal/kyoani-death-penalty-finalized",
+          "title": "KyoAni arsonist's death penalty finalized",
+          "publisher": "The Japan Times",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2025-01-28"
+        },
+        {
+          "url": "https://www.nippon.com/en/news/yjj2026031700701",
+          "title": "Withdrawal of Appeal against Death Sentence Found Valid in KyoAni Case",
+          "publisher": "Nippon.com (Jiji Press)",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2026-03-17"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "shinzo-abe-assassination",
+      "sources": [
+        {
+          "url": "https://www.rte.ie/news/world/2026/0121/1554212-tetsuya-yamagami-japan",
+          "title": "Man who killed Japan's ex-PM Abe sentenced to life",
+          "publisher": "RTÉ",
+          "type": "BROADCAST",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2026-01-21"
+        },
+        {
+          "url": "https://cfjctoday.com/2026/01/20/man-who-assassinated-japanese-pm-abe-gets-life-in-prison/",
+          "title": "Man who assassinated former Japanese prime minister gets life in prison",
+          "publisher": "CFJC Today (AP)",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2026-01-20"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "southport-dance-class-attack",
+      "sources": [
+        {
+          "url": "https://www.cbc.ca/1.7439204",
+          "title": "Axel Rudakubana sentenced to 52 years in prison for killing 3 British children",
+          "publisher": "CBC",
+          "type": "BROADCAST",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2025-01-23"
+        },
+        {
+          "url": "https://www.irishtimes.com/world/uk/2025/01/23/axel-rudakubana-in-court-for-sentencing-over-southport-dance-class-murders",
+          "title": "Southport child-killer Axel Rudakubana sentenced to at least 52 years in prison",
+          "publisher": "The Irish Times",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2025-01-23"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "madeleine-mccann-disappearance",
+      "sources": [
+        {
+          "url": "https://www.nbcnews.com/world/europe/suspect-madeleine-mccann-disappearance-released-serving-time-unrelated-rcna231818",
+          "title": "Suspect in Madeleine McCann disappearance released after serving time in unrelated case",
+          "publisher": "NBC News",
+          "type": "BROADCAST",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2025-09-17"
+        },
+        {
+          "url": "https://gazette.com/2025/09/16/timeline-in-the-investigation-of-the-disappearance-of-madeleine-mccann/",
+          "title": "Timeline in the investigation of the disappearance of Madeleine McCann",
+          "publisher": "The Gazette (AP)",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2025-09-16"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "baiyin-serial-murders",
+      "sources": [
+        {
+          "url": "https://www.caixinglobal.com/2019-01-03/notorious-serial-killer-executed-after-25-years-at-large-101366097.html",
+          "title": "Notorious Serial Killer Executed After 25 Years at Large",
+          "publisher": "Caixin Global",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2019-01-03"
+        },
+        {
+          "url": "https://www.taipeitimes.com/News/world/archives/2019/01/04/2003707330",
+          "title": "China's 'Jack the Ripper' executed",
+          "publisher": "Taipei Times",
+          "type": "NEWS",
+          "accessedAt": "2026-11-19",
+          "publishedAt": "2019-01-04"
+        }
+      ],
+      "claims": []
+    }
+  ]
+}

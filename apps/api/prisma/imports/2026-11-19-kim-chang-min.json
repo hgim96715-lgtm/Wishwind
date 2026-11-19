@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "guri-kim-chang-min-director-death",
+      "content": {
+        "title": "김창민 감독 사망 사건",
+        "summary": "경기 구리시에서 영화감독 김창민 씨가 폭행당해 숨진 사건. 피고인 2명에게 1심에서 징역 12년과 3년이 선고됐고 판결은 확정되지 않았습니다",
+        "overview": "2025년 10월 20일 새벽 경기 구리시의 한 식당 앞에서 영화감독 김창민 씨가 발달장애가 있는 아들과 식사하던 중 소음 문제로 시비가 붙었고, 30대 남성 2명에게 폭행당해 의식을 잃었습니다. 김 감독은 뇌사 판정을 받은 뒤 장기기증으로 4명에게 새 삶을 전하고 세상을 떠났습니다. 경찰은 상해치사 혐의로 송치했으나, 검찰은 2026년 5월 21일 두 사람을 살인과 장애인복지법 위반 혐의로 구속기소했습니다. 2026년 11월 19일 1심 재판부는 이모 씨에게 살인 혐의를 인정해 징역 12년을, 임모 씨에게는 살인 대신 폭행치사 혐의를 적용해 징역 3년을 선고했습니다. 판결은 확정되지 않았습니다.",
+        "country": "KR",
+        "category": "MURDER",
+        "status": "IN_PROGRESS",
+        "location": "경기 구리시",
+        "occurredAt": "2025-10-20",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": null,
+        "timeline": [
+          {
+            "occurredAt": "2025-10-20",
+            "occurredAtPrecision": "DAY",
+            "title": "식당 앞 폭행",
+            "description": "새벽 1시쯤 구리시의 식당 앞에서 소음 시비 끝에 김 감독이 폭행당해 쓰러졌다는 혐의 내용입니다. 이 자리를 자폐가 있는 아들이 지켜본 것으로 알려졌습니다."
+          },
+          {
+            "occurredAt": "2025-11-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "뇌사 판정과 장기기증",
+            "description": "김 감독은 뇌사 판정을 받은 뒤 장기기증으로 4명에게 새 삶을 전했습니다."
+          },
+          {
+            "occurredAt": "2026-05-11",
+            "occurredAtPrecision": "DAY",
+            "title": "검찰 시민위원회 살인죄 적용 의견",
+            "description": "검찰 시민위원회가 살인죄를 적용해야 한다는 의견을 냈습니다."
+          },
+          {
+            "occurredAt": "2026-05-21",
+            "occurredAtPrecision": "DAY",
+            "title": "살인 혐의로 구속기소",
+            "description": "의정부지검 남양주지청이 두 사람을 살인과 장애인복지법 위반 혐의로 구속기소했습니다."
+          },
+          {
+            "occurredAt": "2026-10-08",
+            "occurredAtPrecision": "DAY",
+            "title": "결심공판 구형",
+            "description": "검찰이 이모 씨에게 징역 20년, 임모 씨에게 징역 15년을 구형했습니다."
+          },
+          {
+            "occurredAt": "2026-11-19",
+            "occurredAtPrecision": "DAY",
+            "title": "1심 선고",
+            "description": "의정부지법 남양주지원이 이모 씨에게 징역 12년, 임모 씨에게 징역 3년을 선고했습니다."
+          }
+        ],
+        "victims": [
+          {
+            "name": "김창민",
+            "alias": "김창민 감독",
+            "gender": "MALE",
+            "status": "DECEASED",
+            "description": "영화감독으로, 발달장애가 있는 아들과 식사하던 중 사건을 겪었습니다."
+          }
+        ],
+        "suspects": [
+          {
+            "alias": "이모 씨",
+            "description": "30대 남성입니다. 피해자를 주먹과 발로 여러 차례 폭행한 혐의를 받았습니다.",
+            "charges": "살인, 장애인복지법 위반",
+            "status": "INDICTED",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "의정부지방법원 남양주지원 제1형사부",
+                "type": "IMPRISONMENT",
+                "penalty": "징역 12년, 장애인 관련 기관 취업제한",
+                "verdict": "재판부는 머리를 향한 폭행이 사망 원인인 경막하출혈로 이어졌고, 범행 뒤 피해자를 죽이고 싶었다고 여러 번 말한 점 등을 들어 살인의 고의를 인정했습니다. 피고인은 폭행은 인정했지만 살인의 고의는 부인했습니다. 확정되지 않은 1심 판결입니다.",
+                "isFinal": false,
+                "decidedAt": "2026-11-19"
+              }
+            ]
+          },
+          {
+            "alias": "임모 씨",
+            "description": "30대 남성입니다. 피해자를 목을 감아 제압하고 골목으로 데려간 혐의를 받았습니다.",
+            "charges": "살인, 장애인복지법 위반 (1심에서 폭행치사로 인정)",
+            "status": "INDICTED",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "의정부지방법원 남양주지원 제1형사부",
+                "type": "IMPRISONMENT",
+                "penalty": "징역 3년, 장애인 관련 기관 취업제한",
+                "verdict": "재판부는 살인을 함께 공모했다고 보기 어렵고 목을 조른 행위가 사망 원인이라고 단정할 수 없다며 살인 대신 폭행치사를 인정했습니다. 피고인은 싸움을 말리고 피해자를 보호하려 했다며 혐의를 부인했습니다. 확정되지 않은 1심 판결입니다.",
+                "isFinal": false,
+                "decidedAt": "2026-11-19"
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "길거리 시비가 폭력으로 번질 때 주변 사람은 어떻게 안전하게 도울 수 있을까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://www.khan.co.kr/article/202605211356001",
+          "title": "‘김창민 감독 사망 사건’ 피의자 2명 기소···상해치사죄→살인죄로",
+          "publisher": "경향신문",
+          "type": "NEWS",
+          "publishedAt": "2026-05-21",
+          "accessedAt": "2026-11-19"
+        },
+        {
+          "url": "https://www.ytn.co.kr/_ln/0103_202610081749270989",
+          "title": "[속보] '김창민 감독 살인 사건' 30대 2명 징역 20년 구형",
+          "publisher": "YTN",
+          "type": "BROADCAST",
+          "publishedAt": "2026-10-08",
+          "accessedAt": "2026-11-19"
+        },
+        {
+          "url": "https://www.hankyung.com/article/2026111967907",
+          "title": "[속보] '김창민 감독 사망' 피고인 2명에 각각 징역 12년·3년 선고",
+          "publisher": "한국경제",
+          "type": "NEWS",
+          "publishedAt": "2026-11-19",
+          "accessedAt": "2026-11-19"
+        },
+        {
+          "url": "https://www.insight.co.kr/news/582715",
+          "title": "'故김창민 감독 폭행치사' 피고인 2명, 징역 12년·3년 선고",
+          "publisher": "인사이트",
+          "type": "NEWS",
+          "publishedAt": "2026-11-19",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    }
+  ]
+}

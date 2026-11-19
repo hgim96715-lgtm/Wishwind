@@ -1,0 +1,359 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "molar-father-schoolgirl-murder",
+      "content": {
+        "title": "'어금니 아빠' 여중생 살해 사건",
+        "summary": "중학생인 딸의 친구를 유인해 살해하고 시신을 유기한 이영학에게 무기징역이 확정된 사건",
+        "overview": "이영학은 2017년 9월 30일 딸의 친구인 중학생을 집으로 불러 추행하고 다음 날 살해한 뒤 시신을 강원도 영월군의 야산에 유기했습니다. 1심은 사형을 선고했지만 2심은 무기징역으로 감형했습니다. 대법원은 2018년 11월 29일 이영학과 검찰의 상고를 모두 기각해 무기징역을 확정했습니다. 범행을 도운 미성년 자녀에게는 장기 6년, 단기 4년의 징역형이 확정됐습니다.",
+        "country": "KR",
+        "category": "MURDER",
+        "status": "SOLVED",
+        "occurredAt": "2017-09-30",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": "2018-11-29",
+        "timeline": [
+          {
+            "occurredAt": "2017-09-30",
+            "occurredAtPrecision": "DAY",
+            "title": "피해자를 집으로 유인",
+            "description": "딸의 친구를 자신의 집으로 불렀습니다."
+          },
+          {
+            "occurredAt": "2018-11-02",
+            "occurredAtPrecision": "DAY",
+            "title": "미성년 공범 형 확정",
+            "description": "대법원이 장기 6년, 단기 4년의 징역형을 확정했습니다."
+          },
+          {
+            "occurredAt": "2018-11-29",
+            "occurredAtPrecision": "DAY",
+            "title": "무기징역 확정",
+            "description": "대법원이 양측의 상고를 모두 기각했습니다."
+          }
+        ],
+        "victims": [
+          {
+            "alias": "딸의 친구인 중학생",
+            "status": "DECEASED",
+            "gender": "FEMALE"
+          }
+        ],
+        "suspects": [
+          {
+            "name": "이영학",
+            "status": "CONVICTED",
+            "charges": "강간 등 살인, 추행유인, 사체유기 등",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "type": "DEATH",
+                "penalty": "사형",
+                "isFinal": false
+              },
+              {
+                "courtLevel": "APPEAL",
+                "type": "LIFE",
+                "penalty": "무기징역",
+                "isFinal": false
+              },
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "대법원",
+                "type": "LIFE",
+                "penalty": "무기징역",
+                "isFinal": true,
+                "decidedAt": "2018-11-29",
+                "verdict": "이영학과 검찰의 상고를 모두 기각했습니다."
+              }
+            ]
+          },
+          {
+            "alias": "미성년 공범",
+            "status": "CONVICTED",
+            "charges": "범행 방조 등",
+            "sentences": [
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "대법원",
+                "type": "IMPRISONMENT",
+                "penalty": "장기 6년, 단기 4년",
+                "isFinal": true,
+                "decidedAt": "2018-11-02"
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "아이들이 주변 어른의 위험한 접근을 알아차리고 도움을 청하려면 무엇이 필요할까요?"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.newdaily.co.kr/site/data/html/2018/11/29/2018112900072.html",
+          "title": "'어금니 아빠' 이영학 무기징역 확정",
+          "publisher": "뉴데일리",
+          "type": "NEWS",
+          "publishedAt": "2018-11-29",
+          "accessedAt": "2026-11-19"
+        },
+        {
+          "url": "https://kpinews.kr/newsView/1065581136311752",
+          "title": "'어금니 아빠' 이영학, 무기징역 확정",
+          "publisher": "KPI뉴스",
+          "type": "NEWS",
+          "publishedAt": "2018-11-29",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "incheon-elementary-student-murder",
+      "content": {
+        "title": "인천 초등생 살인 사건",
+        "summary": "8세 초등학생을 유인해 살해한 주범에게 징역 20년, 방조범에게 징역 13년이 확정된 사건",
+        "overview": "2017년 3월 29일 인천 연수구의 한 공원에서 미성년 주범이 8세 초등학생을 집으로 유인해 살해하고 시신을 훼손해 유기했습니다. 1심은 공범에게 무기징역을 선고했지만 2심은 살인 공모를 인정하지 않고 살인 방조로 징역 13년을 선고했습니다. 대법원은 2018년 9월 13일 주범에게 징역 20년, 방조범에게 징역 13년을 선고한 원심을 확정했습니다.",
+        "country": "KR",
+        "category": "MURDER",
+        "status": "SOLVED",
+        "location": "인천광역시 연수구",
+        "occurredAt": "2017-03-29",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": "2018-09-13",
+        "timeline": [
+          {
+            "occurredAt": "2017-03-29",
+            "occurredAtPrecision": "DAY",
+            "title": "초등학생 유인 살해",
+            "description": "공원에서 초등학생을 집으로 유인해 살해했습니다."
+          },
+          {
+            "occurredAt": "2018-04-30",
+            "occurredAtPrecision": "DAY",
+            "title": "항소심 선고",
+            "description": "주범에게 징역 20년, 공범에게 살인 방조로 징역 13년을 선고했습니다."
+          },
+          {
+            "occurredAt": "2018-09-13",
+            "occurredAtPrecision": "DAY",
+            "title": "대법원 확정",
+            "description": "대법원이 원심을 확정했습니다."
+          }
+        ],
+        "victims": [
+          {
+            "alias": "초등학생",
+            "age": 8,
+            "status": "DECEASED",
+            "gender": "FEMALE"
+          }
+        ],
+        "suspects": [
+          {
+            "alias": "주범 김모양",
+            "status": "CONVICTED",
+            "charges": "살인, 사체유기 등",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "type": "IMPRISONMENT",
+                "penalty": "징역 20년",
+                "isFinal": false
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "서울고등법원",
+                "type": "IMPRISONMENT",
+                "penalty": "징역 20년",
+                "isFinal": false,
+                "decidedAt": "2018-04-30"
+              },
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "대법원",
+                "type": "IMPRISONMENT",
+                "penalty": "징역 20년",
+                "isFinal": true,
+                "decidedAt": "2018-09-13"
+              }
+            ]
+          },
+          {
+            "alias": "방조범 박모씨",
+            "status": "CONVICTED",
+            "charges": "살인 방조, 사체유기 등",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "type": "LIFE",
+                "penalty": "무기징역, 위치추적 전자장치 부착 30년",
+                "isFinal": false
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "서울고등법원",
+                "type": "IMPRISONMENT",
+                "penalty": "징역 13년",
+                "isFinal": false,
+                "decidedAt": "2018-04-30",
+                "verdict": "살인 공모를 인정하지 않고 살인 방조를 적용했습니다."
+              },
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "대법원",
+                "type": "IMPRISONMENT",
+                "penalty": "징역 13년",
+                "isFinal": true,
+                "decidedAt": "2018-09-13"
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "아이들이 낯선 사람의 부탁을 안전하게 거절하도록 어떻게 도울 수 있을까요?"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://mobile.newsis.com/view/NISX20180913_0000418319",
+          "title": "[종합]'인천 초등생 살인' 주범 징역 20년·방조범 징역 13년 확정",
+          "publisher": "뉴시스",
+          "type": "NEWS_AGENCY",
+          "publishedAt": "2018-09-13",
+          "accessedAt": "2026-11-19"
+        },
+        {
+          "url": "https://kpinews.kr/newsView/1065596826303555",
+          "title": "'인천 초등생 살인사건' 김양 단독범행으로 확정",
+          "publisher": "KPI뉴스",
+          "type": "NEWS",
+          "publishedAt": "2018-09-13",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "nowon-three-women-murder",
+      "content": {
+        "title": "노원 세 모녀 살해 사건",
+        "summary": "온라인 게임에서 알게 된 여성과 그 가족 등 3명을 살해한 김태현에게 무기징역이 확정된 사건",
+        "overview": "김태현은 2021년 3월 23일 서울 노원구의 한 아파트를 찾아가 온라인 게임에서 알게 된 여성과 여동생, 어머니를 살해했습니다. 1심과 항소심은 계획적 범행을 인정해 무기징역을 선고했습니다. 대법원은 2022년 4월 14일 무기징역과 위치추적 전자장치 부착 30년을 선고한 원심을 확정했습니다.",
+        "country": "KR",
+        "category": "MURDER",
+        "status": "SOLVED",
+        "location": "서울특별시 노원구",
+        "occurredAt": "2021-03-23",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": "2022-04-14",
+        "timeline": [
+          {
+            "occurredAt": "2021-03-23",
+            "occurredAtPrecision": "DAY",
+            "title": "세 모녀 살해",
+            "description": "피해자의 집을 찾아가 3명을 살해했습니다."
+          },
+          {
+            "occurredAt": "2021-10-12",
+            "occurredAtPrecision": "DAY",
+            "title": "1심 무기징역",
+            "description": "서울북부지방법원이 무기징역을 선고했습니다."
+          },
+          {
+            "occurredAt": "2022-01-19",
+            "occurredAtPrecision": "DAY",
+            "title": "항소심 무기징역",
+            "description": "서울고등법원이 1심과 같은 형을 선고했습니다."
+          },
+          {
+            "occurredAt": "2022-04-14",
+            "occurredAtPrecision": "DAY",
+            "title": "대법원 확정",
+            "description": "대법원이 원심을 확정했습니다."
+          }
+        ],
+        "victims": [
+          {
+            "alias": "온라인 게임에서 알게 된 여성",
+            "status": "DECEASED",
+            "gender": "FEMALE"
+          },
+          {
+            "alias": "여동생",
+            "status": "DECEASED",
+            "gender": "FEMALE"
+          },
+          {
+            "alias": "어머니",
+            "status": "DECEASED",
+            "gender": "FEMALE"
+          }
+        ],
+        "suspects": [
+          {
+            "name": "김태현",
+            "status": "CONVICTED",
+            "charges": "살인, 절도, 특수주거침입 등",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "서울북부지방법원",
+                "type": "LIFE",
+                "penalty": "무기징역",
+                "isFinal": false,
+                "decidedAt": "2021-10-12"
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "서울고등법원",
+                "type": "LIFE",
+                "penalty": "무기징역",
+                "isFinal": false,
+                "decidedAt": "2022-01-19"
+              },
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "대법원",
+                "type": "LIFE",
+                "penalty": "무기징역, 위치추적 전자장치 부착 30년",
+                "isFinal": true,
+                "decidedAt": "2022-04-14",
+                "verdict": "무기징역을 선고한 원심을 확정했습니다."
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "온라인에서 알게 된 사람의 집착과 위협에 어떻게 대응해야 할까요?"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.lawtimes.co.kr/news/articleViewAmp.html?idxno=177911",
+          "title": "[판결] '노원 세 모녀 살인' 김태현, 무기징역 확정",
+          "publisher": "법률신문",
+          "type": "NEWS",
+          "publishedAt": "2022-04-14",
+          "accessedAt": "2026-11-19"
+        },
+        {
+          "url": "https://m.dailian.co.kr/news/view/1076665",
+          "title": "2심도 무기징역 '세 모녀 살해' 김태현…대법원 상고",
+          "publisher": "데일리안",
+          "type": "NEWS",
+          "publishedAt": "2022-01-24",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    }
+  ]
+}

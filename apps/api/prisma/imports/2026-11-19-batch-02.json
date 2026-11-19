@@ -1,0 +1,345 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "kang-ho-sun-serial-murders",
+      "content": {
+        "title": "강호순 연쇄살인 사건",
+        "summary": "부녀자 8명과 아내, 장모를 살해한 혐의로 사형이 확정된 연쇄살인 사건",
+        "overview": "강호순은 2006년 9월부터 부녀자 8명을 납치해 살해하고 아내와 장모를 살해한 혐의로 재판을 받았습니다. 1심과 항소심 모두 사형을 선고했습니다. 강호순이 상고하지 않아 대법원 판단 없이 2009년 7월 31일 항소심 판결이 확정됐습니다.",
+        "victimCountNote": "10명",
+        "country": "KR",
+        "category": "MURDER",
+        "status": "SOLVED",
+        "occurredAt": "2006-09-01",
+        "occurredAtPrecision": "MONTH",
+        "solvedAt": "2009-07-31",
+        "timeline": [
+          {
+            "occurredAt": "2009-04-22",
+            "occurredAtPrecision": "DAY",
+            "title": "1심 사형 선고",
+            "description": "수원지방법원 안산지원이 사형을 선고했습니다."
+          },
+          {
+            "occurredAt": "2009-07-23",
+            "occurredAtPrecision": "DAY",
+            "title": "항소심 사형 선고",
+            "description": "서울고등법원이 사형을 선고했습니다."
+          },
+          {
+            "occurredAt": "2009-07-31",
+            "occurredAtPrecision": "DAY",
+            "title": "사형 확정",
+            "description": "상고장을 내지 않아 상고 기간이 지나면서 형이 확정됐습니다."
+          }
+        ],
+        "victims": [
+          {
+            "alias": "납치 피해 부녀자 8명",
+            "status": "DECEASED",
+            "gender": "FEMALE"
+          },
+          {
+            "alias": "아내와 장모",
+            "status": "DECEASED",
+            "gender": "FEMALE"
+          }
+        ],
+        "suspects": [
+          {
+            "name": "강호순",
+            "status": "CONVICTED",
+            "charges": "살인, 방화 등",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "수원지방법원 안산지원",
+                "type": "DEATH",
+                "penalty": "사형",
+                "isFinal": false,
+                "decidedAt": "2009-04-22"
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "서울고등법원",
+                "type": "DEATH",
+                "penalty": "사형",
+                "isFinal": true,
+                "decidedAt": "2009-07-23",
+                "verdict": "강호순이 상고하지 않아 2009년 7월 31일 형이 확정됐습니다."
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "늦은 밤 혼자 귀가하는 사람을 지키려면 무엇이 필요할까요?"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "url": "http://www.lawtimes.co.kr/news/articleView.html?idxno=48346",
+          "title": "연쇄살인범 강호순 사형 확정",
+          "publisher": "법률신문",
+          "type": "NEWS",
+          "publishedAt": "2009-08-05",
+          "accessedAt": "2026-11-19"
+        },
+        {
+          "url": "https://www.hankookilbo.com/news/article/200908050695670833",
+          "title": "강호순 상고 포기 사형 확정",
+          "publisher": "한국일보",
+          "type": "NEWS",
+          "publishedAt": "2009-08-05",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "lee-ki-young-paju-murders",
+      "content": {
+        "title": "파주 동거인·택시기사 살해 사건",
+        "summary": "동거인과 택시기사를 잇달아 살해한 이기영에게 무기징역이 선고된 사건",
+        "overview": "이기영은 2022년 8월 동거인을 살해해 시신을 유기하고, 같은 해 12월 택시기사를 살해했습니다. 1심은 무기징역과 위치추적 전자장치 부착 30년을 선고했습니다. 항소심도 검찰의 사형 요구를 받아들이지 않고 같은 형을 선고했습니다.",
+        "country": "KR",
+        "category": "MURDER",
+        "status": "SOLVED",
+        "location": "경기도 파주시",
+        "occurredAt": "2022-08-03",
+        "occurredAtPrecision": "DAY",
+        "timeline": [
+          {
+            "occurredAt": "2022-08-03",
+            "occurredAtPrecision": "DAY",
+            "title": "동거인 살해",
+            "description": "동거인을 살해하고 다음 날 시신을 유기했습니다."
+          },
+          {
+            "occurredAt": "2022-12-20",
+            "occurredAtPrecision": "DAY",
+            "title": "택시기사 살해",
+            "description": "택시기사를 살해했습니다."
+          },
+          {
+            "occurredAt": "2023-05-19",
+            "occurredAtPrecision": "DAY",
+            "title": "1심 무기징역",
+            "description": "무기징역과 위치추적 전자장치 부착 30년을 선고했습니다."
+          },
+          {
+            "occurredAt": "2023-10-19",
+            "occurredAtPrecision": "DAY",
+            "title": "항소심 무기징역",
+            "description": "1심과 같은 형을 선고했습니다."
+          }
+        ],
+        "victims": [
+          {
+            "alias": "동거인",
+            "status": "DECEASED"
+          },
+          {
+            "alias": "택시기사",
+            "age": 59,
+            "status": "DECEASED"
+          }
+        ],
+        "suspects": [
+          {
+            "name": "이기영",
+            "status": "CONVICTED",
+            "charges": "강도살인, 보복살인, 사체유기 등",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "의정부지방법원 고양지원",
+                "type": "LIFE",
+                "penalty": "무기징역, 위치추적 전자장치 부착 30년",
+                "isFinal": false,
+                "decidedAt": "2023-05-19"
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "서울고등법원",
+                "type": "LIFE",
+                "penalty": "무기징역, 위치추적 전자장치 부착 30년",
+                "isFinal": true,
+                "decidedAt": "2023-10-19",
+                "verdict": "검찰의 사형 요구를 받아들이지 않고 1심과 같은 형을 선고했으며, 이 판결이 그대로 확정됐습니다."
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "주변 사람이 사라진 것을 더 일찍 알아차릴 방법은 무엇일까요?"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://mbiz.heraldcorp.com/article/3238307",
+          "title": "'동거인·택시기사 살해' 이기영, 사형 면했다…2심도 무기징역",
+          "publisher": "헤럴드경제",
+          "type": "NEWS",
+          "publishedAt": "2023-10-19",
+          "accessedAt": "2026-11-19"
+        },
+        {
+          "url": "https://www.mt.co.kr/society/2025/12/29/2025122610301311062",
+          "title": "시신 옷장에 숨기고 커플링 쇼핑...마침내 드러난 연쇄살인[뉴스속오늘]",
+          "publisher": "머니투데이",
+          "type": "NEWS",
+          "publishedAt": "2025-12-29",
+          "accessedAt": "2026-11-19"
+        },
+        {
+          "url": "https://m.seoul.co.kr/news/2023/05/19/20230519500062",
+          "title": "‘동거녀·택시 기사’ 살해 이기영 1심서 무기징역 선고",
+          "publisher": "서울신문",
+          "type": "NEWS",
+          "publishedAt": "2023-05-19",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "nth-room-digital-sex-crimes",
+      "content": {
+        "title": "n번방·박사방 디지털 성착취 사건",
+        "summary": "텔레그램 대화방에서 아동·청소년 성착취물을 제작하고 유포한 디지털 성범죄 사건",
+        "overview": "문형욱은 2015년부터 범행을 시작해 텔레그램에서 n번방을 운영했습니다. 조주빈은 2019년 9월 박사방 범죄집단을 조직했습니다. 대법원은 2021년 조주빈에게 징역 42년, 문형욱에게 징역 34년, 강훈에게 징역 15년을 확정했습니다. 전체 피해자 수는 확정할 수 없습니다.",
+        "victimCountNote": "확인 불가",
+        "country": "KR",
+        "category": "SEXUAL_CRIME",
+        "status": "SOLVED",
+        "occurredAt": "2015-01-01",
+        "occurredAtPrecision": "YEAR",
+        "solvedAt": "2021-11-11",
+        "timeline": [
+          {
+            "occurredAt": "2019-09-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "박사방 범죄집단 조직",
+            "description": "조주빈이 박사방 범죄집단을 조직했습니다."
+          },
+          {
+            "occurredAt": "2021-10-14",
+            "occurredAtPrecision": "DAY",
+            "title": "조주빈 징역 42년 확정",
+            "description": "대법원이 원심 형량을 확정했습니다."
+          },
+          {
+            "occurredAt": "2021-11-11",
+            "occurredAtPrecision": "DAY",
+            "title": "문형욱·강훈 형 확정",
+            "description": "대법원이 문형욱에게 징역 34년, 강훈에게 징역 15년을 확정했습니다."
+          }
+        ],
+        "victims": [],
+        "suspects": [
+          {
+            "name": "조주빈",
+            "alias": "박사",
+            "status": "CONVICTED",
+            "charges": "범죄단체조직, 아동·청소년 성착취물 제작·배포 등",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "type": "IMPRISONMENT",
+                "penalty": "징역 40년",
+                "isFinal": false,
+                "decidedAt": "2020-11-26"
+              },
+              {
+                "courtLevel": "APPEAL",
+                "type": "IMPRISONMENT",
+                "penalty": "징역 42년",
+                "isFinal": false,
+                "decidedAt": "2021-06-01",
+                "verdict": "병합 사건을 감안해 형을 정했습니다."
+              },
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "대법원",
+                "type": "IMPRISONMENT",
+                "penalty": "징역 42년",
+                "isFinal": true,
+                "decidedAt": "2021-10-14"
+              }
+            ]
+          },
+          {
+            "name": "문형욱",
+            "alias": "갓갓",
+            "status": "CONVICTED",
+            "charges": "아동·청소년 성착취물 제작·배포 등",
+            "sentences": [
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "대법원",
+                "type": "IMPRISONMENT",
+                "penalty": "징역 34년",
+                "isFinal": true,
+                "decidedAt": "2021-11-11"
+              }
+            ]
+          },
+          {
+            "name": "강훈",
+            "alias": "부따",
+            "status": "CONVICTED",
+            "charges": "범죄집단 활동, 아동·청소년 성착취물 제작·배포 등",
+            "sentences": [
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "대법원",
+                "type": "IMPRISONMENT",
+                "penalty": "징역 15년",
+                "isFinal": true,
+                "decidedAt": "2021-11-11",
+                "verdict": "상고를 기각했습니다."
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "디지털 성범죄 피해자를 보호하려면 무엇이 더 필요할까요?"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.newsis.com/view/NISX20211014_0001612725",
+          "title": "[일지]'박사방' 조주빈, 검거부터 '징역 42년' 확정까지",
+          "publisher": "뉴시스",
+          "type": "NEWS_AGENCY",
+          "publishedAt": "2021-10-14",
+          "accessedAt": "2026-11-19"
+        },
+        {
+          "url": "https://mobile.newsis.com/view/NISX20211110_0001646565",
+          "title": "'n번방 창시' 갓갓, 징역 34년 확정…'박사방' 부따, 징역 15년",
+          "publisher": "뉴시스",
+          "type": "NEWS_AGENCY",
+          "publishedAt": "2021-11-11",
+          "accessedAt": "2026-11-19"
+        },
+        {
+          "url": "https://www.ytn.co.kr/_ln/0115_202104081836564138",
+          "title": "텔레그램 'n번방' 운영 '갓갓' 문형욱 징역 34년",
+          "publisher": "YTN",
+          "type": "BROADCAST",
+          "publishedAt": "2021-04-08",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    }
+  ]
+}

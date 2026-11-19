@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "tokyo-subway-sarin-attack",
+      "sources": [
+        {
+          "url": "https://www.cbsnews.com/amp/news/shoko-asahara-aum-shinrikyo-members-executed-today-sarin-tokyo-subway-attack-2018-07-06",
+          "title": "Doomsday cult leader, followers executed for 1995 sarin attack in Tokyo subway",
+          "publisher": "CBS News",
+          "type": "NEWS",
+          "publishedAt": "2018-07-06",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "jack-the-ripper",
+      "sources": [
+        {
+          "url": "https://www.history.com/articles/jack-the-ripper",
+          "title": "Jack the Ripper",
+          "publisher": "History.com",
+          "type": "OTHER",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": []
+    }
+  ]
+}
