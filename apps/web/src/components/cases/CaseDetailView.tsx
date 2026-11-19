@@ -5,6 +5,7 @@ import { ApiUnavailableError, getCase } from "@/lib/cases/api";
 import {
   CATEGORY_LABEL,
   COUNTRY_LABEL,
+  caseRoomCountry,
   COURT_LEVEL_LABEL,
   SENTENCE_TYPE_LABEL,
   SUSPECT_STATUS_LABEL,
@@ -13,10 +14,13 @@ import {
 } from "@/lib/cases/labels";
 import type { CaseDetail, Sentence, Suspect } from "@/lib/cases/types";
 import { CaseNotes } from "./CaseNotes";
+import { CaseHelp } from "@/components/help/CaseHelp";
 import { CaseTabs, type CaseTab } from "./CaseTabs";
 import { Notice } from "./Notice";
+import { RelatedPanel } from "./RelatedPanel";
 import { SentenceVote } from "./SentenceVote";
 import { ReviewStamp, StatusStamp } from "./StatusStamp";
+import { FileShareBar } from "@/components/files/FileShareBar";
 
 export async function CaseDetailView({ slug }: { slug: string }) {
   let data: CaseDetail | null;
@@ -82,9 +86,11 @@ export async function CaseDetailView({ slug }: { slug: string }) {
     {
       id: "related",
       label: "관련 콘텐츠",
-      panel: (
-        <Empty>관련 기사·영상·다큐는 브리핑룸이 열리면 여기에 모아 둘 예정입니다.</Empty>
-      ),
+      count:
+        (data.relatedContents?.length ?? 0) +
+        (data.newsItems?.length ?? 0) +
+        (data.sources?.filter((s) => !data.newsItems?.some((n) => n.url === s.url)).length ?? 0),
+      panel: <RelatedPanel data={data} />,
     },
   ];
 
@@ -93,7 +99,7 @@ export async function CaseDetailView({ slug }: { slug: string }) {
       <header className="pb-6">
         <div className="flex items-start justify-between gap-4">
           <p className="text-sm font-medium text-subtle">
-            {COUNTRY_LABEL[data.country]} · {CATEGORY_LABEL[data.category]} ·{" "}
+            {COUNTRY_LABEL[caseRoomCountry(data.country)]} · {CATEGORY_LABEL[data.category]} ·{" "}
             {formatCaseDate(data.occurredAt, data.occurredAtPrecision)}
           </p>
           <div className="flex shrink-0 items-center gap-2">
@@ -110,9 +116,11 @@ export async function CaseDetailView({ slug }: { slug: string }) {
             {data.location}
           </p>
         )}
+        <FileShareBar type="case" fileKey={data.slug} title={data.title} />
       </header>
 
       <CaseTabs tabs={tabs} />
+      <CaseHelp data={data} />
     </article>
   );
 }
@@ -220,7 +228,7 @@ function OverviewPanel({ data }: { data: CaseDetail }) {
       )}
       <dl className="grid grid-cols-2 gap-3 rounded-xl border border-line bg-surface p-4 text-sm sm:grid-cols-4">
         <Fact label="발생" value={formatCaseDate(data.occurredAt, data.occurredAtPrecision)} />
-        <Fact label="국가" value={COUNTRY_LABEL[data.country]} />
+        <Fact label="국가" value={COUNTRY_LABEL[caseRoomCountry(data.country)]} />
         <Fact label="유형" value={CATEGORY_LABEL[data.category]} />
         <Fact label="피해자" value={`${data.victims.length}명`} />
       </dl>

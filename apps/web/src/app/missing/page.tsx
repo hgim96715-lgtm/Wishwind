@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { LuArrowLeft } from "react-icons/lu";
+import { HelpLink } from "@/components/help/HelpBar";
 import { MissingExperience } from "@/components/missing/MissingExperience";
 import { ApiUnavailableError } from "@/lib/cases/api";
 import { getAllMissing } from "@/lib/missing/api";
@@ -27,7 +28,18 @@ export default function MissingPage() {
         <div className="mt-3 rounded-2xl bg-white/70 px-3 py-2 backdrop-blur">
           <h1 className="text-xl font-semibold text-[#5b4d3c]">실종방</h1>
           <p className="hidden text-sm text-[#7a6650] sm:block">무사히 집으로 돌아오길 바라며, 함께 길을 놓습니다.</p>
+          <p className="mt-1 text-xs text-[#7a6650]">
+            실종 신고{" "}
+            <a href="tel:182" className="pointer-events-auto font-semibold text-[#2f7469] underline-offset-2 hover:underline">
+              182
+            </a>{" "}
+            · 긴급{" "}
+            <a href="tel:112" className="pointer-events-auto font-semibold text-[#2f7469] underline-offset-2 hover:underline">
+              112
+            </a>
+          </p>
         </div>
+        <HelpLink className="pointer-events-auto mt-2" />
       </header>
       <Suspense fallback={<div className="flex h-full items-center justify-center text-[#7a6650]">바닷가 언덕으로 가고 있습니다…</div>}>
         <MissingPath />
