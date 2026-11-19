@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "example-existing-case",
+      "sources": [
+        {
+          "url": "https://example.com/news/verdict",
+          "title": "기사 제목을 그대로 적습니다",
+          "publisher": "언론사 이름",
+          "type": "NEWS",
+          "publishedAt": "2026-01-15",
+          "accessedAt": "2026-11-19"
+        }
+      ],
+      "claims": [
+        {
+          "sourceUrl": "https://example.com/news/verdict",
+          "field": "sentences.final.penalty",
+          "value": "무기징역",
+          "quote": "기사 원문에 적힌 문장을 그대로 옮깁니다."
+        }
+      ]
+    },
+    {
+      "slug": "example-new-case",
+      "content": {
+        "title": "새 사건 제목",
+        "summary": "사건을 한 줄로 설명하는 요약",
+        "overview": "사건의 개요를 합니다체로 적습니다.",
+        "country": "KR",
+        "category": "MURDER",
+        "status": "SOLVED",
+        "location": "발생 지역",
+        "occurredAt": "2024-05-01",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": "2025-06-01",
+        "timeline": [
+          {
+            "occurredAt": "2024-05-01",
+            "occurredAtPrecision": "DAY",
+            "title": "사건 발생",
+            "description": "무슨 일이 있었는지 적습니다."
+          }
+        ],
+        "victims": [
+          { "alias": "피해자", "gender": "UNKNOWN", "status": "DECEASED" }
+        ],
+        "suspects": [
+          {
+            "name": "확정 판결을 받은 사람의 이름",
+            "status": "CONVICTED",
+            "charges": "살인",
+            "sentences": [
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "대법원",
+                "type": "LIFE",
+                "penalty": "무기징역",
+                "verdict": "상고를 기각했습니다.",
+                "isFinal": true,
+                "decidedAt": "2025-06-01"
+              }
+            ]
+          }
+        ],
+        "questions": [{ "question": "이 사건에서 함께 생각해 볼 점은 무엇일까요?" }],
+        "circumstances": []
+      },
+      "sources": [],
+      "claims": []
+    }
+  ]
+}
