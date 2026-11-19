@@ -131,6 +131,16 @@ enum SourceType {
   OTHER
 }
 
+enum RelatedKind {
+  DOCUMENTARY
+  TV_PROGRAM
+  YOUTUBE
+  PODCAST
+  MOVIE
+  SERIES
+  BOOK
+}
+
 enum ClaimStatus {
   UNVERIFIED
   QUOTE_MATCHED
@@ -175,6 +185,7 @@ model Case {
   missingPersons          MissingPerson[]
   briefingPosts           BriefingPost[]
   newsItems               NewsItem[]
+  relatedContents         RelatedContent[]
 
   @@index([isPublished, occurredAt(sort: Desc)])
   @@index([reviewStatus])
@@ -203,6 +214,31 @@ model CaseSource {
 
   @@unique([caseId, url])
   @@map("case_sources")
+}
+
+model RelatedContent {
+  id     String @id @default(uuid(7)) @db.Uuid
+  caseId String @map("case_id") @db.Uuid
+
+  kind         RelatedKind
+  title        String      @db.VarChar(300)
+  platform     String      @db.VarChar(100)
+  creator      String?     @db.VarChar(200)
+  url          String      @db.VarChar(1000)
+  releaseYear  Int?        @map("release_year") @db.SmallInt
+  language     String      @default("ko") @db.VarChar(10)
+  note         String?     @db.VarChar(300)
+  isDramatized Boolean     @default(false) @map("is_dramatized")
+  sortOrder    Int         @default(0) @map("sort_order")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@unique([caseId, url])
+  @@index([caseId, sortOrder])
+  @@map("related_contents")
 }
 
 model CaseClaim {
@@ -530,6 +566,8 @@ model CloudMessage {
   body            String            @db.VarChar(100)
   status          UserContentStatus @default(HELD)
   category        String?           @db.VarChar(40)
+  posX            Float?            @map("pos_x") @db.Real
+  posZ            Float?            @map("pos_z") @db.Real
   createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz(3)
 
   @@index([status, createdAt(sort: Desc)])
@@ -624,10 +662,42 @@ model PageView {
   @@map("page_views")
 }
 
+enum FileTarget {
+  CASE
+  MISSING
+}
+
+enum FileEventKind {
+  VIEW
+  SHARE
+}
+
+/** 사건 파일·실종자 카드를 연 사람, 공유한 사람 수. 방문자 해시는 날마다 바뀌어 하루 1회만 셈 */
+model FileEvent {
+  id          String        @id @default(uuid(7)) @db.Uuid
+  target      FileTarget
+  targetKey   String        @map("target_key") @db.VarChar(100)
+  kind        FileEventKind
+  channel     String?       @db.VarChar(20)
+  visitorHash String        @map("visitor_hash") @db.VarChar(64)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@unique([target, targetKey, kind, visitorHash])
+  @@index([target, targetKey, kind, createdAt])
+  @@map("file_events")
+}
+
 enum NewsStatus {
   NEW
   PUBLISHED
   DISMISSED
+}
+
+enum NewsAutoVerdict {
+  PUBLISH
+  HOLD
+  DISMISS
 }
 
 model NewsItem {
@@ -641,6 +711,9 @@ model NewsItem {
   region  String  @default("KR") @db.VarChar(10)
   lang    String  @default("ko") @db.VarChar(10)
   titleKo String? @map("title_ko") @db.VarChar(300)
+
+  autoVerdict NewsAutoVerdict? @map("auto_verdict")
+  autoReason  String?          @map("auto_reason") @db.VarChar(300)
 
   publishedAt DateTime? @map("published_at") @db.Timestamptz(3)
   reviewedAt  DateTime? @map("reviewed_at") @db.Timestamptz(3)
