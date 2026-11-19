@@ -1,0 +1,26 @@
+{
+  "name": "cold_cases",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@11.21.0",
+  "engines": {
+    "node": ">=24.11.0"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel --filter web --filter api dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "pnpm --filter api dev",
+    "build": "pnpm --filter api build && pnpm --filter web build",
+    "lint": "pnpm --parallel --filter web --filter api lint",
+    "cases": "pnpm --filter api cases",
+    "missing": "pnpm --filter api missing",
+    "db:up": "docker compose up -d --wait",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres",
+    "db:generate": "pnpm --filter api exec prisma generate",
+    "db:migrate": "pnpm --filter api exec prisma migrate dev",
+    "db:seed": "pnpm --filter api exec prisma db execute --file prisma/seed.sql",
+    "db:seed:recent": "pnpm --filter api exec prisma db execute --file prisma/seed-recent-cases.sql",
+    "db:studio": "pnpm --filter api exec prisma studio"
+  }
+}

@@ -3,3 +3,29 @@ docs/
 
 # IDE 설정
 .idea/
+node_modules/
+
+# 환경변수
+.env
+.env.*
+!.env.example
+
+# 동작 확인용 스크린샷
+.screenshots/
+
+# 가해자 사진 (배포 시 객체 저장소 사용)
+apps/web/public/suspects/*
+!apps/web/public/suspects/.gitkeep
+
+# 실종방 캐릭터: Kenney 묶음 중 화면에 쓰는 character-*.glb만 커밋함
+# (소품·무기 파일과 분위기에 맞지 않아 빼는 캐릭터는 제외)
+apps/web/public/models/characters/*.glb
+!apps/web/public/models/characters/character-*.glb
+apps/web/public/models/characters/character-zombie.glb
+apps/web/public/models/characters/character-soldier.glb
+apps/web/public/models/characters/character-raider.glb
+apps/web/public/models/characters/character-knight.glb
+
+# 새벽 자동 수집 사건 파일 (처리 결과는 DB에 들어가므로 커밋하지 않음)
+apps/api/prisma/imports/inbox/*
+!apps/api/prisma/imports/inbox/.gitkeep
