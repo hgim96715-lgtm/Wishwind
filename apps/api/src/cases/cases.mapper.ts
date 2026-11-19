@@ -1,5 +1,6 @@
 import { CaseReviewStatus } from '../generated/prisma/enums.js';
 import type { CaseDetailRow, CaseListRow } from './cases.repository.js';
+import { isClueOnlySource } from '../case-import/case-import.schema.js';
 import { toPublicSuspect } from './public-suspect.js';
 
 export interface PhotoPolicy {
@@ -46,6 +47,8 @@ export function toCaseDetail(
   return {
     ...detail,
     ...reviewFlags(preview, isPublished, reviewStatus),
+    // 나무위키는 단서용이라 화면의 관련 기사 목록에는 내보내지 않음
+    sources: found.sources.filter((s) => !isClueOnlySource(s.url)),
     suspects: found.suspects.map((s) =>
       toPublicSuspect(s, found.country, photo.countries, photo.baseUrl),
     ),

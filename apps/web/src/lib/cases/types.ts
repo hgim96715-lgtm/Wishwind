@@ -149,7 +149,44 @@ export interface CaseDetail extends CaseListItem {
   suspiciousCircumstances: SuspiciousCircumstance[];
   /** 관리실에서 이 사건에 연결해 공개한 최근 기사 */
   newsItems?: CaseNewsItem[];
+  /** 다큐·방송·영화·유튜브 등 더 볼거리 */
+  relatedContents?: RelatedContent[];
+  /** 사건 정리에 쓴 기사·판결·공공기관 자료 (나무위키 제외) */
+  sources?: CaseSourceLink[];
   updatedAt?: string;
+}
+
+export type RelatedKind =
+  | "DOCUMENTARY"
+  | "TV_PROGRAM"
+  | "YOUTUBE"
+  | "PODCAST"
+  | "MOVIE"
+  | "SERIES"
+  | "BOOK";
+
+export interface RelatedContent {
+  id: string;
+  kind: RelatedKind;
+  title: string;
+  platform: string;
+  creator: string | null;
+  url: string;
+  releaseYear: number | null;
+  language: string;
+  note: string | null;
+  isDramatized: boolean;
+}
+
+export type SourceType = "COURT" | "GOVERNMENT" | "NEWS_AGENCY" | "NEWS" | "BROADCAST" | "OTHER";
+
+export interface CaseSourceLink {
+  id: string;
+  url: string;
+  title: string;
+  publisher: string;
+  type: SourceType;
+  publishedAt: string | null;
 }
 
 export interface CaseNewsItem {

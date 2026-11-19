@@ -7,6 +7,7 @@ import {
   CourtLevel,
   DatePrecision,
   Gender,
+  RelatedKind,
   SentenceType,
   SourceType,
   SuspectStatus,
@@ -155,6 +156,22 @@ const sourceSchema = z.strictObject({
   accessedAt: isoDate.nullish(),
 });
 
+/**
+ * 관련 콘텐츠(다큐·방송·영화·유튜브 등). 사실의 출처가 아니라 "더 보기" 링크라 검토 상태에 영향 없음.
+ * 공식 플랫폼·방송사 채널 링크만 씀 (불법 업로드 금지). 사건을 바탕으로 각색한 작품은 isDramatized=true
+ */
+const relatedSchema = z.strictObject({
+  kind: z.enum(RelatedKind),
+  title: text(300),
+  platform: text(100),
+  creator: text(200).nullish(),
+  url: z.url({ protocol: /^https$/ }).max(1000),
+  releaseYear: z.int().min(1900).max(2100).nullish(),
+  language: z.string().regex(/^[a-z]{2}$/).default('ko'),
+  note: text(300).nullish(),
+  isDramatized: z.boolean().default(false),
+});
+
 const claimSchema = z.strictObject({
   sourceUrl: z.url({ protocol: /^https?$/ }).max(1000),
   field: text(100),
@@ -171,6 +188,8 @@ const entrySchema = z.strictObject({
   content: contentSchema.optional(),
   sources: z.array(sourceSchema).default([]),
   claims: z.array(claimSchema).default([]),
+  /** 없으면 기존 관련 콘텐츠를 건드리지 않음. 있으면 url 기준으로 추가·수정(누적) */
+  related: z.array(relatedSchema).optional(),
 });
 
 export const importFileSchema = z.strictObject({
@@ -181,6 +200,7 @@ export const importFileSchema = z.strictObject({
 export type ImportFile = z.infer<typeof importFileSchema>;
 export type ImportEntry = z.infer<typeof entrySchema>;
 export type ImportContent = z.infer<typeof contentSchema>;
+export type ImportRelated = z.infer<typeof relatedSchema>;
 
 const POLITE_SENTENCE = /(습니다|입니다)\.$/;
 const POLITE_QUESTION = /까요\?$/;
@@ -263,6 +283,20 @@ export function checkEntry(entry: ImportEntry) {
   }
   if (urls.some(isClueOnlySource)) {
     warnings.push(at('나무위키는 검증 출처 2곳에 포함되지 않습니다'));
+  }
+
+  const related = entry.related ?? [];
+  const relatedUrls = related.map((r) => r.url);
+  if (new Set(relatedUrls).size !== relatedUrls.length) {
+    errors.push(at('같은 관련 콘텐츠 URL이 중복됐습니다'));
+  }
+  for (const item of related) {
+    if (isClueOnlySource(item.url) || /wikipedia\.org$/i.test(new URL(item.url).hostname)) {
+      errors.push(at(`위키는 관련 콘텐츠로 넣지 않습니다: ${item.url}`));
+    }
+    if (item.isDramatized && !item.note) {
+      warnings.push(at(`각색 작품은 note에 "사건을 모티브로 한 극영화"처럼 적어 주세요: ${item.title}`));
+    }
   }
 
   const content = entry.content;

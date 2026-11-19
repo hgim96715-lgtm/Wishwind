@@ -21,8 +21,9 @@ const asTimelineDate = (value: string | null | undefined) =>
 
 export interface ImportResult {
   slug: string;
-  action: 'created' | 'updated' | 'sources-only';
+  action: 'created' | 'updated' | 'sources-only' | 'related-only';
   sources: number;
+  related: number;
   claims: number;
 }
 
@@ -219,6 +220,32 @@ async function syncSources(
   }
 }
 
+/** 관련 콘텐츠는 url 기준으로 누적함. 파일에 적힌 순서가 화면 순서 */
+async function syncRelated(
+  tx: Prisma.TransactionClient,
+  caseId: string,
+  entry: ImportEntry,
+) {
+  for (const [index, item] of (entry.related ?? []).entries()) {
+    const data = {
+      kind: item.kind,
+      title: item.title,
+      platform: item.platform,
+      creator: item.creator ?? null,
+      releaseYear: item.releaseYear ?? null,
+      language: item.language,
+      note: item.note ?? null,
+      isDramatized: item.isDramatized,
+      sortOrder: index,
+    };
+    await tx.relatedContent.upsert({
+      where: { caseId_url: { caseId, url: item.url } },
+      create: { ...data, caseId, url: item.url },
+      update: data,
+    });
+  }
+}
+
 export async function importEntry(
   tx: Prisma.TransactionClient,
   entry: ImportEntry,
@@ -244,9 +271,11 @@ export async function importEntry(
     await syncSuspects(tx, saved.id, entry.slug, entry.content);
   }
   await syncSources(tx, saved.id, entry);
+  await syncRelated(tx, saved.id, entry);
 
-  // 내용이나 출처가 바뀌면 이전 검토 결과는 더 이상 유효하지 않음
-  if (existing && existing.reviewStatus !== CaseReviewStatus.DRAFT) {
+  // 내용이나 출처가 바뀌면 이전 검토 결과는 더 이상 유효하지 않음 (관련 콘텐츠만 바뀐 경우는 그대로 둠)
+  const factsChanged = Boolean(entry.content) || entry.sources.length > 0;
+  if (existing && factsChanged && existing.reviewStatus !== CaseReviewStatus.DRAFT) {
     await tx.case.update({
       where: { id: saved.id },
       data: {
@@ -258,8 +287,15 @@ export async function importEntry(
 
   return {
     slug: entry.slug,
-    action: !existing ? 'created' : entry.content ? 'updated' : 'sources-only',
+    action: !existing
+      ? 'created'
+      : entry.content
+        ? 'updated'
+        : entry.sources.length > 0
+          ? 'sources-only'
+          : 'related-only',
     sources: entry.sources.length,
+    related: entry.related?.length ?? 0,
     claims: entry.claims.length,
   };
 }
