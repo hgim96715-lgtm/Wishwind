@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./.cases-cli",
+    "incremental": false,
+    "declaration": false,
+    "sourceMap": false
+  },
+  "include": [
+    "src/case-import/**/*.ts",
+    "src/generated/**/*.ts",
+    "src/missing/cli.ts",
+    "src/missing/missing-store.ts",
+    "src/missing/fbi-missing.client.ts",
+    "src/missing/fbi-missing.mapper.ts"
+  ],
+  "exclude": [
+    "**/*spec.ts"
+  ]
+}

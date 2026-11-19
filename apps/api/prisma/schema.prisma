@@ -1,0 +1,656 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "esm"
+  importFileExtension = "js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Country {
+  KR
+  US
+  JP
+  CN
+  GB
+  OTHER
+}
+
+enum CaseCategory {
+  MURDER
+  MISSING
+  KIDNAPPING
+  SEXUAL_CRIME
+  ROBBERY
+  ARSON
+  TERROR
+  FRAUD
+  OTHER
+}
+
+enum CaseStatus {
+  UNSOLVED
+  IN_PROGRESS
+  SOLVED
+}
+
+enum DatePrecision {
+  DAY
+  MONTH
+  YEAR
+  UNKNOWN
+}
+
+enum SuspectStatus {
+  SUSPECTED
+  ARRESTED
+  INDICTED
+  CONVICTED
+  ACQUITTED
+  CLEARED
+  DECEASED
+  AT_LARGE
+}
+
+enum VictimStatus {
+  DECEASED
+  INJURED
+  MISSING
+  FOUND_ALIVE
+  UNKNOWN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  UNKNOWN
+}
+
+enum CourtLevel {
+  FIRST
+  APPEAL
+  SUPREME
+  OTHER
+}
+
+enum SentenceType {
+  DEATH
+  LIFE
+  IMPRISONMENT
+  PROBATION
+  FINE
+  ACQUITTAL
+  OTHER
+}
+
+enum SentenceVoteChoice {
+  AGREE
+  DISAGREE
+}
+
+enum SentenceVoteDirection {
+  TOO_LENIENT
+  TOO_HARSH
+}
+
+enum UserContentStatus {
+  PUBLISHED
+  HELD
+  BLOCKED
+  HIDDEN
+}
+
+enum ModerationStage {
+  REGEX
+  AI
+  FALLBACK
+  ADMIN
+}
+
+enum ModerationVerdict {
+  ALLOW
+  BLOCK
+  HOLD
+}
+
+enum CaseReviewStatus {
+  DRAFT
+  NEEDS_REVIEW
+  VERIFIED
+  REJECTED
+}
+
+enum SourceType {
+  COURT
+  GOVERNMENT
+  NEWS_AGENCY
+  NEWS
+  BROADCAST
+  OTHER
+}
+
+enum ClaimStatus {
+  UNVERIFIED
+  QUOTE_MATCHED
+  CONFIRMED
+  CONFLICT
+}
+
+model Case {
+  id    String @id @default(uuid(7)) @db.Uuid
+  slug  String @unique @db.VarChar(200)
+  title String @db.VarChar(200)
+
+  summary  String  @db.VarChar(500)
+  overview String? @db.Text
+
+  victimCountNote String? @map("victim_count_note") @db.VarChar(100)
+
+  country  Country
+  category CaseCategory
+  status   CaseStatus   @default(UNSOLVED)
+  location String?      @db.VarChar(200)
+
+  occurredAt          DateTime?     @map("occurred_at") @db.Date
+  occurredAtPrecision DatePrecision @default(DAY) @map("occurred_at_precision")
+  solvedAt            DateTime?     @map("solved_at") @db.Date
+
+  isPublished    Boolean          @default(false) @map("is_published")
+  reviewStatus   CaseReviewStatus @default(DRAFT) @map("review_status")
+  reviewNote     String?          @map("review_note") @db.Text
+  lastVerifiedAt DateTime?        @map("last_verified_at") @db.Timestamptz(3)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  timeline                TimelineEvent[]
+  suspects                Suspect[]
+  victims                 Victim[]
+  unsolvedQuestions       UnsolvedQuestion[]
+  suspiciousCircumstances SuspiciousCircumstance[]
+  sources                 CaseSource[]
+  userQuestions           UserQuestion[]
+  missingPersons          MissingPerson[]
+  briefingPosts           BriefingPost[]
+  newsItems               NewsItem[]
+
+  @@index([isPublished, occurredAt(sort: Desc)])
+  @@index([reviewStatus])
+  @@index([status, occurredAt(sort: Desc)])
+  @@index([country, category, occurredAt(sort: Desc)])
+  @@index([category, occurredAt(sort: Desc)])
+  @@map("cases")
+}
+
+model CaseSource {
+  id     String @id @default(uuid(7)) @db.Uuid
+  caseId String @map("case_id") @db.Uuid
+
+  url         String     @db.VarChar(1000)
+  title       String     @db.VarChar(300)
+  publisher   String     @db.VarChar(200)
+  type        SourceType @default(NEWS)
+  publishedAt DateTime?  @map("published_at") @db.Date
+  accessedAt  DateTime?  @map("accessed_at") @db.Date
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  case   Case        @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  claims CaseClaim[]
+
+  @@unique([caseId, url])
+  @@map("case_sources")
+}
+
+model CaseClaim {
+  id       String @id @default(uuid(7)) @db.Uuid
+  sourceId String @map("source_id") @db.Uuid
+
+  field  String      @db.VarChar(100)
+  value  String      @db.Text
+  quote  String      @db.Text
+  status ClaimStatus @default(UNVERIFIED)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  source CaseSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@index([sourceId, field])
+  @@index([status])
+  @@map("case_claims")
+}
+
+model TimelineEvent {
+  id     String @id @default(uuid(7)) @db.Uuid
+  caseId String @map("case_id") @db.Uuid
+
+  occurredAt          DateTime?     @map("occurred_at") @db.Timestamptz(3)
+  occurredAtPrecision DatePrecision @default(DAY) @map("occurred_at_precision")
+  title               String        @db.VarChar(200)
+  description         String?       @db.Text
+
+  sortOrder Int @default(0) @map("sort_order")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId, occurredAt, sortOrder])
+  @@map("timeline_events")
+}
+
+model Suspect {
+  id     String @id @default(uuid(7)) @db.Uuid
+  caseId String @map("case_id") @db.Uuid
+
+  name        String?       @db.VarChar(100)
+  alias       String?       @db.VarChar(100)
+  description String?       @db.Text
+  charges     String?       @db.Text
+  status      SuspectStatus @default(SUSPECTED)
+  sortOrder   Int           @default(0) @map("sort_order")
+
+  identityDisclosedAt      DateTime? @map("identity_disclosed_at") @db.Date
+  identityDisclosureAgency String?   @map("identity_disclosure_agency") @db.VarChar(100)
+  identityDisclosureSource String?   @map("identity_disclosure_source") @db.VarChar(1000)
+  photoUrl                 String?   @map("photo_url") @db.VarChar(300)
+  photoSourceAgency        String?   @map("photo_source_agency") @db.VarChar(100)
+  photoSourceUrl           String?   @map("photo_source_url") @db.VarChar(1000)
+
+  nameExceptionReason    String?   @map("name_exception_reason") @db.VarChar(300)
+  nameExceptionDecidedAt DateTime? @map("name_exception_decided_at") @db.Date
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  case      Case       @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  sentences Sentence[]
+
+  @@index([caseId, sortOrder])
+  @@map("suspects")
+}
+
+model Victim {
+  id     String @id @default(uuid(7)) @db.Uuid
+  caseId String @map("case_id") @db.Uuid
+
+  name        String?      @db.VarChar(100)
+  alias       String?      @db.VarChar(100)
+  age         Int?         @db.SmallInt
+  gender      Gender       @default(UNKNOWN)
+  description String?      @db.Text
+  status      VictimStatus @default(UNKNOWN)
+  sortOrder   Int          @default(0) @map("sort_order")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId, sortOrder])
+  @@map("victims")
+}
+
+model Sentence {
+  id        String @id @default(uuid(7)) @db.Uuid
+  suspectId String @map("suspect_id") @db.Uuid
+
+  courtLevel CourtLevel   @default(FIRST) @map("court_level")
+  courtName  String?      @map("court_name") @db.VarChar(100)
+  type       SentenceType
+  verdict    String?      @db.Text
+  penalty    String?      @db.VarChar(200)
+  isFinal    Boolean      @default(false) @map("is_final")
+  decidedAt  DateTime?    @map("decided_at") @db.Date
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  suspect Suspect        @relation(fields: [suspectId], references: [id], onDelete: Cascade)
+  votes   SentenceVote[]
+
+  @@index([suspectId, decidedAt])
+  @@map("sentences")
+}
+
+/// 확정 형량에 대한 시민 의견. 로그인이 없어 브라우저별 익명 ID(voterId)로 1인 1표를 구분함
+model SentenceVote {
+  id         String @id @default(uuid(7)) @db.Uuid
+  sentenceId String @map("sentence_id") @db.Uuid
+  voterId    String @map("voter_id") @db.Uuid
+
+  choice    SentenceVoteChoice
+  direction SentenceVoteDirection?
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  sentence Sentence @relation(fields: [sentenceId], references: [id], onDelete: Cascade)
+
+  @@unique([sentenceId, voterId])
+  @@index([sentenceId, choice])
+  @@map("sentence_votes")
+}
+
+model UnsolvedQuestion {
+  id     String @id @default(uuid(7)) @db.Uuid
+  caseId String @map("case_id") @db.Uuid
+
+  question    String  @db.VarChar(300)
+  description String? @db.Text
+  isResolved  Boolean @default(false) @map("is_resolved")
+  answer      String? @db.Text
+  sortOrder   Int     @default(0) @map("sort_order")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  case        Case         @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  userAnswers UserAnswer[]
+
+  @@index([caseId, sortOrder])
+  @@map("unsolved_questions")
+}
+
+model UserAnswer {
+  id         String @id @default(uuid(7)) @db.Uuid
+  questionId String @map("question_id") @db.Uuid
+  voterId    String @map("voter_id") @db.Uuid
+
+  body        String            @db.VarChar(500)
+  status      UserContentStatus
+  reportCount Int               @default(0) @map("report_count")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  question    UnsolvedQuestion    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  reports     UserContentReport[]
+  moderations UserContentModeration[]
+
+  @@unique([questionId, voterId])
+  @@index([questionId, status, createdAt])
+  @@index([voterId, updatedAt])
+  @@index([status, updatedAt])
+  @@map("user_answers")
+}
+
+model UserQuestion {
+  id      String @id @default(uuid(7)) @db.Uuid
+  caseId  String @map("case_id") @db.Uuid
+  voterId String @map("voter_id") @db.Uuid
+
+  body         String            @db.VarChar(200)
+  status       UserContentStatus
+  reportCount  Int               @default(0) @map("report_count")
+  curiousCount Int               @default(0) @map("curious_count")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  case        Case                    @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  curious     UserQuestionCurious[]
+  reports     UserContentReport[]
+  moderations UserContentModeration[]
+
+  @@unique([caseId, voterId])
+  @@index([caseId, status, curiousCount(sort: Desc), createdAt(sort: Desc)])
+  @@index([voterId, updatedAt])
+  @@index([status, updatedAt])
+  @@map("user_questions")
+}
+
+model UserQuestionCurious {
+  userQuestionId String @map("user_question_id") @db.Uuid
+  voterId        String @map("voter_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  userQuestion UserQuestion @relation(fields: [userQuestionId], references: [id], onDelete: Cascade)
+
+  @@id([userQuestionId, voterId])
+  @@index([voterId])
+  @@map("user_question_curious")
+}
+
+model UserContentReport {
+  id         String  @id @default(uuid(7)) @db.Uuid
+  answerId   String? @map("answer_id") @db.Uuid
+  questionId String? @map("question_id") @db.Uuid
+  voterId    String  @map("voter_id") @db.Uuid
+
+  reason String? @db.VarChar(200)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  answer   UserAnswer?   @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  question UserQuestion? @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([answerId, voterId])
+  @@unique([questionId, voterId])
+  @@map("user_content_reports")
+}
+
+model UserContentModeration {
+  id         String  @id @default(uuid(7)) @db.Uuid
+  answerId   String? @map("answer_id") @db.Uuid
+  questionId String? @map("question_id") @db.Uuid
+
+  stage        ModerationStage
+  verdict      ModerationVerdict
+  category     String            @db.VarChar(40)
+  reason       String?           @db.Text
+  model        String?           @db.VarChar(100)
+  inputTokens  Int               @default(0) @map("input_tokens")
+  outputTokens Int               @default(0) @map("output_tokens")
+  estimatedUsd Decimal           @default(0) @map("estimated_usd") @db.Decimal(10, 6)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  answer   UserAnswer?   @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  question UserQuestion? @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([answerId, createdAt])
+  @@index([questionId, createdAt])
+  @@index([verdict, createdAt])
+  @@map("user_content_moderations")
+}
+
+model SuspiciousCircumstance {
+  id     String @id @default(uuid(7)) @db.Uuid
+  caseId String @map("case_id") @db.Uuid
+
+  title       String  @db.VarChar(200)
+  description String? @db.Text
+  sortOrder   Int     @default(0) @map("sort_order")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId, sortOrder])
+  @@map("suspicious_circumstances")
+}
+
+enum MissingSource {
+  FBI
+  SAFE182
+}
+
+enum MissingStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model MissingPerson {
+  id         String        @id @default(uuid(7)) @db.Uuid
+  source     MissingSource
+  externalId String        @map("external_id") @db.VarChar(100)
+
+  name          String    @db.VarChar(200)
+  gender        Gender    @default(UNKNOWN)
+  ageAtMissing  Int?      @map("age_at_missing")
+  ageNow        Int?      @map("age_now")
+  missingDate   DateTime? @map("missing_date") @db.Date
+  lastSeenPlace String?   @map("last_seen_place") @db.VarChar(300)
+  region        String    @db.VarChar(100)
+  appearance    String?   @db.Text
+  description   String?   @db.Text
+  descriptionKo String?   @map("description_ko") @db.Text
+  descriptionKoSourceHash String? @map("description_ko_source_hash") @db.VarChar(64)
+  photoUrl      String?   @map("photo_url") @db.VarChar(500)
+  thumbUrl      String?   @map("thumb_url") @db.VarChar(500)
+  sourceUrl     String    @map("source_url") @db.VarChar(500)
+
+  status         MissingStatus @default(ACTIVE)
+  sourceModified DateTime?     @map("source_modified") @db.Timestamptz(3)
+  lastSyncedAt   DateTime      @map("last_synced_at") @db.Timestamptz(3)
+
+  caseId String? @map("case_id") @db.Uuid
+  case   Case?   @relation(fields: [caseId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([source, externalId])
+  @@index([status, region, missingDate(sort: Desc)])
+  @@index([caseId])
+  @@map("missing_persons")
+}
+
+model CloudMessage {
+  id              String            @id @default(uuid(7)) @db.Uuid
+  voterId         String            @map("voter_id") @db.Uuid
+  body            String            @db.VarChar(100)
+  status          UserContentStatus @default(HELD)
+  category        String?           @db.VarChar(40)
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([status, createdAt(sort: Desc)])
+  @@index([voterId, createdAt])
+  @@map("cloud_messages")
+}
+
+enum BriefingKind {
+  NOTICE
+  NEWS
+  CASE_UPDATE
+  OPINION
+}
+
+enum BriefingStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model BriefingPost {
+  id     String         @id @default(uuid(7)) @db.Uuid
+  kind   BriefingKind
+  status BriefingStatus @default(DRAFT)
+
+  title    String  @db.VarChar(200)
+  body     String  @db.Text
+  isPinned Boolean @default(false) @map("is_pinned")
+
+  caseId String? @map("case_id") @db.Uuid
+  case   Case?   @relation(fields: [caseId], references: [id], onDelete: SetNull)
+
+  publishedAt DateTime? @map("published_at") @db.Timestamptz(3)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([status, publishedAt(sort: Desc)])
+  @@index([status, isPinned])
+  @@index([caseId])
+  @@map("briefing_posts")
+}
+
+enum InquiryKind {
+  QUESTION
+  CORRECTION
+  FEEDBACK
+}
+
+enum InquiryStatus {
+  OPEN
+  ANSWERED
+  CLOSED
+}
+
+model Inquiry {
+  id      String        @id @default(uuid(7)) @db.Uuid
+  kind    InquiryKind
+  status  InquiryStatus @default(OPEN)
+  voterId String        @map("voter_id") @db.Uuid
+
+  caseSlug String? @map("case_slug") @db.VarChar(200)
+  body     String  @db.VarChar(2000)
+
+  reply     String?   @db.Text
+  repliedAt DateTime? @map("replied_at") @db.Timestamptz(3)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([kind, status, createdAt(sort: Desc)])
+  @@index([voterId, createdAt(sort: Desc)])
+  @@map("inquiries")
+}
+
+model BlockedVoter {
+  voterId   String   @id @map("voter_id") @db.Uuid
+  reason    String?  @db.VarChar(300)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@map("blocked_voters")
+}
+
+model PageView {
+  id           String  @id @default(uuid(7)) @db.Uuid
+  path         String  @db.VarChar(300)
+  visitorHash  String  @map("visitor_hash") @db.VarChar(64)
+  referrerHost String? @map("referrer_host") @db.VarChar(200)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([createdAt])
+  @@index([path, createdAt])
+  @@map("page_views")
+}
+
+enum NewsStatus {
+  NEW
+  PUBLISHED
+  DISMISSED
+}
+
+model NewsItem {
+  id        String     @id @default(uuid(7)) @db.Uuid
+  url       String     @unique @db.VarChar(1000)
+  title     String     @db.VarChar(300)
+  publisher String     @db.VarChar(200)
+  query     String     @db.VarChar(100)
+  status    NewsStatus @default(NEW)
+
+  region  String  @default("KR") @db.VarChar(10)
+  lang    String  @default("ko") @db.VarChar(10)
+  titleKo String? @map("title_ko") @db.VarChar(300)
+
+  publishedAt DateTime? @map("published_at") @db.Timestamptz(3)
+  reviewedAt  DateTime? @map("reviewed_at") @db.Timestamptz(3)
+
+  caseId String? @map("case_id") @db.Uuid
+  case   Case?   @relation(fields: [caseId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([status, region, publishedAt(sort: Desc)])
+  @@index([caseId])
+  @@map("news_items")
+}

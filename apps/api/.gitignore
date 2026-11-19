@@ -1,0 +1,22 @@
+# dependencies
+/node_modules
+
+# build
+/dist
+/.cases-cli
+*.tsbuildinfo
+
+# prisma generated client
+/src/generated/
+
+# env files
+.env
+.env.*
+!.env.example
+
+# test
+/coverage
+
+# misc
+.DS_Store
+*.log
