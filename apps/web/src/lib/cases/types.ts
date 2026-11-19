@@ -1,0 +1,195 @@
+/**
+ * NestJS API(/api/cases) 응답 타입.
+ * 원본은 apps/api/prisma/schema.prisma. 공유 패키지가 생기면 그쪽으로 옮길 것.
+ * Date 컬럼은 JSON으로 오면서 ISO 문자열이 됨.
+ */
+export type Country = "KR" | "US" | "JP" | "CN" | "GB" | "OTHER";
+export type CaseCategory =
+  | "MURDER"
+  | "MISSING"
+  | "KIDNAPPING"
+  | "SEXUAL_CRIME"
+  | "ROBBERY"
+  | "ARSON"
+  | "TERROR"
+  | "FRAUD"
+  | "OTHER";
+export type CaseStatus = "UNSOLVED" | "IN_PROGRESS" | "SOLVED";
+export type DatePrecision = "DAY" | "MONTH" | "YEAR" | "UNKNOWN";
+export type SuspectStatus =
+  | "SUSPECTED"
+  | "ARRESTED"
+  | "INDICTED"
+  | "CONVICTED"
+  | "ACQUITTED"
+  | "CLEARED"
+  | "DECEASED"
+  | "AT_LARGE";
+export type VictimStatus =
+  | "DECEASED"
+  | "INJURED"
+  | "MISSING"
+  | "FOUND_ALIVE"
+  | "UNKNOWN";
+export type Gender = "MALE" | "FEMALE" | "UNKNOWN";
+export type CourtLevel = "FIRST" | "APPEAL" | "SUPREME" | "OTHER";
+export type SentenceType =
+  | "DEATH"
+  | "LIFE"
+  | "IMPRISONMENT"
+  | "PROBATION"
+  | "FINE"
+  | "ACQUITTAL"
+  | "OTHER";
+
+export interface CaseListItem {
+  id: string;
+  slug: string;
+  title: string;
+  summary: string;
+  country: Country;
+  category: CaseCategory;
+  status: CaseStatus;
+  location: string | null;
+  occurredAt: string | null;
+  occurredAtPrecision: DatePrecision;
+  /** 개발 환경 미리보기에서만 true가 될 수 있음 */
+  reviewPending?: boolean;
+  unpublished?: boolean;
+}
+
+export interface CaseListResponse {
+  items: CaseListItem[];
+  nextCursor: string | null;
+}
+
+export interface TimelineEvent {
+  id: string;
+  occurredAt: string | null;
+  occurredAtPrecision: DatePrecision;
+  title: string;
+  description: string | null;
+}
+
+export interface Sentence {
+  id: string;
+  courtLevel: CourtLevel;
+  courtName: string | null;
+  type: SentenceType;
+  verdict: string | null;
+  penalty: string | null;
+  isFinal: boolean;
+  decidedAt: string | null;
+}
+
+export type SentenceVoteChoice = "AGREE" | "DISAGREE";
+export type SentenceVoteDirection = "TOO_LENIENT" | "TOO_HARSH";
+
+/** 집계는 투표한 사람에게만 내려옴 (results: null이면 아직 투표 전) */
+export interface SentenceVoteState {
+  choice: SentenceVoteChoice | null;
+  direction: SentenceVoteDirection | null;
+  results: {
+    agree: number;
+    disagree: number;
+    total: number;
+    tooLenient: number;
+    tooHarsh: number;
+  } | null;
+}
+
+export interface Suspect {
+  id: string;
+  name: string | null;
+  alias: string | null;
+  description: string | null;
+  charges: string | null;
+  status: SuspectStatus;
+  identityDisclosedAt: string | null;
+  identityDisclosureAgency: string | null;
+  identityDisclosureSource: string | null;
+  photoUrl: string | null;
+  photoSourceAgency: string | null;
+  photoSourceUrl: string | null;
+  sentences: Sentence[];
+}
+
+export interface Victim {
+  id: string;
+  name: string | null;
+  alias: string | null;
+  age: number | null;
+  gender: Gender;
+  description: string | null;
+  status: VictimStatus;
+}
+
+export interface UnsolvedQuestion {
+  id: string;
+  question: string;
+  description: string | null;
+  isResolved: boolean;
+  answer: string | null;
+}
+
+export interface SuspiciousCircumstance {
+  id: string;
+  title: string;
+  description: string | null;
+}
+
+export interface CaseDetail extends CaseListItem {
+  overview: string | null;
+  victimCountNote: string | null;
+  solvedAt: string | null;
+  timeline: TimelineEvent[];
+  suspects: Suspect[];
+  victims: Victim[];
+  unsolvedQuestions: UnsolvedQuestion[];
+  suspiciousCircumstances: SuspiciousCircumstance[];
+  /** 관리실에서 이 사건에 연결해 공개한 최근 기사 */
+  newsItems?: CaseNewsItem[];
+  updatedAt?: string;
+}
+
+export interface CaseNewsItem {
+  id: string;
+  url: string;
+  title: string;
+  titleKo: string | null;
+  publisher: string;
+  publishedAt: string | null;
+}
+
+export type UserContentStatus = "PUBLISHED" | "HELD" | "BLOCKED" | "HIDDEN";
+
+export interface CaseNoteAnswer {
+  id: string;
+  body: string;
+  createdAt: string;
+  isMine: boolean;
+}
+
+export interface CaseNotesState {
+  canAsk: boolean;
+  questions: {
+    questionId: string;
+    answerCount: number;
+    mine: { body: string; status: UserContentStatus } | null;
+    /** 내 수사 노트를 남기기 전에는 null */
+    answers: CaseNoteAnswer[] | null;
+  }[];
+  myQuestion: { id: string; body: string; status: UserContentStatus } | null;
+  userQuestions: {
+    id: string;
+    body: string;
+    curiousCount: number;
+    curiousByMe: boolean;
+    isMine: boolean;
+  }[];
+}
+
+export interface CaseNoteSaveResult {
+  result: { status: UserContentStatus; message: string };
+  notes: CaseNotesState;
+}
