@@ -21,8 +21,8 @@ export function RoomGrid() {
         animate="show"
         className="grid w-full gap-x-5 gap-y-8 md:grid-cols-3"
       >
-        {ROOMS.map((room, i) => (
-          <RoomCard key={room.slug} room={room} fileNo={i + 1} />
+        {ROOMS.map((room) => (
+          <RoomCard key={room.slug} room={room} />
         ))}
       </motion.nav>
     </MotionConfig>
