@@ -35,6 +35,9 @@ export interface MissingListResponse {
 export interface CloudMessage {
   id: string;
   body: string;
+  /** 바람개비를 꽂은 언덕 좌표. 예전 메시지는 null (정원 안에 꽂힘) */
+  posX?: number | null;
+  posZ?: number | null;
   createdAt: string;
 }
 

@@ -34,12 +34,15 @@ export function WishPanel({
   setData,
   onClose,
   onPlaced,
+  getPosition,
 }: {
   data: CloudsResponse | null;
   setData: React.Dispatch<React.SetStateAction<CloudsResponse | null>>;
   onClose: () => void;
   /** 꽂은 바람개비를 정원에서 바로 보여 주기 위해 알림 */
-  onPlaced?: (id: string, message: string) => void;
+  onPlaced?: (id: string, message: string, placedHere: boolean) => void;
+  /** 지금 서 있는 자리 앞 (바람개비를 꽂을 곳). 목록 화면 등에서는 없음 → 정원 안에 꽂힘 */
+  getPosition?: () => [number, number] | undefined;
 }) {
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
@@ -59,11 +62,13 @@ export function WishPanel({
     if (body.length < 2 || sending) return;
     setSending(true);
     setNotice(null);
+    const spot = getPosition?.();
+    const position = spot ? { x: Math.round(spot[0] * 100) / 100, z: Math.round(spot[1] * 100) / 100 } : undefined;
     try {
       const res = await fetch(ENDPOINT, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ body }),
+        body: JSON.stringify({ body, position }),
       });
       const r = (await res.json()) as PlaceCloudResult & { message?: string };
       if (!res.ok) throw new Error(r.message ?? "바람개비를 꽂지 못했습니다");
@@ -75,7 +80,13 @@ export function WishPanel({
       setNotice({ tone: r.status === "PUBLISHED" ? "ok" : "wait", text: r.message });
       setData((d) => d && { ...d, cloudCount: r.cloudCount });
       if (r.cloud) {
-        const cloud: CloudMessage = { id: r.cloud.id, body: r.cloud.body, createdAt: r.cloud.createdAt };
+        const cloud: CloudMessage = {
+          id: r.cloud.id,
+          body: r.cloud.body,
+          posX: r.cloud.posX ?? null,
+          posZ: r.cloud.posZ ?? null,
+          createdAt: r.cloud.createdAt,
+        };
         setData((d) =>
           d && {
             ...d,
@@ -84,7 +95,7 @@ export function WishPanel({
             pending: r.status === "HELD" ? [cloud, ...d.pending] : d.pending,
           },
         );
-        onPlaced?.(cloud.id, r.message);
+        onPlaced?.(cloud.id, r.message, cloud.posX != null);
       }
     } catch (err) {
       setNotice({ tone: "warn", text: (err as Error).message });
@@ -118,7 +129,7 @@ export function WishPanel({
       </button>
       <h2 className="text-lg font-semibold">바람개비 꽂기</h2>
       <p className="mt-1 text-sm text-muted">
-        길 위의 모든 분에게 응원 한 마디를 건네 주세요. 바람개비가 되어 정원에 꽂히고, 바람이 모일수록 다 같이 힘차게 돕니다.
+        길 위의 모든 분에게 응원 한 마디를 건네 주세요. 지금 서 있는 자리에 바람개비가 꽂히고, 바람이 모일수록 언덕의 바람개비가 다 같이 힘차게 돕니다.
       </p>
       <p className="mt-3 text-xs text-subtle">정원의 바람개비 {count}개</p>
       <Progress count={count} ms={ms} />

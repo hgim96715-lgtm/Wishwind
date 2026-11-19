@@ -3,7 +3,7 @@ import * as THREE from "three";
 /**
  * 보는 사람의 현재 시각(브라우저 로컬 시간)에 맞춘 하늘 색.
  * 키프레임 사이는 선형 보간 → 1분마다 갱신해도 끊기지 않고 서서히 바뀜.
- * 밤에도 별·달은 쓰지 않음 (죽음 연상 소재 제외). 대신 등불이 더 밝아져 길을 비춤
+ * 밤에는 하늘이 캄캄해지고 별이 뜸 (사용자 요청 2026-11-19, 예전엔 죽음 연상 소재라 뺐음). 등불이 더 밝아져 길을 비춤
  */
 export interface SkyPalette {
   top: string;
@@ -21,14 +21,17 @@ export interface SkyPalette {
   sea: string;
   /** HUD 글자를 밝게 바꿀지 */
   dark: boolean;
+  /** 별이 보이는 정도 (0 = 낮, 1 = 한밤) */
+  stars: number;
 }
 
-type Key = [hour: number, p: Omit<SkyPalette, "dark">];
+type Key = [hour: number, p: Omit<SkyPalette, "dark" | "stars">];
 
-const NIGHT: Omit<SkyPalette, "dark"> = {
-  top: "#26345c", horizon: "#56648f", hemiSky: "#c3cbe6", hemiGround: "#5a5978",
-  hemiIntensity: 1.0, sun: "#aab6e0", sunIntensity: 0.4, cloud: "#dde2f2", lamp: 2.0,
-  grass: "#3e5a55", sand: "#8a8296", sea: "#2e4570",
+// 한밤: 캄캄한 남색 하늘. 땅은 겨우 보일 만큼만 밝혀 등불·등대가 돋보이게 함
+const NIGHT: Omit<SkyPalette, "dark" | "stars"> = {
+  top: "#070d24", horizon: "#1a2444", hemiSky: "#6f7aa8", hemiGround: "#22253c",
+  hemiIntensity: 0.75, sun: "#9aa8dc", sunIntensity: 0.3, cloud: "#8f98ba", lamp: 2.8,
+  grass: "#2b4a40", sand: "#55516a", sea: "#132244",
 };
 
 const KEYS: Key[] = [
@@ -61,7 +64,7 @@ export function paletteAt(hour: number): SkyPalette {
   const [h0, p0] = KEYS[i];
   const [h1, p1] = KEYS[i + 1];
   const t = h1 === h0 ? 0 : (h - h0) / (h1 - h0);
-  const p: Omit<SkyPalette, "dark"> = {
+  const p: Omit<SkyPalette, "dark" | "stars"> = {
     top: mixHex(p0.top, p1.top, t),
     horizon: mixHex(p0.horizon, p1.horizon, t),
     hemiSky: mixHex(p0.hemiSky, p1.hemiSky, t),
@@ -75,7 +78,9 @@ export function paletteAt(hour: number): SkyPalette {
     sand: mixHex(p0.sand, p1.sand, t),
     sea: mixHex(p0.sea, p1.sea, t),
   };
-  return { ...p, dark: h >= 19.5 || h < 5.5 };
+  // 별: 저녁 7시 반부터 9시 반까지 서서히 떠서, 새벽 4시 반부터 6시까지 서서히 사라짐
+  const stars = h >= 19.5 ? Math.min(1, (h - 19.5) / 2) : h < 4.5 ? 1 : h < 6 ? 1 - (h - 4.5) / 1.5 : 0;
+  return { ...p, dark: h >= 19.5 || h < 5.5, stars };
 }
 
 /** 현재 시각(소수 시간). ?time=19 처럼 주소에 넣으면 그 시간으로 미리 볼 수 있음 */
@@ -85,4 +90,22 @@ export function currentHour(): number {
   if (Number.isFinite(forced)) return forced;
   const now = new Date();
   return now.getHours() + now.getMinutes() / 60;
+}
+
+/** 흐림·비·눈·안개면 하늘을 회색빛으로 덮고 햇빛·별을 줄임 */
+export function withWeather(p: SkyPalette, kind: "clear" | "cloudy" | "fog" | "rain" | "snow"): SkyPalette {
+  if (kind === "clear") return p;
+  const grey = p.dark ? "#262b3a" : kind === "snow" ? "#d9dde6" : "#a3a9b5";
+  const amount = kind === "cloudy" ? 0.4 : kind === "fog" ? 0.6 : 0.55;
+  return {
+    ...p,
+    top: mixHex(p.top, grey, amount),
+    horizon: mixHex(p.horizon, grey, amount),
+    hemiSky: mixHex(p.hemiSky, grey, amount * 0.5),
+    sun: mixHex(p.sun, grey, amount),
+    sunIntensity: p.sunIntensity * (1 - amount),
+    hemiIntensity: p.hemiIntensity * (kind === "snow" ? 1.05 : 0.9),
+    sea: mixHex(p.sea, grey, amount * 0.5),
+    stars: 0,
+  };
 }

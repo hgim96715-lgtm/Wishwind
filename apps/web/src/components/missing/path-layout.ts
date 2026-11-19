@@ -15,15 +15,15 @@ export type Slot =
 export const SLOT_SPACING = 4;
 
 export function buildSlots(groups: RegionGroup[]): Slot[] {
+  // 지역으로 나누지 않음 (사용자 결정 2026-11-19): 모든 실종자를 최근에 실종된 순서로 한 줄로 세움.
+  // 갈래 길 구간에서는 바깥쪽(side 1) 등불이 갈래 길 옆에 서므로 여러 길에 고르게 흩어짐 (world.ts lanternPoint)
+  const people = groups
+    .flatMap((g) => g.people.map((person) => ({ person, regionLabel: g.label })))
+    .sort((a, b) => (b.person.missingDate ?? "").localeCompare(a.person.missingDate ?? ""));
   const slots: Slot[] = [{ kind: "start" }];
-  let side: 1 | -1 = 1;
-  for (const g of groups) {
-    slots.push({ kind: "sign", region: g.region, label: g.label, count: g.people.length });
-    for (const person of g.people) {
-      slots.push({ kind: "lantern", person, side, regionLabel: g.label });
-      side = side === 1 ? -1 : 1;
-    }
-  }
+  people.forEach(({ person, regionLabel }, i) => {
+    slots.push({ kind: "lantern", person, side: i % 2 === 0 ? 1 : -1, regionLabel });
+  });
   slots.push({ kind: "end" });
   return slots;
 }

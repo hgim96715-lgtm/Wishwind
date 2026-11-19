@@ -75,7 +75,7 @@ export class CloudsService implements OnApplicationBootstrap, OnApplicationShutd
     return { cloudCount, milestones: MILESTONES, clouds, pending };
   }
 
-  async place(voterId: string, body: string) {
+  async place(voterId: string, body: string, position?: { x: number; z: number }) {
     const filtered = filterCloud(body);
     if (!filtered.ok) {
       return { status: UserContentStatus.BLOCKED, message: filtered.message, cloudCount: await this.count() };
@@ -97,11 +97,13 @@ export class CloudsService implements OnApplicationBootstrap, OnApplicationShutd
       body: result.body,
       status: result.status,
       category: result.log.category,
+      posX: position?.x,
+      posZ: position?.z,
     });
     const published = cloud.status === UserContentStatus.PUBLISHED;
     return {
       status: cloud.status,
-      message: published ? '바람개비 하나를 정원에 꽂았습니다.' : '확인 후 정원에 꽂힙니다.',
+      message: published ? '바람개비 하나를 꽂았습니다.' : '확인 후 언덕에 꽂힙니다.',
       cloud,
       cloudCount: await this.count(),
     };

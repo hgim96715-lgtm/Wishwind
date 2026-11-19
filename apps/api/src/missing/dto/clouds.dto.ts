@@ -8,6 +8,13 @@ export const cloudSchema = z.object({
     .refine((v) => typeof v === 'string', CLOUD_MESSAGE)
     .transform((v) => (v as string).trim())
     .refine((v) => v.length >= 2 && v.length <= 100, CLOUD_MESSAGE),
+  /** 바람개비를 꽂은 자리 (언덕 좌표). 없으면 정원 안 자리에 차례로 꽂힘 */
+  position: z
+    .object({
+      x: z.number().finite().min(-100).max(100),
+      z: z.number().finite().min(-20000).max(60),
+    })
+    .optional(),
 });
 
 export type CloudInput = z.output<typeof cloudSchema>;

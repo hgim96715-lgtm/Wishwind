@@ -9,7 +9,8 @@ import { Canvas, useFrame, useThree, type ThreeEvent } from "@react-three/fiber"
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import type { Slot } from "../path-layout";
-import { currentHour, paletteAt, type SkyPalette } from "../time-of-day";
+import type { Weather } from "@/lib/weather/types";
+import { currentHour, paletteAt, withWeather, type SkyPalette } from "../time-of-day";
 import { Avatar } from "./Avatar";
 import { createLabelStore, LabelOverlay, LabelProjector, type Label, type LabelStore } from "./labels";
 import {
@@ -24,14 +25,27 @@ import {
   SEA_LEVEL,
   slotAtZ,
   SPAWN,
-  trailPoint,
+  BRIDGE_HALF_WIDTH,
+  branchX,
+  bridgeDeckY,
+  bridgeHalfLength,
+  hash2,
+  inWater,
+  pathAmount,
+  plantableSpot,
+  pondDistance,
+  pondsNear,
+  SLOT_SPACING,
   trailX,
+  walkHeight,
+  waterLevel,
+  type Pond,
 } from "./world";
 
 /** 화면 연출 기준 (API의 milestones와 같은 값) */
 const SUNLIGHT_AT = 10;
 const HOME_PATH_AT = 50;
-const MAX_PINWHEELS = 300;
+const MAX_PINWHEELS = 600;
 const BUBBLE_MAX = 6;
 const PINWHEEL_COLORS = ["#ffd166", "#7cc6f2", "#9ad97a", "#ff9f8a", "#c9a7f2", "#ffb86b"];
 
@@ -39,10 +53,13 @@ export interface Wish {
   id: string;
   body: string;
   pending?: boolean;
+  /** 꽂은 자리 [x, z]. 없으면 바람개비 정원 안에 차례로 꽂힘 */
+  pos?: [number, number];
 }
 
 export interface PlayerStatus {
-  region: string | null;
+  /** 지금 있는 곳 이름 (바람개비 정원, 연못가, 갈래 길 …) */
+  place: string;
   nearId: string | null;
   inGarden: boolean;
 }
@@ -52,6 +69,8 @@ export interface WorldControls {
   /** 조이스틱 입력 (-1~1). y가 앞 */
   stick: { x: number; y: number };
   teleport?: (x: number, z: number) => void;
+  /** 지금 서 있는 곳 바로 앞, 바람개비를 꽂을 수 있는 자리 [x, z] */
+  plantSpot?: () => [number, number];
 }
 
 interface SceneProps {
@@ -64,6 +83,8 @@ interface SceneProps {
   controls: React.RefObject<WorldControls>;
   onSelect: (id: string) => void;
   onStatus: (s: PlayerStatus) => void;
+  /** 보는 사람 동네(기본 서울)의 지금 날씨 */
+  weather?: Weather | null;
 }
 
 function usePalette(): SkyPalette {
@@ -76,7 +97,11 @@ function usePalette(): SkyPalette {
 }
 
 export default function GardenScene(props: SceneProps & { onPalette?: (p: SkyPalette) => void }) {
-  const palette = usePalette();
+  const kind = props.weather?.kind ?? "clear";
+  const base = usePalette();
+  const palette = useMemo(() => withWeather(base, kind), [base, kind]);
+  // 안개·비·눈이면 멀리가 더 빨리 흐려짐
+  const fog: [number, number] = kind === "fog" ? [12, 70] : kind === "rain" || kind === "snow" ? [30, 120] : [45, 160];
   // 3D 위 글자 저장소: 장면이 살아 있는 동안 하나만 씀
   const [labels] = useState(createLabelStore);
   const { onPalette } = props;
@@ -90,10 +115,12 @@ export default function GardenScene(props: SceneProps & { onPalette?: (p: SkyPal
       aria-hidden
     >
       <color attach="background" args={[palette.horizon]} />
-      <fog attach="fog" args={[palette.horizon, 45, 160]} />
+      <fog attach="fog" args={[palette.horizon, ...fog]} />
       <hemisphereLight args={[palette.hemiSky, palette.hemiGround, palette.hemiIntensity]} />
       <directionalLight position={[-30, 40, 10]} intensity={palette.sunIntensity} color={palette.sun} />
       <SkyDome top={palette.top} horizon={palette.horizon} />
+      {palette.stars > 0 && <Stars amount={palette.stars} />}
+      {(kind === "rain" || kind === "snow") && <Precipitation kind={kind} intensity={props.weather?.intensity ?? 0.6} />}
       <LabelProjector store={labels} />
       <World {...props} palette={palette} labels={labels} />
     </Canvas>
@@ -102,8 +129,9 @@ export default function GardenScene(props: SceneProps & { onPalette?: (p: SkyPal
   );
 }
 
-function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, onSelect, onStatus, palette, labels }: SceneProps & { palette: SkyPalette; labels: LabelStore }) {
+function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, onSelect, onStatus, palette, labels, weather }: SceneProps & { palette: SkyPalette; labels: LabelStore }) {
   const player = useRef(new THREE.Vector3(SPAWN[0], heightAt(SPAWN[0], SPAWN[1]), SPAWN[1]));
+  const ground = useGroundWeather(weather?.kind ?? "clear");
   // 표지판·말풍선은 플레이어 근처만 그림 → 수천 개 DOM을 만들지 않음 (5칸 단위로만 갱신)
   const [nearSlot, setNearSlot] = useState(0);
   const home = wishCount >= HOME_PATH_AT;
@@ -111,14 +139,17 @@ function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, on
 
   return (
     <>
-      <Terrain palette={palette} player={player} />
+      <Terrain palette={palette} player={player} ground={ground} />
       <Sea palette={palette} player={player} />
       <Lanterns slots={slots} lamp={palette.lamp} onSelect={onSelect} />
-      <RegionSigns slots={slots} nearSlot={nearSlot} labels={labels} />
-      <Lighthouse night={night} home={home} />
+      {/* 해 질 녘(등불 밝기가 오르기 시작할 때)부터 등대에 불이 들어옴 */}
+      <Lighthouse lit={night || palette.lamp >= 1.5} home={home} />
       <PinwheelGarden wishes={wishes} wishCount={wishCount} freshId={freshId} player={player} labels={labels} />
       <Butterflies />
-      <Meadow />
+      <RoamingButterflies player={player} />
+      <Meadow player={player} ground={ground} />
+      <FootGlow player={player} amount={night ? 1 : Math.max(0, (palette.lamp - 1.2) / 1.6)} />
+      <Ponds nearSlot={nearSlot} />
       {wishCount >= SUNLIGHT_AT && <GardenSunlight golden={home} />}
       <Player
         slots={slots}
@@ -164,13 +195,214 @@ function SkyDome({ top, horizon }: { top: string; horizon: string }) {
   );
 }
 
+/**
+ * 밤하늘 별. 하늘 돔 안쪽 위쪽 반구에 점 2,600개, 반짝임은 셰이더에서 시간으로만 계산 (매 프레임 배열 수정 없음)
+ * 저녁 7시 반부터 서서히 뜨고, 흐리거나 비·눈이 오면 보이지 않음
+ */
+function Stars({ amount }: { amount: number }) {
+  const ref = useRef<THREE.Points>(null);
+  const { geometry, material } = useMemo(() => {
+    const N = 2600;
+    const pos = new Float32Array(N * 3);
+    const seed = new Float32Array(N);
+    for (let i = 0; i < N; i++) {
+      // 위쪽 반구에 고르게 (지평선 가까이는 조금 덜)
+      const u = hash2(i, 1.7);
+      const v = hash2(i, 9.3);
+      const y = 0.08 + Math.pow(u, 0.8) * 0.92;
+      const r = Math.sqrt(1 - y * y);
+      const a = v * Math.PI * 2;
+      pos.set([Math.cos(a) * r * 220, y * 220, Math.sin(a) * r * 220], i * 3);
+      seed[i] = hash2(i, 4.4);
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    g.setAttribute("seed", new THREE.BufferAttribute(seed, 1));
+    const m = new THREE.ShaderMaterial({
+      uniforms: { time: { value: 0 }, amount: { value: 0 }, dpr: { value: 1 } },
+      vertexShader: /* glsl */ `
+        attribute float seed;
+        uniform float time;
+        uniform float dpr;
+        varying float vAlpha;
+        void main() {
+          vec4 mv = modelViewMatrix * vec4(position, 1.0);
+          // 대부분은 작은 별, 열에 하나쯤 밝은 별
+          gl_PointSize = (2.0 + seed * seed * 4.5) * dpr;
+          vAlpha = 0.55 + 0.45 * sin(time * (0.8 + seed * 2.0) + seed * 40.0);
+          gl_Position = projectionMatrix * mv;
+        }
+      `,
+      fragmentShader: /* glsl */ `
+        uniform float amount;
+        varying float vAlpha;
+        void main() {
+          float d = length(gl_PointCoord - 0.5);
+          float a = smoothstep(0.5, 0.0, d) * vAlpha * amount;
+          gl_FragColor = vec4(1.0, 0.97, 0.88, a);
+        }
+      `,
+      transparent: true,
+      depthWrite: false,
+      fog: false,
+    });
+    return { geometry: g, material: m };
+  }, []);
+  const dpr = useThree((st) => st.viewport.dpr);
+  useEffect(() => {
+    material.uniforms.amount.value = amount;
+    material.uniforms.dpr.value = dpr;
+  }, [material, amount, dpr]);
+  useFrame(({ camera, clock }) => {
+    ref.current?.position.copy(camera.position);
+    material.uniforms.time.value = clock.elapsedTime;
+  });
+  return <points ref={ref} geometry={geometry} material={material} frustumCulled={false} renderOrder={0} />;
+}
+
+/** 비·눈 상자 크기 (카메라 기준) */
+const W = 20;
+const TOP = 18;
+const BOTTOM = -4;
+
+/**
+ * 비·눈: 카메라를 따라다니는 40×25×40 상자 안에서만 떨어짐 → 언덕 전체에 내리는 것처럼 보이지만 입자는 수천 개뿐.
+ * 비는 짧은 선, 눈은 흔들리며 천천히 내리는 점
+ */
+function Precipitation({ kind, intensity }: { kind: "rain" | "snow"; intensity: number }) {
+  const group = useRef<THREE.Group>(null);
+  const N = Math.round((kind === "rain" ? 2600 : 1800) * Math.max(0.35, intensity));
+  const { geometry, drops } = useMemo(() => {
+    const drops = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) {
+      drops[i * 3] = (hash2(i, 3.1) - 0.5) * W * 2;
+      drops[i * 3 + 1] = BOTTOM + hash2(i, 6.2) * (TOP - BOTTOM);
+      drops[i * 3 + 2] = (hash2(i, 8.7) - 0.5) * W * 2;
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.BufferAttribute(new Float32Array(kind === "rain" ? N * 6 : N * 3), 3));
+    return { geometry: g, drops };
+  }, [N, kind]);
+  const material = useMemo(
+    () =>
+      kind === "rain"
+        ? new THREE.LineBasicMaterial({ color: "#c9d6ea", transparent: true, opacity: 0.45, depthWrite: false })
+        : new THREE.PointsMaterial({ color: "#ffffff", size: 0.16, map: flakeTexture, alphaTest: 0.05, transparent: true, opacity: 0.95, depthWrite: false }),
+    [kind],
+  );
+
+  useFrame(({ camera, clock }, rawDt) => {
+    const dt = Math.min(rawDt, 0.05);
+    const g = group.current;
+    if (!g) return;
+    g.position.set(camera.position.x, camera.position.y - 4, camera.position.z);
+    const pos = geometry.attributes.position as THREE.BufferAttribute;
+    const arr = pos.array as Float32Array;
+    const t = clock.elapsedTime;
+    const fall = kind === "rain" ? 22 : 1.6;
+    for (let i = 0; i < N; i++) {
+      let y = drops[i * 3 + 1] - fall * dt * (0.8 + hash2(i, 1.1) * 0.4);
+      if (y < BOTTOM) y = TOP;
+      drops[i * 3 + 1] = y;
+      const x = drops[i * 3] + (kind === "snow" ? Math.sin(t * 0.7 + i) * 0.6 : 0);
+      const z = drops[i * 3 + 2];
+      if (kind === "rain") {
+        // 바람에 살짝 기운 빗줄기
+        arr.set([x, y, z, x + 0.08, y + 0.55, z], i * 6);
+      } else {
+        arr.set([x, y, z], i * 3);
+      }
+    }
+    pos.needsUpdate = true;
+  });
+
+  return (
+    <group ref={group}>
+      {kind === "rain" ? (
+        <lineSegments geometry={geometry} material={material} frustumCulled={false} />
+      ) : (
+        <points geometry={geometry} material={material} frustumCulled={false} />
+      )}
+    </group>
+  );
+}
+
 /* ───────────────────────── 지형 ───────────────────────── */
+
+/**
+ * 지형 중심을 정점 간격(180/120 = 1.5)의 배수로만 옮김. 10 단위로 옮기면 정점 격자가 매번 다른 자리에 놓여
+ * 연못 물가 모양이 달라져, 걸어갈 때 연못이 줄었다 커졌다 하는 것처럼 보였음
+ */
+const snap = (v: number) => Math.round(v / 15) * 15;
 
 /**
  * 플레이어를 따라다니는 지형 한 장(180×180). 멀리 걸어가면 중심을 옮겨 높이·색을 다시 계산
  * → 수 km 길이의 길이라도 정점 1.4만 개로 끝남
  */
-function Terrain({ palette, player }: { palette: SkyPalette; player: React.RefObject<THREE.Vector3> }) {
+/* ───────────────────────── 날씨에 따른 땅 ───────────────────────── */
+
+type GroundState = { wet: number; snow: number };
+
+/**
+ * 비가 오면 땅이 서서히 젖고(약 20초), 눈이 오면 서서히 쌓임(약 40초). 그치면 천천히 마르고 녹음.
+ * 페이지를 열었을 때 이미 오고 있었다면 어느 정도 젖고 쌓인 상태에서 시작함
+ */
+function useGroundWeather(kind: Weather["kind"]): React.RefObject<GroundState> {
+  const ground = useRef<GroundState>({ wet: kind === "rain" ? 0.6 : 0, snow: kind === "snow" ? 0.45 : 0 });
+  useFrame((_, rawDt) => {
+    const dt = Math.min(rawDt, 0.1);
+    const g = ground.current;
+    g.wet = approach(g.wet, kind === "rain" ? 1 : 0, dt / (kind === "rain" ? 20 : 60));
+    g.snow = approach(g.snow, kind === "snow" ? 1 : 0, dt / (kind === "snow" ? 40 : 90));
+  });
+  return ground;
+}
+
+function approach(v: number, target: number, step: number): number {
+  return v < target ? Math.min(target, v + step) : Math.max(target, v - step);
+}
+
+/** 밤에 캐릭터 발밑을 은은하게 밝힘: 바닥의 둥근 빛 + 캐릭터를 비추는 작은 불빛 */
+const footGlowTexture = (() => {
+  if (typeof document === "undefined") return null;
+  const c = document.createElement("canvas");
+  c.width = c.height = 64;
+  const g = c.getContext("2d")!;
+  const grad = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  grad.addColorStop(0, "rgba(255,236,196,0.75)");
+  grad.addColorStop(0.45, "rgba(255,226,170,0.3)");
+  grad.addColorStop(1, "rgba(255,226,170,0)");
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 64, 64);
+  return new THREE.CanvasTexture(c);
+})();
+
+function FootGlow({ player, amount }: { player: React.RefObject<THREE.Vector3>; amount: number }) {
+  const group = useRef<THREE.Group>(null);
+  const disc = useRef<THREE.Mesh>(null);
+  const up = useMemo(() => new THREE.Vector3(0, 0, 1), []);
+  const normal = useMemo(() => new THREE.Vector3(), []);
+  useFrame(() => {
+    const p = player.current;
+    group.current?.position.set(p.x, walkHeight(p.x, p.z), p.z);
+    // 빛 원판을 언덕 기울기에 맞춰 눕힘 (평평하면 비탈에 반쯤 묻혀 잘려 보임)
+    const e = 0.6;
+    normal.set(heightAt(p.x - e, p.z) - heightAt(p.x + e, p.z), 2 * e, heightAt(p.x, p.z - e) - heightAt(p.x, p.z + e)).normalize();
+    disc.current?.quaternion.setFromUnitVectors(up, normal);
+  });
+  if (amount <= 0.01) return null;
+  return (
+    <group ref={group}>
+      <mesh ref={disc} position-y={0.06} renderOrder={2}>
+        <planeGeometry args={[3.2, 3.2]} />
+        <meshBasicMaterial map={footGlowTexture} transparent opacity={amount * 0.9} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
+      </mesh>
+      <pointLight position={[0, 1.6, 0.6]} color="#ffe2b0" intensity={amount * 3.2} distance={5} decay={1.6} />
+    </group>
+  );
+}
+
+function Terrain({ palette, player, ground }: { palette: SkyPalette; player: React.RefObject<THREE.Vector3>; ground: React.RefObject<GroundState> }) {
   const SIZE = 180;
   const SEG = 120;
   const { geometry, base } = useMemo(() => {
@@ -181,48 +413,80 @@ function Terrain({ palette, player }: { palette: SkyPalette; player: React.RefOb
     return { geometry: g, base: Float32Array.from(pos.array as Float32Array) };
   }, []);
   const center = useRef<{ x: number; z: number } | null>(null);
-  const colors = useMemo(() => ({ grass: new THREE.Color(), sand: new THREE.Color(), dirt: new THREE.Color(), c: new THREE.Color() }), []);
+  const colors = useMemo(() => ({ grass: new THREE.Color(), sand: new THREE.Color(), dirt: new THREE.Color(), snow: new THREE.Color("#eef2f7"), c: new THREE.Color() }), []);
+  const material = useRef<THREE.MeshStandardMaterial>(null);
+  // 마지막으로 색칠한 젖음·눈 정도 (조금씩 바뀔 때마다 다시 칠함)
+  const painted = useRef({ wet: -1, snow: -1 });
+
+  /** 땅 색: 모래→풀→흙길, 비가 오면 젖어서 짙어지고, 눈이 오면 높은 곳부터 하얗게 덮임 */
+  const paint = () => {
+    const pos = geometry.attributes.position as THREE.BufferAttribute;
+    const col = geometry.attributes.color as THREE.BufferAttribute;
+    const { wet, snow } = ground.current;
+    colors.grass.set(palette.grass);
+    colors.sand.set(palette.sand);
+    colors.dirt.set(palette.sand).lerp(new THREE.Color("#a98b66"), 0.5);
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i);
+      const y = pos.getY(i);
+      const z = pos.getZ(i);
+      const g = grassAmount(x, z);
+      const path = pathAmount(x, z) * g;
+      colors.c.copy(colors.sand).lerp(colors.grass, g);
+      // 길(큰길·갈래 길·광장 길)은 흙빛
+      colors.c.lerp(colors.dirt, path);
+      // 젖은 땅: 풀은 짙은 초록, 흙길은 진흙처럼 더 어둡게
+      if (wet > 0) colors.c.multiplyScalar(1 - wet * (0.22 + 0.2 * path));
+      if (snow > 0) {
+        // 높은 언덕일수록, 사람이 덜 다닌 곳일수록 먼저 덮이고 바닷가 모래는 덜 쌓임
+        const lumpy = 0.75 + 0.25 * Math.sin(x * 0.37 + z * 0.21) * Math.sin(z * 0.43 - x * 0.17);
+        const height = THREE.MathUtils.clamp(0.75 + y * 0.12, 0.6, 1.15);
+        const cover = THREE.MathUtils.clamp((snow * 1.25 * lumpy * height - 0.1) * (1 - 0.45 * path) * (0.35 + 0.65 * g), 0, 0.97);
+        colors.c.lerp(colors.snow, cover);
+      }
+      col.setXYZ(i, colors.c.r, colors.c.g, colors.c.b);
+    }
+    col.needsUpdate = true;
+    painted.current = { wet, snow };
+    // 젖으면 살짝 반들거림
+    if (material.current) material.current.roughness = 1 - wet * 0.4;
+  };
 
   const rebuild = (cx: number, cz: number) => {
     const pos = geometry.attributes.position as THREE.BufferAttribute;
-    const col = geometry.attributes.color as THREE.BufferAttribute;
-    colors.grass.set(palette.grass);
-    colors.sand.set(palette.sand);
-    colors.dirt.set(palette.sand).lerp(new THREE.Color("#a98b66"), 0.35);
     for (let i = 0; i < pos.count; i++) {
       const x = base[i * 3] + cx;
       const z = base[i * 3 + 2] + cz;
       pos.setXYZ(i, x, heightAt(x, z), z);
-      const g = grassAmount(x, z);
-      colors.c.copy(colors.sand).lerp(colors.grass, g);
-      // 오솔길: 길 중심에서 1.3 안쪽은 흙빛
-      const onTrail = Math.max(0, 1 - Math.abs(x - trailX(slotAtZ(z))) / 1.6);
-      if (z < 2) colors.c.lerp(colors.dirt, onTrail * g);
-      col.setXYZ(i, colors.c.r, colors.c.g, colors.c.b);
     }
     pos.needsUpdate = true;
-    col.needsUpdate = true;
     geometry.computeVertexNormals();
     geometry.computeBoundingSphere();
     center.current = { x: cx, z: cz };
+    paint();
   };
 
   // 시간대가 바뀌면 색만 다시 계산
   useLayoutEffect(() => {
     const p = player.current;
-    rebuild(Math.round(p.x / 10) * 10, Math.round(p.z / 10) * 10);
+    rebuild(snap(p.x), snap(p.z));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [palette.grass, palette.sand]);
 
   useFrame(() => {
     const p = player.current;
     const c = center.current;
-    if (c && Math.hypot(p.x - c.x, p.z - c.z) > 30) rebuild(Math.round(p.x / 10) * 10, Math.round(p.z / 10) * 10);
+    if (c && Math.hypot(p.x - c.x, p.z - c.z) > 30) rebuild(snap(p.x), snap(p.z));
+    else {
+      const g = ground.current;
+      const d = painted.current;
+      if (Math.abs(g.wet - d.wet) > 0.02 || Math.abs(g.snow - d.snow) > 0.02) paint();
+    }
   });
 
   return (
     <mesh geometry={geometry} frustumCulled={false}>
-      <meshStandardMaterial vertexColors roughness={1} />
+      <meshStandardMaterial ref={material} vertexColors roughness={1} />
     </mesh>
   );
 }
@@ -246,6 +510,21 @@ function Sea({ palette, player }: { palette: SkyPalette; player: React.RefObject
 
 /* ───────────────────────── 등불 (실종자) ───────────────────────── */
 
+/** 눈송이: 기본 Points는 네모로 그려져서 둥글고 가장자리가 흐린 점 텍스처를 씌움 */
+const flakeTexture = (() => {
+  if (typeof document === "undefined") return null;
+  const c = document.createElement("canvas");
+  c.width = c.height = 32;
+  const g = c.getContext("2d")!;
+  const grad = g.createRadialGradient(16, 16, 0, 16, 16, 16);
+  grad.addColorStop(0, "rgba(255,255,255,1)");
+  grad.addColorStop(0.5, "rgba(255,255,255,0.85)");
+  grad.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 32, 32);
+  return new THREE.CanvasTexture(c);
+})();
+
 const haloTexture = (() => {
   if (typeof document === "undefined") return null;
   const c = document.createElement("canvas");
@@ -261,10 +540,53 @@ const haloTexture = (() => {
 })();
 
 /**
+ * 등불 빛무리. 기본 PointsMaterial은 카메라에 가까울수록 한없이 커져서, 들판 등불 옆을 지나가면
+ * 화면을 덮는 큰 원이 생김 → 화면 크기 상한(maxPx)을 두고, 아주 가까우면 흐리게 사라지게 함
+ */
+const haloMaterial = new THREE.ShaderMaterial({
+  uniforms: {
+    map: { value: haloTexture },
+    size: { value: 1.8 },
+    scale: { value: 400 },
+    maxPx: { value: 110 },
+  },
+  vertexShader: /* glsl */ `
+    uniform float size;
+    uniform float scale;
+    uniform float maxPx;
+    varying float vFade;
+    void main() {
+      vec4 mv = modelViewMatrix * vec4(position, 1.0);
+      float d = max(-mv.z, 0.001);
+      gl_PointSize = min(size * scale / d, maxPx);
+      vFade = smoothstep(2.0, 6.0, d);
+      gl_Position = projectionMatrix * mv;
+    }
+  `,
+  fragmentShader: /* glsl */ `
+    uniform sampler2D map;
+    varying float vFade;
+    void main() {
+      vec4 c = texture2D(map, gl_PointCoord);
+      gl_FragColor = vec4(c.rgb, c.a * vFade);
+    }
+  `,
+  transparent: true,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
+  toneMapped: false,
+});
+
+/**
  * 길가 정원 등 = 실종자 한 명. 수천 개라도 기둥·지붕·등 3개의 InstancedMesh(draw call 3번)로 그림
  * 클릭하면 instanceId로 어떤 분의 등불인지 찾음
  */
 function Lanterns({ slots, lamp, onSelect }: { slots: Slot[]; lamp: number; onSelect: (id: string) => void }) {
+  // 빛무리 크기 기준 = 화면 높이(기기 픽셀)의 절반 (three의 sizeAttenuation과 같은 계산)
+  const bufferHeight = useThree((st) => st.size.height * st.viewport.dpr);
+  useLayoutEffect(() => {
+    haloMaterial.uniforms.scale.value = bufferHeight / 2;
+  }, [bufferHeight]);
   const items = useMemo(
     () =>
       slots.flatMap((s, i) => (s.kind === "lantern" ? [{ id: s.person.id, pos: lanternPoint(i, s.side) }] : [])),
@@ -315,35 +637,22 @@ function Lanterns({ slots, lamp, onSelect }: { slots: Slot[]; lamp: number; onSe
       </instancedMesh>
       {haloTexture && (
         <points geometry={halos} frustumCulled={false}>
-          <pointsMaterial map={haloTexture} size={1.8} sizeAttenuation transparent depthWrite={false} blending={THREE.AdditiveBlending} toneMapped={false} />
+          <primitive object={haloMaterial} attach="material" />
         </points>
       )}
     </group>
   );
 }
 
-/** 근처(앞뒤 40칸) 지역 표지판만 글자 층에 올림 */
-function RegionSigns({ slots, nearSlot, labels }: { slots: Slot[]; nearSlot: number; labels: LabelStore }) {
-  useEffect(() => {
-    const list: Label[] = slots.flatMap((s, i) => {
-      if (s.kind !== "sign" || Math.abs(i - nearSlot) >= 40) return [];
-      const [x, y, z] = trailPoint(i);
-      return [{ id: `sign:${s.region}`, text: `${s.label} · ${s.count}명`, variant: "sign" as const, pos: [x, y + 3, z] as [number, number, number] }];
-    });
-    labels.set("signs", list);
-  }, [slots, nearSlot, labels]);
-  useEffect(() => () => labels.set("signs", []), [labels]);
-  return null;
-}
 
 /* ───────────────────────── 등대 ───────────────────────── */
 
 /** 길 잃은 사람을 집으로 안내하는 빛. 밤에는 빛줄기가 바다를 천천히 비추고, 바람개비 50개면 낮에도 환하게 켜짐 */
-function Lighthouse({ night, home }: { night: boolean; home: boolean }) {
+function Lighthouse({ lit: dusk, home }: { lit: boolean; home: boolean }) {
   const [lx, lz] = LIGHTHOUSE;
   const y = heightAt(lx, lz);
   const beam = useRef<THREE.Group>(null);
-  const lit = night || home;
+  const lit = dusk || home;
   useFrame((_, dt) => {
     if (beam.current) beam.current.rotation.y += dt * 0.5;
   });
@@ -428,13 +737,27 @@ function PinwheelGarden({
   const n = Math.min(MAX_PINWHEELS, Math.max(wishCount + pendingCount, wishes.length));
   const sticks = useRef<THREE.InstancedMesh>(null);
   const rotors = useRef<THREE.InstancedMesh>(null);
-  const spots = useMemo(() => Array.from({ length: MAX_PINWHEELS }, (_, k) => pinwheelSpot(k)), []);
-  // 바깥쪽(큰 k)일수록 최근 메시지 → 새로 꽂은 바람개비가 정원 가장자리에 생김
-  const messageAt = useMemo(() => {
+  /*
+   * 자리 정하기
+   * - 꽂은 자리(pos)가 있는 메시지: 언덕 어디든 그 자리
+   * - 자리가 없는 옛 메시지·목록 밖 메시지: 정원 해바라기씨 배열. 바깥쪽(큰 k)일수록 최근 메시지
+   */
+  const { spots, messageAt } = useMemo(() => {
+    const shown = wishes.slice(0, n);
+    const placed = shown.filter((w) => w.pos);
+    const unplaced = shown.filter((w) => !w.pos);
+    const spiral = Math.max(0, n - placed.length);
+    const list: [number, number, number][] = Array.from({ length: spiral }, (_, k) => pinwheelSpot(k));
     const map = new Map<number, Wish>();
-    wishes.slice(0, n).forEach((w, i) => map.set(n - 1 - i, w));
-    return map;
+    unplaced.forEach((w, i) => map.set(spiral - 1 - i, w));
+    for (const w of placed) {
+      const [x, z] = w.pos!;
+      map.set(list.length, w);
+      list.push([x, heightAt(x, z), z]);
+    }
+    return { spots: list, messageAt: map };
   }, [wishes, n]);
+  const total = spots.length;
   const freshIndex = useMemo(() => {
     for (const [k, w] of messageAt) if (w.id === freshId) return k;
     return -1;
@@ -446,20 +769,20 @@ function PinwheelGarden({
   useLayoutEffect(() => {
     const m = new THREE.Matrix4();
     const c = new THREE.Color();
-    for (let k = 0; k < n; k++) {
+    for (let k = 0; k < total; k++) {
       const [x, y, z] = spots[k];
       sticks.current?.setMatrixAt(k, m.makeTranslation(x, y + 0.55, z));
       rotors.current?.setColorAt(k, c.set(PINWHEEL_COLORS[k % PINWHEEL_COLORS.length]));
     }
     if (sticks.current) {
-      sticks.current.count = n;
+      sticks.current.count = total;
       sticks.current.instanceMatrix.needsUpdate = true;
     }
     if (rotors.current) {
-      rotors.current.count = n;
+      rotors.current.count = total;
       if (rotors.current.instanceColor) rotors.current.instanceColor.needsUpdate = true;
     }
-  }, [n, spots]);
+  }, [total, spots]);
 
   const m = useMemo(() => new THREE.Matrix4(), []);
   const q = useMemo(() => new THREE.Quaternion(), []);
@@ -479,7 +802,7 @@ function PinwheelGarden({
     angle.current += dt * speed;
     const r = rotors.current;
     if (r) {
-      for (let k = 0; k < n; k++) {
+      for (let k = 0; k < total; k++) {
         const [x, y, z] = spots[k];
         let scale = 1;
         if (bornAt.current?.k === k) {
@@ -546,37 +869,175 @@ function GardenSunlight({ golden }: { golden: boolean }) {
   );
 }
 
-/** 시작 광장 주변 들꽃: 빈 풀밭에 생기를 줌. 작은 점 꽃 InstancedMesh 1개 */
-function Meadow() {
+const FLOWER_COLORS = ["#ffe08a", "#f7b6c8", "#c9b5f0", "#ffffff", "#ffc98a", "#ff9fb0", "#a8d4ff"];
+
+/**
+ * 언덕 전체 들꽃. 플레이어 주변 120×120만 그리고, 멀리 걸어가면 그 자리 기준으로 다시 깜
+ * 격자 칸마다 같은 난수(hash2)를 쓰므로 돌아와도 꽃 자리가 그대로임. 꽃밭은 큰 물결 무늬로 군데군데 몰림
+ */
+function Meadow({ player, ground }: { player: React.RefObject<THREE.Vector3>; ground: React.RefObject<GroundState> }) {
   const ref = useRef<THREE.InstancedMesh>(null);
-  const COUNT = 700;
-  useLayoutEffect(() => {
+  const COUNT = 5200;
+  const RANGE = 60;
+  const CELL = 1.6;
+  const center = useRef<{ x: number; z: number } | null>(null);
+  const m = useMemo(() => new THREE.Matrix4(), []);
+  const c = useMemo(() => new THREE.Color(), []);
+
+  const rebuild = (cx: number, cz: number) => {
     const mesh = ref.current;
     if (!mesh) return;
-    const m = new THREE.Matrix4();
-    const c = new THREE.Color();
-    const colors = ["#ffe08a", "#f7b6c8", "#c9b5f0", "#ffffff", "#ffc98a"];
-    const rand = (n: number) => {
-      const x = Math.sin(n * 12.9898) * 43758.5453;
-      return x - Math.floor(x);
-    };
-    for (let i = 0; i < COUNT; i++) {
-      const x = GARDEN_CENTER[0] + (rand(i) - 0.5) * 70;
-      const z = GARDEN_CENTER[1] + (rand(i + 999) - 0.5) * 60;
-      const g = grassAmount(x, z);
-      const y = heightAt(x, z);
-      const s = g > 0.8 ? 0.06 + rand(i + 7) * 0.05 : 0;
-      mesh.setMatrixAt(i, m.makeScale(s, s * 0.7, s).setPosition(x, y + 0.08, z));
-      mesh.setColorAt(i, c.set(colors[i % colors.length]));
+    let i = 0;
+    const gx0 = Math.floor((cx - RANGE) / CELL);
+    const gz0 = Math.floor((cz - RANGE) / CELL);
+    const cells = Math.ceil((RANGE * 2) / CELL);
+    for (let a = 0; a < cells && i < COUNT; a++) {
+      for (let b = 0; b < cells && i < COUNT; b++) {
+        const gx = gx0 + a;
+        const gz = gz0 + b;
+        const h = hash2(gx, gz);
+        const patch = 0.5 + 0.5 * Math.sin(gx * CELL * 0.11 + 1.3) * Math.sin(gz * CELL * 0.09 + 0.4);
+        if (h > 0.12 + patch * 0.6) continue;
+        const x = (gx + hash2(gz, gx)) * CELL;
+        const z = (gz + hash2(gx + 7, gz - 3)) * CELL;
+        if (grassAmount(x, z) < 0.8 || pathAmount(x, z) > 0.05) continue;
+        if (pondsNear(z, 7).some((p) => pondDistance(p, x, z) < 1.15)) continue;
+        const s = 0.07 + hash2(gz + 11, gx) * 0.07;
+        m.makeScale(s, s * 0.75, s).setPosition(x, heightAt(x, z) + 0.12, z);
+        mesh.setMatrixAt(i, m);
+        mesh.setColorAt(i, c.set(FLOWER_COLORS[Math.floor(hash2(gz, gx + 5) * FLOWER_COLORS.length)]));
+        i++;
+      }
     }
+    mesh.count = i;
     mesh.instanceMatrix.needsUpdate = true;
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    center.current = { x: cx, z: cz };
+  };
+
+  useLayoutEffect(() => {
+    const p = player.current;
+    rebuild(Math.round(p.x / 10) * 10, Math.round(p.z / 10) * 10);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useFrame(() => {
+    const p = player.current;
+    const cc = center.current;
+    if (cc && Math.hypot(p.x - cc.x, p.z - cc.z) > 20) rebuild(Math.round(p.x / 10) * 10, Math.round(p.z / 10) * 10);
+    // 눈이 쌓이면 꽃이 눈 속으로 묻힘
+    if (ref.current) {
+      const snow = ground.current.snow;
+      ref.current.position.y = -0.24 * Math.min(1, snow * 1.3);
+      ref.current.visible = snow < 0.95;
+    }
+  });
+
   return (
     <instancedMesh ref={ref} args={[undefined, undefined, COUNT]} frustumCulled={false}>
       <sphereGeometry args={[1, 6, 4]} />
       <meshStandardMaterial roughness={1} />
     </instancedMesh>
+  );
+}
+
+/* ───────────────────────── 연못과 다리 ───────────────────────── */
+
+/** 플레이어 근처(앞뒤 160) 연못만 그림 */
+function Ponds({ nearSlot }: { nearSlot: number }) {
+  const ponds = useMemo(() => pondsNear(-nearSlot * SLOT_SPACING, 160), [nearSlot]);
+  return (
+    <>
+      {ponds.map((p) => (
+        <PondView key={p.id} pond={p} />
+      ))}
+    </>
+  );
+}
+
+const BRIDGE_COLOR = "#5f9e8f";
+
+/**
+ * 연못: 수련 잎이 떠 있는 잔잔한 물 + 그 위를 둥글게 건너는 초록 나무다리.
+ * 다리는 늘 z 방향으로 놓이고, 높이는 world.ts의 bridgeDeckY와 같아서 캐릭터가 그 위를 걸음
+ */
+function PondView({ pond }: { pond: Pond }) {
+  const water = waterLevel(pond);
+  const L = bridgeHalfLength(pond);
+  const W = BRIDGE_HALF_WIDTH;
+
+  const { planks, posts, rails, pads } = useMemo(() => {
+    const N = 16;
+    const planks: { y: number; z: number; tilt: number; len: number }[] = [];
+    const posts: [number, number, number][] = [];
+    const rails: { x: number; y: number; z: number; tilt: number; len: number }[] = [];
+    for (let i = 0; i < N; i++) {
+      const z0 = -L + (2 * L * i) / N;
+      const z1 = -L + (2 * L * (i + 1)) / N;
+      const y0 = bridgeDeckY(pond, z0);
+      const y1 = bridgeDeckY(pond, z1);
+      const len = Math.hypot(z1 - z0, y1 - y0);
+      // rotation-x가 양수면 +z 끝이 내려가므로 기울기 부호를 뒤집음
+      const tilt = -Math.atan2(y1 - y0, z1 - z0);
+      planks.push({ y: (y0 + y1) / 2, z: (z0 + z1) / 2, tilt, len });
+      for (const side of [-1, 1]) {
+        if (i % 2 === 0) posts.push([side * (W - 0.05), y0, z0]);
+        rails.push({ x: side * (W - 0.05), y: (y0 + y1) / 2 + 0.7, z: (z0 + z1) / 2, tilt, len });
+      }
+    }
+    for (const side of [-1, 1]) posts.push([side * (W - 0.05), bridgeDeckY(pond, L), L]);
+
+    const pads: { x: number; z: number; r: number; flower: boolean }[] = [];
+    for (let k = 0; pads.length < 14 && k < 80; k++) {
+      const a = hash2(k, pond.x) * Math.PI * 2;
+      const d = Math.sqrt(hash2(pond.z, k)) * 0.8;
+      const x = Math.cos(a) * d * pond.rx;
+      const z = Math.sin(a) * d * pond.rz;
+      if (Math.abs(x) < W + 0.6) continue; // 다리 밑은 비움
+      pads.push({ x, z, r: 0.3 + hash2(k + 3, k) * 0.25, flower: hash2(k, k + 9) < 0.35 });
+    }
+    return { planks, posts, rails, pads };
+  }, [pond, L, W]);
+
+  return (
+    <group position={[pond.x, 0, pond.z]}>
+      <mesh rotation-x={-Math.PI / 2} position={[0, water, 0]} scale={[pond.rx * 0.98, pond.rz * 0.98, 1]}>
+        <circleGeometry args={[1, 48]} />
+        <meshStandardMaterial color="#6fa9b8" roughness={0.15} metalness={0.15} transparent opacity={0.88} />
+      </mesh>
+      {pads.map((p, i) => (
+        <group key={i} position={[p.x, water + 0.02, p.z]}>
+          <mesh>
+            <cylinderGeometry args={[p.r, p.r, 0.02, 12]} />
+            <meshStandardMaterial color="#5e9a5a" roughness={0.9} />
+          </mesh>
+          {p.flower && (
+            <mesh position={[0.05, 0.08, 0.05]} scale={[1, 0.7, 1]}>
+              <sphereGeometry args={[0.1, 8, 6]} />
+              <meshStandardMaterial color="#f6b3c8" roughness={0.8} />
+            </mesh>
+          )}
+        </group>
+      ))}
+      {planks.map((p, i) => (
+        <mesh key={`d${i}`} position={[0, p.y - 0.05, p.z]} rotation-x={p.tilt}>
+          <boxGeometry args={[W * 2, 0.1, p.len * 1.04]} />
+          <meshStandardMaterial color={i % 2 ? "#6aa898" : BRIDGE_COLOR} roughness={0.85} />
+        </mesh>
+      ))}
+      {posts.map(([x, y, z], i) => (
+        <mesh key={`p${i}`} position={[x, y + 0.35, z]}>
+          <boxGeometry args={[0.08, 0.75, 0.08]} />
+          <meshStandardMaterial color={BRIDGE_COLOR} roughness={0.85} />
+        </mesh>
+      ))}
+      {rails.map((r, i) => (
+        <mesh key={`r${i}`} position={[r.x, r.y, r.z]} rotation-x={r.tilt}>
+          <boxGeometry args={[0.07, 0.07, r.len * 1.04]} />
+          <meshStandardMaterial color={BRIDGE_COLOR} roughness={0.85} />
+        </mesh>
+      ))}
+    </group>
   );
 }
 
@@ -620,15 +1081,86 @@ function Butterflies() {
   );
 }
 
-function Butterfly({ tex, phase, r, w }: { tex: THREE.Texture | null; phase: number; r: number; w: number }) {
+/**
+ * 언덕 여기저기 꽃밭을 맴도는 나비 24마리. 플레이어 주변 격자(16칸)마다 꽃밭 몇 곳을 고르고,
+ * 걸어가서 꽃밭이 바뀌면 나비가 새 꽃밭으로 천천히 날아감 (순간 이동 없음)
+ */
+function RoamingButterflies({ player }: { player: React.RefObject<THREE.Vector3> }) {
+  const COLORS = ["#ffd166", "#7cc6f2", "#ff9f8a", "#c9a7f2", "#9ad97a", "#ffb86b", "#f7b6c8", "#ffffff"];
+  const list = useMemo(
+    () =>
+      Array.from({ length: 24 }, (_, i) => COLORS[i % COLORS.length]).map((color, i) => ({
+        tex: wingTexture(color),
+        phase: i * 2.3,
+        r: 1.5 + (i % 3) * 0.9,
+        w: 0.4 + (i % 4) * 0.08,
+        center: new THREE.Vector2(Infinity, Infinity),
+      })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+  const CELL = 16;
+  const lastCell = useRef("");
+  const targets = useRef<[number, number][]>([]);
+
+  useFrame((_, dt) => {
+    const p = player.current;
+    const cx = Math.round(p.x / CELL);
+    const cz = Math.round(p.z / CELL);
+    const key = `${cx},${cz}`;
+    if (key !== lastCell.current) {
+      lastCell.current = key;
+      const found: [number, number][] = [];
+      for (let dx = -3; dx <= 3; dx++) {
+        for (let dz = -3; dz <= 3; dz++) {
+          const gx = cx + dx;
+          const gz = cz + dz;
+          if (hash2(gx + 0.5, gz + 0.5) > 0.55) continue;
+          const x = gx * CELL + (hash2(gz, gx) - 0.5) * 10;
+          const z = gz * CELL + (hash2(gx, gz) - 0.5) * 10;
+          if (grassAmount(x, z) > 0.8 && !inWater(x, z)) found.push([x, z]);
+        }
+      }
+      targets.current = found;
+    }
+    const t = targets.current;
+    if (!t.length) return;
+    list.forEach((b, i) => {
+      // 나비마다 다른 꽃밭으로 (꽃밭이 적으면 몇 마리씩 함께)
+      const [tx, tz] = t[(i * 7) % t.length];
+      if (!Number.isFinite(b.center.x)) {
+        b.center.set(tx, tz);
+        return;
+      }
+      const d = Math.hypot(tx - b.center.x, tz - b.center.y);
+      if (d < 0.01) return;
+      const step = Math.min(d, dt * 3.5);
+      b.center.x += ((tx - b.center.x) / d) * step;
+      b.center.y += ((tz - b.center.y) / d) * step;
+    });
+  });
+
+  return (
+    <>
+      {list.map((b, i) => (
+        <Butterfly key={i} tex={b.tex} phase={b.phase} r={b.r} w={b.w} center={b.center} />
+      ))}
+    </>
+  );
+}
+
+function Butterfly({ tex, phase, r, w, center }: { tex: THREE.Texture | null; phase: number; r: number; w: number; center?: THREE.Vector2 }) {
   const g = useRef<THREE.Group>(null);
   const left = useRef<THREE.Group>(null);
   const right = useRef<THREE.Group>(null);
   const [gx, gz] = GARDEN_CENTER;
   useFrame(({ clock }) => {
     const t = clock.elapsedTime * w + phase;
-    const x = gx + Math.cos(t) * r * (1 + 0.25 * Math.sin(t * 2.3));
-    const z = gz + Math.sin(t) * r * (1 + 0.25 * Math.cos(t * 1.7));
+    const cx = center ? center.x : gx;
+    const cz = center ? center.y : gz;
+    if (!Number.isFinite(cx)) return;
+    const x = cx + Math.cos(t) * r * (1 + 0.25 * Math.sin(t * 2.3));
+    const z = cz + Math.sin(t) * r * (1 + 0.25 * Math.cos(t * 1.7));
     const y = heightAt(x, z) + 1.1 + Math.sin(t * 3.1) * 0.35;
     if (g.current) {
       g.current.position.set(x, y, z);
@@ -716,7 +1248,12 @@ function Player({
   useEffect(() => {
     const c = controls.current;
     c.teleport = (x, z) => {
-      player.current.set(x, heightAt(x, z), z);
+      player.current.set(x, walkHeight(x, z), z);
+    };
+    c.plantSpot = () => {
+      const p = player.current;
+      // 캐릭터 바로 앞 (발밑에 꽂으면 캐릭터에 가려 보이지 않음)
+      return plantableSpot(p.x - Math.sin(yaw.current) * 1.4, p.z - Math.cos(yaw.current) * 1.4);
     };
     const typing = (e: Event) => e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLSelectElement;
     const down = (e: KeyboardEvent) => {
@@ -747,6 +1284,7 @@ function Player({
     window.addEventListener("pointerup", pup);
     return () => {
       c.teleport = undefined;
+      c.plantSpot = undefined;
       window.removeEventListener("keydown", down);
       window.removeEventListener("keyup", up);
       window.removeEventListener("blur", blur);
@@ -784,13 +1322,23 @@ function Player({
     if (Math.abs(iy) > 0.05) {
       const speed = (k.has("Shift") ? 9 : 4.5) * Math.min(1, Math.abs(iy));
       const dir = Math.sign(iy);
-      const [nx, nz] = clampToLand(p.x + fx * dir * speed * dt, p.z + fz * dir * speed * dt, slots.length);
-      p.set(nx, heightAt(nx, nz), nz);
+      const mx = fx * dir * speed * dt;
+      const mz = fz * dir * speed * dt;
+      // 연못 물에는 들어가지 않음 (다리 위는 걸을 수 있음). 막히면 물가를 따라 미끄러지듯 비켜 감
+      // 이미 물가 안쪽에 서 있으면(순간 이동 직후 등) 어느 쪽으로든 나갈 수 있게 함
+      const stuck = inWater(p.x, p.z);
+      for (const [ax, az] of [[mx, mz], [mx, 0], [0, mz]] as const) {
+        const [nx, nz] = clampToLand(p.x + ax, p.z + az, slots.length);
+        if (stuck || !inWater(nx, nz)) {
+          p.set(nx, walkHeight(nx, nz), nz);
+          break;
+        }
+      }
       speedRef.current = speed;
     } else {
       // 제자리에서 돌 때는 걷는 동작만 살짝
       speedRef.current = Math.abs(ix) > 0.3 ? 1 : 0;
-      p.y = heightAt(p.x, p.z);
+      p.y = walkHeight(p.x, p.z);
     }
     // 캐릭터는 늘 카메라가 보는 쪽(앞)을 바라봄. 뒤로 걸을 때도 몸은 앞을 향한 채 뒷걸음
     const target = Math.atan2(fx, fz);
@@ -816,20 +1364,12 @@ function Player({
     const ls = slots[li];
     const nearId = ls?.kind === "lantern" ? ls.person.id : null;
     const slot = Math.max(0, Math.round(slotAtZ(p.z)));
-    let region: string | null = null;
-    for (let i = Math.min(slots.length - 1, slot); i >= 0; i--) {
-      const s = slots[i];
-      if (s.kind === "sign") {
-        region = s.label;
-        break;
-      }
-    }
     const inGarden = Math.hypot(p.x - GARDEN_CENTER[0], p.z - GARDEN_CENTER[1]) < 14;
-    if (p.z > -2) region = null;
-    const key = `${region}|${nearId}|${inGarden}`;
+    const place = placeName(p.x, p.z, inGarden);
+    const key = `${place}|${nearId}|${inGarden}`;
     if (key !== lastStatus.current) {
       lastStatus.current = key;
-      onStatus({ region, nearId, inGarden });
+      onStatus({ place, nearId, inGarden });
     }
     const coarse = Math.round(slot / 5) * 5;
     if (coarse !== lastSlot.current) {
@@ -845,3 +1385,13 @@ function Player({
   );
 }
 
+/** 화면 위에 보여 줄 지금 있는 곳 이름 */
+function placeName(x: number, z: number, inGarden: boolean) {
+  if (inGarden) return "바람개비 정원";
+  if (pondsNear(z, 4).some((p) => pondDistance(p, x, z) < 1.8)) return "연못가";
+  if (Math.hypot(x - LIGHTHOUSE[0], z - LIGHTHOUSE[1]) < 10) return "등대 아래";
+  if (z > -2) return "등대 언덕";
+  const bx = branchX(slotAtZ(z));
+  if (bx !== null && Math.abs(x - bx) < 4 && bx - trailX(slotAtZ(z)) > 3) return "갈래 길";
+  return "등불 길";
+}

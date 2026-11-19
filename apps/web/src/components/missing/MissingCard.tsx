@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { LuExternalLink, LuMapPin, LuX } from "react-icons/lu";
 import { formatMissingDate } from "@/lib/missing/regions";
 import type { MissingDetail } from "@/lib/missing/types";
+import { FileShareBar } from "@/components/files/FileShareBar";
 
 type Load =
   | { state: "loading" }
@@ -169,6 +170,15 @@ function CardBody({
           </button>
         </section>
       )}
+
+      <FileShareBar
+        type="missing"
+        fileKey={data.id}
+        title={`${data.name}님을 찾습니다`}
+        tone="missing"
+        // 국내(안전Dream) 자료는 실종아동법상 목적 외 사용 우려가 있어 이용 조건 확인 전까지 전단지를 만들지 않음
+        flyer={data.source === "FBI"}
+      />
 
       <p className="mt-6 text-center text-sm font-medium text-[#6b5a46]">
         이 분을 보셨나요?
