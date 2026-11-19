@@ -1,6 +1,6 @@
 import { SentenceType, SuspectStatus } from '../generated/prisma/enums.js';
 
-const HIDE_NAME_STATUSES = new Set<SuspectStatus>([
+export const HIDE_NAME_STATUSES: ReadonlySet<SuspectStatus> = new Set<SuspectStatus>([
   SuspectStatus.ACQUITTED,
   SuspectStatus.CLEARED,
 ]);

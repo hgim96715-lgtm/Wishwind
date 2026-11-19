@@ -1,4 +1,4 @@
-import { COUNTRY_LABEL, COUNTRY_ORDER } from "@/lib/cases/labels";
+import { COUNTRY_LABEL, COUNTRY_ORDER, caseRoomCountry } from "@/lib/cases/labels";
 import type { CaseListItem, Country } from "@/lib/cases/types";
 import { FileSpine } from "./FileSpine";
 
@@ -6,9 +6,10 @@ import { FileSpine } from "./FileSpine";
 function groupByCountry(items: CaseListItem[]) {
   const map = new Map<Country, CaseListItem[]>();
   for (const item of items) {
-    const list = map.get(item.country) ?? [];
+    const country = caseRoomCountry(item.country);
+    const list = map.get(country) ?? [];
     list.push(item);
-    map.set(item.country, list);
+    map.set(country, list);
   }
   return [...map.entries()].sort(
     ([a], [b]) => COUNTRY_ORDER.indexOf(a) - COUNTRY_ORDER.indexOf(b),

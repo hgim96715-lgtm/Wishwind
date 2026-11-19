@@ -30,8 +30,11 @@ export const CATEGORY_LABEL: Record<CaseCategory, string> = {
   OTHER: "기타",
 };
 
-/** 국가별 책장 순서. 여기에 없는 국가는 맨 뒤에 붙음 */
-export const COUNTRY_ORDER: readonly Country[] = ["KR", "US", "JP", "CN", "GB", "OTHER"];
+/** 국가별 책장 순서. 여기에 없는 국가는 맨 뒤에 붙음. 중국(CN)은 사건이 적어 사건방에서는 기타로 묶음 */
+export const COUNTRY_ORDER: readonly Country[] = ["KR", "US", "JP", "GB", "OTHER"];
+
+/** 사건방에 보이는 국가. 데이터는 CN 그대로 두고 화면에서만 기타로 묶음 */
+export const caseRoomCountry = (c: Country): Country => (c === "CN" ? "OTHER" : c);
 
 /** 서류철 책등 색. 같은 책장 안에서 유형이 한눈에 구분되도록 채도를 낮춘 중간 톤 */
 export const CATEGORY_COLOR: Record<CaseCategory, string> = {

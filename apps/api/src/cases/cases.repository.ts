@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CaseReviewStatus, NewsStatus } from '../generated/prisma/enums.js';
+import { CaseReviewStatus, Country, NewsStatus } from '../generated/prisma/enums.js';
 import type { Prisma } from '../generated/prisma/client.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type { ListCasesQuery } from './dto/cases.dto.js';
+import { HIDE_NAME_STATUSES } from './public-suspect.js';
 
 const byOrder = { sortOrder: 'asc' } as const;
 
@@ -33,6 +34,25 @@ const caseDetailInclude = {
   victims: { orderBy: byOrder },
   unsolvedQuestions: { orderBy: byOrder },
   suspiciousCircumstances: { orderBy: byOrder },
+  relatedContents: {
+    orderBy: [{ kind: 'asc' }, byOrder],
+    select: {
+      id: true,
+      kind: true,
+      title: true,
+      platform: true,
+      creator: true,
+      url: true,
+      releaseYear: true,
+      language: true,
+      note: true,
+      isDramatized: true,
+    },
+  },
+  sources: {
+    orderBy: [{ publishedAt: { sort: 'desc', nulls: 'last' } }, { createdAt: 'asc' }],
+    select: { id: true, url: true, title: true, publisher: true, type: true, publishedAt: true },
+  },
   newsItems: {
     where: { status: NewsStatus.PUBLISHED },
     orderBy: { publishedAt: { sort: 'desc', nulls: 'last' } },
@@ -80,7 +100,7 @@ function visibilityWhere(preview: boolean): Prisma.CaseWhereInput {
 
 /**
  * 검색 조건 조립.
- * - q: 제목·요약·지역에 부분 일치 (ILIKE '%q%'). 선두 와일드카드라 B-Tree 인덱스를 못 탐 →
+ * - q: 제목·요약·지역·공개된 가해자 이름에 부분 일치 (ILIKE '%q%'). 선두 와일드카드라 B-Tree 인덱스를 못 탐 →
  *   데이터가 수천 건 이상이 되면 pg_trgm GIN 인덱스나 전문 검색(tsvector)으로 전환할 것
  * - yearFrom/yearTo: 발생일 범위. occurred_at은 date 컬럼이라 UTC 자정 기준으로 비교함
  */
@@ -90,7 +110,8 @@ function listWhere(
 ): Prisma.CaseWhereInput {
   const where: Prisma.CaseWhereInput = {
     ...visibilityWhere(preview),
-    country,
+    // 사건방에서 중국(CN)은 기타로 묶어 보여 주므로, 기타를 고르면 둘 다 찾음 (?country=CN도 같음)
+    country: country === Country.OTHER || country === Country.CN ? { in: [Country.OTHER, Country.CN] } : country,
     category,
     status,
   };
@@ -100,6 +121,15 @@ function listWhere(
       { title: { contains: q, mode: 'insensitive' } },
       { summary: { contains: q, mode: 'insensitive' } },
       { location: { contains: q, mode: 'insensitive' } },
+      // "오원춘 사건"처럼 가해자 이름으로 부르는 사건이 많음. 응답에서 이름을 가리는 무죄·혐의없음은 검색에서도 제외
+      {
+        suspects: {
+          some: {
+            name: { contains: q, mode: 'insensitive' },
+            status: { notIn: [...HIDE_NAME_STATUSES] },
+          },
+        },
+      },
     ];
   }
 

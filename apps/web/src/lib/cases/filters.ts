@@ -25,6 +25,8 @@ export function parseCaseFilters(
     const value = (Array.isArray(raw) ? raw[0] : raw)?.trim();
     if (value) out[key] = value;
   }
+  // 사건방에서 중국은 기타로 묶음. 예전 주소(?country=CN)도 기타로 보여 줌
+  if (out.country === "CN") out.country = "OTHER";
   return out as CaseFilters;
 }
 
