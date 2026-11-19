@@ -22,7 +22,7 @@ export class AnalyticsService {
     private readonly config: ConfigService<Env, true>,
   ) {}
 
-  private visitorHash(ip: string, ua: string, day: string) {
+  visitorHash(ip: string, ua: string, day: string) {
     const secret = this.config.get('ADMIN_SESSION_SECRET', { infer: true }) ?? processSalt;
     const daily = createHmac('sha256', secret).update(`visitor:${day}`).digest('hex');
     return createHash('sha256').update(`${daily}|${ip}|${ua}`).digest('hex');
