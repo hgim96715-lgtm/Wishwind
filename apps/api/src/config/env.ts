@@ -28,6 +28,8 @@ export const envSchema = z
     NEWS_SYNC_INTERVAL_HOURS: z.coerce.number().min(1).max(48).default(3),
     NEWS_QUERIES: optional(z.string()),
     NEWS_FOREIGN_ENABLED: z.stringbool().default(true),
+    /** 새 기사를 Claude가 분류해 바로 공개함 (ANTHROPIC_API_KEY 필요, 없으면 예전처럼 관리자 확인) */
+    NEWS_AUTO_PUBLISH: z.stringbool().default(true),
     PAPAGO_CLIENT_ID: optional(z.string().min(1)),
     PAPAGO_CLIENT_SECRET: optional(z.string().min(1)),
 

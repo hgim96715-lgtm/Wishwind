@@ -7,6 +7,7 @@ const REGION_COUNTRY: Record<string, Country> = {
   US: Country.US,
   GB: Country.GB,
   JP: Country.JP,
+  CN: Country.CN,
 };
 
 export function regionToCountry(region: string): Country {

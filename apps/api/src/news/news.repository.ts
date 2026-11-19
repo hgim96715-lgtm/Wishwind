@@ -83,6 +83,20 @@ export class NewsRepository {
     });
   }
 
+  /** 자동 분류를 아직 안 한 새 기사 (최근 3일, 오래된 것은 사람이 정리) */
+  unclassifiedNew(limit: number) {
+    return this.prisma.newsItem.findMany({
+      where: {
+        status: NewsStatus.NEW,
+        autoVerdict: null,
+        createdAt: { gte: new Date(Date.now() - 3 * DAY_MS) },
+      },
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+      select: newsRowSelect,
+    });
+  }
+
   // ---- 사건 쪽 ----
 
   /** 기사 제목과 비교할 사건 후보 (반려된 사건 제외) */

@@ -60,7 +60,14 @@ export default function NewsPage({
   );
 }
 
-const FLAG: Record<NewsItem["region"], string> = { KR: "🇰🇷", US: "🇺🇸", GB: "🇬🇧", JP: "🇯🇵" };
+const FLAG: Record<NewsItem["region"], string> = { KR: "🇰🇷", US: "🇺🇸", GB: "🇬🇧", JP: "🇯🇵", CN: "🇨🇳", OTHER: "🌐" };
+
+/** 관리자가 손대지 않은(reviewedAt 없음) 자동 분류 결과만 표시 */
+const AUTO_LABEL: Record<NonNullable<NewsItem["autoVerdict"]>, { text: string; className: string }> = {
+  PUBLISH: { text: "자동 공개", className: "bg-[#e3efe9] text-[#3d6b5a]" },
+  DISMISS: { text: "자동 숨김", className: "bg-line text-muted" },
+  HOLD: { text: "확인 필요", className: "bg-[#f5ead4] text-[#8a6420]" },
+};
 
 type NewsListResponse = { items: NewsItem[]; counts: Partial<Record<NewsStatus, number>>; papago: boolean };
 
@@ -97,7 +104,7 @@ async function NewsList({ status, scope }: { status: NewsStatus; scope: "kr" | "
         </div>
       )}
       {data.items.length === 0 ? (
-        <Empty>{status === "NEW" ? "확인할 새 기사가 없습니다. 몇 시간마다 자동으로 모입니다." : "기사가 없습니다."}</Empty>
+        <Empty>{status === "NEW" ? "확인할 새 기사가 없습니다. 3시간마다 모아 사건 소식은 자동 공개하고, 확인이 필요한 기사만 여기에 남깁니다." : "기사가 없습니다."}</Empty>
       ) : (
         <ul className="space-y-2">
           {data.items.map((n) => (
@@ -108,11 +115,17 @@ async function NewsList({ status, scope }: { status: NewsStatus; scope: "kr" | "
                 <span>· {formatDateTime(n.publishedAt)}</span>
                 <span className="text-subtle">· 검색어 “{n.query}”</span>
                 {n.case && <span>· 연결: {n.case.title}</span>}
+                {n.autoVerdict && !n.reviewedAt && (
+                  <span className={`rounded px-1.5 py-0.5 font-medium ${AUTO_LABEL[n.autoVerdict].className}`}>
+                    {AUTO_LABEL[n.autoVerdict].text}
+                  </span>
+                )}
               </div>
               <a href={n.url} target="_blank" rel="noreferrer noopener" className="mt-1 block font-medium hover:underline">
                 {n.titleKo ?? n.title} ↗
               </a>
               {n.titleKo && <p className="text-xs text-subtle">원문: {n.title}</p>}
+              {n.autoReason && !n.reviewedAt && <p className="mt-1 text-xs text-subtle">Claude 판단: {n.autoReason}</p>}
               {n.suggestions.length > 0 && (
                 <p className="mt-2 text-xs text-[#b0832f]">
                   이 사건 소식일 수 있습니다: {n.suggestions.map((c) => c.title).join(", ")}

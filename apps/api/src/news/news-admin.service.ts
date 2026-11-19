@@ -82,6 +82,14 @@ export class NewsAdminService {
    */
   async createCase(id: string, input: NewsCaseInput) {
     const found = await this.findNews(id);
+    return this.createDraftFromNews(found, input, `새 뉴스에서 만든 사건입니다: ${found.url}`);
+  }
+
+  /**
+   * 기사 → '수사 중' 비공개 초안 (관리자 버튼, 자동 분류 공용).
+   * 기사는 첫 출처·타임라인 한 줄로 붙고, 기사에는 사건이 연결됨
+   */
+  createDraftFromNews(found: NewsRow, input: NewsCaseInput, reviewNote: string) {
     const day = (found.publishedAt ?? new Date()).toISOString().slice(0, 10).replaceAll('-', '');
     return this.repo.transaction(async (tx) => {
       const created = await this.repo.createCase(
@@ -97,11 +105,11 @@ export class NewsAdminService {
           occurredAtPrecision: DatePrecision.UNKNOWN,
           reviewStatus: CaseReviewStatus.DRAFT,
           isPublished: false,
-          reviewNote: `새 뉴스에서 만든 사건입니다: ${found.url}`,
+          reviewNote: reviewNote.slice(0, 1000),
         },
         tx,
       );
-      await this.repo.update(id, { caseId: created.id, reviewedAt: new Date() }, tx);
+      await this.repo.update(found.id, { caseId: created.id, reviewedAt: new Date() }, tx);
       await this.attachToCase(found, created.id, input.timelineTitle, tx);
       return created;
     });

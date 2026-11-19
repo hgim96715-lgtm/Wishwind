@@ -4,10 +4,11 @@ import { NewsAdminService } from './news-admin.service.js';
 import { NewsSyncService } from './news-sync.service.js';
 import { NewsRepository } from './news.repository.js';
 import { PapagoTranslator } from './papago.js';
+import { NewsClassifier } from './news-classifier.js';
 
-/** 사건·실종 기사 자동 수집, 해외 제목 번역, 관리실 확인·사건 연결 */
+/** 사건·실종 기사 자동 수집, 해외 제목 번역, Claude 자동 분류·공개, 관리실 확인·사건 연결 */
 @Module({
   controllers: [NewsAdminController],
-  providers: [NewsRepository, NewsAdminService, NewsSyncService, PapagoTranslator],
+  providers: [NewsRepository, NewsAdminService, NewsSyncService, PapagoTranslator, NewsClassifier],
 })
 export class NewsModule {}

@@ -171,9 +171,12 @@ export interface NewsItem {
   publisher: string;
   query: string;
   status: NewsStatus;
-  region: "KR" | "US" | "GB" | "JP";
+  region: "KR" | "US" | "GB" | "JP" | "CN" | "OTHER";
   lang: string;
   titleKo: string | null;
+  /** Claude 자동 분류 결과 (분류 전이거나 키가 없으면 null) */
+  autoVerdict: "PUBLISH" | "HOLD" | "DISMISS" | null;
+  autoReason: string | null;
   publishedAt: string | null;
   reviewedAt: string | null;
   caseId: string | null;
