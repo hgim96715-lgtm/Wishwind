@@ -146,18 +146,3 @@ cold_cases/
 ```
 
 각 백엔드 모듈은 `controller`(요청 받기), `service`(규칙), `repository`(DB 조회), `mapper`(응답 모양), `dto`(입력 검증)로 역할을 나눠 두었습니다.
-
----
-
-## 실행 방법
-
-```bash
-pnpm install
-cp .env.example .env                      # Docker DB 계정 (값은 직접 채웁니다)
-cp apps/api/.env.example apps/api/.env    # API 키 등 (값은 직접 채웁니다)
-cp apps/web/.env.example apps/web/.env
-pnpm db:up                                # PostgreSQL 시작
-pnpm db:migrate                           # 마이그레이션 적용
-pnpm db:generate                          # Prisma 클라이언트 생성
-pnpm dev                                  # 웹 :3001, API :4000
-```
