@@ -48,11 +48,14 @@ export function AvatarSetup({
   initial,
   onDone,
   accountNickname = null,
+  forWish = false,
 }: {
   initial: AvatarChoice | null;
   onDone: (v: AvatarChoice) => void;
   /** 로그인했으면 계정 닉네임을 그대로 쓰고 여기서는 바꾸지 않음 ('○○님의 기록'에서 바꿈) */
   accountNickname?: string | null;
+  /** 닉네임 없이 둘러보다 바람개비를 꽂으려 할 때 */
+  forWish?: boolean;
 }) {
   const [options, setOptions] = useState<CharacterOption[] | null>(null);
   const [index, setIndex] = useState(0);
@@ -111,10 +114,11 @@ export function AvatarSetup({
       >
         <LuX aria-hidden className="size-5" />
       </button>
-      <h2 className="pr-8 text-lg font-semibold">바람개비 정원에 오신 걸 환영합니다</h2>
+      <h2 className="pr-8 text-lg font-semibold">{forWish ? "바람개비에 남길 이름을 정해 주세요" : "바람개비 정원에 오신 걸 환영합니다"}</h2>
       <p className="mt-1 text-sm leading-6 text-muted">
-        정원을 둘러보며 등불을 눌러 실종된 분들을 기억하고, 소망을 담아 바람개비를 꽂아 보세요. 먼저 함께 걸을 캐릭터와 닉네임을
-        골라 주세요.
+        {forWish
+          ? "바람개비를 꽂으면 다른 분들에게 '○○님이 바람개비를 꽂았습니다'로 알려집니다. 닉네임을 정하면 바로 꽂을 수 있습니다."
+          : "정원을 둘러보며 등불을 눌러 실종된 분들을 기억하고, 소망을 담아 바람개비를 꽂아 보세요. 먼저 함께 걸을 캐릭터와 닉네임을 골라 주세요. 닫고 둘러보기만 해도 됩니다."}
       </p>
 
       <div className="mt-4 flex items-center gap-2">
@@ -163,7 +167,7 @@ export function AvatarSetup({
         }}
         className="mt-5 w-full rounded-full bg-[#e9a94f] py-3 font-medium text-white transition-opacity disabled:opacity-40"
       >
-        언덕으로 가기
+        {forWish ? "바람개비 꽂으러 가기" : "언덕으로 가기"}
       </button>
       <LoginHint />
     </motion.div>

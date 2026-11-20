@@ -94,9 +94,15 @@ input.admin-input::-webkit-datetime-edit {
 }
 
 /* 실종방 밤: 화면 위 안내판을 어두운 반투명 + 밝은 글자로 (창·카드(role=dialog) 안은 그대로) */
-html[data-garden="night"] .garden-page :is(.bg-white\/60, .bg-white\/70, .bg-white\/75, .bg-white\/80, .bg-white\/90):not([role="dialog"] *) {
+html[data-garden="night"] .garden-page :is(.bg-white\/60, .bg-white\/70, .bg-white\/75, .bg-white\/80, .bg-white\/85, .bg-white\/90, .bg-\[\#fffdf8\]\/90):not([role="dialog"] *, .logo-pill) {
   background-color: rgb(18 24 48 / 0.62);
   border-color: rgb(255 255 255 / 0.12);
+  color: #e6e1f0;
+}
+/* 불러오는 동안 보이는 안내 화면도 밤 하늘 색으로 */
+html[data-garden="night"] .garden-page .garden-veil {
+  background-color: #0f1d40;
+  color: #c9d1ea;
 }
 html[data-garden="night"] .garden-page :is(.hover\:bg-white:hover):not([role="dialog"] *) {
   background-color: rgb(32 42 78 / 0.82);

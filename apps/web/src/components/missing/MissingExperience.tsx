@@ -7,6 +7,7 @@ import { LuClock, LuCloud, LuCloudFog, LuCloudRain, LuCloudSnow, LuList, LuMap, 
 import { WEATHER_LABEL, type Weather, type WeatherKind } from "@/lib/weather/types";
 import type { RegionGroup } from "@/lib/missing/regions";
 import type { CloudMessage } from "@/lib/missing/types";
+import { THEME_KEY } from "@/components/common/ThemeToggle";
 import { AvatarSetup, loadAvatar, type AvatarChoice } from "./garden/AvatarSetup";
 import type { PlayerStatus, Wish, WorldControls } from "./garden/GardenScene";
 import { Joystick } from "./garden/Joystick";
@@ -59,6 +60,8 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
     return () => ac.abort();
   }, []);
   const [editingAvatar, setEditingAvatar] = useState(false);
+  // 닉네임 없이 둘러보던 사람이 바람개비를 꽂으려 할 때 이름부터 정하게 함
+  const [namingForWish, setNamingForWish] = useState(false);
   const [selected, setSelected] = useState<{ id: string; regionLabel: string } | null>(null);
   const [status, setStatus] = useState<PlayerStatus>({ place: "바람개비 정원", nearId: null, inGarden: true });
   const controls = useRef<WorldControls>({ stick: { x: 0, y: 0 } });
@@ -97,7 +100,10 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   }, [toast]);
 
   // 밤에는 화면 위 안내판(이름표·시계·날씨·버튼)을 어두운 반투명으로 바꿔 하늘과 어울리게 함 (globals.css의 garden-page 규칙)
+  // 실종방은 사이트 낮·밤 설정 대신 언덕의 시간을 따름 → 사이트를 밤으로 둬도 낮 언덕 위 안내판·창이 어둡게 겹치지 않음
   useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.theme = "light";
     const apply = () => {
       document.documentElement.dataset.garden = paletteAt(currentHour()).dark ? "night" : "day";
     };
@@ -106,6 +112,15 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
     return () => {
       window.clearInterval(id);
       delete document.documentElement.dataset.garden;
+      // 다른 방으로 나가면 사이트 낮·밤 설정으로 되돌림 (실종방으로 바로 들어왔으면 처음엔 밝게 시작했으므로 저장값을 다시 읽음)
+      let saved: string | null = null;
+      try {
+        saved = localStorage.getItem(THEME_KEY);
+      } catch {
+        /* 폰 설정 따름 */
+      }
+      const dark = saved === "dark" || (saved !== "light" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      root.dataset.theme = dark ? "dark" : "light";
     };
   }, []);
 
@@ -167,7 +182,7 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
     return <Veil text="아직 길에 놓인 등불이 없습니다. 실종자 정보를 불러오는 중이니 잠시 후 다시 와 주세요." />;
   }
 
-  const overlay = !!selected || wishOpen || !avatar || editingAvatar;
+  const overlay = !!selected || wishOpen || !avatar || editingAvatar || namingForWish;
 
   return (
     <div className="relative h-full w-full">
@@ -188,14 +203,6 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
               onStatus={setStatus}
             />
           </div>
-
-          {/* 좁은 화면에서는 오른쪽 위 지역 메뉴와 겹치므로 그 아래로 내림 */}
-          <p
-            aria-live="polite"
-            className="pointer-events-none absolute top-[7.5rem] left-1/2 z-10 md:top-20 -translate-x-1/2 rounded-full bg-white/75 px-3 py-1 text-sm whitespace-nowrap text-[#7a6650] backdrop-blur"
-          >
-            {status.place}
-          </p>
 
           <PlaceMenu
             lanterns={total}
@@ -228,7 +235,7 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
               )}
               <button
                 type="button"
-                onClick={() => setWishOpen(true)}
+                onClick={() => (avatar?.nickname ? setWishOpen(true) : setNamingForWish(true))}
                 className="flex items-center gap-1.5 rounded-full bg-white/90 px-4 py-2.5 text-sm text-[#6b5a46] shadow-sm backdrop-blur hover:bg-white"
               >
                 <LuWind aria-hidden className="size-4 text-[#e9a94f]" />
@@ -241,13 +248,13 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
                 className="flex items-center gap-1 rounded-full bg-white/70 px-3 py-1.5 text-xs text-[#7a6650] backdrop-blur hover:bg-white"
               >
                 <LuUserRound aria-hidden className="size-3.5" />
-                {avatar?.nickname ?? "캐릭터"}
+                {avatar?.nickname || "닉네임 정하기"}
               </button>
             </div>
           )}
 
-          {weather && !overlay && (
-            <WeatherChip weather={weather} mine={mine} onMine={askMyLocation} onSeoul={backToSeoul} raised={touch} />
+          {!overlay && (
+            <GardenInfo place={status.place} weather={weather} mine={mine} onMine={askMyLocation} onSeoul={backToSeoul} raised={touch} />
           )}
 
           {!touch && !overlay && (
@@ -286,14 +293,18 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
       )}
 
       <AnimatePresence>
-        {mode === "scene" && (!avatar || editingAvatar) && (
+        {mode === "scene" && (!avatar || editingAvatar || namingForWish) && (
           <AvatarSetup
             key="avatar"
             initial={avatar}
             accountNickname={accountNickname}
+            forWish={namingForWish}
             onDone={(v) => {
               setAvatar(v);
               setEditingAvatar(false);
+              // 바람개비를 꽂으려다 이름을 정했으면 바로 꽂기 창으로 이어감
+              if (namingForWish && v.nickname) setWishOpen(true);
+              setNamingForWish(false);
             }}
           />
         )}
@@ -350,24 +361,30 @@ const WEATHER_ICON: Record<WeatherKind, typeof LuSun> = {
   snow: LuCloudSnow,
 };
 
-/** 정원 날씨 표시. 누르면 내 위치 날씨 ↔ 서울 날씨 (위치 권한은 이때만 물어봄) */
-function WeatherChip({
+/** 왼쪽 아래 안내: 지금 있는 곳 → 시계 → 날씨(누르면 내 위치 ↔ 서울, 위치 권한은 이때만 물어봄) */
+function GardenInfo({
+  place,
   weather,
   mine,
   onMine,
   onSeoul,
   raised,
 }: {
-  weather: Weather;
+  place: string;
+  weather: Weather | null;
   mine: boolean;
   onMine: () => void;
   onSeoul: () => void;
   raised: boolean;
 }) {
-  const Icon = WEATHER_ICON[weather.kind];
+  const Icon = weather ? WEATHER_ICON[weather.kind] : null;
   return (
     <div className={`absolute left-5 z-20 flex flex-col items-start gap-1.5 ${raised ? "bottom-40" : "bottom-40 md:bottom-6"}`}>
+      <p aria-live="polite" className="rounded-full bg-white/75 px-3 py-1.5 text-sm font-medium text-[#6b5a46] shadow-sm backdrop-blur">
+        {place}
+      </p>
       <GardenClock />
+      {weather && Icon && (
       <button
         type="button"
         onClick={mine ? onSeoul : onMine}
@@ -381,6 +398,7 @@ function WeatherChip({
           {mine ? "서울" : "내 위치"}
         </span>
       </button>
+      )}
     </div>
   );
 }
@@ -417,7 +435,7 @@ function timeWord(h: number): string {
 
 function Veil({ text }: { text: string }) {
   return (
-    <div className="flex h-full w-full items-center justify-center bg-[#f4e6d4] px-6 text-center text-[#7a6650]">
+    <div className="garden-veil flex h-full w-full items-center justify-center bg-[#f4e6d4] px-6 text-center text-[#7a6650]">
       {text}
     </div>
   );

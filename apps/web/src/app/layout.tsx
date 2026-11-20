@@ -110,7 +110,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <PageViewTracker />
         </Suspense>
         {/* 개발 모드에서만: 다른 사람 눈에 보이는 화면 확인 */}
-        <DevViewerSwitch />
+        <Suspense fallback={null}>
+          <DevViewerSwitch />
+        </Suspense>
         {/* 관리자로 로그인한 채 둘러볼 때 관리실로 돌아가는 버튼 */}
         <Suspense fallback={null}>
           <AdminReturn />

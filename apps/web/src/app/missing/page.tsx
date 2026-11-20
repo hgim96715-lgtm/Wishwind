@@ -35,7 +35,7 @@ export default function MissingPage() {
         </div>
         <HelpLink className="pointer-events-auto mt-2" />
       </header>
-      <Suspense fallback={<div className="flex h-full items-center justify-center text-[#7a6650]">바닷가 언덕으로 가고 있습니다…</div>}>
+      <Suspense fallback={<div className="garden-veil flex h-full items-center justify-center text-[#7a6650]">바닷가 언덕으로 가고 있습니다…</div>}>
         <MissingPath />
       </Suspense>
     </main>

@@ -1,5 +1,7 @@
 import * as THREE from "three";
 
+import { DEV_GARDEN_TIME_KEY } from "./dev-garden-time";
+
 /**
  * 보는 사람의 현재 시각(브라우저 로컬 시간)에 맞춘 하늘 색.
  * 키프레임 사이는 선형 보간 → 1분마다 갱신해도 끊기지 않고 서서히 바뀜.
@@ -93,6 +95,15 @@ export function currentHour(): number {
   const override = new URLSearchParams(window.location.search).get("time");
   const forced = override === null ? NaN : Number(override);
   if (Number.isFinite(forced)) return forced;
+  // 개발 모드: 화면 아래 DEV 메뉴에서 고른 시각
+  if (process.env.NODE_ENV === "development") {
+    try {
+      const dev = Number(localStorage.getItem(DEV_GARDEN_TIME_KEY) ?? NaN);
+      if (Number.isFinite(dev)) return dev;
+    } catch {
+      /* 저장소를 못 쓰면 실제 시각 */
+    }
+  }
   const now = new Date();
   return now.getHours() + now.getMinutes() / 60;
 }

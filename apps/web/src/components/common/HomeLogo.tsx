@@ -11,7 +11,7 @@ export function HomeLogo({ onSky = false, className = "" }: { onSky?: boolean; c
       href="/"
       aria-label="Wishwind 홈으로"
       className={`inline-flex items-center transition-opacity hover:opacity-80 ${
-        onSky ? "pointer-events-auto rounded-full bg-white/75 px-3 py-1.5 backdrop-blur" : ""
+        onSky ? "logo-pill pointer-events-auto rounded-full bg-white/75 px-3 py-1.5 backdrop-blur" : ""
       } ${className}`}
     >
       <Image src="/wishwind-logo.png" alt="Wishwind" width={720} height={240} className={`brand-logo ${onSky ? "h-7 w-auto" : "h-9 w-auto"}`} />

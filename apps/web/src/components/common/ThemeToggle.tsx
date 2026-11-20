@@ -111,5 +111,5 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   );
 }
 
-/** <head>에서 화면을 그리기 전에 실행 → 밤을 고른 사람에게 밝은 화면이 깜빡이지 않음 */
-export const THEME_INIT_SCRIPT = `(function(){try{var t=localStorage.getItem('${THEME_KEY}');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=d?'dark':'light';}catch(e){}})();`;
+/** <head>에서 화면을 그리기 전에 실행 → 밤을 고른 사람에게 밝은 화면이 깜빡이지 않음. 실종방은 언덕의 시간을 따르므로 늘 밝게 시작 */
+export const THEME_INIT_SCRIPT = `(function(){try{var t=location.pathname.indexOf('/missing')===0?'light':localStorage.getItem('${THEME_KEY}');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=d?'dark':'light';}catch(e){}})();`;
