@@ -16,7 +16,7 @@ import { MissingList } from "./MissingList";
 import { buildSlots } from "./path-layout";
 import { currentHour } from "./time-of-day";
 import { useWeather } from "./useWeather";
-import { useWishes, WishPanel } from "./WishPanel";
+import { arrivalMessage, useWishes, WishPanel } from "./WishPanel";
 
 // WebGL은 브라우저 전용 → 서버 렌더링에서 빼고, three 번들(수백 KB)도 이 화면에서만 받음
 const GardenScene = dynamic(() => import("./garden/GardenScene"), {
@@ -51,10 +51,11 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   const { weather, mine, askMyLocation, backToSeoul } = useWeather();
 
   // 응원은 모든 실종자에게 건네는 바람개비 → 정원 전체에 하나의 개수
-  const [wishData, setWishData] = useWishes();
+  const [toast, setToast] = useState<string | null>(null);
+  // 다른 사람이 새로 꽂으면 "○○님이 바람개비를 꽂았습니다"를 잠깐 띄움
+  const [wishData, setWishData] = useWishes(useCallback((clouds: CloudMessage[]) => setToast(arrivalMessage(clouds)), []));
   const [wishOpen, setWishOpen] = useState(false);
   const [freshId, setFreshId] = useState<string | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
   const closeWish = useCallback(() => setWishOpen(false), []);
 
   const wishes: Wish[] = useMemo(
@@ -270,7 +271,7 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
         )}
       </AnimatePresence>
       <AnimatePresence>
-        {wishOpen && <WishPanel key="wishes" data={wishData} setData={setWishData} onClose={closeWish} onPlaced={onPlaced} getPosition={() => (mode === "scene" ? controls.current.plantSpot?.() : undefined)} />}
+        {wishOpen && <WishPanel key="wishes" data={wishData} setData={setWishData} onClose={closeWish} onPlaced={onPlaced} nickname={avatar?.nickname} getPosition={() => (mode === "scene" ? controls.current.plantSpot?.() : undefined)} />}
       </AnimatePresence>
       <AnimatePresence>
         {selected && <MissingCard key={selected.id} id={selected.id} regionLabel={selected.regionLabel} onClose={close} />}

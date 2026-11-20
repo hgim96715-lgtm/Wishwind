@@ -16,6 +16,6 @@ export class CloudsController {
 
   @Post()
   place(@VoterId() voterId: string, @Body(new ZodPipe(cloudSchema)) input: CloudInput) {
-    return this.clouds.place(voterId, input.body, input.position);
+    return this.clouds.place(voterId, input.body, input.position, input.nickname);
   }
 }

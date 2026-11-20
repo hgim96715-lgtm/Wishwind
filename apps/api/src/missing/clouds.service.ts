@@ -20,6 +20,14 @@ const MODERATION_CONTEXT = {
   protectedNames: [] as string[],
 };
 
+/**
+ * 닉네임도 정원에 공개되므로 메시지와 함께 한 번에 검사함 (AI 호출은 한 번).
+ * 검사에 붙인 닉네임 줄은 저장하지 않고, 메시지 본문은 원래대로 저장함
+ */
+export function moderationText(body: string, nickname?: string | null) {
+  return nickname ? `${body}\n\n[닉네임] ${nickname}` : body;
+}
+
 /** 정원 전체에 모인 바람개비(응원 메시지) 기준: 햇살 → 집으로 가는 길(등대 점등) */
 export const MILESTONES = { sunlight: 10, homePath: 50 } as const;
 
@@ -52,7 +60,7 @@ export class CloudsService implements OnApplicationBootstrap, OnApplicationShutd
     const held = await this.repo.findHeldIn(RETRYABLE, RECHECK_BATCH);
     let published = 0;
     for (const c of held) {
-      const r = await this.moderator.moderate(c.body, MODERATION_CONTEXT);
+      const r = await this.moderator.moderate(moderationText(c.body, c.nickname), MODERATION_CONTEXT);
       // 아직도 키가 없거나 오류면 그대로 두고 다음 주기에 다시 시도
       if (r.status === UserContentStatus.HELD && RETRYABLE.includes(r.log.category)) break;
       await this.repo.updateModeration(c.id, r.status, r.log.category);
@@ -75,7 +83,7 @@ export class CloudsService implements OnApplicationBootstrap, OnApplicationShutd
     return { cloudCount, milestones: MILESTONES, clouds, pending };
   }
 
-  async place(voterId: string, body: string, position?: { x: number; z: number }) {
+  async place(voterId: string, body: string, position?: { x: number; z: number }, nickname?: string) {
     const filtered = filterCloud(body);
     if (!filtered.ok) {
       return { status: UserContentStatus.BLOCKED, message: filtered.message, cloudCount: await this.count() };
@@ -87,14 +95,16 @@ export class CloudsService implements OnApplicationBootstrap, OnApplicationShutd
       throw new HttpException('오늘은 바람개비를 충분히 꽂아 주셨습니다. 내일 다시 찾아와 주세요.', HttpStatus.TOO_MANY_REQUESTS);
     }
 
-    const result = await this.moderator.moderate(body, MODERATION_CONTEXT);
+    const result = await this.moderator.moderate(moderationText(body, nickname), MODERATION_CONTEXT);
     if (result.status === UserContentStatus.BLOCKED) {
       return { status: result.status, message: result.message, cloudCount: await this.count() };
     }
 
     const cloud = await this.repo.create({
       voterId,
-      body: result.body,
+      // 검사용으로 붙인 닉네임 줄은 빼고 원래 메시지만 저장 (차단이 아니면 본문은 바뀌지 않음)
+      body,
+      nickname,
       status: result.status,
       category: result.log.category,
       posX: position?.x,

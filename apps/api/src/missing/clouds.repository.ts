@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UserContentStatus } from '../generated/prisma/enums.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
-const cloudSelect = { id: true, body: true, posX: true, posZ: true, createdAt: true } as const;
+const cloudSelect = { id: true, body: true, nickname: true, posX: true, posZ: true, createdAt: true } as const;
 
 @Injectable()
 export class CloudsRepository {
@@ -35,7 +35,15 @@ export class CloudsRepository {
     return this.prisma.cloudMessage.count({ where: { voterId, createdAt: { gte: since } } });
   }
 
-  create(data: { voterId: string; body: string; status: UserContentStatus; category: string; posX?: number; posZ?: number }) {
+  create(data: {
+    voterId: string;
+    body: string;
+    nickname?: string;
+    status: UserContentStatus;
+    category: string;
+    posX?: number;
+    posZ?: number;
+  }) {
     return this.prisma.cloudMessage.create({
       data,
       select: { ...cloudSelect, status: true },
@@ -47,7 +55,7 @@ export class CloudsRepository {
       where: { status: UserContentStatus.HELD, category: { in: categories } },
       orderBy: { createdAt: 'asc' },
       take,
-      select: { id: true, body: true },
+      select: { id: true, body: true, nickname: true },
     });
   }
 

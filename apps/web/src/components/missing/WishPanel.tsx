@@ -11,18 +11,68 @@ const MAX = 100;
 
 type Notice = { tone: "ok" | "wait" | "warn"; text: string } | null;
 
-/** 정원 전체에 모인 바람개비(응원 메시지). 화면 연출과 패널이 같은 값을 씀 */
-export function useWishes() {
+/** 다른 사람이 새로 꽂은 바람개비를 확인하는 간격 */
+const POLL_MS = 30_000;
+
+/**
+ * 정원 전체에 모인 바람개비(응원 메시지). 화면 연출과 패널이 같은 값을 씀.
+ * 화면이 보이는 동안 주기적으로 다시 받아, 다른 사람이 새로 꽂은 바람개비를 onArrive로 알려 줌
+ * (처음 받은 목록과 내가 꽂은 것은 알리지 않음)
+ */
+export function useWishes(onArrive?: (clouds: CloudMessage[]) => void) {
   const [data, setData] = useState<CloudsResponse | null>(null);
+  const latest = useRef<CloudsResponse | null>(null);
+  const arrive = useRef(onArrive);
   useEffect(() => {
-    const ac = new AbortController();
-    fetch(ENDPOINT, { signal: ac.signal })
-      .then((res) => (res.ok ? (res.json() as Promise<CloudsResponse>) : null))
-      .then((d) => d && setData(d))
-      .catch(() => {});
-    return () => ac.abort();
+    latest.current = data;
+    arrive.current = onArrive;
+  });
+
+  useEffect(() => {
+    let ac = new AbortController();
+    const load = () => {
+      ac = new AbortController();
+      fetch(ENDPOINT, { signal: ac.signal })
+        .then((res) => (res.ok ? (res.json() as Promise<CloudsResponse>) : null))
+        .then((next) => {
+          if (!next) return;
+          const prev = latest.current;
+          if (prev) {
+            const known = new Set([...prev.clouds, ...prev.pending].map((c) => c.id));
+            const fresh = next.clouds.filter((c) => !known.has(c.id));
+            if (fresh.length) arrive.current?.(fresh);
+          }
+          setData(
+            prev
+              ? {
+                  ...next,
+                  // 목록 응답에 내 확인 중 메시지가 없으면 화면에 있던 것을 지키되, 공개된 것은 뺌
+                  pending: next.pending.length
+                    ? next.pending
+                    : prev.pending.filter((p) => !next.clouds.some((c) => c.id === p.id)),
+                }
+              : next,
+          );
+        })
+        .catch(() => {});
+    };
+    load();
+    const id = window.setInterval(() => {
+      if (document.visibilityState === "visible") load();
+    }, POLL_MS);
+    return () => {
+      window.clearInterval(id);
+      ac.abort();
+    };
   }, []);
   return [data, setData] as const;
+}
+
+/** "호하님이 바람개비를 꽂았습니다" / 여러 명이면 "호하님 외 2명이 …" */
+export function arrivalMessage(clouds: CloudMessage[]) {
+  const named = clouds.find((c) => c.nickname)?.nickname;
+  const who = named ? `${named}님` : "누군가";
+  return clouds.length > 1 ? `${who} 외 ${clouds.length - 1}명이 바람개비를 꽂았습니다` : `${who}${named ? "이" : ""} 바람개비를 꽂았습니다`;
 }
 
 /**
@@ -35,6 +85,7 @@ export function WishPanel({
   onClose,
   onPlaced,
   getPosition,
+  nickname,
 }: {
   data: CloudsResponse | null;
   setData: React.Dispatch<React.SetStateAction<CloudsResponse | null>>;
@@ -43,6 +94,8 @@ export function WishPanel({
   onPlaced?: (id: string, message: string, placedHere: boolean) => void;
   /** 지금 서 있는 자리 앞 (바람개비를 꽂을 곳). 목록 화면 등에서는 없음 → 정원 안에 꽂힘 */
   getPosition?: () => [number, number] | undefined;
+  /** 정원 캐릭터 닉네임. 다른 사람 화면에 "○○님이 바람개비를 꽂았습니다"로 보임 */
+  nickname?: string;
 }) {
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
@@ -68,7 +121,7 @@ export function WishPanel({
       const res = await fetch(ENDPOINT, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ body, position }),
+        body: JSON.stringify({ body, position, nickname: nickname?.trim() || undefined }),
       });
       const r = (await res.json()) as PlaceCloudResult & { message?: string };
       if (!res.ok) throw new Error(r.message ?? "바람개비를 꽂지 못했습니다");
@@ -83,6 +136,7 @@ export function WishPanel({
         const cloud: CloudMessage = {
           id: r.cloud.id,
           body: r.cloud.body,
+          nickname: r.cloud.nickname ?? null,
           posX: r.cloud.posX ?? null,
           posZ: r.cloud.posZ ?? null,
           createdAt: r.cloud.createdAt,

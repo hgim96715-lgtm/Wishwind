@@ -564,6 +564,8 @@ model CloudMessage {
   id              String            @id @default(uuid(7)) @db.Uuid
   voterId         String            @map("voter_id") @db.Uuid
   body            String            @db.VarChar(100)
+  /** 꽂은 사람이 정한 닉네임. 정원에 "○○님이 바람개비를 꽂았습니다"로 보임 (메시지와 함께 검사) */
+  nickname        String?           @db.VarChar(20)
   status          UserContentStatus @default(HELD)
   category        String?           @db.VarChar(40)
   posX            Float?            @map("pos_x") @db.Real

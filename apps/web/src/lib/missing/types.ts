@@ -35,6 +35,8 @@ export interface MissingListResponse {
 export interface CloudMessage {
   id: string;
   body: string;
+  /** 꽂은 사람의 정원 닉네임. 예전 메시지나 닉네임 없이 꽂은 것은 null */
+  nickname?: string | null;
   /** 바람개비를 꽂은 언덕 좌표. 예전 메시지는 null (정원 안에 꽂힘) */
   posX?: number | null;
   posZ?: number | null;
