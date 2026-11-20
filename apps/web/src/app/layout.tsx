@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { PageViewTracker } from "@/components/PageViewTracker";
 import "./globals.css";
 import { HelpBar } from "@/components/help/HelpBar";
+import { DevViewerSwitch } from "@/components/dev/DevViewerSwitch";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Suspense fallback={null}>
           <PageViewTracker />
         </Suspense>
+        {/* 개발 모드에서만: 다른 사람 눈에 보이는 화면 확인 */}
+        <DevViewerSwitch />
       </body>
     </html>
   );
