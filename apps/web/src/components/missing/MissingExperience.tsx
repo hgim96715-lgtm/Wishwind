@@ -300,20 +300,24 @@ type Place = "garden" | "pond" | "lighthouse" | "newest" | "oldest";
 
 /** 바로 가기: 지역으로 나누지 않으므로 언덕의 장소와 등불 길 처음·끝만 고름 */
 function PlaceMenu({ lanterns, onGo }: { lanterns: number; onGo: (where: Place) => void }) {
+  // 고른 장소를 그대로 보여 줌 (예전엔 항상 '장소 고르기'로 되돌아가 바뀌지 않는 것처럼 보였음)
+  const [place, setPlace] = useState<Place | "">("");
   return (
-    <label className="absolute top-[4.25rem] right-4 z-20 flex h-10 max-w-[60%] items-center gap-2 rounded-full bg-white/80 px-4 text-sm whitespace-nowrap shadow-sm backdrop-blur md:top-16 md:right-5 md:max-w-none">
-      <span className="text-[#7a6650]">바로 가기</span>
+    <label className="absolute top-[4.25rem] right-4 z-20 flex h-9 items-center rounded-full bg-white/80 pr-2 pl-3 text-sm shadow-sm backdrop-blur md:top-16 md:right-5">
+      <span className="sr-only">바로 가기</span>
       <select
-        value=""
+        value={place}
         onChange={(e) => {
-          if (e.target.value) onGo(e.target.value as Place);
+          const where = e.target.value as Place;
+          setPlace(where);
+          if (where) onGo(where);
           // 메뉴에 포커스가 남으면 키 입력(WASD·Enter)이 메뉴로 가서 걷기·등불 열기가 안 됨
           e.target.blur();
         }}
-        className="min-w-0 flex-1 truncate bg-transparent outline-none md:max-w-48"
+        className="max-w-40 truncate bg-transparent text-[#5b4d3c] outline-none"
       >
         <option value="" disabled>
-          장소 고르기
+          바로 가기
         </option>
         <option value="garden">바람개비 정원</option>
         <option value="pond">연못 다리</option>

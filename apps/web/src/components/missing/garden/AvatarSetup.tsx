@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
+import { LuChevronLeft, LuChevronRight, LuX } from "react-icons/lu";
 import { fetchCharacters, type CharacterOption } from "./Avatar";
 
 // three를 쓰는 미리보기는 고르기 화면이 열릴 때만 받음
@@ -77,8 +77,21 @@ export function AvatarSetup({
   const step = (d: number) => count && setIndex((i) => (i + d + count) % count);
 
   const name = (accountNickname ?? nickname).trim();
-  const error = name.length > 0 && (name.length < 2 ? "두 글자 이상 써 주세요." : BAD.test(name) ? "연락처나 링크는 닉네임에 쓸 수 없습니다." : null);
+  // 계정 닉네임은 서버에서 이미 검사했으므로 다시 막지 않음 ('바람 766'의 숫자가 연락처로 오인되던 문제)
+  const error = accountNickname
+    ? null
+    : name.length > 0 && (name.length < 2 ? "두 글자 이상 써 주세요." : BAD.test(name) ? "연락처나 링크는 닉네임에 쓸 수 없습니다." : null);
   const ok = name.length >= 2 && !error;
+
+  /** 닫기(X): 고르던 중이면 그대로 두고, 처음이면 지금 보이는 캐릭터로 이름 없이 둘러봄 (저장하지 않아 다음에 다시 물어봄) */
+  const close = () =>
+    onDone(initial ?? { url: current?.url ?? null, nickname: accountNickname ?? "" });
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
 
   return (
     <motion.div
@@ -90,7 +103,15 @@ export function AvatarSetup({
       exit={{ opacity: 0, y: 12 }}
       className="absolute inset-x-4 top-1/2 z-40 mx-auto max-h-[90dvh] max-w-sm -translate-y-1/2 overflow-y-auto rounded-3xl border border-[#f1dfc4] bg-[#fffaf2]/95 p-6 shadow-[0_20px_60px_rgb(120_90_50/0.25)] backdrop-blur"
     >
-      <h2 className="text-lg font-semibold">바람개비 정원에 오신 걸 환영합니다</h2>
+      <button
+        type="button"
+        onClick={close}
+        aria-label="닫기"
+        className="absolute top-4 right-4 rounded-full p-1.5 text-[#9a8a76] hover:bg-black/5 hover:text-[#5b4d3c]"
+      >
+        <LuX aria-hidden className="size-5" />
+      </button>
+      <h2 className="pr-8 text-lg font-semibold">바람개비 정원에 오신 걸 환영합니다</h2>
       <p className="mt-1 text-sm leading-6 text-muted">
         정원을 둘러보며 등불을 눌러 실종된 분들을 기억하고, 소망을 담아 바람개비를 꽂아 보세요. 먼저 함께 걸을 캐릭터와 닉네임을
         골라 주세요.

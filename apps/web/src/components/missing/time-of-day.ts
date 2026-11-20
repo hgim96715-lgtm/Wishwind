@@ -27,28 +27,33 @@ export interface SkyPalette {
 
 type Key = [hour: number, p: Omit<SkyPalette, "dark" | "stars">];
 
-// 한밤: 캄캄한 남색 하늘. 땅은 겨우 보일 만큼만 밝혀 등불·등대가 돋보이게 함
+// 한밤: 거의 검정이던 하늘을 깊은 남색으로. 달빛 받은 푸른 언덕이 보이고 등불·등대가 돋보이게 함
 const NIGHT: Omit<SkyPalette, "dark" | "stars"> = {
-  top: "#070d24", horizon: "#1a2444", hemiSky: "#6f7aa8", hemiGround: "#22253c",
-  hemiIntensity: 0.75, sun: "#9aa8dc", sunIntensity: 0.3, cloud: "#8f98ba", lamp: 2.8,
-  grass: "#2b4a40", sand: "#55516a", sea: "#132244",
+  top: "#0b1a3d", horizon: "#25386a", hemiSky: "#8fa3d6", hemiGround: "#2a3552",
+  hemiIntensity: 0.95, sun: "#b8c6f0", sunIntensity: 0.45, cloud: "#9aa6c8", lamp: 2.8,
+  grass: "#2f5a55", sand: "#626887", sea: "#16305e",
 };
 
+/**
+ * 하루의 흐름이 눈에 보이도록 시간대마다 색을 분명히 나눔 (사용자 요청 2026-11-20: 아침·오후가 똑같아 보임)
+ * 해 뜰 녘(주황·분홍) → 아침(맑고 산뜻) → 한낮(진한 파랑) → 오후(황금빛) → 노을(주황·장밋빛) → 해 질 녘(보라) → 밤(남색)
+ */
 const KEYS: Key[] = [
   [0, NIGHT],
-  [4.5, NIGHT],
-  // 새벽: 지평선부터 분홍빛
-  [6, { top: "#7f9cc8", horizon: "#f8cdb8", hemiSky: "#f4e6f0", hemiGround: "#d8b2a6", hemiIntensity: 1.3, sun: "#ffc8a8", sunIntensity: 0.8, cloud: "#fbeef0", lamp: 2.0 , grass: "#8fae8a", sand: "#e9cdbb", sea: "#7d97c4" }],
-  // 아침
-  [8, { top: "#8fc3ea", horizon: "#fde4c8", hemiSky: "#ffffff", hemiGround: "#ffe6cf", hemiIntensity: 1.9, sun: "#fff0d6", sunIntensity: 1.4, cloud: "#ffffff", lamp: 1.4 , grass: "#8cc47a", sand: "#f3dfc0", sea: "#6fb1d9" }],
-  // 한낮
-  [13, { top: "#74b3ec", horizon: "#e6f1fa", hemiSky: "#ffffff", hemiGround: "#f2eee6", hemiIntensity: 2.0, sun: "#ffffff", sunIntensity: 1.6, cloud: "#ffffff", lamp: 1.1 , grass: "#86c46d", sand: "#f2e3c4", sea: "#5aa7dc" }],
-  [16.5, { top: "#8fb8e0", horizon: "#fde2c6", hemiSky: "#fff8ef", hemiGround: "#f8e2cc", hemiIntensity: 1.9, sun: "#ffe2bf", sunIntensity: 1.4, cloud: "#fffaf4", lamp: 1.3 , grass: "#93c176", sand: "#f4dcbf", sea: "#6aaad6" }],
-  // 노을: 진한 주황 대신 복숭아·연분홍·라벤더로 은은하게
-  [18.3, { top: "#9fa9d4", horizon: "#ffd2b8", hemiSky: "#fff1ea", hemiGround: "#f3d3c8", hemiIntensity: 1.7, sun: "#ffcfb0", sunIntensity: 1.2, cloud: "#fff2ec", lamp: 1.5 , grass: "#a3b98a", sand: "#f3d2bf", sea: "#8aa1cf" }],
-  // 저녁: 짙은 남보라 대신 부드러운 라벤더 블루
-  [20, { top: "#4a5689", horizon: "#b9a7c9", hemiSky: "#d9d4ec", hemiGround: "#8a7d9c", hemiIntensity: 1.2, sun: "#c6bde4", sunIntensity: 0.6, cloud: "#ebe7f6", lamp: 1.8 , grass: "#6f7f86", sand: "#b7a6b8", sea: "#5a6596" }],
-  [21.5, NIGHT],
+  [4.8, NIGHT],
+  // 해 뜰 녘: 지평선에서 주황·분홍 빛이 번짐
+  [6, { top: "#5a6fb0", horizon: "#ffb07c", hemiSky: "#ffd9c2", hemiGround: "#e0a98f", hemiIntensity: 1.25, sun: "#ffb27a", sunIntensity: 0.9, cloud: "#ffd8c4", lamp: 2.0, grass: "#7fa07c", sand: "#e8c0a2", sea: "#6a7fbf" }],
+  // 아침: 해가 올라 맑고 산뜻함 (연노랑 햇살)
+  [8.5, { top: "#9fd3f5", horizon: "#fff1cf", hemiSky: "#ffffff", hemiGround: "#ffe9c8", hemiIntensity: 1.9, sun: "#fff1cc", sunIntensity: 1.45, cloud: "#ffffff", lamp: 1.3, grass: "#8fcf7a", sand: "#f6e2bd", sea: "#6fbde6" }],
+  // 한낮: 하늘이 가장 진한 파랑, 햇빛이 하얗게 강함
+  [13, { top: "#4f9be6", horizon: "#d6ebfb", hemiSky: "#ffffff", hemiGround: "#eef0ea", hemiIntensity: 2.05, sun: "#ffffff", sunIntensity: 1.7, cloud: "#ffffff", lamp: 1.0, grass: "#79c062", sand: "#f1e4c6", sea: "#3f98d8" }],
+  // 오후: 햇빛이 기울며 황금빛
+  [16.3, { top: "#7fa9dc", horizon: "#ffe0a8", hemiSky: "#fff3dc", hemiGround: "#f4dbb0", hemiIntensity: 1.85, sun: "#ffd89a", sunIntensity: 1.45, cloud: "#fff5e3", lamp: 1.2, grass: "#9cc06a", sand: "#f2d4a0", sea: "#5e9ccc" }],
+  // 노을: 지평선이 주황·장밋빛으로 물듦
+  [18.2, { top: "#6f6fae", horizon: "#ff9a6b", hemiSky: "#ffd0b5", hemiGround: "#e39a83", hemiIntensity: 1.55, sun: "#ff9a5e", sunIntensity: 1.15, cloud: "#ffd3c0", lamp: 1.6, grass: "#9a9a72", sand: "#e8b49a", sea: "#7a6fa8" }],
+  // 해 질 녘: 분홍이 보라·남색으로 바뀜
+  [19.5, { top: "#2e3a74", horizon: "#c97b8f", hemiSky: "#c9b8dc", hemiGround: "#6e6382", hemiIntensity: 1.1, sun: "#d08aa6", sunIntensity: 0.55, cloud: "#d8c6e0", lamp: 2.2, grass: "#4b5d6a", sand: "#8f7f96", sea: "#36407a" }],
+  [21, NIGHT],
   [24, NIGHT],
 ];
 
