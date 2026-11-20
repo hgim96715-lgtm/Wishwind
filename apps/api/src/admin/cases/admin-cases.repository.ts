@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import type { Prisma } from '../../generated/prisma/client.js';
-import { BriefingKind, BriefingStatus } from '../../generated/prisma/enums.js';
+import { BriefingKind, BriefingStatus, CaseReviewStatus } from '../../generated/prisma/enums.js';
 import { PrismaService } from '../../prisma/prisma.service.js';
-import type { CaseEdit, CaseListQuery } from './dto/admin-cases.dto.js';
+import type { CaseEdit, CaseListQuery, SourceAdd } from './dto/admin-cases.dto.js';
 
 export const adminCaseRowSelect = {
   id: true,
@@ -100,5 +100,41 @@ export class AdminCasesRepository {
 
   remove(id: string) {
     return this.prisma.case.delete({ where: { id } });
+  }
+
+  findSourceByUrl(caseId: string, url: string) {
+    return this.prisma.caseSource.findUnique({ where: { caseId_url: { caseId, url } }, select: { id: true } });
+  }
+
+  addSource(caseId: string, source: SourceAdd) {
+    return this.prisma.$transaction([
+      this.prisma.caseSource.create({
+        data: {
+          caseId,
+          url: source.url,
+          title: source.title,
+          publisher: source.publisher,
+          type: source.type,
+          publishedAt: source.publishedAt ?? null,
+          accessedAt: new Date(new Date().toISOString().slice(0, 10)),
+        },
+      }),
+      this.invalidateReview(caseId),
+    ]);
+  }
+
+  /** 지운 출처가 있으면 true */
+  async removeSource(caseId: string, sourceId: string) {
+    const { count } = await this.prisma.caseSource.deleteMany({ where: { id: sourceId, caseId } });
+    if (count > 0) await this.invalidateReview(caseId);
+    return count > 0;
+  }
+
+  /** 출처가 바뀌면 검토를 다시 해야 함 (초안은 그대로 둠) */
+  private invalidateReview(caseId: string) {
+    return this.prisma.case.updateMany({
+      where: { id: caseId, reviewStatus: { not: CaseReviewStatus.DRAFT } },
+      data: { reviewStatus: CaseReviewStatus.NEEDS_REVIEW, lastVerifiedAt: null },
+    });
   }
 }

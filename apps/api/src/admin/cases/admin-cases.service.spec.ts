@@ -30,3 +30,28 @@ describe('AdminCasesService.remove', () => {
     expect(repo.remove).not.toHaveBeenCalled();
   });
 });
+
+describe('AdminCasesService.addSource', () => {
+  const source = { url: 'https://example.com/a', title: '기사', publisher: '신문', type: 'NEWS' as const };
+  function make(existing: { id: string } | null) {
+    const repo = {
+      findSummary: vi.fn().mockResolvedValue({ slug: 's', isPublished: false }),
+      findSourceByUrl: vi.fn().mockResolvedValue(existing),
+      addSource: vi.fn().mockResolvedValue(undefined),
+      findDetail: vi.fn().mockResolvedValue({ id: 'id-1' }),
+    };
+    return { repo, service: new AdminCasesService(repo as unknown as AdminCasesRepository) };
+  }
+
+  it('새 URL이면 추가함', async () => {
+    const { repo, service } = make(null);
+    await service.addSource('id-1', source);
+    expect(repo.addSource).toHaveBeenCalledWith('id-1', source);
+  });
+
+  it('이미 있는 URL이면 막음', async () => {
+    const { repo, service } = make({ id: 'src-1' });
+    await expect(service.addSource('id-1', source)).rejects.toBeInstanceOf(BadRequestException);
+    expect(repo.addSource).not.toHaveBeenCalled();
+  });
+});

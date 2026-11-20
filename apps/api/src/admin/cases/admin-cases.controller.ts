@@ -6,10 +6,12 @@ import {
   caseListSchema,
   publishSchema,
   reviewSchema,
+  sourceAddSchema,
   type CaseEdit,
   type CaseListQuery,
   type PublishInput,
   type ReviewInput,
+  type SourceAdd,
 } from './dto/admin-cases.dto.js';
 import { AdminCasesService } from './admin-cases.service.js';
 
@@ -50,5 +52,18 @@ export class AdminCasesController {
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.cases.remove(id);
+  }
+
+  @Post(':id/sources')
+  addSource(@Param('id', ParseUUIDPipe) id: string, @Body(new ZodPipe(sourceAddSchema)) body: SourceAdd) {
+    return this.cases.addSource(id, body);
+  }
+
+  @Delete(':id/sources/:sourceId')
+  removeSource(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('sourceId', ParseUUIDPipe) sourceId: string,
+  ) {
+    return this.cases.removeSource(id, sourceId);
   }
 }

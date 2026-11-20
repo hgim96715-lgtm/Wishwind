@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ActionForm, Button } from "@/components/admin/ActionForm";
 import { Badge, Card, ErrorBox, Field, Skeleton, inputClass } from "@/components/admin/ui";
-import { deleteCase, publishCase, reviewCase, updateCase } from "@/app/admin/actions";
+import { addCaseSource, deleteCase, publishCase, removeCaseSource, reviewCase, updateCase } from "@/app/admin/actions";
 import {
   BRIEFING_KIND_LABEL,
   BRIEFING_STATUS_LABEL,
@@ -17,6 +17,15 @@ import { CATEGORY_LABEL, COUNTRY_LABEL, COUNTRY_ORDER, STATUS_STAMP, caseRoomCou
 const PRECISION = { DAY: "일까지", MONTH: "월까지", YEAR: "연도만", UNKNOWN: "모름" } as const;
 const REVIEWS: ReviewStatus[] = ["DRAFT", "NEEDS_REVIEW", "VERIFIED", "REJECTED"];
 const dateValue = (iso: string | null) => iso?.slice(0, 10) ?? "";
+
+const SOURCE_TYPE_LABEL: Record<string, string> = {
+  NEWS: "언론 기사",
+  NEWS_AGENCY: "통신사",
+  BROADCAST: "방송",
+  GOVERNMENT: "정부·수사기관",
+  COURT: "법원",
+  OTHER: "기타",
+};
 
 export default function AdminCaseDetailPage({ params }: PageProps<"/admin/cases/[id]">) {
   return (
@@ -180,16 +189,56 @@ async function CaseEditor({ id }: { id: string }) {
             </p>
             <ul className="space-y-2 text-sm">
               {c.sources.map((s) => (
-                <li key={s.id}>
-                  <a href={s.url} target="_blank" rel="noreferrer noopener" className="hover:underline">
-                    {s.title}
-                  </a>
-                  <p className="text-xs text-subtle">
-                    {s.publisher} · 인용 {s._count.claims}
-                  </p>
+                <li key={s.id} className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <a href={s.url} target="_blank" rel="noreferrer noopener" className="break-words hover:underline">
+                      {s.title}
+                    </a>
+                    <p className="text-xs text-subtle">
+                      {s.publisher} · {SOURCE_TYPE_LABEL[s.type] ?? s.type}
+                      {s.publishedAt && ` · ${s.publishedAt.slice(0, 10)}`} · 인용 {s._count.claims}
+                    </p>
+                  </div>
+                  <ActionForm
+                    inline
+                    action={removeCaseSource.bind(null, c.id, s.id)}
+                    confirmMessage={`이 출처를 지울까요?\n${s.title}`}
+                  >
+                    <button type="submit" className="shrink-0 text-xs text-subtle hover:text-[#b5543a]" aria-label="출처 지우기">
+                      지우기
+                    </button>
+                  </ActionForm>
                 </li>
               ))}
             </ul>
+            <details className="mt-4 border-t border-line pt-4">
+              <summary className="cursor-pointer text-sm font-medium">출처 추가</summary>
+              <ActionForm action={addCaseSource.bind(null, c.id)} className="mt-3">
+                <Field label="주소(URL)">
+                  <input name="url" type="url" required maxLength={1000} placeholder="https://" className={inputClass} />
+                </Field>
+                <Field label="기사·문서 제목">
+                  <input name="title" required maxLength={300} className={inputClass} />
+                </Field>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <Field label="매체·기관">
+                    <input name="publisher" required maxLength={200} placeholder="예: 경향신문" className={inputClass} />
+                  </Field>
+                  <Field label="종류">
+                    <select name="type" defaultValue="NEWS" className={inputClass}>
+                      {Object.entries(SOURCE_TYPE_LABEL).map(([k, v]) => (
+                        <option key={k} value={k}>{v}</option>
+                      ))}
+                    </select>
+                  </Field>
+                </div>
+                <Field label="발행일" hint="모르면 비워 두세요.">
+                  <input name="publishedAt" type="date" className={inputClass} />
+                </Field>
+                <Button tone="primary">출처 추가</Button>
+                <p className="text-xs text-subtle">나무위키는 단서용이라 검증 출처 2곳에 세지 않습니다. 출처를 바꾸면 검토 상태를 다시 확인해야 합니다.</p>
+              </ActionForm>
+            </details>
           </Card>
 
           <Card>

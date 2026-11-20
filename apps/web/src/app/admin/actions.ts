@@ -102,6 +102,24 @@ export async function publishCase(id: string, published: boolean) {
   );
 }
 
+export async function addCaseSource(id: string, _: ActionState, form: FormData) {
+  return run(
+    () =>
+      adminSend(`/cases/${id}/sources`, "POST", {
+        url: text(form, "url"),
+        title: text(form, "title"),
+        publisher: text(form, "publisher"),
+        type: text(form, "type") || "NEWS",
+        publishedAt: text(form, "publishedAt") || null,
+      }),
+    "출처를 추가했습니다. 검토 상태를 다시 확인해 주세요.",
+  );
+}
+
+export async function removeCaseSource(id: string, sourceId: string) {
+  return run(() => adminSend(`/cases/${id}/sources/${sourceId}`, "DELETE"), "출처를 지웠습니다.");
+}
+
 /** 사건방에 넣을 필요가 없는 초안을 지움. 공개 중이면 API가 막음 */
 export async function deleteCase(id: string): Promise<ActionState> {
   try {

@@ -5,6 +5,7 @@ import {
   CaseStatus,
   Country,
   DatePrecision,
+  SourceType,
 } from '../../../generated/prisma/enums.js';
 
 const dateOrNull = z
@@ -51,3 +52,13 @@ export type ReviewInput = z.infer<typeof reviewSchema>;
 
 export const publishSchema = z.object({ published: z.boolean() });
 export type PublishInput = z.infer<typeof publishSchema>;
+
+/** 관리실에서 출처 한 곳 추가. JSON 가져오기의 출처 형식과 같음 */
+export const sourceAddSchema = z.object({
+  url: z.url({ protocol: /^https?$/ }).max(1000),
+  title: z.string().trim().min(1).max(300),
+  publisher: z.string().trim().min(1).max(200),
+  type: z.enum(SourceType).default(SourceType.NEWS),
+  publishedAt: dateOrNull.optional(),
+});
+export type SourceAdd = z.infer<typeof sourceAddSchema>;

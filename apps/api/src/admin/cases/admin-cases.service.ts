@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { reviewCase, setPublished } from '../../case-import/case-import.repository.js';
 import { asBadRequest } from '../../common/errors/as-bad-request.js';
 import type { CaseReviewStatus } from '../../generated/prisma/enums.js';
-import type { CaseEdit, CaseListQuery } from './dto/admin-cases.dto.js';
+import type { CaseEdit, CaseListQuery, SourceAdd } from './dto/admin-cases.dto.js';
 import { newCaseDraft, statusChangedDraft, toAdminCaseRow, toReviewCounts } from './admin-cases.mapper.js';
 import { AdminCasesRepository } from './admin-cases.repository.js';
 
@@ -67,5 +67,25 @@ export class AdminCasesService {
     }
     await this.repo.remove(id);
     return { id, slug: found.slug, deleted: true };
+  }
+
+  /**
+   * 출처 한 곳 추가. 같은 URL이 이미 있으면 막음.
+   * JSON 가져오기와 같게, 출처가 바뀌면 이전 검토 결과는 무효라 초안이 아니면 '재확인 필요'로 돌림
+   */
+  async addSource(id: string, source: SourceAdd) {
+    await this.findOrThrow(id);
+    if (await this.repo.findSourceByUrl(id, source.url)) {
+      throw new BadRequestException('이미 등록된 출처입니다.');
+    }
+    await this.repo.addSource(id, source);
+    return this.detail(id);
+  }
+
+  async removeSource(id: string, sourceId: string) {
+    await this.findOrThrow(id);
+    const removed = await this.repo.removeSource(id, sourceId);
+    if (!removed) throw new NotFoundException('출처를 찾을 수 없습니다.');
+    return this.detail(id);
   }
 }
