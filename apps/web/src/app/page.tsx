@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { LuHeartHandshake } from "react-icons/lu";
 import { AccountLink } from "@/components/home/AccountLink";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
 import { RoomGrid } from "@/components/home/RoomGrid";
 
 // 서버 컴포넌트. 정적인 텍스트는 서버에서 HTML로 내려가고,
@@ -11,7 +12,8 @@ export default function Home() {
   return (
     <main className="relative mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-6 py-20">
       {/* 쿠키를 읽는 부분만 Suspense로 감싸 나머지는 정적으로 렌더링 */}
-      <div className="absolute top-6 right-6">
+      <div className="absolute top-6 right-6 flex items-center gap-2">
+        <ThemeToggle />
         <Suspense fallback={null}>
           <AccountLink />
         </Suspense>

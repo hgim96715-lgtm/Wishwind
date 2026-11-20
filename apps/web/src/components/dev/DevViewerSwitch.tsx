@@ -19,7 +19,6 @@ export function DevViewerSwitch() {
 
   return (
     <div className="fixed right-3 bottom-3 z-[60] flex flex-col items-end gap-1.5">
-      <ThemeSwitch />
     <form
       method="post"
       action="/dev/viewer"
@@ -46,54 +45,3 @@ export function DevViewerSwitch() {
   );
 }
 
-type Theme = "light" | "dark" | "system";
-const THEME_KEY = "dev-theme";
-const THEME_LABEL: Record<Theme, string> = { light: "라이트", dark: "다크", system: "폰 설정" };
-
-/** 개발 중 다크/라이트 미리 보기. <html data-theme>를 바꾸고 이 브라우저에만 기억함 */
-function applyTheme(theme: Theme) {
-  const dark = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  document.documentElement.dataset.theme = dark ? "dark" : "light";
-}
-
-function ThemeSwitch() {
-  const [theme, setTheme] = useState<Theme>("light");
-  useEffect(() => {
-    let saved: Theme = "light";
-    try {
-      saved = (localStorage.getItem(THEME_KEY) as Theme | null) ?? "light";
-    } catch {
-      /* 저장소를 못 쓰면 라이트 */
-    }
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setTheme(saved);
-    applyTheme(saved);
-  }, []);
-
-  const choose = (next: Theme) => {
-    setTheme(next);
-    applyTheme(next);
-    try {
-      localStorage.setItem(THEME_KEY, next);
-    } catch {
-      /* 이번 화면에서만 적용 */
-    }
-  };
-
-  return (
-    <div className="flex items-center gap-1 rounded-full border border-dashed border-[#c46a4b]/60 bg-white/90 p-1 text-xs shadow-sm backdrop-blur">
-      <span className="px-2 font-mono text-[10px] text-[#c46a4b]">THEME</span>
-      {(Object.keys(THEME_LABEL) as Theme[]).map((t) => (
-        <button
-          key={t}
-          type="button"
-          onClick={() => choose(t)}
-          aria-pressed={theme === t}
-          className={`rounded-full px-2.5 py-1 ${theme === t ? "bg-foreground text-surface" : "hover:bg-black/5"}`}
-        >
-          {THEME_LABEL[t]}
-        </button>
-      ))}
-    </div>
-  );
-}
