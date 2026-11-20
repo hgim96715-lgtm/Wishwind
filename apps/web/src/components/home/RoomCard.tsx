@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { motion, type Variants } from "motion/react";
-import { LuArrowRight } from "react-icons/lu";
 import type { Room } from "@/lib/rooms";
 import { RoomEmblem } from "./RoomEmblem";
 
@@ -45,10 +44,6 @@ export function RoomCard({ room }: RoomCardProps) {
           </p>
           <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-(--accent)">
             들어가기
-            <LuArrowRight
-              aria-hidden
-              className="size-4 transition-transform duration-300 group-hover:translate-x-1"
-            />
           </span>
         </div>
       </div>

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { LuArrowLeft } from "react-icons/lu";
 import { HelpLink } from "@/components/help/HelpBar";
 import { MissingExperience } from "@/components/missing/MissingExperience";
 import { ApiUnavailableError } from "@/lib/cases/api";
@@ -21,7 +20,6 @@ export default function MissingPage() {
           href="/"
           className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1.5 text-sm text-[#6b5a46] backdrop-blur hover:bg-white"
         >
-          <LuArrowLeft aria-hidden className="size-4" />
           홈으로
         </Link>
         {/* 하늘 색이 시간대마다 바뀌므로(밤엔 어두움) 글자 뒤에 반투명 바탕을 둠 */}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LuArrowLeft, LuHeartHandshake, LuPhone } from "react-icons/lu";
+import { LuHeartHandshake, LuPhone } from "react-icons/lu";
 import { ContactCard } from "@/components/help/ContactCard";
 import {
   COUNTRY_NAME,
@@ -41,7 +41,6 @@ export default function HelpPage() {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-12 sm:py-16">
       <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-subtle hover:text-foreground">
-        <LuArrowLeft aria-hidden className="size-4" />
         홈으로
       </Link>
 

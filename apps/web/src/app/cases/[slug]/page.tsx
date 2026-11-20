@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { LuArrowLeft } from "react-icons/lu";
 import {
   CaseDetailSkeleton,
   CaseDetailView,
@@ -19,7 +18,6 @@ export default function CasePage({ params }: PageProps<"/cases/[slug]">) {
         href="/cases"
         className="mb-10 inline-flex items-center gap-1.5 text-sm text-subtle transition-colors hover:text-foreground"
       >
-        <LuArrowLeft aria-hidden className="size-4" />
         사건방으로
       </Link>
       <Suspense fallback={<CaseDetailSkeleton />}>

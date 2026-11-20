@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { LuArrowLeft } from "react-icons/lu";
 import { getRoom, type RoomSlug } from "@/lib/rooms";
 
 interface RoomHeaderProps {
@@ -16,7 +15,6 @@ export function RoomHeader({ slug }: RoomHeaderProps) {
         href="/"
         className="inline-flex items-center gap-1.5 text-sm text-subtle transition-colors hover:text-foreground"
       >
-        <LuArrowLeft aria-hidden className="size-4" />
         홈으로
       </Link>
 

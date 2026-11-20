@@ -197,7 +197,7 @@ function RecentCases({ cases }: { cases: Briefing["recentCases"] }) {
           최근 들어온 사건 파일
         </h2>
         <Link href="/cases" className="text-sm text-[#c46a4b] hover:underline">
-          사건방 전체 보기 →
+          사건방 전체 보기
         </Link>
       </div>
       <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -356,7 +356,7 @@ function NewMissing({ missing }: { missing: Briefing["missing"] }) {
         ))}
       </ul>
       <Link href="/missing" className="mt-4 inline-block text-sm text-[#3f8f84] hover:underline">
-        실종방에서 자세히 보기 →
+        실종방에서 자세히 보기
       </Link>
     </section>
   );

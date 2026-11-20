@@ -61,7 +61,7 @@ export function NotesBoard({
             <p className="font-mono text-[11px] tracking-[0.18em] text-[#c46a4b]">오늘의 질문</p>
             <p className="mt-2 font-serif text-lg font-bold leading-snug">{question.question}</p>
             <Link href={`/cases/${question.caseSlug}`} className="mt-2 inline-block text-xs text-muted hover:underline">
-              📁 {question.caseTitle}에서 나온 질문 →
+              📁 {question.caseTitle}에서 나온 질문
             </Link>
           </div>
         )}
@@ -94,7 +94,7 @@ export function NotesBoard({
               <Memo index={0}>
                 <p className="text-center leading-relaxed">아직 남겨진 생각이 없습니다. 사건방에서 첫 생각을 남겨 주세요.</p>
                 <Link href="/cases" className="mt-2 block text-center text-xs text-muted hover:underline">
-                  사건방으로 가기 →
+                  사건방으로 가기
                 </Link>
               </Memo>
             </ul>
@@ -107,7 +107,7 @@ export function NotesBoard({
               href={`/cases/${question.caseSlug}`}
               className="inline-block rounded-full bg-[#fffdf8] px-4 py-2 text-sm font-medium shadow-[0_1px_3px_rgb(47_44_40/0.15)] hover:bg-white"
             >
-              첫 생각을 남겨 주세요 →
+              첫 생각을 남겨 주세요
             </Link>
           </div>
         )}

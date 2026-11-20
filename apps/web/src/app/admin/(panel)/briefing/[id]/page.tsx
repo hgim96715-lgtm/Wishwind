@@ -35,7 +35,7 @@ async function EditPost({ id }: { id: string }) {
     <div className="space-y-6">
       <header>
         <Link href="/admin/briefing" className="text-sm text-subtle hover:text-foreground">
-          ← 브리핑 글
+          브리핑 글
         </Link>
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <h1 className="text-2xl font-semibold tracking-tight">{post.title}</h1>

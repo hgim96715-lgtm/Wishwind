@@ -51,7 +51,7 @@ async function CaseEditor({ id }: { id: string }) {
     <div className="space-y-6">
       <header>
         <Link href="/admin/cases" className="text-sm text-subtle hover:text-foreground">
-          ← 사건 목록
+          사건 목록
         </Link>
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <h1 className="text-2xl font-semibold tracking-tight">{c.title}</h1>

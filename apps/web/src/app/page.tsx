@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LuArrowRight, LuHeartHandshake, LuWind } from "react-icons/lu";
+import { LuHeartHandshake, LuWind } from "react-icons/lu";
 import { RoomGrid } from "@/components/home/RoomGrid";
 
 // 서버 컴포넌트. 정적인 텍스트는 서버에서 HTML로 내려가고,
@@ -57,7 +57,6 @@ export default function Home() {
             className="ml-auto inline-flex items-center gap-1 pl-1 font-medium text-[#2f7469] hover:underline sm:ml-2"
           >
             도움받는 곳
-            <LuArrowRight aria-hidden className="size-3.5" />
           </Link>
         </div>
       </div>

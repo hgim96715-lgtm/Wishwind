@@ -10,7 +10,7 @@ export default function NewPostPage({ searchParams }: PageProps<"/admin/briefing
   return (
     <>
       <Link href="/admin/briefing" className="text-sm text-subtle hover:text-foreground">
-        ← 브리핑 글
+        브리핑 글
       </Link>
       <div className="mt-2">
         <PageTitle title="새 브리핑 글" description="초안으로 저장됩니다. 다음 화면에서 공개할 수 있습니다." />

@@ -40,7 +40,7 @@ async function Voter({ voterId }: { voterId: string }) {
     <div className="space-y-6">
       <header>
         <Link href="/admin/moderation" className="text-sm text-subtle hover:text-foreground">
-          ← 부적절한 글
+          부적절한 글
         </Link>
         <h1 className="mt-2 text-2xl font-semibold tracking-tight">작성자 #{shortId(v.voterId)}</h1>
         <p className="mt-1 font-mono text-xs text-subtle">{v.voterId}</p>

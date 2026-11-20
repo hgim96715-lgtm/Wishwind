@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { LuArrowLeft } from "react-icons/lu";
 import { ContactForm } from "@/components/briefing/ContactForm";
 
 export const metadata: Metadata = {
@@ -13,7 +12,6 @@ export default function ContactPage({ searchParams }: PageProps<"/contact">) {
   return (
     <main className="mx-auto w-full max-w-2xl flex-1 px-6 py-16">
       <Link href="/briefing" className="inline-flex items-center gap-1.5 text-sm text-subtle hover:text-foreground">
-        <LuArrowLeft aria-hidden className="size-4" />
         브리핑룸으로
       </Link>
       <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.2em] text-subtle">Tip Line</p>
