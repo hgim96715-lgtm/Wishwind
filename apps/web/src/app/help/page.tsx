@@ -40,7 +40,7 @@ const ABROAD: HelpCountry[] = ["US", "GB", "JP"];
 export default function HelpPage() {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-12 sm:py-16">
-      <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-subtle hover:text-foreground">
+      <Link href="/" className="inline-flex items-center rounded-full border border-line bg-surface px-3.5 py-1.5 text-sm text-muted shadow-sm transition-colors hover:bg-white hover:text-foreground">
         홈으로
       </Link>
 

@@ -16,7 +16,7 @@ export default function CasePage({ params }: PageProps<"/cases/[slug]">) {
     <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-16 md:px-10">
       <Link
         href="/cases"
-        className="mb-10 inline-flex items-center gap-1.5 text-sm text-subtle transition-colors hover:text-foreground"
+        className="mb-10 inline-flex items-center rounded-full border border-line bg-surface px-3.5 py-1.5 text-sm text-muted shadow-sm transition-colors hover:bg-white hover:text-foreground"
       >
         사건방으로
       </Link>

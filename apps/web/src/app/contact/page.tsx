@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function ContactPage({ searchParams }: PageProps<"/contact">) {
   return (
     <main className="mx-auto w-full max-w-2xl flex-1 px-6 py-16">
-      <Link href="/briefing" className="inline-flex items-center gap-1.5 text-sm text-subtle hover:text-foreground">
+      <Link href="/briefing" className="inline-flex items-center rounded-full border border-line bg-surface px-3.5 py-1.5 text-sm text-muted shadow-sm transition-colors hover:bg-white hover:text-foreground">
         브리핑룸으로
       </Link>
       <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.2em] text-subtle">Tip Line</p>

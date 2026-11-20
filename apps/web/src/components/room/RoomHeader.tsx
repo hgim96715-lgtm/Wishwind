@@ -13,7 +13,7 @@ export function RoomHeader({ slug }: RoomHeaderProps) {
     <header className="border-b border-line pb-8">
       <Link
         href="/"
-        className="inline-flex items-center gap-1.5 text-sm text-subtle transition-colors hover:text-foreground"
+        className="inline-flex items-center rounded-full border border-line bg-surface px-3.5 py-1.5 text-sm text-muted shadow-sm transition-colors hover:bg-white hover:text-foreground"
       >
         홈으로
       </Link>
