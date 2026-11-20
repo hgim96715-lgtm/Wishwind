@@ -36,6 +36,9 @@ function canUseScene(): boolean {
   }
 }
 
+/** 방금 꽂은 바람개비 말풍선을 강조해 보여 주는 시간 */
+const FRESH_BUBBLE_MS = 6000;
+
 export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   const slots = useMemo(() => buildSlots(groups), [groups]);
   const [mode, setMode] = useState<Mode>("checking");
@@ -77,6 +80,13 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
     const id = setTimeout(() => setToast(null), 4000);
     return () => clearTimeout(id);
   }, [toast]);
+
+  // 방금 꽂은 바람개비의 강조 말풍선은 잠깐만 보여 줌. 그 뒤로는 다른 바람개비처럼 가까이 갈 때만 보임
+  useEffect(() => {
+    if (!freshId) return;
+    const id = setTimeout(() => setFreshId(null), FRESH_BUBBLE_MS);
+    return () => clearTimeout(id);
+  }, [freshId]);
 
   const regionOf = useCallback(
     (id: string) => {
