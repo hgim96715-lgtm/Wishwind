@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { LuChevronLeft, LuChevronRight, LuLogIn } from "react-icons/lu";
+import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { fetchCharacters, type CharacterOption } from "./Avatar";
 
 // three를 쓰는 미리보기는 고르기 화면이 열릴 때만 받음
@@ -147,9 +147,8 @@ function LoginHint() {
     <div className="mt-3 text-center">
       <Link
         href="/login?next=/missing"
-        className="flex w-full items-center justify-center gap-1.5 rounded-full border border-[#e6d3b3] bg-white/70 py-2.5 text-sm font-medium text-[#9a6a2c] transition-colors hover:bg-white"
+        className="flex w-full items-center justify-center rounded-full border border-[#e6d3b3] bg-white/70 py-2.5 text-sm font-medium text-[#9a6a2c] transition-colors hover:bg-white"
       >
-        <LuLogIn aria-hidden className="size-4" />
         로그인하러 가기
       </Link>
       <p className="mt-2 text-xs break-keep text-[#a08b72]">선택 사항 · 다른 기기에서도 기록이 이어집니다</p>
