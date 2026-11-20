@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "news-20261120-c9f5ad",
+      "content": {
+        "title": "A10 고속도로 '작은 순교자' 이나스 사건",
+        "summary": "1987년 프랑스 A10 고속도로 옆에서 학대 흔적이 가득한 네 살 여자아이가 숨진 채 발견됐지만 30년 넘게 신원조차 밝혀지지 않았던 프랑스의 대표적 장기 미제 사건으로, 2018년 DNA로 이나스 투루브로 확인됐고 2026년 11월 부모가 1심에서 각각 징역 20년·15년을 선고받았습니다",
+        "overview": "1987년 8월 11일 프랑스 루아르에셰르주 쉬에브르를 지나는 A10 고속도로 옆 도랑에서 고속도로 직원 두 명이 네 살 정도 된 여자아이의 시신을 발견했습니다. 법의학자들은 아이 몸에서 다리미에 덴 화상과 사람에게 물린 흉터를 확인했습니다. 하지만 아이의 실종을 신고한 사람은 아무도 없었습니다. 헌병대는 프랑스 역사상 가장 큰 목격자 찾기에 나서 30여 개 나라에 알리고, 학교 6만 5천 곳과 시청 3만 곳에 아이 사진을 붙였지만 신원을 밝히지 못했습니다. 이름 없이 '작은 순교자', '이름 모를 소녀'로 불린 아이는 쉬에브르 마을이 마련한 묘지에 묻혔습니다. 2018년 6월, 다른 폭력 사건으로 채취된 아이 오빠의 DNA가 단서가 되어 아이가 모로코 카사블랑카에서 태어난 이나스 투루브로 확인됐고, 부모가 체포됐습니다. 재판은 8년 뒤인 2026년 11월 2일 블루아의 루아르에셰르 중죄법원에서 열렸고, 부모는 혐의를 부인했습니다. 11월 17일 법원은 어머니 알리마 엘 바크티에게 사망에 이르게 한 고문·야만 행위 혐의로 징역 20년을, 아버지 아메드 투루브에게 그 공범 혐의로 징역 15년을 선고했습니다. 아버지는 항소했고, 아직 형이 확정되지 않았습니다.",
+        "victimCountNote": "사망 1명",
+        "country": "OTHER",
+        "category": "MURDER",
+        "status": "IN_PROGRESS",
+        "location": "프랑스 루아르에셰르주 쉬에브르, A10 고속도로",
+        "occurredAt": "1987-08-11",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": null,
+        "timeline": [
+          {
+            "occurredAt": "1987-08-11",
+            "occurredAtPrecision": "DAY",
+            "title": "A10 고속도로 옆에서 시신 발견",
+            "description": "고속도로 직원 두 명이 쉬에브르를 지나는 A10 고속도로 옆 도랑에서 네 살 정도 된 여자아이의 시신을 발견했습니다. 몸에는 화상과 물린 흉터가 있었습니다."
+          },
+          {
+            "occurredAt": "1987-01-01",
+            "occurredAtPrecision": "YEAR",
+            "title": "프랑스 최대 규모의 목격자 찾기",
+            "description": "헌병대가 30여 개 나라에 알리고 학교와 시청 수만 곳에 아이 사진을 붙였지만, 실종 신고가 없어 신원을 밝히지 못했습니다."
+          },
+          {
+            "occurredAt": "2018-06-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "DNA로 신원 확인, 부모 체포",
+            "description": "다른 폭력 사건으로 채취된 오빠의 DNA가 단서가 되어 아이가 이나스 투루브로 확인됐고, 부모가 체포됐습니다."
+          },
+          {
+            "occurredAt": "2026-11-02",
+            "occurredAtPrecision": "DAY",
+            "title": "블루아 중죄법원 재판 시작",
+            "description": "부모가 39년 만에 법정에 섰고, 두 사람 모두 혐의를 부인했습니다."
+          },
+          {
+            "occurredAt": "2026-11-17",
+            "occurredAtPrecision": "DAY",
+            "title": "1심 선고: 어머니 징역 20년, 아버지 징역 15년",
+            "description": "어머니는 사망에 이르게 한 고문·야만 행위 혐의, 아버지는 그 공범 혐의로 유죄 판결을 받았습니다. 아버지는 검찰 구형(14년)보다 1년 많은 형을 받았고 항소했습니다."
+          }
+        ],
+        "victims": [
+          {
+            "name": "이나스 투루브 (Inass Touloub)",
+            "age": 4,
+            "gender": "FEMALE",
+            "status": "DECEASED",
+            "description": "모로코 카사블랑카에서 태어났습니다. 30년 넘게 이름 없이 '작은 순교자'로 불렸고, 쉬에브르 마을이 마련한 묘지에 묻혔습니다."
+          }
+        ],
+        "suspects": [
+          {
+            "name": "알리마 엘 바크티 (Halima El Bakhti)",
+            "status": "INDICTED",
+            "charges": "사망에 이르게 한 고문·야만 행위",
+            "description": "이나스의 어머니로 재판 당시 72세였습니다. 법정에서 혐의를 부인했습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "루아르에셰르 중죄법원 (블루아)",
+                "type": "IMPRISONMENT",
+                "verdict": "사망에 이르게 한 고문·야만 행위 혐의로 유죄를 선고받았습니다. 법원은 범행 당시 판단 능력이 떨어진 상태였다고 봤습니다.",
+                "penalty": "징역 20년",
+                "isFinal": false,
+                "decidedAt": "2026-11-17"
+              }
+            ]
+          },
+          {
+            "name": "아메드 투루브 (Ahmed Touloub)",
+            "status": "INDICTED",
+            "charges": "사망에 이르게 한 고문·야만 행위의 공범",
+            "description": "이나스의 아버지로 재판 당시 74세였습니다. 법정에서 혐의를 부인했고, 1심 판결에 항소했습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "루아르에셰르 중죄법원 (블루아)",
+                "type": "IMPRISONMENT",
+                "verdict": "공범 혐의로 유죄를 선고받았습니다. 법원은 그가 딸이 겪은 학대를 알지 못했을 리 없다고 봤습니다.",
+                "penalty": "징역 15년",
+                "isFinal": false,
+                "decidedAt": "2026-11-17"
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "아이가 사라져도 아무도 신고하지 않는 일을 막으려면 어떤 제도가 필요할까요?"
+          },
+          {
+            "question": "가정 안에서 벌어지는 아동 학대를 주변에서 더 빨리 알아차리려면 무엇이 필요할까요?"
+          },
+          {
+            "question": "오래된 미제 사건을 풀기 위해 DNA 자료를 어떻게 쓰고 보호해야 할까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://www.ici.fr/centre-val-de-loire/petite-martyre-de-l-a10-la-mere-et-le-pere-d-inass-touloub-respectivement-condamnes-a-20-et-15-ans-de-reclusion-4226760",
+          "title": "\"Petite martyre de l'A10\" : la mère et le père d'Inass Touloub respectivement condamnés à 20 et 15 ans de réclusion",
+          "publisher": "ICI (Radio France)",
+          "type": "BROADCAST",
+          "publishedAt": "2026-11-17",
+          "accessedAt": "2026-11-20"
+        },
+        {
+          "url": "https://www.dhnet.be/dernieres-depeches/2026/11/02/les-parents-de-la-petite-martyre-de-la10-juges-39-ans-apres-sa-mort-Z5AVMN2VC5DPZDF6YHYJM7C7UE/",
+          "title": "Les parents d'Inass Touloub, jugés 39 ans après sa mort, nient les faits",
+          "publisher": "La DH (AFP)",
+          "type": "NEWS_AGENCY",
+          "publishedAt": "2026-11-02",
+          "accessedAt": "2026-11-20"
+        },
+        {
+          "url": "https://www.magcentre.fr/381632-proces-de-la-petite-martyre-de-la10-la-justice-est-rendue-pour-inass/",
+          "title": "Procès de la petite martyre de l'A10 : la justice est rendue pour Inass",
+          "publisher": "Mag'Centre",
+          "type": "NEWS",
+          "publishedAt": "2026-11-19",
+          "accessedAt": "2026-11-20"
+        },
+        {
+          "url": "https://www.lemonde.fr/societe/article/2026/11/17/proces-des-parents-de-la-petite-inconnue-de-l-a10-la-mere-condamnee-a-vingt-ans-de-reclusion-le-pere-a-quinze-ans_6813049_3224.html",
+          "title": "Procès des parents de la petite inconnue de l'A10 : la mère condamnée à vingt ans de réclusion, le père à quinze ans",
+          "publisher": "Le Monde",
+          "type": "NEWS",
+          "publishedAt": "2026-11-17",
+          "accessedAt": "2026-11-20"
+        }
+      ],
+      "claims": []
+    }
+  ]
+}
