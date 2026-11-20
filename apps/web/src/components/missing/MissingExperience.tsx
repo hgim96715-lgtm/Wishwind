@@ -43,7 +43,21 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   const slots = useMemo(() => buildSlots(groups), [groups]);
   const [mode, setMode] = useState<Mode>("checking");
   const [touch, setTouch] = useState(false);
-  const [avatar, setAvatar] = useState<AvatarChoice | null>(null);
+  const [savedAvatar, setAvatar] = useState<AvatarChoice | null>(null);
+  // 로그인했으면 계정 닉네임을 캐릭터 이름으로 씀 (이 브라우저에 저장한 이름보다 우선)
+  const [accountNickname, setAccountNickname] = useState<string | null>(null);
+  const avatar = useMemo(
+    () => (savedAvatar && accountNickname ? { ...savedAvatar, nickname: accountNickname } : savedAvatar),
+    [savedAvatar, accountNickname],
+  );
+  useEffect(() => {
+    const ac = new AbortController();
+    fetch("/api/auth/status", { signal: ac.signal })
+      .then((r) => r.json() as Promise<{ nickname?: string | null }>)
+      .then((r) => setAccountNickname(r.nickname ?? null))
+      .catch(() => {});
+    return () => ac.abort();
+  }, []);
   const [editingAvatar, setEditingAvatar] = useState(false);
   const [selected, setSelected] = useState<{ id: string; regionLabel: string } | null>(null);
   const [status, setStatus] = useState<PlayerStatus>({ place: "바람개비 정원", nearId: null, inGarden: true });
@@ -263,6 +277,7 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
           <AvatarSetup
             key="avatar"
             initial={avatar}
+            accountNickname={accountNickname}
             onDone={(v) => {
               setAvatar(v);
               setEditingAvatar(false);

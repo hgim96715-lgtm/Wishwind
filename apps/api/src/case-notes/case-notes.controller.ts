@@ -31,6 +31,26 @@ export class CaseNotesController {
     return this.notes.saveAnswer(slug, questionId, voterId, input.body);
   }
 
+  /** 내 노트 지우기. 프록시가 PUT·POST만 넘기므로 POST로 받음 */
+  @Post('answers/:questionId/delete')
+  @HttpCode(200)
+  deleteAnswer(
+    @Param('slug') slug: string,
+    @Param('questionId', ParseUUIDPipe) questionId: string,
+    @VoterId() voterId: string,
+  ) {
+    return this.notes.deleteAnswer(slug, questionId, voterId);
+  }
+
+  @Put('answers/:answerId/empathy')
+  empathy(
+    @Param('slug') slug: string,
+    @Param('answerId', ParseUUIDPipe) answerId: string,
+    @VoterId() voterId: string,
+  ) {
+    return this.notes.markEmpathy(slug, answerId, voterId);
+  }
+
   @Post('questions')
   @HttpCode(200)
   saveQuestion(

@@ -204,6 +204,10 @@ export interface CaseNoteAnswer {
   id: string;
   body: string;
   createdAt: string;
+  /** 무작위 별명 ("바람 37") */
+  nickname: string;
+  empathyCount: number;
+  empathizedByMe: boolean;
   isMine: boolean;
 }
 
@@ -212,9 +216,12 @@ export interface CaseNotesState {
   questions: {
     questionId: string;
     answerCount: number;
-    mine: { body: string; status: UserContentStatus } | null;
-    /** 내 수사 노트를 남기기 전에는 null */
-    answers: CaseNoteAnswer[] | null;
+    /** empathyCount: 내 노트가 받은 공감 수 (나에게만 보임) */
+    mine: { body: string; status: UserContentStatus; empathyCount: number } | null;
+    /** 내 노트를 남겨 다른 사람 노트가 모두 열렸는지 */
+    unlocked: boolean;
+    /** 열리기 전에는 미리 보기 몇 개만 */
+    answers: CaseNoteAnswer[];
   }[];
   myQuestion: { id: string; body: string; status: UserContentStatus } | null;
   userQuestions: {

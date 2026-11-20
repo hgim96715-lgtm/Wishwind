@@ -1,9 +1,9 @@
 import { cookies } from "next/headers";
 import { API_URL } from "@/lib/cases/api";
 
-const VOTER_COOKIE = "cold_cases_voter";
+export const VOTER_COOKIE = "cold_cases_voter";
 // 브라우저가 허용하는 쿠키 수명 상한(400일)
-const VOTER_COOKIE_MAX_AGE = 60 * 60 * 24 * 400;
+export const VOTER_COOKIE_MAX_AGE = 60 * 60 * 24 * 400;
 
 async function forward(path: string, init: RequestInit) {
   try {

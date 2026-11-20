@@ -56,7 +56,7 @@ export class CaseNotesRepository {
   findMyAnswers(voterId: string, questionIds: string[]) {
     return this.prisma.userAnswer.findMany({
       where: { voterId, questionId: { in: questionIds } },
-      select: { id: true, questionId: true, body: true, status: true },
+      select: { id: true, questionId: true, body: true, status: true, empathyCount: true },
     });
   }
 
@@ -89,7 +89,14 @@ export class CaseNotesRepository {
       where: { questionId: { in: questionIds }, status: UserContentStatus.PUBLISHED },
       orderBy: { createdAt: 'desc' },
       take,
-      select: { id: true, questionId: true, body: true, createdAt: true, voterId: true },
+      select: { id: true, questionId: true, body: true, createdAt: true, voterId: true, empathyCount: true },
+    });
+  }
+
+  findMyEmpathies(voterId: string, answerIds: string[]) {
+    return this.prisma.userAnswerEmpathy.findMany({
+      where: { voterId, answerId: { in: answerIds } },
+      select: { answerId: true },
     });
   }
 
@@ -109,13 +116,29 @@ export class CaseNotesRepository {
     });
   }
 
+  /**
+   * 노트 저장. 내용을 고치면 받은 공감은 예전 내용에 대한 것이므로 0으로 되돌림
+   * (공감 기록도 지워 같은 사람이 새 내용에 다시 공감할 수 있음)
+   */
   upsertAnswer(questionId: string, voterId: string, result: ModerationResult) {
     const data = moderatedData(result);
-    return this.prisma.userAnswer.upsert({
-      where: { questionId_voterId: { questionId, voterId } },
-      create: { ...data, questionId, voterId },
-      update: data,
+    return this.prisma.$transaction(async (tx) => {
+      const before = await tx.userAnswer.findUnique({
+        where: { questionId_voterId: { questionId, voterId } },
+        select: { id: true, body: true },
+      });
+      const changed = before && before.body !== data.body;
+      if (changed) await tx.userAnswerEmpathy.deleteMany({ where: { answerId: before.id } });
+      return tx.userAnswer.upsert({
+        where: { questionId_voterId: { questionId, voterId } },
+        create: { ...data, questionId, voterId },
+        update: changed ? { ...data, empathyCount: 0 } : data,
+      });
     });
+  }
+
+  deleteAnswer(questionId: string, voterId: string) {
+    return this.prisma.userAnswer.delete({ where: { questionId_voterId: { questionId, voterId } } });
   }
 
   findQuestionStatus(caseId: string, voterId: string) {
@@ -154,6 +177,31 @@ export class CaseNotesRepository {
         await tx.userQuestion.update({
           where: { id: userQuestionId },
           data: { curiousCount: { increment: 1 } },
+        });
+      }
+    });
+  }
+
+  // ── 공감해요 ─────────────────────────────
+
+  findPublishedAnswer(id: string, caseId: string) {
+    return this.prisma.userAnswer.findFirst({
+      where: { id, status: UserContentStatus.PUBLISHED, question: { caseId } },
+      select: { id: true, voterId: true },
+    });
+  }
+
+  /** 같은 사람이 두 번 눌러도 1번만 셈 */
+  addEmpathy(answerId: string, voterId: string) {
+    return this.prisma.$transaction(async (tx) => {
+      const { count } = await tx.userAnswerEmpathy.createMany({
+        data: [{ answerId, voterId }],
+        skipDuplicates: true,
+      });
+      if (count > 0) {
+        await tx.userAnswer.update({
+          where: { id: answerId },
+          data: { empathyCount: { increment: 1 } },
         });
       }
     });

@@ -1,6 +1,8 @@
 import Image from "next/image";
+import { Suspense } from "react";
 import Link from "next/link";
 import { LuHeartHandshake } from "react-icons/lu";
+import { AccountLink } from "@/components/home/AccountLink";
 import { RoomGrid } from "@/components/home/RoomGrid";
 
 // 서버 컴포넌트. 정적인 텍스트는 서버에서 HTML로 내려가고,
@@ -8,6 +10,12 @@ import { RoomGrid } from "@/components/home/RoomGrid";
 export default function Home() {
   return (
     <main className="relative mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-6 py-20">
+      {/* 쿠키를 읽는 부분만 Suspense로 감싸 나머지는 정적으로 렌더링 */}
+      <div className="absolute top-6 right-6">
+        <Suspense fallback={null}>
+          <AccountLink />
+        </Suspense>
+      </div>
       <section className="mb-14">
         <Image src="/wishwind-logo.png" alt="Wishwind" width={720} height={240} priority className="h-12 w-auto md:h-14" />
         <h1 className="mt-5 text-4xl font-bold leading-snug tracking-tight md:text-5xl md:leading-tight">

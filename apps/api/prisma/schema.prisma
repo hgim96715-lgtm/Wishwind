@@ -401,6 +401,8 @@ model UserAnswer {
   body        String            @db.VarChar(500)
   status      UserContentStatus
   reportCount Int               @default(0) @map("report_count")
+  /** '공감해요' 수. 싫어요는 두지 않음 */
+  empathyCount Int              @default(0) @map("empathy_count")
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
@@ -408,12 +410,26 @@ model UserAnswer {
   question    UnsolvedQuestion    @relation(fields: [questionId], references: [id], onDelete: Cascade)
   reports     UserContentReport[]
   moderations UserContentModeration[]
+  empathies   UserAnswerEmpathy[]
 
   @@unique([questionId, voterId])
   @@index([questionId, status, createdAt])
   @@index([voterId, updatedAt])
   @@index([status, updatedAt])
   @@map("user_answers")
+}
+
+/** 수사 노트 '공감해요'. 한 사람이 한 노트에 한 번만 */
+model UserAnswerEmpathy {
+  answerId  String   @map("answer_id") @db.Uuid
+  voterId   String   @map("voter_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  answer UserAnswer @relation(fields: [answerId], references: [id], onDelete: Cascade)
+
+  @@id([answerId, voterId])
+  @@index([voterId])
+  @@map("user_answer_empathies")
 }
 
 model UserQuestion {
@@ -730,4 +746,36 @@ model NewsItem {
   @@index([status, region, publishedAt(sort: Desc)])
   @@index([caseId])
   @@map("news_items")
+}
+
+enum AuthProvider {
+  NAVER
+  GOOGLE
+}
+
+model User {
+  id          String    @id @default(uuid(7)) @db.Uuid
+  voterId     String    @unique @map("voter_id") @db.Uuid
+  /** 사이트에서 쓰는 닉네임 (네이버·구글 이름을 받지 않고 직접 정함). 없으면 "바람 N" */
+  nickname    String?   @unique @db.VarChar(20)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  lastLoginAt DateTime  @default(now()) @map("last_login_at") @db.Timestamptz(3)
+
+  accounts UserAccount[]
+
+  @@map("users")
+}
+
+model UserAccount {
+  id             String       @id @default(uuid(7)) @db.Uuid
+  userId         String       @map("user_id") @db.Uuid
+  provider       AuthProvider
+  providerUserId String       @map("provider_user_id") @db.VarChar(200)
+  createdAt      DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerUserId])
+  @@index([userId])
+  @@map("user_accounts")
 }

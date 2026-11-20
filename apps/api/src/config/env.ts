@@ -35,6 +35,23 @@ export const envSchema = z
 
     ADMIN_PASSWORD: optional(z.string().min(12, '12자 이상이어야 합니다')),
     ADMIN_SESSION_SECRET: optional(z.string().min(32, '32자 이상이어야 합니다')),
+
+    /** 선택 로그인(네이버·구글). 세션 서명 키와 공급자 키가 있어야 해당 버튼이 켜짐 */
+    USER_SESSION_SECRET: optional(z.string().min(32, '32자 이상이어야 합니다')),
+    NAVER_CLIENT_ID: optional(z.string().min(1)),
+    NAVER_CLIENT_SECRET: optional(z.string().min(1)),
+    GOOGLE_CLIENT_ID: optional(z.string().min(1)),
+    GOOGLE_CLIENT_SECRET: optional(z.string().min(1)),
+    /** 로그인 콜백을 허용할 웹 주소 (쉼표로 여러 개). 기본 http://localhost:3001 */
+    WEB_ORIGINS: optional(z.string()),
+  })
+  .refine((e) => !!e.NAVER_CLIENT_ID === !!e.NAVER_CLIENT_SECRET, {
+    path: ['NAVER_CLIENT_SECRET'],
+    message: 'NAVER_CLIENT_ID와 NAVER_CLIENT_SECRET은 둘 다 넣거나 둘 다 비워야 합니다',
+  })
+  .refine((e) => !!e.GOOGLE_CLIENT_ID === !!e.GOOGLE_CLIENT_SECRET, {
+    path: ['GOOGLE_CLIENT_SECRET'],
+    message: 'GOOGLE_CLIENT_ID와 GOOGLE_CLIENT_SECRET은 둘 다 넣거나 둘 다 비워야 합니다',
   })
   .refine((e) => !!e.PAPAGO_CLIENT_ID === !!e.PAPAGO_CLIENT_SECRET, {
     path: ['PAPAGO_CLIENT_SECRET'],

@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { LuFlag, LuNotebookPen, LuSearch } from "react-icons/lu";
+import { LuFlag, LuHeart, LuLock, LuNotebookPen, LuSearch, LuTrash2 } from "react-icons/lu";
 import type {
+  CaseNoteAnswer,
   CaseNoteSaveResult,
   CaseNotesState,
   UnsolvedQuestion,
@@ -48,20 +49,62 @@ function ReportButton({ onReport }: { onReport: () => Promise<void> }) {
   );
 }
 
+/** 다른 사람 노트 한 장. 댓글은 없고, 공감해요와 신고만 */
+function OtherNote({
+  note,
+  onEmpathy,
+  onReport,
+}: {
+  note: CaseNoteAnswer;
+  onEmpathy: () => Promise<void>;
+  onReport: () => Promise<void>;
+}) {
+  const [pending, setPending] = useState(false);
+  return (
+    <li className="rounded-lg bg-background p-3 text-sm leading-6">
+      <p className="text-xs font-semibold text-subtle">{note.nickname}</p>
+      <p className="mt-1 break-words whitespace-pre-wrap">{note.body}</p>
+      <div className="mt-1 flex items-center justify-between gap-3">
+        <button
+          type="button"
+          aria-pressed={note.empathizedByMe}
+          disabled={note.empathizedByMe || pending}
+          onClick={() => {
+            setPending(true);
+            onEmpathy().finally(() => setPending(false));
+          }}
+          className="inline-flex min-h-8 items-center gap-1 rounded-full border border-line px-3 text-xs font-semibold text-muted enabled:hover:border-[#c46a4b]/60 enabled:hover:text-[#c46a4b] disabled:cursor-default aria-pressed:border-[#c46a4b]/40 aria-pressed:text-[#c46a4b]"
+        >
+          <LuHeart aria-hidden className={`size-3.5 ${note.empathizedByMe ? "fill-current" : ""}`} />
+          공감해요
+          {note.empathyCount > 0 && <span className="font-normal tabular-nums">{note.empathyCount.toLocaleString("ko-KR")}</span>}
+        </button>
+        <ReportButton onReport={onReport} />
+      </div>
+    </li>
+  );
+}
+
 function NoteForm({
   label,
+  guide,
   placeholder,
   submitLabel,
   max,
   initial,
   onSubmit,
+  onDelete,
 }: {
   label: string;
+  /** 쓰는 칸 위의 안내 한 줄 */
+  guide?: string;
   placeholder: string;
   submitLabel: string;
   max: number;
   initial: string;
   onSubmit: (body: string) => Promise<string>;
+  /** 내가 이미 남긴 노트일 때만: 지우기 */
+  onDelete?: () => Promise<void>;
 }) {
   const [body, setBody] = useState(initial);
   const [pending, setPending] = useState(false);
@@ -84,6 +127,7 @@ function NoteForm({
     <form onSubmit={submit} className="mt-3">
       <label className="text-sm font-semibold">
         {label}
+        {guide && <span className="mt-1 block text-xs font-normal leading-5 text-muted">{guide}</span>}
         <textarea
           value={body}
           maxLength={max}
@@ -97,6 +141,28 @@ function NoteForm({
         <span className="text-xs text-subtle">
           {body.length}/{max}
         </span>
+        <span className="flex items-center gap-2">
+          {onDelete && (
+            <button
+              type="button"
+              disabled={pending}
+              onClick={async () => {
+                if (!window.confirm("내 노트를 지울까요? 받은 공감도 함께 사라지고, 다른 사람의 노트는 다시 가려집니다.")) return;
+                setPending(true);
+                setMessage(null);
+                try {
+                  await onDelete();
+                } catch (error) {
+                  setMessage(error instanceof Error ? error.message : "지우지 못했습니다.");
+                  setPending(false);
+                }
+              }}
+              className="inline-flex min-h-10 items-center gap-1 rounded-lg border border-line px-3 text-sm text-muted hover:border-[#c46a4b]/60 hover:text-[#c46a4b] disabled:opacity-50"
+            >
+              <LuTrash2 aria-hidden className="size-4" />
+              지우기
+            </button>
+          )}
         <button
           type="submit"
           disabled={pending || body.trim().length === 0}
@@ -105,6 +171,7 @@ function NoteForm({
           <LuNotebookPen aria-hidden className="size-4" />
           {pending ? "검토 중입니다" : submitLabel}
         </button>
+        </span>
       </div>
       <p aria-live="polite" className="mt-2 text-sm text-[#c46a4b] empty:hidden">
         {message}
@@ -150,11 +217,21 @@ export function CaseNotes({
     setNotes(saved.notes);
     return saved.result.message;
   };
+  const removeAnswer = async (questionId: string) => {
+    setNotes(await send<CaseNotesState>(`${base}/answers/${questionId}/delete`, "POST"));
+  };
   const report = async (target: "answer" | "question", id: string) => {
     await send(`${base}/reports`, "POST", { target, id });
   };
   const curious = async (id: string) => {
     setNotes(await send<CaseNotesState>(`${base}/questions/${id}/curious`, "PUT"));
+  };
+  const empathy = async (answerId: string) => {
+    try {
+      setNotes(await send<CaseNotesState>(`${base}/answers/${answerId}/empathy`, "PUT"));
+    } catch {
+      // 이미 눌렀거나 숨겨진 글이면 조용히 무시
+    }
   };
 
   if (questions.length === 0 && !notes?.canAsk) {
@@ -183,7 +260,8 @@ export function CaseNotes({
       <ul className="space-y-3">
         {questions.map((q) => {
           const note = notes?.questions.find((n) => n.questionId === q.id);
-          const others = note?.answers?.filter((a) => !a.isMine) ?? [];
+          const others = note?.answers.filter((a) => !a.isMine) ?? [];
+          const hiddenCount = note && !note.unlocked ? Math.max(0, note.answerCount - others.length) : 0;
           return (
             <li
               key={q.id}
@@ -209,31 +287,56 @@ export function CaseNotes({
                     <NoteForm
                       key={note.mine?.body ?? "new"}
                       label={note.mine ? "내 수사 노트" : "수사 노트 남기기"}
+                      guide="누군가를 탓하기보다, 같은 일을 막으려면 무엇이 필요할지 적어 주세요."
                       placeholder="이 질문에 대한 내 생각을 적어 주세요. 특정인을 범인으로 단정하는 글은 남길 수 없습니다."
-                      submitLabel={note.mine ? "고쳐 남기기" : "수사 노트 남기기"}
+                      submitLabel={note.mine ? "노트 수정하기" : "수사 노트 남기기"}
                       max={ANSWER_MAX}
                       initial={note.mine?.body ?? ""}
-                      onSubmit={(body) => save(`/answers/${q.id}`, "PUT", body)}
+                      onSubmit={async (body) => {
+                        const received = note.mine?.empathyCount ?? 0;
+                        if (
+                          received > 0 &&
+                          body.trim() !== note.mine?.body &&
+                          !window.confirm(`노트를 수정하면 받은 공감 ${received.toLocaleString("ko-KR")}개가 사라집니다. 수정할까요?`)
+                        ) {
+                          return "수정하지 않았습니다.";
+                        }
+                        return save(`/answers/${q.id}`, "PUT", body);
+                      }}
+                      onDelete={note.mine ? () => removeAnswer(q.id) : undefined}
                     />
                   )}
-                  {note.answers === null ? (
-                    <p className="mt-2 text-xs text-subtle">
-                      내 수사 노트를 남기면 다른 수사관 {note.answerCount.toLocaleString("ko-KR")}명의
-                      노트를 볼 수 있습니다.
+                  {note.mine && note.mine.status === "PUBLISHED" && note.mine.empathyCount > 0 && (
+                    <p className="mt-1 flex items-center gap-1 text-xs text-[#c46a4b]">
+                      <LuHeart aria-hidden className="size-3.5 fill-current" />
+                      {note.mine.empathyCount.toLocaleString("ko-KR")}명이 내 노트에 공감했습니다.
                     </p>
-                  ) : (
-                    others.length > 0 && (
-                      <ul className="mt-3 space-y-2">
-                        {others.map((a) => (
-                          <li key={a.id} className="rounded-lg bg-background p-3 text-sm leading-6">
-                            <p className="break-words whitespace-pre-wrap">{a.body}</p>
-                            <div className="text-right">
-                              <ReportButton onReport={() => report("answer", a.id)} />
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    )
+                  )}
+                  {others.length > 0 && (
+                    <ul className="mt-3 space-y-2">
+                      {others.map((a) => (
+                        <OtherNote
+                          key={a.id}
+                          note={a}
+                          onEmpathy={() => empathy(a.id)}
+                          onReport={() => report("answer", a.id)}
+                        />
+                      ))}
+                    </ul>
+                  )}
+                  {!note.unlocked && note.answerCount > 0 && (
+                    <p className="mt-3 flex items-start gap-1.5 rounded-lg border border-dashed border-line px-3 py-2 text-xs leading-5 text-muted">
+                      <LuLock aria-hidden className="mt-0.5 size-3.5 shrink-0" />
+                      <span>
+                        다른 사람의 의견을 보기 전에, 곰곰이 한번 생각해 보세요. 내 노트를 남기면
+                        {hiddenCount > 0 ? ` 다른 사람의 노트 ${hiddenCount.toLocaleString("ko-KR")}개가` : " 다른 사람의 노트가"} 열립니다.
+                      </span>
+                    </p>
+                  )}
+                  {note.unlocked && others.length > 0 && (
+                    <p className="mt-2 text-[11px] text-subtle">
+                      노트에는 댓글을 달 수 없습니다. 생각이 다르면 내 노트로 남겨 주세요.
+                    </p>
                   )}
                 </div>
               )}

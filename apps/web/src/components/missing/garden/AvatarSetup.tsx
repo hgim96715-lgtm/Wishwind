@@ -44,7 +44,16 @@ function saveAvatar(v: AvatarChoice) {
 }
 
 /** 처음 들어올 때 캐릭터와 닉네임을 고름. 이 브라우저에만 저장 */
-export function AvatarSetup({ initial, onDone }: { initial: AvatarChoice | null; onDone: (v: AvatarChoice) => void }) {
+export function AvatarSetup({
+  initial,
+  onDone,
+  accountNickname = null,
+}: {
+  initial: AvatarChoice | null;
+  onDone: (v: AvatarChoice) => void;
+  /** 로그인했으면 계정 닉네임을 그대로 쓰고 여기서는 바꾸지 않음 ('○○님의 기록'에서 바꿈) */
+  accountNickname?: string | null;
+}) {
   const [options, setOptions] = useState<CharacterOption[] | null>(null);
   const [index, setIndex] = useState(0);
   const [nickname, setNickname] = useState(initial?.nickname ?? "");
@@ -67,7 +76,7 @@ export function AvatarSetup({ initial, onDone }: { initial: AvatarChoice | null;
   const count = options?.length ?? 0;
   const step = (d: number) => count && setIndex((i) => (i + d + count) % count);
 
-  const name = nickname.trim();
+  const name = (accountNickname ?? nickname).trim();
   const error = name.length > 0 && (name.length < 2 ? "두 글자 이상 써 주세요." : BAD.test(name) ? "연락처나 링크는 닉네임에 쓸 수 없습니다." : null);
   const ok = name.length >= 2 && !error;
 
@@ -105,14 +114,23 @@ export function AvatarSetup({ initial, onDone }: { initial: AvatarChoice | null;
       <label className="mt-4 block text-sm font-medium" htmlFor="nickname">
         닉네임
       </label>
-      <input
-        id="nickname"
-        value={nickname}
-        maxLength={10}
-        onChange={(e) => setNickname(e.target.value)}
-        placeholder="2~10자"
-        className="mt-1 w-full rounded-xl border border-[#ecdcc4] bg-white px-3 py-2 text-sm outline-none focus:border-[#e9a94f]"
-      />
+      {accountNickname ? (
+        <>
+          <p id="nickname" className="mt-1 rounded-xl border border-[#ecdcc4] bg-white/60 px-3 py-2 text-sm">
+            {accountNickname}
+          </p>
+          <p className="mt-1 text-xs text-[#a08b72]">로그인 닉네임입니다. {accountNickname}님의 기록에서 바꿀 수 있습니다.</p>
+        </>
+      ) : (
+        <input
+          id="nickname"
+          value={nickname}
+          maxLength={10}
+          onChange={(e) => setNickname(e.target.value)}
+          placeholder="2~10자"
+          className="mt-1 w-full rounded-xl border border-[#ecdcc4] bg-white px-3 py-2 text-sm outline-none focus:border-[#e9a94f]"
+        />
+      )}
       {error && <p className="mt-1 text-xs text-[#b5563c]">{error}</p>}
       <button
         type="button"

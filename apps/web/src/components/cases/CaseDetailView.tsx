@@ -14,7 +14,6 @@ import {
 } from "@/lib/cases/labels";
 import type { CaseDetail, Sentence, Suspect } from "@/lib/cases/types";
 import { CaseNotes } from "./CaseNotes";
-import { CaseHelp } from "@/components/help/CaseHelp";
 import { CaseTabs, type CaseTab } from "./CaseTabs";
 import { Notice } from "./Notice";
 import { RelatedPanel } from "./RelatedPanel";
@@ -120,7 +119,6 @@ export async function CaseDetailView({ slug }: { slug: string }) {
       </header>
 
       <CaseTabs tabs={tabs} />
-      <CaseHelp data={data} />
     </article>
   );
 }

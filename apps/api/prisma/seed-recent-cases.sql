@@ -69,7 +69,7 @@ BEGIN
    "timeline":[["2022-11-13","DAY","대학생 4명 피살","새벽 시간 주택에 침입한 범인에게 살해됐습니다."],["2022-12-30","DAY","펜실베이니아에서 체포","부모 집에서 체포됐습니다."],["2025-07-02","DAY","유죄 인정","사형을 피하는 조건으로 살인 4건과 주거침입을 인정했습니다."],["2025-07-23","DAY","종신형 선고","가석방 없는 종신형 4회와 주거침입 징역 10년을 선고받았습니다."]],
    "victims":[{"name":"Madison Mogen","status":"DECEASED","gender":"FEMALE"},{"name":"Kaylee Goncalves","status":"DECEASED","gender":"FEMALE"},{"name":"Xana Kernodle","status":"DECEASED","gender":"FEMALE"},{"name":"Ethan Chapin","status":"DECEASED","gender":"MALE"}],
    "suspects":[{"name":"Bryan Kohberger","status":"CONVICTED","charges":"1급 살인 4건, 주거침입","sentences":[{"court":"FIRST","courtName":"아이다호주 법원","type":"LIFE","penalty":"가석방 없는 종신형 4회","verdict":"유죄 인정 합의에 따라 항소권을 포기했습니다.","final":true,"date":"2025-07-23"}]}],
-   "questions":["범인은 왜 이 집을 골랐을까요?"]},
+   "questions":["혼자 또는 친구들끼리 사는 대학가 주택이 밤사이 더 안전하려면 무엇이 필요할까요?","갑작스럽게 가족과 친구를 잃은 사람들, 함께 지내던 학생들에게는 어떤 지원이 필요할까요?"]},
   {"slug":"gilgo-beach-serial-killings","title":"길고 비치 연쇄살인 사건","summary":"미국 롱아일랜드 해변에서 시신이 잇따라 발견된 뒤 10여 년 만에 범인이 유죄를 인정한 사건","overview":"2010년 12월 미국 뉴욕주 롱아일랜드 길고 비치 일대에서 여성들의 시신이 잇따라 발견됐습니다. 2023년 건축가 렉스 호이어만이 체포됐고, 2026년 4월 7건의 살인에 유죄를 인정하고 기소되지 않은 1건도 시인했습니다. 같은 해 6월 가석방 없는 종신형을 선고받았습니다.","country":"US","category":"MURDER","status":"SOLVED","location":"미국 뉴욕주 롱아일랜드 길고 비치","at":"2010-12-01","precision":"MONTH","solved":"2026-06-17",
    "timeline":[["2010-12-01","MONTH","해변에서 시신 발견","실종 여성을 수색하던 중 시신들이 발견됐습니다."],["2023-07-01","MONTH","렉스 호이어만 체포","건축가인 용의자가 체포됐습니다."],["2026-04-08","DAY","유죄 인정","여성 8명을 살해했다고 시인했습니다."],["2026-06-17","DAY","종신형 선고","가석방 없는 종신형을 선고받았습니다."]],
    "victims":[{"alias":"여성 피해자","count":8,"status":"DECEASED","gender":"FEMALE"}],

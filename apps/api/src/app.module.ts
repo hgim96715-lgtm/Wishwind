@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { AccountModule } from './account/account.module.js';
 import { AdminModule } from './admin/admin.module.js';
 import { AppController } from './app.controller.js';
 import { AnalyticsModule } from './analytics/analytics.module.js';
@@ -29,6 +30,7 @@ import { SentenceVotesModule } from './sentence-votes/sentence-votes.module.js';
     AnalyticsModule,
     NewsModule,
     CaseImportModule,
+    AccountModule,
   ],
   controllers: [AppController],
   providers: [AppService],

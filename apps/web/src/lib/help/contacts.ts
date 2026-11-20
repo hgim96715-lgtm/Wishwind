@@ -346,7 +346,3 @@ export const COUNTRY_NAME: Record<HelpCountry, string> = { KR: "한국", US: "�
 export function contactsFor(situation: HelpSituation, country: HelpCountry = "KR") {
   return HELP_CONTACTS.filter((c) => c.country === country && c.situations.includes(situation));
 }
-
-export function contactById(id: string) {
-  return HELP_CONTACTS.find((c) => c.id === id);
-}
