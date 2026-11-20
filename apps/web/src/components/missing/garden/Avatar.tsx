@@ -29,25 +29,28 @@ const HEIGHT = 1.35;
 export function Avatar({
   url,
   speedRef,
+  poseRef,
   loading = "placeholder",
 }: {
   url: string | null;
   speedRef: React.RefObject<number>;
+  /** "sit"이면 앉은 자세 (벤치) */
+  poseRef?: React.RefObject<"sit" | null>;
   /** 모델을 받는 동안 보여 줄 것: 임시 모양 또는 아무것도 안 보이기(미리보기) */
   loading?: "placeholder" | "none";
 }) {
-  const placeholder = <Placeholder speedRef={speedRef} />;
+  const placeholder = <Placeholder speedRef={speedRef} poseRef={poseRef} />;
   if (!url) return placeholder;
   return (
     <ModelBoundary fallback={placeholder}>
       <Suspense fallback={loading === "none" ? null : placeholder}>
-        <Model url={url} speedRef={speedRef} />
+        <Model url={url} speedRef={speedRef} poseRef={poseRef} />
       </Suspense>
     </ModelBoundary>
   );
 }
 
-function Model({ url, speedRef }: { url: string; speedRef: React.RefObject<number> }) {
+function Model({ url, speedRef, poseRef }: { url: string; speedRef: React.RefObject<number>; poseRef?: React.RefObject<"sit" | null> }) {
   const { scene, animations } = useGLTF(url);
   // 같은 모델을 여러 번 써도 뼈대가 섞이지 않게 SkeletonUtils로 복제
   const model = useMemo(() => {
@@ -65,7 +68,7 @@ function Model({ url, speedRef }: { url: string; speedRef: React.RefObject<numbe
   const { actions, names } = useAnimations(animations, root);
   const clip = useMemo(() => {
     const find = (re: RegExp) => names.find((n) => re.test(n) && !/death|die|punch|hit|sword|gun|shoot/i.test(n));
-    return { idle: find(/idle/i), walk: find(/walk/i), run: find(/run|sprint/i) ?? find(/walk/i) };
+    return { idle: find(/idle/i), walk: find(/walk/i), run: find(/run|sprint/i) ?? find(/walk/i), sit: names.find((n) => n === "sit") };
   }, [names]);
   const current = useRef<string | undefined>(undefined);
 
@@ -79,7 +82,7 @@ function Model({ url, speedRef }: { url: string; speedRef: React.RefObject<numbe
 
   useFrame(() => {
     const s = speedRef.current ?? 0;
-    const want = s > 6 ? clip.run : s > 0.3 ? clip.walk : clip.idle;
+    const want = poseRef?.current === "sit" && clip.sit ? clip.sit : s > 6 ? clip.run : s > 0.3 ? clip.walk : clip.idle;
     if (!want || want === current.current) return;
     if (current.current) actions[current.current]?.fadeOut(0.2);
     actions[want]?.reset().fadeIn(0.2).play();
@@ -94,11 +97,11 @@ function Model({ url, speedRef }: { url: string; speedRef: React.RefObject<numbe
 }
 
 /** 모델 파일이 아직 없을 때 쓰는 임시 모양 */
-function Placeholder({ speedRef }: { speedRef: React.RefObject<number> }) {
+function Placeholder({ speedRef, poseRef }: { speedRef: React.RefObject<number>; poseRef?: React.RefObject<"sit" | null> }) {
   const body = useRef<THREE.Group>(null);
   useFrame(({ clock }) => {
     const s = speedRef.current ?? 0;
-    if (body.current) body.current.position.y = s > 0.3 ? Math.abs(Math.sin(clock.elapsedTime * 9)) * 0.08 : 0;
+    if (body.current) body.current.position.y = poseRef?.current === "sit" ? -0.3 : s > 0.3 ? Math.abs(Math.sin(clock.elapsedTime * 9)) * 0.08 : 0;
   });
   const color = "#f2a08f";
   return (
