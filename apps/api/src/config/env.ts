@@ -32,6 +32,8 @@ export const envSchema = z
     NEWS_FOREIGN_ENABLED: z.stringbool().default(true),
     /** 새 기사를 Claude가 분류해 바로 공개함 (ANTHROPIC_API_KEY 필요, 없으면 예전처럼 관리자 확인) */
     NEWS_AUTO_PUBLISH: z.stringbool().default(true),
+    /** 새 뉴스로 '수사 중' 사건 초안까지 만들지. 기본 꺼짐 (뉴스는 브리핑룸에만, 사건방은 직접 고른 사건만) */
+    NEWS_DRAFT_CASES: z.stringbool().default(false),
     PAPAGO_CLIENT_ID: optional(z.string().min(1)),
     PAPAGO_CLIENT_SECRET: optional(z.string().min(1)),
 

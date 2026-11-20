@@ -177,7 +177,8 @@ export class NewsSyncService implements OnApplicationBootstrap, OnApplicationShu
           autoVerdict: NewsAutoVerdict[verdict],
           autoReason: v.reasonKo.slice(0, 300),
         });
-        if (verdict === 'PUBLISH' && counts.drafted < DRAFT_LIMIT) {
+        // 사건방은 기억할 만한 사건을 골라 정리하는 곳이라, 새 뉴스로 사건 초안을 만드는 것은 기본으로 꺼 둠 (뉴스는 브리핑룸에만)
+        if (verdict === 'PUBLISH' && this.config.get('NEWS_DRAFT_CASES', { infer: true }) && counts.drafted < DRAFT_LIMIT) {
           const created = await this.draftCase({ ...row, titleKo }, v, known);
           if (created) counts.drafted += 1;
         }
