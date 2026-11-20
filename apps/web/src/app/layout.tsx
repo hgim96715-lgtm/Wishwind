@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
 import { PageViewTracker } from "@/components/PageViewTracker";
@@ -6,6 +6,7 @@ import "./globals.css";
 import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL } from "@/lib/site";
 import { HelpBar } from "@/components/help/HelpBar";
 import { DevViewerSwitch } from "@/components/dev/DevViewerSwitch";
+import { AdminReturn } from "@/components/admin/AdminReturn";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,6 +17,12 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+/** 밝은 화면 하나로 디자인했으므로 폰이 다크 모드여도 그대로 보이게 함 (주소창 색도 배경색과 맞춤) */
+export const viewport: Viewport = {
+  colorScheme: "only light",
+  themeColor: "#efe9df",
+};
 
 /** 검색엔진·공유 미리보기 기본값. 각 페이지의 title·description이 이 위에 덮어씀 */
 export const metadata: Metadata = {
@@ -93,6 +100,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </Suspense>
         {/* 개발 모드에서만: 다른 사람 눈에 보이는 화면 확인 */}
         <DevViewerSwitch />
+        {/* 관리자로 로그인한 채 둘러볼 때 관리실로 돌아가는 버튼 */}
+        <Suspense fallback={null}>
+          <AdminReturn />
+        </Suspense>
       </body>
     </html>
   );

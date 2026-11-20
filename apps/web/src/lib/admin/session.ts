@@ -5,6 +5,11 @@ import { API_URL } from "@/lib/cases/api";
 export const ADMIN_COOKIE = "cold_cases_admin";
 /** API 토큰 수명(12시간)과 같게 맞춤 */
 export const ADMIN_COOKIE_MAX_AGE = 60 * 60 * 12;
+/**
+ * 관리자 로그인 표시용 쿠키 (값은 "1"뿐, 인증에는 쓰지 않음). 진짜 세션 쿠키는 /admin 경로에만 실려서
+ * 사이트의 다른 페이지에서는 관리자인지 알 수 없음 → 이 표시로 '관리실로 돌아가기' 버튼만 보여 줌
+ */
+export const ADMIN_HINT_COOKIE = "cold_cases_admin_hint";
 
 export class AdminApiError extends Error {
   constructor(

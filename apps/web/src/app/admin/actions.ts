@@ -7,6 +7,7 @@ import { API_URL } from "@/lib/cases/api";
 import {
   ADMIN_COOKIE,
   ADMIN_COOKIE_MAX_AGE,
+  ADMIN_HINT_COOKIE,
   AdminApiError,
   adminSend,
   clientIp,
@@ -53,11 +54,13 @@ export async function login(_: ActionState, form: FormData): Promise<ActionState
     path: "/admin",
     maxAge: ADMIN_COOKIE_MAX_AGE,
   });
+  (await cookies()).set(ADMIN_HINT_COOKIE, "1", { sameSite: "lax", path: "/", maxAge: ADMIN_COOKIE_MAX_AGE });
   redirect("/admin");
 }
 
 export async function logout() {
   (await cookies()).delete({ name: ADMIN_COOKIE, path: "/admin" });
+  (await cookies()).delete({ name: ADMIN_HINT_COOKIE, path: "/" });
   redirect("/admin/login");
 }
 
