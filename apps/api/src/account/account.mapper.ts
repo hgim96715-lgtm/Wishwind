@@ -11,15 +11,12 @@ export function accountNickname(user: { nickname: string | null; voterId: string
   return user.nickname ?? windName(user.voterId);
 }
 
-/** 내 기록 응답. 익명 ID(voterId)는 내보내지 않음 */
-export function toMe(user: UserRow, a: Activity) {
-  const [answers, questions, votes, clouds, curious] = a.counts;
-  return {
-    nickname: accountNickname(user),
-    providers: user.accounts.map((x) => x.provider),
-    joinedAt: user.createdAt,
-    counts: { answers, questions, votes, clouds, curious },
-    answers: a.answers.map((x) => ({
+type Rows = Activity;
+
+/** 칸별로 화면에 내보낼 모양 (익명 ID는 내보내지 않음) */
+export const mapActivity = {
+  answers: (rows: Rows['answers']) =>
+    rows.map((x) => ({
       id: x.id,
       body: x.body,
       status: x.status,
@@ -27,7 +24,8 @@ export function toMe(user: UserRow, a: Activity) {
       question: x.question.question,
       case: caseRef(x.question.case),
     })),
-    questions: a.questions.map((x) => ({
+  questions: (rows: Rows['questions']) =>
+    rows.map((x) => ({
       id: x.id,
       body: x.body,
       status: x.status,
@@ -35,7 +33,8 @@ export function toMe(user: UserRow, a: Activity) {
       createdAt: x.createdAt,
       case: caseRef(x.case),
     })),
-    votes: a.votes.map((x) => ({
+  votes: (rows: Rows['votes']) =>
+    rows.map((x) => ({
       id: x.id,
       choice: x.choice,
       direction: x.direction,
@@ -43,7 +42,23 @@ export function toMe(user: UserRow, a: Activity) {
       penalty: x.sentence.penalty,
       case: caseRef(x.sentence.suspect.case),
     })),
-    clouds: a.clouds,
-    inquiries: a.inquiries.map((x) => ({ ...x, body: x.body.length > 120 ? `${x.body.slice(0, 120)}…` : x.body })),
+  clouds: (rows: Rows['clouds']) => rows,
+  inquiries: (rows: Rows['inquiries']) =>
+    rows.map((x) => ({ ...x, body: x.body.length > 120 ? `${x.body.slice(0, 120)}…` : x.body })),
+};
+
+/** 내 기록 응답. 익명 ID(voterId)는 내보내지 않음 */
+export function toMe(user: UserRow, a: Activity) {
+  const [answers, questions, votes, clouds, curious, inquiries] = a.counts;
+  return {
+    nickname: accountNickname(user),
+    providers: user.accounts.map((x) => x.provider),
+    joinedAt: user.createdAt,
+    counts: { answers, questions, votes, clouds, curious, inquiries },
+    answers: mapActivity.answers(a.answers),
+    questions: mapActivity.questions(a.questions),
+    votes: mapActivity.votes(a.votes),
+    clouds: mapActivity.clouds(a.clouds),
+    inquiries: mapActivity.inquiries(a.inquiries),
   };
 }

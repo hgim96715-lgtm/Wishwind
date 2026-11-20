@@ -6,9 +6,11 @@ import {
   authorizeQuerySchema,
   loginSchema,
   nicknameSchema,
+  activityQuerySchema,
   type AuthorizeQuery,
   type LoginInput,
   type NicknameInput,
+  type ActivityQuery,
 } from './dto/account.dto.js';
 
 /** Next 서버만 호출함. 세션 토큰은 httpOnly 쿠키에서 꺼내 x-user-session 헤더로 넘김 */
@@ -35,6 +37,11 @@ export class AccountController {
   @Get('me')
   me(@Headers('x-user-session') token?: string) {
     return this.account.me(token);
+  }
+
+  @Get('me/activity')
+  activity(@Headers('x-user-session') token: string | undefined, @Query(new ZodPipe(activityQuerySchema)) query: ActivityQuery) {
+    return this.account.moreActivity(token, query.kind, query.before);
   }
 
   @Get('profile')

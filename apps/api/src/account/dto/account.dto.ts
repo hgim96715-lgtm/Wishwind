@@ -35,3 +35,10 @@ export const nicknameSchema = z.object({
     .refine((v) => !NICKNAME_RESERVED.test(v), '운영자로 오해할 수 있는 닉네임은 쓸 수 없습니다.'),
 });
 export type NicknameInput = z.output<typeof nicknameSchema>;
+
+/** 나의 기록 '더 불러오기' */
+export const activityQuerySchema = z.object({
+  kind: z.enum(['answers', 'questions', 'votes', 'clouds', 'inquiries']),
+  before: z.iso.datetime({ offset: true }).transform((v) => new Date(v)),
+});
+export type ActivityQuery = z.output<typeof activityQuerySchema>;

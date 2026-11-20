@@ -5,21 +5,14 @@ import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { fetchMe } from "@/lib/account/session";
-import { FoldList } from "./FoldList";
+import { MyRecords } from "./MyRecords";
 import { NicknameForm } from "./NicknameForm";
 import { WithdrawButton } from "./WithdrawButton";
 import type { Me } from "@/lib/account/types";
 
 export const metadata: Metadata = { title: "나의 기록", robots: { index: false, follow: false } };
 
-const STATUS: Record<string, { label: string; tone: string }> = {
-  PUBLISHED: { label: "공개", tone: "bg-[#e3f1ea] text-[#2f7a5b]" },
-  HELD: { label: "확인 중", tone: "bg-[#fff4d6] text-[#8a6a1f]" },
-  HIDDEN: { label: "숨김", tone: "bg-line/60 text-subtle" },
-  BLOCKED: { label: "게시 안 됨", tone: "bg-[#fbe9e4] text-[#a3523f]" },
-};
 const PROVIDER = { NAVER: "네이버", GOOGLE: "구글" } as const;
-const INQUIRY = { QUESTION: "문의", CORRECTION: "정정 요청", FEEDBACK: "의견" } as const;
 
 const day = (iso: string) =>
   new Intl.DateTimeFormat("ko-KR", { dateStyle: "medium", timeZone: "Asia/Seoul" }).format(new Date(iso));
@@ -64,70 +57,10 @@ async function MyLog({ searchParams }: { searchParams: PageProps<"/me">["searchP
 
       <Counts counts={me.counts} />
 
-      <Section title="수사 노트 답변" total={me.counts.answers} empty="아직 남긴 답변이 없습니다. 사건 파일의 질문 탭에서 생각을 남겨 보세요.">
-        {me.answers.map((a) => (
-          <Item key={a.id} href={`/cases/${a.case.slug}`} meta={`${a.case.title} · ${day(a.createdAt)}`} status={a.status}>
-            <span className="block text-xs text-subtle">Q. {a.question}</span>
-            {a.body}
-          </Item>
-        ))}
-      </Section>
-
-      <Section title="내가 던진 질문" total={me.counts.questions} empty="아직 남긴 질문이 없습니다.">
-        {me.questions.map((q) => (
-          <Item
-            key={q.id}
-            href={`/cases/${q.case.slug}`}
-            meta={`${q.case.title} · ${day(q.createdAt)} · 나도 궁금합니다 ${q.curiousCount}`}
-            status={q.status}
-          >
-            {q.body}
-          </Item>
-        ))}
-      </Section>
-
-      <Section title="형량 의견" total={me.counts.votes} empty="아직 남긴 형량 의견이 없습니다.">
-        {me.votes.map((v) => (
-          <Item key={v.id} href={`/cases/${v.case.slug}`} meta={`${v.case.title} · ${day(v.createdAt)}`}>
-            {v.penalty ? `${v.penalty}: ` : ""}
-            {v.choice === "AGREE" ? "적절하다" : v.direction === "TOO_HARSH" ? "너무 무겁다" : v.direction === "TOO_LENIENT" ? "너무 가볍다" : "적절하지 않다"}
-          </Item>
-        ))}
-      </Section>
-
-      <Section title="꽂은 바람개비" total={me.counts.clouds} empty="아직 꽂은 바람개비가 없습니다. 실종방 언덕에 응원 한 마디를 남겨 보세요.">
-        {me.clouds.map((c) => (
-          <Item key={c.id} href="/missing" meta={day(c.createdAt)} status={c.status}>
-            {c.body}
-          </Item>
-        ))}
-      </Section>
-
-      {me.inquiries.length > 0 && (
-        <Section title="문의·의견" empty="">
-          {me.inquiries.map((q) => (
-            <li key={q.id} className="rounded-xl border border-line bg-surface px-4 py-3">
-              <span className="block text-[15px] leading-6">{q.body}</span>
-              <span className="mt-1 flex items-center gap-2 text-xs text-subtle">
-                {q.reply ? (
-                  <span className="rounded bg-[#e3f1ea] px-1.5 py-0.5 font-medium text-[#2f7a5b]">답변이 왔습니다</span>
-                ) : (
-                  <span className="rounded bg-line/60 px-1.5 py-0.5">답변을 기다리는 중</span>
-                )}
-                {INQUIRY[q.kind]} · {day(q.createdAt)}
-              </span>
-              {q.reply && (
-                <div className="mt-3 rounded-lg border-l-2 border-[#3f8f84] bg-[#3f8f84]/5 px-3 py-2 text-sm leading-6">
-                  <span className="block text-xs font-semibold text-[#2f7a5b]">
-                    Wishwind 답변{q.repliedAt && ` · ${day(q.repliedAt)}`}
-                  </span>
-                  <span className="mt-1 block whitespace-pre-wrap">{q.reply}</span>
-                </div>
-              )}
-            </li>
-          ))}
-        </Section>
-      )}
+      <MyRecords
+        initial={{ answers: me.answers, questions: me.questions, votes: me.votes, clouds: me.clouds, inquiries: me.inquiries }}
+        counts={me.counts}
+      />
 
       <div className="mt-16 flex flex-wrap items-center gap-3 border-t border-line pt-6">
         <form action="/api/auth/logout" method="post">
@@ -165,37 +98,5 @@ function Counts({ counts }: { counts: Me["counts"] }) {
         </div>
       ))}
     </dl>
-  );
-}
-
-/** 제목 옆에 전체 개수, 목록은 최근 3개만 먼저 보여 주고 접어 둠. API는 최근 20개까지 보내므로 그보다 많으면 알려 줌 */
-function Section({ title, empty, total, children }: { title: string; empty: string; total?: number; children: React.ReactNode[] }) {
-  const count = total ?? children.length;
-  return (
-    <section className="mt-12">
-      <h2 className="text-lg font-semibold">
-        {title}
-        {count > 0 && <span className="ml-2 text-sm font-normal text-subtle tabular-nums">{count.toLocaleString("ko-KR")}</span>}
-      </h2>
-      {children.length ? <FoldList items={children} /> : <p className="mt-3 text-sm text-subtle">{empty}</p>}
-      {count > children.length && (
-        <p className="mt-2 text-xs text-subtle">최근 {children.length}개까지 보여 줍니다.</p>
-      )}
-    </section>
-  );
-}
-
-function Item({ href, meta, status, children }: { href: string; meta: string; status?: string; children: React.ReactNode }) {
-  const s = status ? STATUS[status] : undefined;
-  return (
-    <li>
-      <Link href={href} className="block rounded-xl border border-line bg-surface px-4 py-3 transition-colors hover:bg-white">
-        <span className="block text-[15px] leading-6">{children}</span>
-        <span className="mt-1 flex items-center gap-2 text-xs text-subtle">
-          {s && <span className={`rounded px-1.5 py-0.5 ${s.tone}`}>{s.label}</span>}
-          {meta}
-        </span>
-      </Link>
-    </li>
   );
 }

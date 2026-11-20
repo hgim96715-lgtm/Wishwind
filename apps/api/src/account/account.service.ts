@@ -11,13 +11,17 @@ import { ContentModerator } from '../case-notes/content-moderator.js';
 import { AuthProvider, ModerationStage, UserContentStatus } from '../generated/prisma/enums.js';
 import type { Env } from '../config/env.js';
 import { AccountRepository } from './account.repository.js';
-import { accountNickname, toMe } from './account.mapper.js';
+import { accountNickname, mapActivity, toMe } from './account.mapper.js';
+import type { ActivityKind } from './account.repository.js';
 import type { AuthorizeQuery, LoginInput, ProviderName } from './dto/account.dto.js';
 import { OAuthClient } from './oauth.client.js';
 import { issueUserToken, verifyUserToken } from './user-session.js';
 
 const PROVIDER: Record<ProviderName, AuthProvider> = { naver: AuthProvider.NAVER, google: AuthProvider.GOOGLE };
 const RELOGIN = '다시 로그인해 주세요.';
+
+/** '더 불러오기' 한 번에 가져오는 수 */
+const MORE_PAGE = 20;
 
 /** 무작위 기본 이름('바람 123')과 헷갈리는 닉네임 */
 const DEFAULT_NAME = /^바람\s*\d+$/;
@@ -81,6 +85,14 @@ export class AccountService {
   }
 
   /** 화면 머리·실종방에 쓰는 가벼운 정보 (닉네임만) */
+  /** '더 불러오기': 한 칸의 기록을 before 시각 이전으로 20개 더 */
+  async moreActivity(token: string | undefined, kind: ActivityKind, before: Date) {
+    const user = await this.userFrom(token);
+    const rows = await this.repo.activityPage(user.voterId, kind, before, MORE_PAGE + 1);
+    const items = mapActivity[kind](rows.slice(0, MORE_PAGE) as never);
+    return { items, hasMore: rows.length > MORE_PAGE };
+  }
+
   async profile(token: string | undefined) {
     const user = await this.userFrom(token);
     return { nickname: accountNickname(user) };

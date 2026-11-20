@@ -1,9 +1,42 @@
 import { Injectable } from '@nestjs/common';
+import type { Prisma } from '../generated/prisma/client.js';
 import type { AuthProvider } from '../generated/prisma/enums.js';
 import type { Db } from '../common/prisma/db.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 const RECENT = 20;
+
+const caseSelect = { select: { slug: true, title: true } } as const;
+/** 나의 기록 칸별로 내보내는 필드 */
+const SELECTS = {
+  answers: {
+    id: true,
+    body: true,
+    status: true,
+    createdAt: true,
+    question: { select: { question: true, case: caseSelect } },
+  },
+  questions: { id: true, body: true, status: true, curiousCount: true, createdAt: true, case: caseSelect },
+  votes: {
+    id: true,
+    choice: true,
+    direction: true,
+    createdAt: true,
+    sentence: { select: { penalty: true, suspect: { select: { case: caseSelect } } } },
+  },
+  clouds: { id: true, body: true, status: true, createdAt: true },
+  inquiries: { id: true, kind: true, status: true, body: true, createdAt: true, reply: true, repliedAt: true },
+} as const;
+
+export type ActivityKind = keyof typeof SELECTS;
+export const ACTIVITY_KINDS = Object.keys(SELECTS) as ActivityKind[];
+type ActivityRows = {
+  answers: Prisma.UserAnswerGetPayload<{ select: typeof SELECTS.answers }>[];
+  questions: Prisma.UserQuestionGetPayload<{ select: typeof SELECTS.questions }>[];
+  votes: Prisma.SentenceVoteGetPayload<{ select: typeof SELECTS.votes }>[];
+  clouds: Prisma.CloudMessageGetPayload<{ select: typeof SELECTS.clouds }>[];
+  inquiries: Prisma.InquiryGetPayload<{ select: typeof SELECTS.inquiries }>[];
+};
 
 @Injectable()
 export class AccountRepository {
@@ -80,69 +113,42 @@ export class AccountRepository {
       ON CONFLICT (voter_id) DO NOTHING`;
   }
 
-  /** 내 기록: 계정 익명 ID로 남긴 활동 */
+  /** 내 기록: 계정 익명 ID로 남긴 활동 (칸마다 최근 RECENT개 + 전체 개수) */
   async activity(voterId: string) {
     const where = { voterId };
-    const order = { createdAt: 'desc' } as const;
     const [answers, questions, votes, clouds, inquiries, counts] = await Promise.all([
-      this.prisma.userAnswer.findMany({
-        where,
-        orderBy: order,
-        take: RECENT,
-        select: {
-          id: true,
-          body: true,
-          status: true,
-          createdAt: true,
-          question: { select: { question: true, case: { select: { slug: true, title: true } } } },
-        },
-      }),
-      this.prisma.userQuestion.findMany({
-        where,
-        orderBy: order,
-        take: RECENT,
-        select: {
-          id: true,
-          body: true,
-          status: true,
-          curiousCount: true,
-          createdAt: true,
-          case: { select: { slug: true, title: true } },
-        },
-      }),
-      this.prisma.sentenceVote.findMany({
-        where,
-        orderBy: order,
-        take: RECENT,
-        select: {
-          id: true,
-          choice: true,
-          direction: true,
-          createdAt: true,
-          sentence: { select: { penalty: true, suspect: { select: { case: { select: { slug: true, title: true } } } } } },
-        },
-      }),
-      this.prisma.cloudMessage.findMany({
-        where,
-        orderBy: order,
-        take: RECENT,
-        select: { id: true, body: true, status: true, createdAt: true },
-      }),
-      this.prisma.inquiry.findMany({
-        where,
-        orderBy: order,
-        take: 10,
-        select: { id: true, kind: true, status: true, body: true, createdAt: true, reply: true, repliedAt: true },
-      }),
+      this.activityPage(voterId, 'answers'),
+      this.activityPage(voterId, 'questions'),
+      this.activityPage(voterId, 'votes'),
+      this.activityPage(voterId, 'clouds'),
+      this.activityPage(voterId, 'inquiries'),
       Promise.all([
         this.prisma.userAnswer.count({ where }),
         this.prisma.userQuestion.count({ where }),
         this.prisma.sentenceVote.count({ where }),
         this.prisma.cloudMessage.count({ where }),
         this.prisma.userQuestionCurious.count({ where }),
+        this.prisma.inquiry.count({ where }),
       ]),
     ]);
     return { answers, questions, votes, clouds, inquiries, counts };
+  }
+
+  /** 한 칸의 기록을 최신순으로 take개. before가 있으면 그 시각보다 앞선 것만 ('더 불러오기') */
+  activityPage<K extends ActivityKind>(voterId: string, kind: K, before?: Date, take = RECENT) {
+    const args = {
+      where: { voterId, ...(before && { createdAt: { lt: before } }) },
+      orderBy: { createdAt: 'desc' as const },
+      take,
+    };
+    const run = {
+      answers: () => this.prisma.userAnswer.findMany({ ...args, select: SELECTS.answers }),
+      questions: () => this.prisma.userQuestion.findMany({ ...args, select: SELECTS.questions }),
+      votes: () => this.prisma.sentenceVote.findMany({ ...args, select: SELECTS.votes }),
+      clouds: () => this.prisma.cloudMessage.findMany({ ...args, select: SELECTS.clouds }),
+      inquiries: () => this.prisma.inquiry.findMany({ ...args, select: SELECTS.inquiries }),
+    };
+    return run[kind]() as Promise<ActivityRows[K]>;
   }
 
   /** 다른 사람이 이미 쓰는 닉네임인지 (대소문자 무시) */

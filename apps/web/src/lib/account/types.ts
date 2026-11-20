@@ -14,7 +14,7 @@ export interface Me {
   nickname: string;
   providers: ("NAVER" | "GOOGLE")[];
   joinedAt: string;
-  counts: { answers: number; questions: number; votes: number; clouds: number; curious: number };
+  counts: { answers: number; questions: number; votes: number; clouds: number; curious: number; inquiries: number };
   answers: { id: string; body: string; status: ContentStatus; createdAt: string; question: string; case: CaseRef }[];
   questions: { id: string; body: string; status: ContentStatus; curiousCount: number; createdAt: string; case: CaseRef }[];
   votes: {
@@ -37,3 +37,6 @@ export interface Me {
     repliedAt: string | null;
   }[];
 }
+
+/** 나의 기록 칸 이름 ('더 불러오기'에 씀) */
+export type ActivityKind = "answers" | "questions" | "votes" | "clouds" | "inquiries";
