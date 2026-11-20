@@ -191,7 +191,7 @@ async function CaseEditor({ id }: { id: string }) {
               {c.sources.map((s) => (
                 <li key={s.id} className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <a href={s.url} target="_blank" rel="noreferrer noopener" className="break-words hover:underline">
+                    <a href={s.url} target="_blank" rel="noreferrer noopener" className="break-words transition-opacity hover:opacity-70">
                       {s.title}
                     </a>
                     <p className="text-xs text-subtle">
@@ -249,7 +249,7 @@ async function CaseEditor({ id }: { id: string }) {
               <ul className="space-y-2 text-sm">
                 {c.briefingPosts.map((p) => (
                   <li key={p.id}>
-                    <Link href={`/admin/briefing/${p.id}`} className="hover:underline">
+                    <Link href={`/admin/briefing/${p.id}`} className="transition-opacity hover:opacity-70">
                       {p.title}
                     </Link>
                     <p className="text-xs text-subtle">

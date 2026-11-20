@@ -70,7 +70,7 @@ async function PostList({ kind, status }: { kind: string; status: string }) {
                   {p.case && <span>· {p.case.title}</span>}
                   <span className="ml-auto">{formatDateTime(p.publishedAt ?? p.createdAt)}</span>
                 </div>
-                <Link href={`/admin/briefing/${p.id}`} className="mt-1 block font-medium hover:underline">
+                <Link href={`/admin/briefing/${p.id}`} className="mt-1 block font-medium transition-opacity hover:opacity-70">
                   {p.title}
                 </Link>
               </li>

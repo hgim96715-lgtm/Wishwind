@@ -30,7 +30,7 @@ export function ContactCard({ contact, compact = false }: { contact: HelpContact
           href={contact.sourceUrl}
           target="_blank"
           rel="noreferrer noopener"
-          className="mt-2 inline-block text-[11px] text-subtle underline-offset-2 hover:underline"
+          className="mt-2 inline-block text-[11px] text-subtle transition-colors hover:text-foreground"
         >
           출처 확인
         </a>

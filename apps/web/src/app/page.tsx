@@ -39,7 +39,7 @@ export default function Home() {
             <LuHeartHandshake aria-hidden className="size-5" />
           </span>
           <span className="min-w-0">
-            <span className="block font-semibold group-hover:underline">도움이 필요할 때</span>
+            <span className="block font-semibold transition-colors group-hover:text-[#2f7469]">도움이 필요할 때</span>
             <span className="block text-xs text-muted">신고·상담 번호를 상황별로 모았습니다</span>
           </span>
         </Link>
@@ -60,7 +60,7 @@ export default function Home() {
           ))}
           <Link
             href="/help"
-            className="ml-auto inline-flex items-center gap-1 pl-1 font-medium text-[#2f7469] hover:underline sm:ml-2"
+            className="ml-auto inline-flex items-center gap-1 pl-1 font-medium text-[#2f7469] transition-opacity hover:opacity-70 sm:ml-2"
           >
             도움받는 곳
           </Link>

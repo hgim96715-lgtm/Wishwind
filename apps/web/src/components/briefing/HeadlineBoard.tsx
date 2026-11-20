@@ -44,7 +44,7 @@ function Ticker({ items, paused, still }: { items: BoardItem[]; paused: boolean;
     items.map((item) => (
       <li key={`${copy}-${item.id}`} className="flex shrink-0 items-center gap-2 pr-8">
         <span aria-hidden className="size-1.5 rounded-full" style={{ backgroundColor: item.kindColor }} />
-        <ItemLink item={item} className="whitespace-nowrap hover:underline" >
+        <ItemLink item={item} className="whitespace-nowrap transition-opacity hover:opacity-70" >
           {item.title}
         </ItemLink>
       </li>
@@ -165,7 +165,7 @@ export function HeadlineBoard({ items, footer }: { items: BoardItem[]; footer?: 
               </p>
               <ItemLink
                 item={item}
-                className="mt-1.5 line-clamp-2 font-serif text-lg font-bold leading-snug text-foreground hover:underline sm:text-xl"
+                className="mt-1.5 line-clamp-2 font-serif text-lg font-bold leading-snug text-foreground transition-opacity hover:opacity-70 sm:text-xl"
               >
                 {item.title}
               </ItemLink>

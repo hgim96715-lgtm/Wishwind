@@ -83,7 +83,7 @@ async function CaseTable({ q, review, published }: { q: string; review: string; 
               {data.items.map((c) => (
                 <tr key={c.id} className="border-b border-line/60 last:border-0 hover:bg-background/60">
                   <td className="px-4 py-2.5">
-                    <Link href={`/admin/cases/${c.id}`} className="font-medium hover:underline">
+                    <Link href={`/admin/cases/${c.id}`} className="font-medium transition-opacity hover:opacity-70">
                       {c.title}
                     </Link>
                     <p className="text-xs text-subtle">

@@ -157,7 +157,7 @@ function ContentCard({ item }: { item: RelatedContent }) {
             <span className="rounded border border-line px-1.5 py-px text-[11px]">각색</span>
           )}
         </span>
-        <span className="mt-1 block font-semibold leading-snug group-hover:underline">{item.title}</span>
+        <span className="mt-1 block font-semibold leading-snug transition-colors group-hover:text-[#c46a4b]">{item.title}</span>
         {item.creator && <span className="mt-0.5 block text-xs text-subtle">{item.creator}</span>}
         {item.note && <span className="mt-1.5 block text-sm leading-6 text-muted">{item.note}</span>}
       </span>

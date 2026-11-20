@@ -60,7 +60,7 @@ export function NotesBoard({
             <Pin />
             <p className="font-mono text-[11px] tracking-[0.18em] text-[#c46a4b]">오늘의 질문</p>
             <p className="mt-2 font-serif text-lg font-bold leading-snug">{question.question}</p>
-            <Link href={`/cases/${question.caseSlug}`} className="mt-2 inline-block text-xs text-muted hover:underline">
+            <Link href={`/cases/${question.caseSlug}`} className="mt-2 inline-block text-xs text-muted transition-colors hover:text-foreground">
               📁 {question.caseTitle}에서 나온 질문
             </Link>
           </div>
@@ -73,14 +73,14 @@ export function NotesBoard({
                 {m.kind === "note" ? (
                   <>
                     <p className="leading-relaxed">“{m.body}”</p>
-                    <Link href={`/cases/${m.caseSlug}`} className="mt-2 block text-xs text-muted hover:underline">
+                    <Link href={`/cases/${m.caseSlug}`} className="mt-2 block text-xs text-muted transition-colors hover:text-foreground">
                       {m.forToday ? "오늘의 질문에 남긴 수사 노트" : `${m.caseTitle} · 수사 노트`}
                     </Link>
                   </>
                 ) : (
                   <>
                     <p className="leading-relaxed">“{m.body}”</p>
-                    <Link href="/missing" className="mt-2 block text-xs text-muted hover:underline">
+                    <Link href="/missing" className="mt-2 block text-xs text-muted transition-colors hover:text-foreground">
                       실종방 응원
                     </Link>
                   </>
@@ -93,7 +93,7 @@ export function NotesBoard({
             <ul className="mx-auto max-w-xs">
               <Memo index={0}>
                 <p className="text-center leading-relaxed">아직 남겨진 생각이 없습니다. 사건방에서 첫 생각을 남겨 주세요.</p>
-                <Link href="/cases" className="mt-2 block text-center text-xs text-muted hover:underline">
+                <Link href="/cases" className="mt-2 block text-center text-xs text-muted transition-colors hover:text-foreground">
                   사건방으로 가기
                 </Link>
               </Memo>

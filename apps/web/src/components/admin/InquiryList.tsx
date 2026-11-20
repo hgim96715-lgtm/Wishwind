@@ -51,7 +51,7 @@ export async function InquiryList({
                 <Badge color={STATUS_COLOR[q.status]}>{INQUIRY_STATUS_LABEL[q.status]}</Badge>
                 <span>{INQUIRY_KIND_LABEL[q.kind]}</span>
                 {q.caseSlug && (
-                  <Link href={`/cases/${q.caseSlug}`} className="hover:underline">
+                  <Link href={`/cases/${q.caseSlug}`} className="transition-opacity hover:opacity-70">
                     · {q.caseSlug}
                   </Link>
                 )}

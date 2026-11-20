@@ -118,7 +118,7 @@ function ModerationRow({ item }: { item: ModerationItem }) {
         <span>{CONTENT_TYPE_LABEL[item.type]}</span>
         <span>·</span>
         {item.caseSlug ? (
-          <Link href={`/cases/${item.caseSlug}`} className="hover:underline">
+          <Link href={`/cases/${item.caseSlug}`} className="transition-opacity hover:opacity-70">
             {item.context}
           </Link>
         ) : (

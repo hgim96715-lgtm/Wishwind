@@ -163,7 +163,7 @@ function NewsList({ news }: { news: Briefing["news"] }) {
 function NewsItem({ n }: { n: Briefing["news"][number] }) {
   return (
     <li className="py-2.5">
-      <a href={n.url} target="_blank" rel="noreferrer noopener" className="font-medium leading-snug hover:underline">
+      <a href={n.url} target="_blank" rel="noreferrer noopener" className="font-medium leading-snug transition-opacity hover:opacity-70">
         {n.region !== "KR" && <span className="mr-1">{REGION_FLAG[n.region]}</span>}
         {n.titleKo ?? n.title}
       </a>
@@ -178,7 +178,7 @@ function NewsItem({ n }: { n: Briefing["news"][number] }) {
         {n.case && (
           <>
             {" · "}
-            <Link href={`/cases/${n.case.slug}`} className="text-[#c46a4b] hover:underline">
+            <Link href={`/cases/${n.case.slug}`} className="text-[#c46a4b] transition-opacity hover:opacity-70">
               {n.case.title} 사건 파일
             </Link>
           </>
@@ -196,7 +196,7 @@ function RecentCases({ cases }: { cases: Briefing["recentCases"] }) {
         <h2 id="recent-title" className="text-lg font-semibold">
           최근 들어온 사건 파일
         </h2>
-        <Link href="/cases" className="text-sm text-[#c46a4b] hover:underline">
+        <Link href="/cases" className="text-sm text-[#c46a4b] transition-opacity hover:opacity-70">
           사건방 전체 보기
         </Link>
       </div>
@@ -281,7 +281,7 @@ function PostCard({ post }: { post: BriefingPost }) {
         <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-muted">{post.body}</p>
       )}
       {post.case && (
-        <Link href={`/cases/${post.case.slug}`} className="mt-3 inline-block text-sm text-[#c46a4b] hover:underline">
+        <Link href={`/cases/${post.case.slug}`} className="mt-3 inline-block text-sm text-[#c46a4b] transition-opacity hover:opacity-70">
           📁 {post.case.title} 사건 파일 보기
         </Link>
       )}
@@ -355,7 +355,7 @@ function NewMissing({ missing }: { missing: Briefing["missing"] }) {
           </li>
         ))}
       </ul>
-      <Link href="/missing" className="mt-4 inline-block text-sm text-[#3f8f84] hover:underline">
+      <Link href="/missing" className="mt-4 inline-block text-sm text-[#3f8f84] transition-opacity hover:opacity-70">
         실종방에서 자세히 보기
       </Link>
     </section>

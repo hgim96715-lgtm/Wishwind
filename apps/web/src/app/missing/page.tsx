@@ -24,11 +24,11 @@ export default function MissingPage() {
           <p className="hidden text-sm text-[#7a6650] sm:block">무사히 집으로 돌아오길 바라며, 함께 바람개비를 꽂습니다.</p>
           <p className="mt-1 text-xs text-[#7a6650]">
             실종 신고{" "}
-            <a href="tel:182" className="pointer-events-auto font-semibold text-[#2f7469] underline-offset-2 hover:underline">
+            <a href="tel:182" className="pointer-events-auto font-semibold text-[#2f7469] transition-opacity hover:opacity-70">
               182
             </a>{" "}
             · 긴급{" "}
-            <a href="tel:112" className="pointer-events-auto font-semibold text-[#2f7469] underline-offset-2 hover:underline">
+            <a href="tel:112" className="pointer-events-auto font-semibold text-[#2f7469] transition-opacity hover:opacity-70">
               112
             </a>
           </p>

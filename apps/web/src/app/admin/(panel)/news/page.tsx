@@ -121,7 +121,7 @@ async function NewsList({ status, scope }: { status: NewsStatus; scope: "kr" | "
                   </span>
                 )}
               </div>
-              <a href={n.url} target="_blank" rel="noreferrer noopener" className="mt-1 block font-medium hover:underline">
+              <a href={n.url} target="_blank" rel="noreferrer noopener" className="mt-1 block font-medium transition-opacity hover:opacity-70">
                 {n.titleKo ?? n.title} ↗
               </a>
               {n.titleKo && <p className="text-xs text-subtle">원문: {n.title}</p>}

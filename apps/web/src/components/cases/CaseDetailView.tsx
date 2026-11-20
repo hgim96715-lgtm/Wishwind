@@ -253,7 +253,7 @@ function RecentNews({ data }: { data: CaseDetail }) {
       <ul className="mt-2 space-y-2">
         {items.map((n) => (
           <li key={n.id} className="text-sm leading-6">
-            <a href={n.url} target="_blank" rel="noreferrer noopener" className="hover:underline">
+            <a href={n.url} target="_blank" rel="noreferrer noopener" className="transition-opacity hover:opacity-70">
               {n.titleKo ?? n.title}
             </a>
             <span className="ml-1.5 text-xs text-subtle">
