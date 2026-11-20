@@ -3,6 +3,9 @@ import { hasActiveFilters, type CaseFilters } from "@/lib/cases/filters";
 import { Bookshelf } from "./Bookshelf";
 import { Notice } from "./Notice";
 
+/** 개발 중에만 서버 실행 방법 같은 안내를 보여 줌 (배포 사이트에는 노출하지 않음) */
+const IS_DEV = process.env.NODE_ENV === "development";
+
 /** 요청마다 최신 목록을 가져오는 서버 컴포넌트. 페이지에서 Suspense로 감싸서 씀 */
 export async function CaseList({ filters }: { filters: CaseFilters }) {
   let data;
@@ -11,9 +14,14 @@ export async function CaseList({ filters }: { filters: CaseFilters }) {
   } catch (error) {
     if (error instanceof ApiUnavailableError) {
       return (
-        <Notice title="수사 본부와 연결이 끊겼습니다">
-          API 서버가 꺼져 있는 것 같습니다. <code>pnpm dev:api</code>로 서버를
-          켠 뒤 새로고침해 주세요.
+        <Notice title="수사 본부와 연결이 잠시 끊겼습니다">
+          {IS_DEV ? (
+            <>
+              API 서버가 꺼져 있는 것 같습니다. <code>pnpm dev:api</code>로 서버를 켠 뒤 새로고침해 주세요.
+            </>
+          ) : (
+            "잠시 후 다시 새로고침해 주세요."
+          )}
         </Notice>
       );
     }
@@ -32,7 +40,13 @@ export async function CaseList({ filters }: { filters: CaseFilters }) {
       </Notice>
     ) : (
       <Notice title="아직 등록된 사건 파일이 없습니다">
-        <code>pnpm db:seed</code>로 예시 사건을 넣어 볼 수 있습니다.
+        {IS_DEV ? (
+          <>
+            <code>pnpm db:seed</code>로 예시 사건을 넣어 볼 수 있습니다.
+          </>
+        ) : (
+          "사건 파일을 정리하고 있습니다. 곧 이곳에 채워집니다."
+        )}
       </Notice>
     );
   }

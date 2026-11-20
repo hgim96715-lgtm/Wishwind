@@ -50,7 +50,9 @@ async function MissingPath() {
     if (error instanceof ApiUnavailableError) {
       return (
         <div className="flex h-full items-center justify-center px-6 text-center text-[#7a6650]">
-          API 서버가 꺼져 있는 것 같습니다. pnpm dev:api로 서버를 켠 뒤 새로고침해 주세요.
+          {process.env.NODE_ENV === "development"
+            ? "API 서버가 꺼져 있는 것 같습니다. pnpm dev:api로 서버를 켠 뒤 새로고침해 주세요."
+            : "실종자 정보를 잠시 불러오지 못했습니다. 잠시 후 다시 새로고침해 주세요."}
         </div>
       );
     }

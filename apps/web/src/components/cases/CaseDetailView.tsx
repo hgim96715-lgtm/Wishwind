@@ -21,6 +21,9 @@ import { SentenceVote } from "./SentenceVote";
 import { ReviewStamp, StatusStamp } from "./StatusStamp";
 import { FileShareBar } from "@/components/files/FileShareBar";
 
+/** 개발 중에만 서버 실행 방법 같은 안내를 보여 줌 (배포 사이트에는 노출하지 않음) */
+const IS_DEV = process.env.NODE_ENV === "development";
+
 export async function CaseDetailView({ slug }: { slug: string }) {
   let data: CaseDetail | null;
   try {
@@ -28,9 +31,14 @@ export async function CaseDetailView({ slug }: { slug: string }) {
   } catch (error) {
     if (error instanceof ApiUnavailableError) {
       return (
-        <Notice title="수사 본부와 연결이 끊겼습니다">
-          API 서버가 꺼져 있는 것 같습니다. <code>pnpm dev:api</code>로 서버를
-          켠 뒤 새로고침해 주세요.
+        <Notice title="수사 본부와 연결이 잠시 끊겼습니다">
+          {IS_DEV ? (
+            <>
+              API 서버가 꺼져 있는 것 같습니다. <code>pnpm dev:api</code>로 서버를 켠 뒤 새로고침해 주세요.
+            </>
+          ) : (
+            "잠시 후 다시 새로고침해 주세요."
+          )}
         </Notice>
       );
     }

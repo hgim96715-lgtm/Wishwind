@@ -45,7 +45,12 @@ export async function adminFetch<T>(path: string, init: RequestInit = {}): Promi
       },
     });
   } catch {
-    throw new AdminApiError("API 서버에 연결할 수 없습니다. pnpm dev:api가 켜져 있는지 확인해 주세요.", 503);
+    throw new AdminApiError(
+      process.env.NODE_ENV === "development"
+        ? "API 서버에 연결할 수 없습니다. pnpm dev:api가 켜져 있는지 확인해 주세요."
+        : "API 서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.",
+      503,
+    );
   }
   if (res.status === 401) redirect("/admin/login");
   const body = (await res.json().catch(() => null)) as unknown;
