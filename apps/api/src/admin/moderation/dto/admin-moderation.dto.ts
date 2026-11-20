@@ -7,7 +7,8 @@ export const moderationListSchema = z.object({
 export type ModerationListQuery = z.infer<typeof moderationListSchema>;
 
 export const moderationActionSchema = z.object({
-  action: z.enum(['publish', 'hide', 'block']),
+  /** dismiss: 신고 기각 (신고 기록을 지우고 공개로 둠). 신고 기능이 있는 답변·질문만 */
+  action: z.enum(['publish', 'hide', 'block', 'dismiss']),
 });
 export type ModerationActionInput = z.infer<typeof moderationActionSchema>;
 export type ModerationAction = ModerationActionInput['action'];

@@ -88,6 +88,7 @@ export const MODERATION_CATEGORY_LABEL: Record<string, string> = {
   REFUSAL: "AI가 판단 거부",
   ADMIN: "관리자",
   ADMIN_HIDDEN: "관리자가 숨김",
+  REPORT_DISMISSED: "관리자가 신고 기각",
   ADMIN_BLOCKED: "관리자가 차단",
   OTHER: "기타",
 };

@@ -124,6 +124,21 @@ export class AdminModerationRepository {
     return this.prisma.cloudMessage.update({ where: { id }, data });
   }
 
+  /** 신고 기각: 신고 기록을 지우고 신고 수를 0으로, 상태는 공개로 (검사 기록에 관리자 판단을 남김) */
+  dismissReports(
+    type: 'answer' | 'question',
+    id: string,
+    moderations: Prisma.UserAnswerUpdateInput['moderations'] & Prisma.UserQuestionUpdateInput['moderations'],
+  ) {
+    const data = { status: UserContentStatus.PUBLISHED, reportCount: 0, moderations };
+    return this.prisma.$transaction([
+      this.prisma.userContentReport.deleteMany({ where: type === 'answer' ? { answerId: id } : { questionId: id } }),
+      type === 'answer'
+        ? this.prisma.userAnswer.update({ where: { id }, data })
+        : this.prisma.userQuestion.update({ where: { id }, data }),
+    ]);
+  }
+
   /** 한 사람(브라우저 익명 ID)이 남긴 모든 글 */
   voterActivity(voterId: string) {
     return Promise.all([

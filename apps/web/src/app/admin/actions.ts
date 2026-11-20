@@ -136,9 +136,14 @@ export async function deleteCase(id: string): Promise<ActionState> {
 export async function moderate(
   type: string,
   id: string,
-  action: "publish" | "hide" | "block",
+  action: "publish" | "hide" | "block" | "dismiss",
 ) {
-  const done = { publish: "공개했습니다.", hide: "숨겼습니다.", block: "차단했습니다." }[action];
+  const done = {
+    publish: "공개했습니다.",
+    hide: "숨겼습니다.",
+    block: "차단했습니다.",
+    dismiss: "신고를 기각했습니다. 신고 기록을 지우고 공개로 두었습니다.",
+  }[action];
   return run(() => adminSend(`/moderation/${type}/${id}`, "POST", { action }), done);
 }
 

@@ -140,13 +140,23 @@ function ModerationRow({ item }: { item: ModerationItem }) {
         )}
         {item.reportCount > 0 && (
           <span className="text-[#b5543a]">
-            신고 {item.reportCount}회
-            {item.reports.some((r) => r.reason) &&
-              ` (${item.reports.flatMap((r) => (r.reason ? [r.reason] : [])).join(", ")})`}
+            신고 {item.reportCount}회 ·{" "}
+            {item.reports.some((r) => r.reason)
+              ? `사유: ${item.reports.flatMap((r) => (r.reason ? [r.reason] : [])).join(", ")}`
+              : "사유 없음"}
           </span>
         )}
       </div>
       <div className="mt-3 flex flex-wrap gap-2">
+        {item.reportCount > 0 && item.type !== "cloud" && (
+          <ActionForm
+            inline
+            action={moderate.bind(null, item.type, item.id, "dismiss")}
+            confirmMessage="신고를 기각할까요? 신고 기록이 지워지고 글은 공개로 남습니다."
+          >
+            <Button tone="ok">신고 기각</Button>
+          </ActionForm>
+        )}
         {item.status !== "PUBLISHED" && (
           <ActionForm inline action={moderate.bind(null, item.type, item.id, "publish")}>
             <Button tone="ok">공개</Button>
