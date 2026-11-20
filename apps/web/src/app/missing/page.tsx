@@ -27,7 +27,7 @@ export default function MissingPage() {
         {/* 하늘 색이 시간대마다 바뀌므로(밤엔 어두움) 글자 뒤에 반투명 바탕을 둠 */}
         <div className="mt-3 rounded-2xl bg-white/70 px-3 py-2 backdrop-blur">
           <h1 className="text-xl font-semibold text-[#5b4d3c]">실종방</h1>
-          <p className="hidden text-sm text-[#7a6650] sm:block">무사히 집으로 돌아오길 바라며, 함께 길을 놓습니다.</p>
+          <p className="hidden text-sm text-[#7a6650] sm:block">무사히 집으로 돌아오길 바라며, 함께 바람개비를 꽂습니다.</p>
           <p className="mt-1 text-xs text-[#7a6650]">
             실종 신고{" "}
             <a href="tel:182" className="pointer-events-auto font-semibold text-[#2f7469] underline-offset-2 hover:underline">
