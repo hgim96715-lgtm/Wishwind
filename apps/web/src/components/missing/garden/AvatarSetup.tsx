@@ -17,12 +17,18 @@ export interface AvatarChoice {
 }
 
 const STORAGE_KEY = "missing-garden-avatar-v2";
+
+/** 개발 모드 '다른 사람으로 보기' 중이면 그 사람 몫의 칸을 따로 씀 → 처음 온 사람처럼 캐릭터 고르기가 나옴 */
+function storageKey() {
+  const viewer = document.cookie.match(/(?:^|; )dev_viewing_as_other=([^;]+)/)?.[1];
+  return viewer ? `${STORAGE_KEY}:dev-${viewer}` : STORAGE_KEY;
+}
 // 연락처·링크를 닉네임에 넣지 못하게 함 (실종방은 아이들도 보는 곳)
 const BAD = /(https?:|www\.|\.com|\.kr|\d{3,}|카톡|오픈채팅|텔레|line|discord)/i;
 
 export function loadAvatar(): AvatarChoice | null {
   try {
-    const v = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null") as AvatarChoice | null;
+    const v = JSON.parse(localStorage.getItem(storageKey()) ?? "null") as AvatarChoice | null;
     return v && typeof v.nickname === "string" && (v.url === null || typeof v.url === "string") ? v : null;
   } catch {
     return null;
@@ -31,7 +37,7 @@ export function loadAvatar(): AvatarChoice | null {
 
 function saveAvatar(v: AvatarChoice) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(v));
+    localStorage.setItem(storageKey(), JSON.stringify(v));
   } catch {
     /* 저장이 막혀도 이번 방문에서는 그대로 씀 */
   }
@@ -76,7 +82,10 @@ export function AvatarSetup({ initial, onDone }: { initial: AvatarChoice | null;
       className="absolute inset-x-4 top-1/2 z-40 mx-auto max-h-[90dvh] max-w-sm -translate-y-1/2 overflow-y-auto rounded-3xl border border-[#f1dfc4] bg-[#fffaf2]/95 p-6 shadow-[0_20px_60px_rgb(120_90_50/0.25)] backdrop-blur"
     >
       <h2 className="text-lg font-semibold">바람개비 정원에 오신 걸 환영합니다</h2>
-      <p className="mt-1 text-sm text-muted">언덕을 함께 걸을 캐릭터와 이름을 골라 주세요.</p>
+      <p className="mt-1 text-sm leading-6 text-muted">
+        정원을 둘러보며 등불을 눌러 실종된 분들을 기억하고, 소망을 담아 바람개비를 꽂아 보세요. 먼저 함께 걸을 캐릭터와 닉네임을
+        골라 주세요.
+      </p>
 
       <div className="mt-4 flex items-center gap-2">
         <button type="button" aria-label="이전 캐릭터" onClick={() => step(-1)} disabled={count < 2} className="rounded-full bg-white p-2 shadow-sm disabled:opacity-30">

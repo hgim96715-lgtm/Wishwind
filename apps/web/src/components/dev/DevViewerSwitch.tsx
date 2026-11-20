@@ -5,14 +5,14 @@ import { useEffect, useState } from "react";
 /**
  * 개발 모드에서만 보이는 "다른 사람으로 보기" 버튼.
  * 같은 브라우저에서는 내 글이 '내 노트'로만 보여서, 남에게 어떻게 보이는지(익명 이름·공감해요·잠금 안내) 확인하기 어려움.
- * 누르면 새 익명 사용자로 바뀌고, "내 화면으로"를 누르면 원래대로 돌아옴. 운영 빌드에서는 그려지지 않음
+ * 누르면 로그인 안 한 새 익명 사용자로 바뀌고(실종방 캐릭터·닉네임도 새로), "내 화면으로"를 누르면 원래대로 돌아옴. 운영 빌드에서는 그려지지 않음
  */
 export function DevViewerSwitch() {
   const [viewing, setViewing] = useState<boolean | null>(null);
   useEffect(() => {
     // 쿠키는 마운트 후에만 읽을 수 있음
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setViewing(document.cookie.split("; ").some((c) => c === "dev_viewing_as_other=1"));
+    setViewing(document.cookie.split("; ").some((c) => c.startsWith("dev_viewing_as_other=")));
   }, []);
 
   if (process.env.NODE_ENV !== "development" || viewing === null) return null;
