@@ -27,7 +27,7 @@ export class BriefingService {
     return { notices, posts, news: news.map(toPublicNews), recentCases, missing, stats, opinions, participation, board };
   }
 
-  /** 사람들의 생각 게시판: 오늘의 질문 + 그 질문(없으면 최근)의 수사 노트 + 실종방 응원. 공개(PUBLISHED) 글만 */
+  /** 사람들의 생각 게시판: 오늘의 질문 + 그 질문에 남긴 수사 노트(질문이 없을 때만 최근 노트) + 실종방 응원. 공개(PUBLISHED) 글만 */
   private async notesBoard() {
     const dayNumber = Math.floor((Date.now() + 9 * 3_600_000) / 86_400_000);
     const question = await this.repo.questionOfDay(dayNumber);
@@ -35,11 +35,9 @@ export class BriefingService {
       question ? this.repo.recentAnswers(question.id, NOTES) : Promise.resolve([]),
       this.repo.recentCheers(6),
     ]);
-    // 오늘 질문에 답이 적으면 다른 질문의 최근 노트로 채움
-    const extra =
-      own.length < NOTES
-        ? (await this.repo.recentAnswers(null, NOTES * 2)).filter((a) => !own.some((o) => o.id === a.id))
-        : [];
+    // 오늘의 질문이 있으면 그 질문에 남긴 노트만 보여 줌 (어제 질문의 답이 섞이지 않게).
+    // 답이 아직 없으면 화면에서 '첫 생각을 남겨 주세요'로 안내함. 질문이 아예 없을 때만 최근 노트를 보여 줌
+    const extra = question ? [] : await this.repo.recentAnswers(null, NOTES);
     const notes = [...own, ...extra].slice(0, NOTES).map((a) => ({
       id: a.id,
       body: a.body,
