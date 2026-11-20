@@ -12,6 +12,7 @@ import {
 } from "@/lib/help/contacts";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/help" },
   title: "도움받는 곳",
   description: "신고·상담 번호를 상황별로 모았습니다. 몰라서 도움을 못 받는 일이 없도록.",
 };

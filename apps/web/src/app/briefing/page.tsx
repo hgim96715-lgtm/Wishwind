@@ -6,6 +6,7 @@ import { BriefingFeed, BriefingSkeleton } from "@/components/briefing/BriefingFe
 import { RoomHeader } from "@/components/room/RoomHeader";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/briefing" },
   title: "브리핑룸",
   description: "새 소식, 사건 변경, 사람들의 생각, 공지사항을 한곳에서 봅니다.",
 };

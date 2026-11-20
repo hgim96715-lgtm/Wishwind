@@ -8,6 +8,7 @@ import { getAllMissing } from "@/lib/missing/api";
 import { groupByRegion } from "@/lib/missing/regions";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/missing" },
   title: "실종방",
   description: "실종된 사람들이 무사히 집으로 돌아올 수 있도록, 바람개비 정원에서 함께 바람을 모읍니다.",
 };

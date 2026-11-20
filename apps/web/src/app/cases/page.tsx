@@ -7,6 +7,8 @@ import { parseCaseFilters } from "@/lib/cases/filters";
 
 export const metadata: Metadata = {
   title: "사건방",
+  description: "국내외 미제·주요 사건을 나라와 유형별 책장으로 정리했습니다. 사건 개요, 타임라인, 판결, 생각해볼 점을 볼 수 있습니다.",
+  alternates: { canonical: "/cases" },
 };
 
 // 헤더는 정적 셸로 미리 렌더링됨.
