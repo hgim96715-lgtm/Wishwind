@@ -338,7 +338,7 @@ export const SITUATIONS: { key: HelpSituation; title: string; lead: string }[] =
   { key: "school", title: "학교폭력", lead: "당한 사람도, 본 사람도 연락할 수 있습니다." },
   { key: "elder-disability", title: "어르신·장애인 학대", lead: "스스로 알리기 어려운 분들이라 주변의 관심이 꼭 필요합니다." },
   { key: "digital-sex-crime", title: "디지털 성범죄", lead: "영상 삭제부터 상담까지 도움을 받을 수 있습니다." },
-  { key: "victim-support", title: "범죄 피해 뒤 도움", lead: "피해 뒤에도 법률·생활 지원을 받을 수 있습니다." },
+  { key: "victim-support", title: "범죄 피해 뒤 도움도 가능합니다", lead: "피해 뒤에도 법률·생활 지원을 받을 수 있습니다." },
 ];
 
 export const COUNTRY_NAME: Record<HelpCountry, string> = { KR: "한국", US: "미국", GB: "영국", JP: "일본" };
