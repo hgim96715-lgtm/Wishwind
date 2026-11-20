@@ -346,7 +346,7 @@ function WeatherChip({
         {weather.place} · {WEATHER_LABEL[weather.kind]}
         <span className="ml-1 flex items-center gap-0.5 text-[#b9772a]">
           <LuMapPin aria-hidden className="size-3" />
-          {mine ? "서울로" : "내 위치로"}
+          {mine ? "서울" : "내 위치"}
         </span>
       </button>
     </div>
