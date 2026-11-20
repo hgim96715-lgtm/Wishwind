@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ActionForm, Button } from "@/components/admin/ActionForm";
 import { Badge, Card, ErrorBox, Field, Skeleton, inputClass } from "@/components/admin/ui";
-import { publishCase, reviewCase, updateCase } from "@/app/admin/actions";
+import { deleteCase, publishCase, reviewCase, updateCase } from "@/app/admin/actions";
 import {
   BRIEFING_KIND_LABEL,
   BRIEFING_STATUS_LABEL,
@@ -155,6 +155,19 @@ async function CaseEditor({ id }: { id: string }) {
                 <ActionForm action={publishCase.bind(null, c.id, true)}>
                   <Button tone="ok">공개하기</Button>
                   <p className="text-xs text-subtle">검증 완료 상태여야 공개할 수 있습니다.</p>
+                </ActionForm>
+              )}
+            </div>
+            <div className="mt-4 border-t border-line pt-4">
+              {c.isPublished ? (
+                <p className="text-xs text-subtle">공개 중인 사건은 비공개로 바꾼 뒤 삭제할 수 있습니다.</p>
+              ) : (
+                <ActionForm
+                  action={deleteCase.bind(null, c.id)}
+                  confirmMessage="이 사건을 삭제할까요? 타임라인·출처·가해자·질문도 함께 지워지며 되돌릴 수 없습니다."
+                >
+                  <Button tone="danger">사건 삭제</Button>
+                  <p className="text-xs text-subtle">사건방에 넣지 않을 초안만 지워 주세요. 연결된 기사는 남고 사건 연결만 끊깁니다.</p>
                 </ActionForm>
               )}
             </div>

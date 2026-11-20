@@ -102,6 +102,17 @@ export async function publishCase(id: string, published: boolean) {
   );
 }
 
+/** 사건방에 넣을 필요가 없는 초안을 지움. 공개 중이면 API가 막음 */
+export async function deleteCase(id: string): Promise<ActionState> {
+  try {
+    await adminSend(`/cases/${id}`, "DELETE");
+  } catch (error) {
+    if (error instanceof AdminApiError) return { error: error.message };
+    throw error;
+  }
+  redirect("/admin/cases");
+}
+
 // ---- 부적절한 글 ----
 
 export async function moderate(

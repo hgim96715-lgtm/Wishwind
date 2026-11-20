@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { reviewCase, setPublished } from '../../case-import/case-import.repository.js';
 import { asBadRequest } from '../../common/errors/as-bad-request.js';
 import type { CaseReviewStatus } from '../../generated/prisma/enums.js';
@@ -53,5 +53,19 @@ export class AdminCasesService {
       await this.repo.createCaseUpdateDraft(id, draft.title, draft.body);
     }
     return this.detail(id);
+  }
+
+  /**
+   * 사건과 딸린 타임라인·출처·가해자·질문 등을 함께 지움 (DB onDelete: Cascade).
+   * 연결된 기사·브리핑 글·실종자 기록은 남고 사건 연결만 끊김 (SetNull).
+   * 공개 사건은 이용자 글이 달려 있을 수 있어 비공개로 바꾼 뒤에만 지울 수 있음
+   */
+  async remove(id: string) {
+    const found = await this.findOrThrow(id);
+    if (found.isPublished) {
+      throw new BadRequestException('공개 중인 사건은 먼저 비공개로 바꾼 뒤 삭제할 수 있습니다.');
+    }
+    await this.repo.remove(id);
+    return { id, slug: found.slug, deleted: true };
   }
 }

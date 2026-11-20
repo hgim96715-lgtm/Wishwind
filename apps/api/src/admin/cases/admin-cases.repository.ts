@@ -97,4 +97,8 @@ export class AdminCasesRepository {
       data: { kind: BriefingKind.CASE_UPDATE, status: BriefingStatus.DRAFT, caseId, title, body },
     });
   }
+
+  remove(id: string) {
+    return this.prisma.case.delete({ where: { id } });
+  }
 }
