@@ -1278,7 +1278,8 @@ function Player({
       if (!b) return;
       seat.current = b;
       poseRef.current = "sit";
-      yaw.current = b.yaw; // 앉은 쪽(바다)을 바라봄
+      // 바로 뒤에서 보면 등받이에 몸이 가려서, 비스듬히 뒤에서 앉은 모습과 바다가 함께 보이게 함
+      yaw.current = b.yaw + 1.35;
     };
     c.stand = () => {
       const b = seat.current;

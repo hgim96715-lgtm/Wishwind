@@ -23,7 +23,8 @@ const smooth = (e0: number, e1: number, x: number) => {
 function baseHeight(x: number, z: number): number {
   const d = x - coastX(z); // 해안선에서 육지 쪽으로 떨어진 거리
   const rise = smooth(-6, 10, d); // 바닷속(음수) → 모래사장 → 언덕
-  const hills = 1.6 + Math.sin(x * 0.07 + z * 0.021) * 0.9 + Math.sin(z * 0.043) * 0.7 + Math.sin(x * 0.17) * 0.25;
+  // 기본 높이 2.2: 언덕 사이 움푹한 곳이 바다 높이보다 낮아져 들판 한가운데에 물이 차 보이던 문제 (사용자 제보 2026-11-21)
+  const hills = 2.2 + Math.sin(x * 0.07 + z * 0.021) * 0.9 + Math.sin(z * 0.043) * 0.7 + Math.sin(x * 0.17) * 0.25;
   return -2.2 + rise * (2.2 + hills);
 }
 

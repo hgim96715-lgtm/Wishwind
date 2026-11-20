@@ -61,18 +61,19 @@ function openGrass(slots: Slot[], x: number, z: number, room: number) {
   return !nearLantern(slots, x, z, room + 1.2);
 }
 
-/** 바다를 바라보는 벤치: 등대 옆 절벽, 시작 연못가, 그리고 오솔길을 따라 바닷가 쪽에 띄엄띄엄 */
+/** 바다를 바라보는 벤치: 등대 옆 절벽, 시작 연못가, 그리고 등불 길 바로 옆(바다 쪽)에 띄엄띄엄 */
 export function benchSpots(slots: Slot[]): Bench[] {
   const list: Bench[] = [
     { id: "lighthouse", x: LIGHTHOUSE[0] - 3.2, z: LIGHTHOUSE[1] + 6.5, yaw: Math.PI / 2 },
     { id: "pond", x: 27.6, z: 12.5, yaw: Math.PI / 2 },
   ];
   const zEnd = -(slots.length + 2) * SLOT_SPACING;
-  for (let z = -48, n = 0; z > zEnd; z -= 76, n++) {
+  for (let z = -36, n = 0; z > zEnd; z -= 48, n++) {
     // 등불과 겹치면 조금씩 옮겨 봄
-    for (const dz of [0, 3, -3, 6, -6, 9]) {
+    for (const dz of [0, 3, -3, 6, -6, 9, -9]) {
       const bz = z + dz;
-      const bx = coastX(bz) + 6.5;
+      // 길에서 몇 걸음 바다 쪽 (멀리 떨어져 있으면 찾기 어려움)
+      const bx = trailX(slotAtZ(bz)) - 3.4;
       if (openGrass(slots, bx, bz, 1.4)) {
         list.push({ id: `coast-${n}`, x: bx, z: bz, yaw: Math.PI / 2 });
         break;
@@ -97,10 +98,13 @@ export function treeSpots(slots: Slot[], benches: Bench[]): Tree[] {
   const zEnd = -(slots.length + 2) * SLOT_SPACING;
   // 시작 광장 둘레: 정원·등대를 가리지 않는 뒤쪽·오른쪽에 작은 숲
   const plaza: [number, number][] = [
-    [14, 34], [18, 31], [-6, 38], [10, 40], [26, 26], [31, 18], [33, 6], [-10, 30],
+    [16, 34], [-6, 38], [28, 25], [33, 8],
   ];
   const ok = (x: number, z: number) =>
-    openGrass(slots, x, z, 1.6) && benches.every((b) => Math.hypot(b.x - x, b.z - z) > 4.5) && list.every((t) => Math.hypot(t.x - x, t.z - z) > 3.2);
+    heightAt(x, z) > 0.4 &&
+    openGrass(slots, x, z, 1.6) &&
+    benches.every((b) => Math.hypot(b.x - x, b.z - z) > 4.5) &&
+    list.every((t) => Math.hypot(t.x - x, t.z - z) > 8);
   const push = (x: number, z: number, seed: number) =>
     list.push({
       x,
@@ -110,17 +114,19 @@ export function treeSpots(slots: Slot[], benches: Bench[]): Tree[] {
       tint: hash2(seed, 9.1),
     });
   plaza.forEach(([x, z], k) => ok(x, z) && push(x, z, k + 0.5));
-  for (let z = 6, k = 0; z > zEnd; z -= 6.5, k++) {
+  // 너무 빽빽하지 않게: 16칸마다 한두 그루, 바닷가는 가끔
+  for (let z = 4, k = 0; z > zEnd; z -= 16, k++) {
     const slot = slotAtZ(z);
-    // 안쪽 들판 (길에서 7~45)
+    // 안쪽 들판 (길에서 9~45)
     for (let j = 0; j < 2; j++) {
+      if (j === 1 && hash2(k * 0.29, 3.7) < 0.5) continue;
       const r = hash2(k * 1.37 + j * 0.41, 2.2);
-      const x = trailX(slot) + 7 + r * 38;
-      const pz = z + (hash2(k * 0.73, j + 4.4) - 0.5) * 4;
+      const x = trailX(slot) + 9 + r * 36;
+      const pz = z + (hash2(k * 0.73, j + 4.4) - 0.5) * 8;
       if (ok(x, pz)) push(x, pz, k * 3 + j);
     }
-    // 바닷가 풀밭 (셋에 하나꼴)
-    if (hash2(k * 0.51, 6.6) < 0.33) {
+    // 바닷가 풀밭 (넷에 하나꼴)
+    if (hash2(k * 0.51, 6.6) < 0.25) {
       const x = coastX(z) + 7 + hash2(k, 1.9) * 3;
       if (x < trailX(slot) - 3 && ok(x, z)) push(x, z, k * 3 + 2);
     }
@@ -233,8 +239,8 @@ export function Benches({ benches }: { benches: Bench[] }) {
             <boxGeometry args={[1.9, 0.08, 0.5]} />
             <meshStandardMaterial color="#b98a5e" roughness={0.9} />
           </mesh>
-          <mesh position={[0, 0.82, 0.24]} rotation={[-0.18, 0, 0]}>
-            <boxGeometry args={[1.9, 0.4, 0.06]} />
+          <mesh position={[0, 0.72, 0.24]} rotation={[-0.18, 0, 0]}>
+            <boxGeometry args={[1.9, 0.28, 0.06]} />
             <meshStandardMaterial color="#b98a5e" roughness={0.9} />
           </mesh>
           {[-0.82, 0.82].map((x) => (
@@ -243,8 +249,8 @@ export function Benches({ benches }: { benches: Bench[] }) {
                 <boxGeometry args={[0.08, SEAT_HEIGHT, 0.08]} />
                 <meshStandardMaterial color="#5f5a55" roughness={0.8} />
               </mesh>
-              <mesh position={[x, 0.5, 0.2]}>
-                <boxGeometry args={[0.08, 1.0, 0.08]} />
+              <mesh position={[x, 0.43, 0.2]}>
+                <boxGeometry args={[0.08, 0.86, 0.08]} />
                 <meshStandardMaterial color="#5f5a55" roughness={0.8} />
               </mesh>
             </group>
