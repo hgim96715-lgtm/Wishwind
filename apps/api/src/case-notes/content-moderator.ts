@@ -8,8 +8,8 @@ import {
 } from '../generated/prisma/enums.js';
 import { filterContent } from './content-filter.js';
 import { decisionSchema } from './schemas/moderation-decision.schema.js';
+import { claudeModel, claudeModelWarning } from '../common/ai/claude-model.js';
 
-const MODEL = 'claude-opus-5-5';
 const TIMEOUT_MS = 15_000;
 const RATES = { input: 4, output: 20 };
 
@@ -100,6 +100,12 @@ export class ContentModerator {
       ? new Anthropic({ maxRetries: 1, timeout: TIMEOUT_MS })
       : null;
 
+  constructor() {
+    // CLAUDE_MODEL에 쓸 수 없는 모델을 넣었으면 서버 시작 때 한 번 알려 줌 (검사는 기본 모델로 계속 동작)
+    const warning = claudeModelWarning();
+    if (warning) this.logger.warn(warning);
+  }
+
   /** 검사를 끝내지 못한 글은 공개하지 않고 HELD로 둠 */
   async moderate(
     body: string,
@@ -127,7 +133,8 @@ export class ContentModerator {
 
     try {
       const response = await this.client.messages.parse({
-        model: MODEL,
+        // .env CLAUDE_MODEL (비면 Opus 5.5). .env가 읽힌 뒤 호출 때마다 확인함
+        model: claudeModel(),
         max_tokens: 4000,
         thinking: { type: 'adaptive' },
         output_config: {

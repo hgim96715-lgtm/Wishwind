@@ -1,7 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
+import { claudeModel } from '../common/ai/claude-model.js';
 
-const MODEL = 'claude-opus-5-5';
 const TIMEOUT_MS = 30_000;
 
 const SYSTEM = `당신은 미국 FBI 실종자 포스터의 영어 설명을 한국어로 옮기는 번역가입니다.
@@ -27,7 +27,8 @@ export class MissingTranslator {
     }
     try {
       const res = await this.client.messages.create({
-        model: MODEL,
+        // .env CLAUDE_MODEL (비면 Opus 5.5). .env가 읽힌 뒤 호출 때마다 확인함
+        model: claudeModel(),
         max_tokens: 4000,
         system: SYSTEM,
         messages: [{ role: 'user', content: `<source>\n${text}\n</source>` }],

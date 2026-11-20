@@ -2,8 +2,8 @@ import Anthropic from '@anthropic-ai/sdk';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
 import { opinionSummarySchema } from './dto/opinion-summary.schema.js';
+import { claudeModel } from '../common/ai/claude-model.js';
 
-const MODEL = 'claude-opus-5-5';
 const TIMEOUT_MS = 60_000;
 
 
@@ -47,7 +47,8 @@ export class OpinionSummarizer {
     }
     const response = await this.client.messages
       .parse({
-        model: MODEL,
+        // .env CLAUDE_MODEL (비면 Opus 5.5). .env가 읽힌 뒤 호출 때마다 확인함
+        model: claudeModel(),
         max_tokens: 8000,
         thinking: { type: 'adaptive' },
         output_config: { effort: 'medium', format: zodOutputFormat(opinionSummarySchema) },
