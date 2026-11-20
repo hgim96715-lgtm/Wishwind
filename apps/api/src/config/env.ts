@@ -25,6 +25,8 @@ export const envSchema = z
     NEWS_SYNC_ENABLED: z.stringbool().default(true),
     /** 예약 작업이 새 사건 파일을 넣는 폴더. API가 10분마다 비공개 초안으로 가져옴 */
     CASE_INBOX_DIR: z.string().default('prisma/imports/inbox'),
+    /** '사건 파일 올리기' API 키. 비우면 그 기능은 꺼짐 (배포 서버에서 새벽 수집을 받을 때 씀) */
+    CASE_IMPORT_TOKEN: optional(z.string().min(32, '32자 이상이어야 합니다')),
     NEWS_SYNC_INTERVAL_HOURS: z.coerce.number().min(1).max(48).default(3),
     NEWS_QUERIES: optional(z.string()),
     NEWS_FOREIGN_ENABLED: z.stringbool().default(true),

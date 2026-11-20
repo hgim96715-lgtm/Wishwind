@@ -76,20 +76,35 @@ export class InboxImportService implements OnApplicationBootstrap, OnApplication
   }
 
   private async importFile(file: string): Promise<InboxResult> {
-    const result: InboxResult = { file, created: [], skipped: [] };
-    const path = join(this.dir, file);
-    let parsed;
+    let data: unknown;
     try {
-      parsed = importFileSchema.safeParse(JSON.parse(await readFile(path, 'utf8')));
+      data = JSON.parse(await readFile(join(this.dir, file), 'utf8'));
     } catch (error) {
-      result.error = `JSON을 읽을 수 없습니다: ${error instanceof Error ? error.message : String(error)}`;
-    }
-    if (parsed && !parsed.success) {
-      result.error = parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; ');
-    }
-    if (result.error || !parsed?.success) {
+      const result: InboxResult = {
+        file,
+        created: [],
+        skipped: [],
+        error: `JSON을 읽을 수 없습니다: ${error instanceof Error ? error.message : String(error)}`,
+      };
       await this.moveTo('failed', file, result);
       this.logger.warn(`사건 inbox ${file}: ${result.error}`);
+      return result;
+    }
+    const result = await this.importData(file, data);
+    await this.moveTo(result.error ? 'failed' : 'done', file, result);
+    return result;
+  }
+
+  /**
+   * 사건 파일 내용을 비공개 초안으로 가져옴. inbox 파일과 '사건 파일 올리기' API(배포 서버)가 함께 씀.
+   * name은 결과 기록용 이름(앞 10자가 날짜면 검토 메모에 그 날짜를 씀)
+   */
+  async importData(name: string, data: unknown): Promise<InboxResult> {
+    const result: InboxResult = { file: name, created: [], skipped: [] };
+    const parsed = importFileSchema.safeParse(data);
+    if (!parsed.success) {
+      result.error = parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; ');
+      this.logger.warn(`사건 가져오기 ${name}: ${result.error}`);
       return result;
     }
 
@@ -101,7 +116,7 @@ export class InboxImportService implements OnApplicationBootstrap, OnApplication
         })
       ).map((c) => c.slug),
     );
-    const day = file.slice(0, 10);
+    const day = /^\d{4}-\d{2}-\d{2}/.test(name) ? name.slice(0, 10) : new Date().toISOString().slice(0, 10);
     for (const entry of parsed.data.cases) {
       if (existing.has(entry.slug)) {
         result.skipped.push({ slug: entry.slug, reason: '이미 있는 사건' });
@@ -136,8 +151,7 @@ export class InboxImportService implements OnApplicationBootstrap, OnApplication
         result.skipped.push({ slug: entry.slug, reason: error instanceof Error ? error.message : String(error) });
       }
     }
-    await this.moveTo('done', file, result);
-    this.logger.log(`사건 inbox ${file}: 새 초안 ${result.created.length}건, 건너뜀 ${result.skipped.length}건`);
+    this.logger.log(`사건 가져오기 ${name}: 새 초안 ${result.created.length}건, 건너뜀 ${result.skipped.length}건`);
     return result;
   }
 
