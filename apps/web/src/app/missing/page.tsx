@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function MissingPage() {
   return (
-    <main className="relative h-dvh w-full overflow-hidden bg-[#f4e6d4]">
+    <main className="garden-page relative h-dvh w-full overflow-hidden bg-[#f4e6d4]">
       <header className="pointer-events-none absolute top-0 left-0 z-20 p-5">
         <HomeLogo onSky />
         {/* 하늘 색이 시간대마다 바뀌므로(밤엔 어두움) 글자 뒤에 반투명 바탕을 둠 */}

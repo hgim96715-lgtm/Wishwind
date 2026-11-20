@@ -14,7 +14,7 @@ import { GARDEN_CENTER, lanternPoint, LIGHTHOUSE, pinwheelSpot, START_POND_VIEW,
 import { MissingCard } from "./MissingCard";
 import { MissingList } from "./MissingList";
 import { buildSlots } from "./path-layout";
-import { currentHour } from "./time-of-day";
+import { currentHour, paletteAt } from "./time-of-day";
 import { useWeather } from "./useWeather";
 import { arrivalMessage, useWishes, WishPanel } from "./WishPanel";
 
@@ -95,6 +95,19 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
     const id = setTimeout(() => setToast(null), 4000);
     return () => clearTimeout(id);
   }, [toast]);
+
+  // 밤에는 화면 위 안내판(이름표·시계·날씨·버튼)을 어두운 반투명으로 바꿔 하늘과 어울리게 함 (globals.css의 garden-page 규칙)
+  useEffect(() => {
+    const apply = () => {
+      document.documentElement.dataset.garden = paletteAt(currentHour()).dark ? "night" : "day";
+    };
+    apply();
+    const id = window.setInterval(apply, 60_000);
+    return () => {
+      window.clearInterval(id);
+      delete document.documentElement.dataset.garden;
+    };
+  }, []);
 
   // 방금 꽂은 바람개비의 강조 말풍선은 잠깐만 보여 줌. 그 뒤로는 다른 바람개비처럼 가까이 갈 때만 보임
   useEffect(() => {

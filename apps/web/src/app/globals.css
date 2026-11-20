@@ -79,3 +79,21 @@ input.admin-input::-webkit-datetime-edit {
     cursor: not-allowed;
   }
 }
+
+/* 실종방 밤: 화면 위 안내판을 어두운 반투명 + 밝은 글자로 (창·카드(role=dialog) 안은 그대로) */
+html[data-garden="night"] .garden-page :is(.bg-white\/60, .bg-white\/70, .bg-white\/75, .bg-white\/80, .bg-white\/90):not([role="dialog"] *) {
+  background-color: rgb(18 24 48 / 0.62);
+  border-color: rgb(255 255 255 / 0.12);
+}
+html[data-garden="night"] .garden-page :is(.hover\:bg-white:hover):not([role="dialog"] *) {
+  background-color: rgb(32 42 78 / 0.82);
+}
+html[data-garden="night"] .garden-page :is(.text-\[\#7a6650\], .text-\[\#6b5a46\], .text-\[\#5b4d3c\], .text-\[\#9a8a76\]):not([role="dialog"] *) {
+  color: #e6e1f0;
+}
+html[data-garden="night"] .garden-page .text-\[\#2f7469\]:not([role="dialog"] *) {
+  color: #8fd8c8;
+}
+html[data-garden="night"] .garden-page .text-\[\#b9772a\]:not([role="dialog"] *) {
+  color: #f2bd6b;
+}

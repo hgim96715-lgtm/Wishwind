@@ -57,6 +57,8 @@ export const metadata: Metadata = {
     other: process.env.NAVER_SITE_VERIFICATION ? { "naver-site-verification": process.env.NAVER_SITE_VERIFICATION } : undefined,
   },
   formatDetection: { telephone: false },
+  // Dark Reader 같은 다크 모드 확장 프로그램이 색을 뒤집지 않게 함
+  other: { "darkreader-lock": "lock" },
 };
 
 /** 검색엔진이 사이트 이름·로고를 알아보게 하는 구조화 데이터 */
