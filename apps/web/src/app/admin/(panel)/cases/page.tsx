@@ -5,7 +5,7 @@ import { Badge, Empty, ErrorBox, FilterTabs, PageTitle, Skeleton, inputClass } f
 import { REVIEW_COLOR, REVIEW_LABEL, formatDateTime } from "@/lib/admin/labels";
 import { AdminApiError, adminGet } from "@/lib/admin/session";
 import type { AdminCaseList, ReviewStatus } from "@/lib/admin/types";
-import { CATEGORY_LABEL, COUNTRY_LABEL, STATUS_STAMP } from "@/lib/cases/labels";
+import { CATEGORY_LABEL, COUNTRY_LABEL, STATUS_STAMP, caseRoomCountry } from "@/lib/cases/labels";
 
 export const metadata: Metadata = { title: "사건 검토·수정" };
 
@@ -87,7 +87,7 @@ async function CaseTable({ q, review, published }: { q: string; review: string; 
                       {c.title}
                     </Link>
                     <p className="text-xs text-subtle">
-                      {COUNTRY_LABEL[c.country]} · {CATEGORY_LABEL[c.category]} · {c.slug}
+                      {COUNTRY_LABEL[caseRoomCountry(c.country)]} · {CATEGORY_LABEL[c.category]} · {c.slug}
                     </p>
                   </td>
                   <td className="px-3 py-2.5">

@@ -12,7 +12,7 @@ import {
 } from "@/lib/admin/labels";
 import { AdminApiError, adminGet } from "@/lib/admin/session";
 import type { AdminCaseDetail, ReviewStatus } from "@/lib/admin/types";
-import { CATEGORY_LABEL, COUNTRY_LABEL, STATUS_STAMP } from "@/lib/cases/labels";
+import { CATEGORY_LABEL, COUNTRY_LABEL, COUNTRY_ORDER, STATUS_STAMP, caseRoomCountry } from "@/lib/cases/labels";
 
 const PRECISION = { DAY: "일까지", MONTH: "월까지", YEAR: "연도만", UNKNOWN: "모름" } as const;
 const REVIEWS: ReviewStatus[] = ["DRAFT", "NEEDS_REVIEW", "VERIFIED", "REJECTED"];
@@ -77,9 +77,10 @@ async function CaseEditor({ id }: { id: string }) {
             </Field>
             <div className="grid gap-3 sm:grid-cols-3">
               <Field label="나라">
-                <select name="country" defaultValue={c.country} className={inputClass}>
-                  {Object.entries(COUNTRY_LABEL).map(([k, v]) => (
-                    <option key={k} value={k}>{v}</option>
+                {/* 사건방처럼 중국은 기타로 묶음. 예전 중국(CN) 사건은 기타로 보이고, 저장하면 기타로 바뀜 */}
+                <select name="country" defaultValue={caseRoomCountry(c.country)} className={inputClass}>
+                  {COUNTRY_ORDER.map((k) => (
+                    <option key={k} value={k}>{COUNTRY_LABEL[k]}</option>
                   ))}
                 </select>
               </Field>
