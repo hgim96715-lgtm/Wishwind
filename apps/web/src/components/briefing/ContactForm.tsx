@@ -14,6 +14,8 @@ interface MyInquiry {
   reply: string | null;
   repliedAt: string | null;
   createdAt: string;
+  /** 관리자가 아직 보지 않아 고칠 수 있음 */
+  editable: boolean;
 }
 
 const KINDS: { value: Kind; label: string; hint: string }[] = [
@@ -148,24 +150,107 @@ export function ContactForm({ initialCase }: { initialCase: string }) {
           <p className="text-xs text-subtle">이 브라우저에서 보낸 글만 보입니다.</p>
           <ul className="mt-4 space-y-3">
             {mine.map((q) => (
-              <li key={q.id} className="rounded-xl border border-line bg-surface p-4 text-sm">
-                <div className="flex items-center gap-2 text-xs text-muted">
-                  <span className="font-medium">{KIND_LABEL[q.kind]}</span>
-                  <span>· {STATUS_LABEL[q.status]}</span>
-                  <span className="ml-auto">{dateFmt.format(new Date(q.createdAt))}</span>
-                </div>
-                <p className="mt-2 whitespace-pre-wrap break-words">{q.body}</p>
-                {q.reply && (
-                  <div className="mt-3 rounded-lg bg-[#4f78a8]/8 p-3">
-                    <p className="text-xs font-semibold text-[#4f78a8]">답변</p>
-                    <p className="mt-1 whitespace-pre-wrap text-muted">{q.reply}</p>
-                  </div>
-                )}
-              </li>
+              <MyInquiryItem key={q.id} item={q} onChange={setMine} />
             ))}
           </ul>
         </section>
       )}
     </>
+  );
+}
+
+async function call(path: string, body?: unknown) {
+  const res = await fetch(path, {
+    method: body === undefined ? "POST" : "PUT",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(body ?? {}),
+  });
+  const data = (await res.json().catch(() => ({}))) as { message?: string | string[]; mine?: MyInquiry[] };
+  if (!res.ok) throw new Error(typeof data.message === "string" ? data.message : "처리하지 못했습니다. 잠시 뒤 다시 시도해 주세요.");
+  return data.mine ?? [];
+}
+
+/** 내가 보낸 글 한 장: 관리자가 보기 전이면 고치기, 언제든 지우기 */
+function MyInquiryItem({ item: q, onChange }: { item: MyInquiry; onChange: (mine: MyInquiry[]) => void }) {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(q.body);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const run = async (task: () => Promise<MyInquiry[]>) => {
+    setPending(true);
+    setError(null);
+    try {
+      onChange(await task());
+      setEditing(false);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "처리하지 못했습니다.");
+    } finally {
+      setPending(false);
+    }
+  };
+
+  return (
+    <li className="rounded-xl border border-line bg-surface p-4 text-sm">
+      <div className="flex items-center gap-2 text-xs text-muted">
+        <span className="font-medium">{KIND_LABEL[q.kind]}</span>
+        <span>· {q.reply ? "답변이 왔습니다" : q.editable ? "관리자가 아직 보지 않았습니다" : STATUS_LABEL[q.status]}</span>
+        <span className="ml-auto">{dateFmt.format(new Date(q.createdAt))}</span>
+      </div>
+      {editing ? (
+        <div className="mt-2">
+          <textarea
+            value={draft}
+            maxLength={MAX}
+            rows={4}
+            onChange={(e) => setDraft(e.target.value)}
+            className="w-full resize-y rounded-lg border border-line bg-background p-3 text-sm leading-6 outline-none focus-visible:ring-4 focus-visible:ring-[#4f78a8]/20"
+          />
+          <div className="mt-2 flex justify-end gap-2">
+            <button type="button" onClick={() => { setEditing(false); setDraft(q.body); }} className="rounded-lg px-3 py-1.5 text-xs text-muted hover:bg-black/5">
+              취소
+            </button>
+            <button
+              type="button"
+              disabled={pending || draft.trim().length < 5}
+              onClick={() => run(() => call(`/api/inquiries/${q.id}`, { body: draft }))}
+              className="rounded-lg bg-foreground px-3 py-1.5 text-xs font-medium text-surface disabled:opacity-50"
+            >
+              {pending ? "저장 중입니다" : "수정하기"}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <p className="mt-2 whitespace-pre-wrap break-words">{q.body}</p>
+      )}
+      {q.reply && (
+        <div className="mt-3 rounded-lg bg-[#4f78a8]/8 p-3">
+          <p className="text-xs font-semibold text-[#4f78a8]">답변</p>
+          <p className="mt-1 whitespace-pre-wrap text-muted">{q.reply}</p>
+        </div>
+      )}
+      {!editing && (
+        <div className="mt-3 flex justify-end gap-3 text-xs text-subtle">
+          {q.editable && (
+            <button type="button" onClick={() => setEditing(true)} className="hover:text-foreground">
+              수정
+            </button>
+          )}
+          <button
+            type="button"
+            disabled={pending}
+            onClick={() => {
+              if (window.confirm("보낸 글을 지울까요? 지우면 되돌릴 수 없습니다.")) {
+                void run(() => call(`/api/inquiries/${q.id}/delete`));
+              }
+            }}
+            className="hover:text-[#b5543a]"
+          >
+            삭제
+          </button>
+        </div>
+      )}
+      {error && <p className="mt-2 text-xs text-[#b5543a]">{error}</p>}
+    </li>
   );
 }

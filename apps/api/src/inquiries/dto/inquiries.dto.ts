@@ -14,6 +14,10 @@ export const inquirySchema = z.object({
 });
 export type InquiryInput = z.infer<typeof inquirySchema>;
 
+/** 보낸 글 고치기 (관리자가 보기 전까지) */
+export const inquiryEditSchema = z.object({ body: z.string().trim().min(5).max(2000) });
+export type InquiryEditInput = z.infer<typeof inquiryEditSchema>;
+
 export const inquiryListSchema = z.object({
   group: z.enum(['inquiry', 'feedback']).default('inquiry'),
   status: z.enum(InquiryStatus).optional(),

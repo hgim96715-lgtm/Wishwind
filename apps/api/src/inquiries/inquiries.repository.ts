@@ -12,6 +12,7 @@ const mineSelect = {
   caseSlug: true,
   reply: true,
   repliedAt: true,
+  seenAt: true,
   createdAt: true,
 } as const satisfies Prisma.InquirySelect;
 
@@ -50,6 +51,22 @@ export class InquiriesRepository {
 
   exists(id: string) {
     return this.prisma.inquiry.findUnique({ where: { id }, select: { id: true } });
+  }
+
+  findMine(id: string, voterId: string) {
+    return this.prisma.inquiry.findFirst({
+      where: { id, voterId },
+      select: { id: true, status: true, reply: true, seenAt: true },
+    });
+  }
+
+  deleteMine(id: string, voterId: string) {
+    return this.prisma.inquiry.deleteMany({ where: { id, voterId } });
+  }
+
+  /** 관리실 목록에 처음 보인 글을 '관리자가 봄'으로 표시 */
+  markSeen(ids: string[]) {
+    return this.prisma.inquiry.updateMany({ where: { id: { in: ids }, seenAt: null }, data: { seenAt: new Date() } });
   }
 
   update(id: string, data: Prisma.InquiryUpdateInput) {

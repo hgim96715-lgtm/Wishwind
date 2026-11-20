@@ -634,6 +634,8 @@ model Inquiry {
 
   reply     String?   @db.Text
   repliedAt DateTime? @map("replied_at") @db.Timestamptz(3)
+  /** 관리자가 관리실 목록에서 처음 본 때. 보기 전까지만 보낸 사람이 고칠 수 있음 */
+  seenAt    DateTime? @map("seen_at") @db.Timestamptz(3)
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
