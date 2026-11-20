@@ -4,7 +4,11 @@ import { InquiryStatus } from '../generated/prisma/enums.js';
 import type { InquiriesRepository } from './inquiries.repository.js';
 import { canEdit, InquiriesService } from './inquiries.service.js';
 
-const open = { status: InquiryStatus.OPEN, reply: null, seenAt: null };
+const open: { status: InquiryStatus; reply: string | null; seenAt: Date | null } = {
+  status: InquiryStatus.OPEN,
+  reply: null,
+  seenAt: null,
+};
 
 describe('보낸 문의 고치기 조건', () => {
   it('관리자가 보기 전이고 답변 전이면 고칠 수 있음', () => {
