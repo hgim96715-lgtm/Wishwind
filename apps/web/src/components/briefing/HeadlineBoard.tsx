@@ -9,8 +9,9 @@ const INTERVAL_MS = 6000;
 /** 자막 띠가 1초에 흐르는 거리(px) */
 const TICKER_SPEED = 40;
 
-const FLAG: Record<string, string> = { KR: "🇰🇷", US: "🇺🇸", GB: "🇬🇧", JP: "🇯🇵", CN: "🇨🇳", OTHER: "🌐" };
-const COUNTRY: Record<string, string> = { KR: "한국", US: "미국", GB: "영국", JP: "일본", CN: "중국", OTHER: "해외" };
+/** 사건방과 같게 중국(CN)은 기타로 보여 줌 */
+const FLAG: Record<string, string> = { KR: "🇰🇷", US: "🇺🇸", GB: "🇬🇧", JP: "🇯🇵", CN: "🌐", OTHER: "🌐" };
+const COUNTRY: Record<string, string> = { KR: "한국", US: "미국", GB: "영국", JP: "일본", CN: "기타", OTHER: "기타" };
 
 function ItemLink({ item, className, children }: { item: BoardItem; className?: string; children: React.ReactNode }) {
   return (

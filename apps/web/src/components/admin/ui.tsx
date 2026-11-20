@@ -48,8 +48,9 @@ export function ErrorBox({ message }: { message: string }) {
   );
 }
 
+/** admin-input: select 화살표와 날짜 달력 버튼을 같은 오른쪽 위치에 맞춤 (globals.css) */
 export const inputClass =
-  "w-full rounded-md border border-line bg-white/60 px-3 py-2 text-sm outline-none focus:border-foreground/50";
+  "admin-input w-full rounded-md border border-line bg-white/60 px-3 py-2 text-sm outline-none focus:border-foreground/50";
 
 export function Field({ label, children, hint }: { label: string; children: ReactNode; hint?: string }) {
   return (
