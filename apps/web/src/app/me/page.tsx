@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { fetchMe } from "@/lib/account/session";
+import { FoldList } from "./FoldList";
 import { NicknameForm } from "./NicknameForm";
 import { WithdrawButton } from "./WithdrawButton";
 import type { Me } from "@/lib/account/types";
@@ -63,7 +64,7 @@ async function MyLog({ searchParams }: { searchParams: PageProps<"/me">["searchP
 
       <Counts counts={me.counts} />
 
-      <Section title="수사 노트 답변" empty="아직 남긴 답변이 없습니다. 사건 파일의 질문 탭에서 생각을 남겨 보세요.">
+      <Section title="수사 노트 답변" total={me.counts.answers} empty="아직 남긴 답변이 없습니다. 사건 파일의 질문 탭에서 생각을 남겨 보세요.">
         {me.answers.map((a) => (
           <Item key={a.id} href={`/cases/${a.case.slug}`} meta={`${a.case.title} · ${day(a.createdAt)}`} status={a.status}>
             <span className="block text-xs text-subtle">Q. {a.question}</span>
@@ -72,7 +73,7 @@ async function MyLog({ searchParams }: { searchParams: PageProps<"/me">["searchP
         ))}
       </Section>
 
-      <Section title="내가 던진 질문" empty="아직 남긴 질문이 없습니다.">
+      <Section title="내가 던진 질문" total={me.counts.questions} empty="아직 남긴 질문이 없습니다.">
         {me.questions.map((q) => (
           <Item
             key={q.id}
@@ -85,7 +86,7 @@ async function MyLog({ searchParams }: { searchParams: PageProps<"/me">["searchP
         ))}
       </Section>
 
-      <Section title="형량 의견" empty="아직 남긴 형량 의견이 없습니다.">
+      <Section title="형량 의견" total={me.counts.votes} empty="아직 남긴 형량 의견이 없습니다.">
         {me.votes.map((v) => (
           <Item key={v.id} href={`/cases/${v.case.slug}`} meta={`${v.case.title} · ${day(v.createdAt)}`}>
             {v.penalty ? `${v.penalty}: ` : ""}
@@ -94,7 +95,7 @@ async function MyLog({ searchParams }: { searchParams: PageProps<"/me">["searchP
         ))}
       </Section>
 
-      <Section title="꽂은 바람개비" empty="아직 꽂은 바람개비가 없습니다. 실종방 언덕에 응원 한 마디를 남겨 보세요.">
+      <Section title="꽂은 바람개비" total={me.counts.clouds} empty="아직 꽂은 바람개비가 없습니다. 실종방 언덕에 응원 한 마디를 남겨 보세요.">
         {me.clouds.map((c) => (
           <Item key={c.id} href="/missing" meta={day(c.createdAt)} status={c.status}>
             {c.body}
@@ -167,11 +168,19 @@ function Counts({ counts }: { counts: Me["counts"] }) {
   );
 }
 
-function Section({ title, empty, children }: { title: string; empty: string; children: React.ReactNode[] }) {
+/** 제목 옆에 전체 개수, 목록은 최근 3개만 먼저 보여 주고 접어 둠. API는 최근 20개까지 보내므로 그보다 많으면 알려 줌 */
+function Section({ title, empty, total, children }: { title: string; empty: string; total?: number; children: React.ReactNode[] }) {
+  const count = total ?? children.length;
   return (
     <section className="mt-12">
-      <h2 className="text-lg font-semibold">{title}</h2>
-      {children.length ? <ul className="mt-3 flex flex-col gap-2">{children}</ul> : <p className="mt-3 text-sm text-subtle">{empty}</p>}
+      <h2 className="text-lg font-semibold">
+        {title}
+        {count > 0 && <span className="ml-2 text-sm font-normal text-subtle tabular-nums">{count.toLocaleString("ko-KR")}</span>}
+      </h2>
+      {children.length ? <FoldList items={children} /> : <p className="mt-3 text-sm text-subtle">{empty}</p>}
+      {count > children.length && (
+        <p className="mt-2 text-xs text-subtle">최근 {children.length}개까지 보여 줍니다.</p>
+      )}
     </section>
   );
 }
