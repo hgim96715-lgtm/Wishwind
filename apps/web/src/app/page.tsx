@@ -17,7 +17,7 @@ export default function Home() {
         </Suspense>
       </div>
       <section className="mb-14">
-        <Image src="/wishwind-logo.png" alt="Wishwind" width={720} height={240} priority className="h-12 w-auto md:h-14" />
+        <Image src="/wishwind-logo.png" alt="Wishwind" width={720} height={240} priority className="brand-logo h-12 w-auto md:h-14" />
         <h1 className="mt-5 text-4xl font-bold leading-snug tracking-tight md:text-5xl md:leading-tight">
           작은 바람이 모이면,
           <br />
