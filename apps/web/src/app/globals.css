@@ -4,7 +4,8 @@
    - 순백(#fff) 대신 살짝 누런 회색 배경 → 눈부심 줄이고 종이/매거진 느낌
    - 글자는 순흑 대신 짙은 갈회색 → 대비는 충분(WCAG AA 이상)하되 딱딱하지 않게 */
 :root {
-  color-scheme: light;
+  /* 'only light': 폰 다크 모드나 브라우저의 '웹페이지 강제 다크'가 색을 멋대로 뒤집지 않게 함 */
+  color-scheme: only light;
   --background: #efe9df;
   --foreground: #2f2c28;
   --surface: #fbf7ef;
