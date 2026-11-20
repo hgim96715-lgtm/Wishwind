@@ -25,6 +25,8 @@ const GARDEN_TIMES: [string, string][] = [
 export function DevViewerSwitch() {
   const [viewing, setViewing] = useState<boolean | null>(null);
   const [gardenTime, setGardenTime] = useState("");
+  // 실종방에서는 안내판을 가리지 않게 접어 두고 'DEV'를 누르면 펼침
+  const [open, setOpen] = useState(false);
   const pathname = usePathname();
   useEffect(() => {
     try {
@@ -38,15 +40,26 @@ export function DevViewerSwitch() {
   }, []);
 
   if (process.env.NODE_ENV !== "development" || viewing === null) return null;
+  const inGarden = pathname === "/missing";
 
   return (
     // 실종방에서는 오른쪽 아래 '바람개비 꽂기' 버튼을 가리지 않게 위 가운데에 둠
     <div
       className={`fixed z-[60] flex flex-col gap-1.5 ${
-        pathname === "/missing" ? "top-3 left-1/2 -translate-x-1/2 items-center" : "right-3 bottom-3 items-end"
+        inGarden ? "top-3 left-1/2 -translate-x-1/2 items-center" : "right-3 bottom-3 items-end"
       }`}
     >
-    {pathname === "/missing" && (
+    {inGarden && (
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="rounded-full border border-dashed border-[#c46a4b]/60 bg-white/90 px-3 py-1 font-mono text-[10px] text-[#c46a4b] shadow-sm backdrop-blur"
+      >
+        {open ? "DEV 접기" : gardenTime || viewing ? "DEV ●" : "DEV"}
+      </button>
+    )}
+    {inGarden && open && (
       <label className="flex items-center gap-1 rounded-full border border-dashed border-[#c46a4b]/60 bg-white/90 py-1 pr-2 pl-1 text-xs shadow-sm backdrop-blur">
         <span className="px-2 font-mono text-[10px] text-[#c46a4b]">DEV</span>
         <span className="text-muted">언덕 시각</span>
@@ -72,6 +85,7 @@ export function DevViewerSwitch() {
         </select>
       </label>
     )}
+    {(!inGarden || open) && (
     <form
       method="post"
       action="/dev/viewer"
@@ -80,11 +94,11 @@ export function DevViewerSwitch() {
       <span className="px-2 font-mono text-[10px] text-[#c46a4b]">DEV</span>
       {viewing ? (
         <>
-          <span className="px-1 text-muted">다른 사람으로 보는 중</span>
-          <button name="action" value="other" className="rounded-full px-2.5 py-1 hover:bg-black/5">
+          <span className="px-1 whitespace-nowrap text-muted">다른 사람으로 보는 중</span>
+          <button name="action" value="other" className="rounded-full px-2.5 py-1 whitespace-nowrap hover:bg-black/5">
             또 다른 사람
           </button>
-          <button name="action" value="back" className="rounded-full bg-foreground px-2.5 py-1 text-surface">
+          <button name="action" value="back" className="rounded-full bg-foreground px-2.5 py-1 whitespace-nowrap text-surface">
             내 화면으로
           </button>
         </>
@@ -94,6 +108,7 @@ export function DevViewerSwitch() {
         </button>
       )}
     </form>
+    )}
     </div>
   );
 }
