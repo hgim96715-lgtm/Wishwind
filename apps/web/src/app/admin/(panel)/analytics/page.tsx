@@ -121,7 +121,7 @@ async function Report({ days }: { days: number }) {
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Number_ label="오늘 방문자" value={a.today.visitors} hint={`조회 ${a.today.views}`} />
         <Number_ label={`${days}일 조회수`} value={a.totals.views} />
-        <Number_ label={`${days}일 방문자 (일별 합계)`} value={a.totals.visitorDays} hint="같은 사람이 이틀 오면 2로 셉니다" />
+        <Number_ label={`${days}일 방문자 (일별 합계)`} value={a.totals.visitorDays} />
         <Number_
           label="하루 평균 방문자"
           value={Math.round(a.totals.visitorDays / Math.max(1, days))}
