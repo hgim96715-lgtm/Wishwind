@@ -103,9 +103,11 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   // 실종방은 사이트 낮·밤 설정 대신 언덕의 시간을 따름 → 사이트를 밤으로 둬도 낮 언덕 위 안내판·창이 어둡게 겹치지 않음
   useEffect(() => {
     const root = document.documentElement;
-    root.dataset.theme = "light";
     const apply = () => {
-      document.documentElement.dataset.garden = paletteAt(currentHour()).dark ? "night" : "day";
+      const night = paletteAt(currentHour()).dark;
+      root.dataset.garden = night ? "night" : "day";
+      // 창(캐릭터 고르기·바람개비 꽂기·등불 카드)도 밤이면 어둡게 (globals.css의 밤 정원 창 색)
+      root.dataset.theme = night ? "dark" : "light";
     };
     apply();
     const id = window.setInterval(apply, 60_000);

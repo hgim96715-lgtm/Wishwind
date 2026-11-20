@@ -99,6 +99,18 @@ html[data-garden="night"] .garden-page :is(.bg-white\/60, .bg-white\/70, .bg-whi
   border-color: rgb(255 255 255 / 0.12);
   color: #e6e1f0;
 }
+/* 밤 정원의 창(캐릭터 고르기·바람개비 꽂기·등불 카드): 사이트 어두운 색 위에 밤하늘 남색을 입힘 */
+html[data-garden="night"] .garden-page [role="dialog"] {
+  --foreground: #e8ebf5;
+  --surface: #1f2a4c;
+  --line: #34416b;
+  --muted: #b8c0da;
+  --subtle: #8b94b3;
+  color: var(--foreground);
+  background-color: rgb(20 28 54 / 0.95);
+  border-color: rgb(255 255 255 / 0.12);
+  box-shadow: 0 20px 60px rgb(0 0 0 / 0.45);
+}
 /* 불러오는 동안 보이는 안내 화면도 밤 하늘 색으로 */
 html[data-garden="night"] .garden-page .garden-veil {
   background-color: #0f1d40;
@@ -121,7 +133,7 @@ html[data-garden="night"] .garden-page .text-\[\#b9772a\]:not([role="dialog"] *)
 :root[data-theme="dark"] .bg-white {
   background-color: var(--surface);
 }
-:root[data-theme="dark"] .hover:bg-white:hover {
+:root[data-theme="dark"] .hover\:bg-white:hover {
   background-color: #2f2b26;
 }
 :root[data-theme="dark"] .bg-white\/60,
