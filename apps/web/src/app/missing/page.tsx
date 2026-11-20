@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { HomeLogo } from "@/components/common/HomeLogo";
 import { Suspense } from "react";
 import { HelpLink } from "@/components/help/HelpBar";
 import { MissingExperience } from "@/components/missing/MissingExperience";
@@ -17,12 +17,7 @@ export default function MissingPage() {
   return (
     <main className="relative h-dvh w-full overflow-hidden bg-[#f4e6d4]">
       <header className="pointer-events-none absolute top-0 left-0 z-20 p-5">
-        <Link
-          href="/"
-          className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1.5 text-sm text-[#6b5a46] backdrop-blur hover:bg-white"
-        >
-          홈으로
-        </Link>
+        <HomeLogo onSky />
         {/* 하늘 색이 시간대마다 바뀌므로(밤엔 어두움) 글자 뒤에 반투명 바탕을 둠 */}
         <div className="mt-3 rounded-2xl bg-white/70 px-3 py-2 backdrop-blur">
           <h1 className="text-xl font-semibold text-[#5b4d3c]">실종방</h1>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { HomeLogo } from "@/components/common/HomeLogo";
 import { LuHeartHandshake, LuPhone } from "react-icons/lu";
 import { ContactCard } from "@/components/help/ContactCard";
 import {
@@ -41,9 +41,7 @@ const ABROAD: HelpCountry[] = ["US", "GB", "JP"];
 export default function HelpPage() {
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-12 sm:py-16">
-      <Link href="/" className="inline-flex items-center rounded-full border border-line bg-surface px-3.5 py-1.5 text-sm text-muted shadow-sm transition-colors hover:bg-white hover:text-foreground">
-        홈으로
-      </Link>
+      <HomeLogo />
 
       <p className="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-subtle">Help</p>
       <h1 className="mt-2 text-3xl font-semibold tracking-tight">도움받는 곳</h1>

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { HomeLogo } from "@/components/common/HomeLogo";
 import { getRoom, type RoomSlug } from "@/lib/rooms";
 
 interface RoomHeaderProps {
@@ -11,12 +11,7 @@ export function RoomHeader({ slug }: RoomHeaderProps) {
 
   return (
     <header className="border-b border-line pb-8">
-      <Link
-        href="/"
-        className="inline-flex items-center rounded-full border border-line bg-surface px-3.5 py-1.5 text-sm text-muted shadow-sm transition-colors hover:bg-white hover:text-foreground"
-      >
-        홈으로
-      </Link>
+      <HomeLogo />
 
       <div className="mt-10 flex items-center gap-4">
         <Icon aria-hidden className="size-8" style={{ color: room.accent }} />
