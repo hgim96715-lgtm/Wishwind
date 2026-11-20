@@ -1,5 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
-import { LuHeartHandshake, LuWind } from "react-icons/lu";
+import { LuHeartHandshake } from "react-icons/lu";
 import { RoomGrid } from "@/components/home/RoomGrid";
 
 // 서버 컴포넌트. 정적인 텍스트는 서버에서 HTML로 내려가고,
@@ -8,10 +9,7 @@ export default function Home() {
   return (
     <main className="relative mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-6 py-20">
       <section className="mb-14">
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-muted">
-          <LuWind aria-hidden className="size-3.5" />
-          Wishwind
-        </span>
+        <Image src="/wishwind-logo.png" alt="Wishwind" width={720} height={240} priority className="h-12 w-auto md:h-14" />
         <h1 className="mt-5 text-4xl font-bold leading-snug tracking-tight md:text-5xl md:leading-tight">
           작은 바람이 모이면,
           <br />
