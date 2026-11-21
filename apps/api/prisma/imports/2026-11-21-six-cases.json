@@ -1,0 +1,924 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "cheonan-suitcase-child-abuse-death",
+      "content": {
+        "title": "천안 여행가방 아동학대 사망 사건",
+        "summary": "2020년 6월 충남 천안에서 9세 아이가 동거하던 아버지의 여자친구에게 여행용 가방에 7시간 넘게 갇혀 숨진 사건으로, 가해자는 살인 혐의가 인정돼 징역 25년이 확정됐습니다",
+        "overview": "2020년 6월 1일 저녁, 충남 천안시 서북구의 한 아파트에서 9세 남자아이가 의식을 잃은 채 발견됐습니다. 아이는 아버지와 동거하던 여성에게 7시간 넘게 여행용 가방에 갇혀 있었고, 병원으로 옮겨졌지만 이틀 뒤인 6월 3일 숨졌습니다. 수사 결과 가해자는 처음 넣은 가방보다 더 작은 가방에 아이를 옮겨 가두고, 아이가 숨이 막힌다고 호소하는데도 가방 위에 올라가 뛰거나 헤어드라이어로 뜨거운 바람을 넣은 것으로 드러났습니다. 아이는 그보다 앞서 몸의 멍 때문에 학대 신고가 접수된 적이 있었지만, 가해자가 함께 있는 자리에서 확인이 이뤄지는 등 보호로 이어지지 못했습니다. 검찰은 아동학대치사 혐의로 송치된 사건을 살인죄로 바꿔 기소했고, 1심은 징역 22년을, 항소심은 살인의 고의를 더 무겁게 보아 징역 25년을 선고했습니다. 대법원은 2021년 5월 징역 25년을 확정했습니다. 이 사건은 학대 신고 뒤 아이를 가해자와 분리해 살피는 절차를 강화해야 한다는 논의로 이어졌습니다.",
+        "victimCountNote": "사망 1명",
+        "country": "KR",
+        "category": "MURDER",
+        "status": "SOLVED",
+        "location": "충남 천안시 서북구",
+        "occurredAt": "2020-06-01",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": "2021-05-11",
+        "timeline": [
+          {
+            "occurredAt": "2020-05-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "학대 신고 접수",
+            "description": "아이 몸의 멍을 본 병원 측의 신고로 경찰과 아동보호전문기관이 확인에 나섰지만, 아이는 집으로 돌아갔습니다."
+          },
+          {
+            "occurredAt": "2020-06-01",
+            "occurredAtPrecision": "DAY",
+            "title": "여행용 가방에 7시간 넘게 갇힌 채 발견",
+            "description": "가해자가 직접 신고했고, 아이는 심정지 상태로 병원에 옮겨졌습니다."
+          },
+          {
+            "occurredAt": "2020-06-03",
+            "occurredAtPrecision": "DAY",
+            "title": "아이 사망"
+          },
+          {
+            "occurredAt": "2020-06-29",
+            "occurredAtPrecision": "DAY",
+            "title": "살인죄로 구속 기소",
+            "description": "검찰은 경찰이 아동학대치사로 송치한 혐의를 살인 등으로 바꿔 기소했습니다."
+          },
+          {
+            "occurredAt": "2021-01-29",
+            "occurredAtPrecision": "DAY",
+            "title": "항소심 징역 25년",
+            "description": "1심의 징역 22년을 깨고 징역 25년을 선고했습니다."
+          },
+          {
+            "occurredAt": "2021-05-11",
+            "occurredAtPrecision": "DAY",
+            "title": "대법원 징역 25년 확정"
+          }
+        ],
+        "victims": [
+          {
+            "alias": "9세 남자아이",
+            "age": 9,
+            "gender": "MALE",
+            "status": "DECEASED",
+            "description": "아버지, 아버지의 동거인과 그 자녀들과 함께 살았습니다."
+          }
+        ],
+        "suspects": [
+          {
+            "alias": "아버지의 동거인 A씨",
+            "status": "CONVICTED",
+            "charges": "살인, 아동복지법 위반(상습 아동학대), 특수상해",
+            "description": "아이를 여행용 가방에 가두고 장시간 방치해 숨지게 했습니다. 재판에서 살해할 생각은 없었다고 주장했지만 받아들여지지 않았습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "대전지방법원 천안지원",
+                "type": "IMPRISONMENT",
+                "verdict": "살인 등 혐의를 유죄로 인정했습니다.",
+                "penalty": "징역 22년",
+                "isFinal": false,
+                "decidedAt": "2020-09-16"
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "대전고등법원",
+                "type": "IMPRISONMENT",
+                "verdict": "1심을 깨고 형을 높였습니다.",
+                "penalty": "징역 25년",
+                "isFinal": false,
+                "decidedAt": "2021-01-29"
+              },
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "대법원",
+                "type": "IMPRISONMENT",
+                "verdict": "상고를 기각해 원심을 확정했습니다.",
+                "penalty": "징역 25년",
+                "isFinal": true,
+                "decidedAt": "2021-05-11"
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "학대 신고가 들어온 아이를 가해자와 떨어진 곳에서 살피려면 어떤 절차가 필요할까요?"
+          },
+          {
+            "question": "한 번 신고된 아이가 집으로 돌아간 뒤에도 안전을 계속 확인하려면 무엇이 필요할까요?"
+          },
+          {
+            "question": "이웃이나 학교가 아이의 위험 신호를 알아차렸을 때 망설이지 않고 알릴 수 있으려면 무엇이 필요할까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://mobile.newsis.com/view/NISX20210511_0001436710",
+          "title": "의붓아들 여행가방 가둬 살해한 계모…징역 25년 확정",
+          "publisher": "뉴시스",
+          "type": "NEWS_AGENCY",
+          "publishedAt": "2021-05-11",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://www.asiae.co.kr/en/article/2021012911001681549",
+          "title": "Woman Imprisoned and Murdered with Travel Bag in Cheonan Sentenced to 25 Years in Appeal",
+          "publisher": "아시아경제",
+          "type": "NEWS",
+          "publishedAt": "2021-01-29",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://www.mt.co.kr/society/2020/06/14/2020061313033137481",
+          "title": "집에 가면 또 맞을텐데…아이는 그래도 돌아갈 수 밖에 없었다",
+          "publisher": "머니투데이",
+          "type": "NEWS",
+          "publishedAt": "2020-06-14",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://mobile.newsis.com/view/NISX20200629_0001076987",
+          "title": "호흡곤란 호소해 가방으로 헤어 드라이기 바람 넣기도",
+          "publisher": "뉴시스",
+          "type": "NEWS_AGENCY",
+          "publishedAt": "2020-06-29",
+          "accessedAt": "2026-11-21"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "pyeongtaek-wonyoung-abuse-death",
+      "content": {
+        "title": "평택 원영이 사건",
+        "summary": "2016년 경기 평택에서 7세 원영이가 계모에게 석 달 가까이 화장실에 갇혀 학대받다 숨지고 야산에 암매장된 사건으로, 계모는 징역 27년, 학대를 방치한 친부는 징역 17년이 확정됐습니다",
+        "overview": "2015년 11월부터 경기 평택의 한 아파트에서 7세 원영이는 계모에게 화장실에 갇힌 채 지냈습니다. 계모는 아이에게 락스와 찬물을 붓고 밥을 제대로 주지 않았으며, 2016년 1월 말 옷에 대변을 봤다는 이유로 옷을 벗기고 찬물을 끼얹은 뒤 방치했습니다. 아이는 다음 날 숨졌습니다. 친부는 학대를 알고도 처벌을 걱정해 아이를 보호하지 않았습니다. 부부는 시신을 열흘가량 베란다에 두었다가 2월 12일 평택 청북면의 야산에 묻었습니다. 아이가 초등학교 입학 예정인데도 나타나지 않자 학교와 교육청이 확인에 나섰고, 경찰 수사 끝에 2016년 3월 시신이 발견됐습니다. 법원은 계모와 친부 모두에게 살인죄를 인정했고, 친부에게는 아이를 구하지 않아 숨지게 한 부작위에 의한 살인이 적용됐습니다. 1심은 각각 징역 20년과 15년을, 항소심은 징역 27년과 17년을 선고했고, 대법원이 2017년 4월 이를 확정했습니다. 이 사건 뒤 장기 결석 아동과 취학 예정 아동의 소재를 확인하는 제도가 강화됐습니다.",
+        "victimCountNote": "사망 1명",
+        "country": "KR",
+        "category": "MURDER",
+        "status": "SOLVED",
+        "location": "경기 평택시",
+        "occurredAt": "2016-02-01",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": "2017-04-13",
+        "timeline": [
+          {
+            "occurredAt": "2015-11-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "화장실 감금과 학대 시작",
+            "description": "계모가 아이를 화장실에 가두고 락스와 찬물을 붓는 학대를 이어갔습니다."
+          },
+          {
+            "occurredAt": "2016-02-01",
+            "occurredAtPrecision": "DAY",
+            "title": "원영이 사망",
+            "description": "전날 찬물을 끼얹은 채 방치된 아이가 숨졌습니다."
+          },
+          {
+            "occurredAt": "2016-02-12",
+            "occurredAtPrecision": "DAY",
+            "title": "야산에 암매장",
+            "description": "부부가 시신을 평택 청북면의 야산에 묻었습니다."
+          },
+          {
+            "occurredAt": "2016-03-12",
+            "occurredAtPrecision": "DAY",
+            "title": "시신 발견",
+            "description": "취학 예정 아동이 나타나지 않아 시작된 확인과 경찰 수사 끝에 시신을 찾았습니다."
+          },
+          {
+            "occurredAt": "2016-08-10",
+            "occurredAtPrecision": "DAY",
+            "title": "1심: 계모 징역 20년, 친부 징역 15년"
+          },
+          {
+            "occurredAt": "2017-04-13",
+            "occurredAtPrecision": "DAY",
+            "title": "대법원 확정: 계모 징역 27년, 친부 징역 17년"
+          }
+        ],
+        "victims": [
+          {
+            "name": "원영이",
+            "age": 7,
+            "gender": "MALE",
+            "status": "DECEASED",
+            "description": "숨질 당시 키 112.5cm, 몸무게 15.3kg으로 또래보다 많이 작았습니다."
+          }
+        ],
+        "suspects": [
+          {
+            "alias": "계모 김모씨",
+            "status": "CONVICTED",
+            "charges": "살인, 사체은닉, 아동학대범죄의 처벌 등에 관한 특례법 위반",
+            "description": "아이를 화장실에 가두고 상습적으로 학대해 숨지게 했습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "수원지방법원 평택지원",
+                "type": "IMPRISONMENT",
+                "verdict": "살인 혐의를 유죄로 인정했습니다.",
+                "penalty": "징역 20년",
+                "isFinal": false,
+                "decidedAt": "2016-08-10"
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "서울고등법원",
+                "type": "IMPRISONMENT",
+                "verdict": "1심보다 형을 높였습니다.",
+                "penalty": "징역 27년",
+                "isFinal": false
+              },
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "대법원",
+                "type": "IMPRISONMENT",
+                "verdict": "상고를 모두 기각해 원심을 확정했습니다.",
+                "penalty": "징역 27년",
+                "isFinal": true,
+                "decidedAt": "2017-04-13"
+              }
+            ]
+          },
+          {
+            "alias": "친부 신모씨",
+            "status": "CONVICTED",
+            "charges": "살인(부작위), 사체은닉, 아동학대범죄의 처벌 등에 관한 특례법 위반",
+            "description": "학대를 알고도 아이를 보호하지 않아 숨지게 했다는 부작위에 의한 살인이 인정됐습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "수원지방법원 평택지원",
+                "type": "IMPRISONMENT",
+                "verdict": "부작위에 의한 살인을 인정했습니다.",
+                "penalty": "징역 15년",
+                "isFinal": false,
+                "decidedAt": "2016-08-10"
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "서울고등법원",
+                "type": "IMPRISONMENT",
+                "verdict": "1심보다 형을 높였습니다.",
+                "penalty": "징역 17년",
+                "isFinal": false
+              },
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "대법원",
+                "type": "IMPRISONMENT",
+                "verdict": "상고를 모두 기각해 원심을 확정했습니다.",
+                "penalty": "징역 17년",
+                "isFinal": true,
+                "decidedAt": "2017-04-13"
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "학교에 오지 않는 아이의 안전을 더 빨리 확인하려면 학교와 지역사회는 무엇을 해야 할까요?"
+          },
+          {
+            "question": "가족 안에서 학대를 알고도 막지 않는 일을 줄이려면 어떤 지원과 교육이 필요할까요?"
+          },
+          {
+            "question": "양육 환경이 바뀐 아이(재혼·친권 변경 등)를 주변에서 살필 수 있는 방법에는 무엇이 있을까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://www.mt.co.kr/society/2017/04/13/2017041309474953324",
+          "title": "'원영이사건' 계모·친부에 징역 27년·17년형 확정",
+          "publisher": "머니투데이",
+          "type": "NEWS",
+          "publishedAt": "2017-04-13",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://www.khan.co.kr/article/201603131134171",
+          "title": "생애 절반을 학대와 구타, 굶주림에 고통",
+          "publisher": "경향신문",
+          "type": "NEWS",
+          "publishedAt": "2016-03-13",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://m.seoul.co.kr/news/2016/07/11/20160711800185",
+          "title": "‘담요 하나 없이…’ 원영이, 화장실서 겨울 3개월 지내",
+          "publisher": "서울신문",
+          "type": "NEWS",
+          "publishedAt": "2016-07-11",
+          "accessedAt": "2026-11-21"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "gumi-three-year-old-girl-death",
+      "content": {
+        "title": "구미 3세 여아 사망 사건",
+        "summary": "2021년 2월 경북 구미의 빈 빌라에서 3세 여자아이가 숨진 채 발견된 사건으로, 아이를 홀로 두고 떠난 언니는 징역 20년이 확정됐지만 DNA로 친모로 드러난 외할머니의 아이 바꿔치기 혐의는 무죄로 끝나 아이가 어떻게 바뀌었는지는 밝혀지지 않았습니다",
+        "overview": "2021년 2월 10일 경북 구미시의 한 빌라에서 세 살 여자아이가 숨진 채 발견됐습니다. 아이를 키우던 20대 여성 김씨는 2020년 8월쯤 이사하면서 아이를 빈집에 홀로 남겨 두었고, 아이는 물과 음식 없이 지내다 숨졌습니다. 처음에는 김씨가 아이의 엄마로 알려졌지만, DNA 검사에서 아이는 김씨의 어머니인 석씨의 딸, 즉 김씨의 동생으로 드러났습니다. 경찰은 석씨가 2018년 비슷한 시기에 아이를 낳은 딸 김씨의 아이와 자신의 아이를 산부인과에서 바꿔치기했다고 보고 기소했습니다. 석씨는 출산 사실을 부인했고, 시신을 처음 발견한 뒤 숨기려 한 혐의도 받았습니다. 김씨는 살인 등으로 기소돼 1심과 항소심에서 징역 20년을 선고받았고, 상고하지 않아 형이 확정됐습니다. 석씨는 1·2심에서 징역 8년을 받았지만 대법원은 아이를 바꿔치기한 증거가 부족하다며 사건을 돌려보냈고, 파기환송심은 미성년자 약취를 무죄로, 시신을 숨기려 한 혐의만 유죄로 보아 징역 2년에 집행유예 3년을 선고했으며 이 판결이 확정됐습니다. 김씨가 낳은 아이의 행방과 두 아이가 바뀐 경위는 밝혀지지 않았습니다.",
+        "victimCountNote": "사망 1명",
+        "country": "KR",
+        "category": "MURDER",
+        "status": "SOLVED",
+        "location": "경북 구미시",
+        "occurredAt": "2020-08-01",
+        "occurredAtPrecision": "MONTH",
+        "solvedAt": "2021-09-16",
+        "timeline": [
+          {
+            "occurredAt": "2018-03-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "김씨 출산",
+            "description": "검찰은 이 무렵 산부인과에서 아이가 바뀌었다고 봤지만, 법원에서 증명되지 않았습니다."
+          },
+          {
+            "occurredAt": "2020-08-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "아이를 빈집에 두고 이사",
+            "description": "김씨가 다른 곳으로 이사하면서 세 살 아이를 홀로 남겼습니다."
+          },
+          {
+            "occurredAt": "2021-02-10",
+            "occurredAtPrecision": "DAY",
+            "title": "빌라에서 아이 시신 발견"
+          },
+          {
+            "occurredAt": "2021-03-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "DNA 검사로 외할머니 석씨가 친모로 드러남"
+          },
+          {
+            "occurredAt": "2021-06-04",
+            "occurredAtPrecision": "DAY",
+            "title": "김씨 1심 징역 20년"
+          },
+          {
+            "occurredAt": "2021-09-16",
+            "occurredAtPrecision": "DAY",
+            "title": "김씨 항소 기각, 이후 상고 포기로 징역 20년 확정"
+          },
+          {
+            "occurredAt": "2022-06-16",
+            "occurredAtPrecision": "DAY",
+            "title": "대법원, 석씨 사건 파기환송",
+            "description": "아이를 바꿔치기했다는 혐의가 충분히 증명되지 않았다고 봤습니다."
+          },
+          {
+            "occurredAt": "2023-02-02",
+            "occurredAtPrecision": "DAY",
+            "title": "석씨 파기환송심: 약취 무죄, 사체은닉미수 유죄",
+            "description": "징역 2년에 집행유예 3년이 선고됐고, 이후 확정됐습니다."
+          }
+        ],
+        "victims": [
+          {
+            "alias": "세 살 여자아이",
+            "age": 3,
+            "gender": "FEMALE",
+            "status": "DECEASED",
+            "description": "DNA 검사로 석씨의 딸로 확인됐습니다."
+          }
+        ],
+        "suspects": [
+          {
+            "alias": "언니 김씨",
+            "status": "CONVICTED",
+            "charges": "살인, 아동복지법 위반(아동유기·방임)",
+            "description": "아이를 빈집에 홀로 두고 떠나 숨지게 했습니다. 재판 과정에서 아이의 친언니로 확인됐습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "대구지방법원 김천지원",
+                "type": "IMPRISONMENT",
+                "verdict": "살인 등을 유죄로 인정하고 아동학대 치료 프로그램 이수와 아동 관련 기관 취업제한 10년을 함께 명령했습니다.",
+                "penalty": "징역 20년",
+                "isFinal": false,
+                "decidedAt": "2021-06-04"
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "대구고등법원",
+                "type": "IMPRISONMENT",
+                "verdict": "양쪽 항소를 기각했고, 상고하지 않아 확정됐습니다.",
+                "penalty": "징역 20년",
+                "isFinal": true,
+                "decidedAt": "2021-09-16"
+              }
+            ]
+          },
+          {
+            "alias": "외할머니(친모) 석씨",
+            "status": "CONVICTED",
+            "charges": "미성년자 약취(무죄), 사체은닉 미수",
+            "description": "DNA 검사로 숨진 아이의 친모로 드러났습니다. 출산 사실을 부인했고, 아이를 바꿔치기한 혐의는 무죄가 확정됐습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "대구지방법원 김천지원",
+                "type": "IMPRISONMENT",
+                "verdict": "아이를 바꿔치기한 혐의 등을 유죄로 봤습니다.",
+                "penalty": "징역 8년",
+                "isFinal": false,
+                "decidedAt": "2021-08-17"
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "대구지방법원 (항소심)",
+                "type": "IMPRISONMENT",
+                "verdict": "1심과 같이 유죄로 봤습니다.",
+                "penalty": "징역 8년",
+                "isFinal": false
+              },
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "대법원",
+                "type": "OTHER",
+                "verdict": "바꿔치기 혐의가 충분히 증명되지 않았다며 사건을 돌려보냈습니다.",
+                "penalty": "파기환송",
+                "isFinal": false,
+                "decidedAt": "2022-06-16"
+              },
+              {
+                "courtLevel": "OTHER",
+                "courtName": "대구지방법원 (파기환송심)",
+                "type": "PROBATION",
+                "verdict": "미성년자 약취는 무죄, 사체은닉 미수만 유죄로 보았고 이 판결이 확정됐습니다.",
+                "penalty": "징역 2년, 집행유예 3년",
+                "isFinal": true,
+                "decidedAt": "2023-02-02"
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "아이가 갑자기 보이지 않을 때 이웃과 지자체가 더 빨리 알아차리려면 무엇이 필요할까요?"
+          },
+          {
+            "question": "출생 직후 아이가 뒤바뀌거나 기록에서 사라지는 일을 막으려면 병원과 출생 등록 제도는 어떻게 바뀌어야 할까요?"
+          },
+          {
+            "question": "어린 나이에 혼자 아이를 키우는 부모가 도움을 요청할 수 있는 길에는 무엇이 있을까요?"
+          }
+        ],
+        "circumstances": [
+          {
+            "title": "두 아이가 바뀐 경위",
+            "description": "숨진 아이는 석씨의 딸로 확인됐지만, 김씨가 낳은 아이와 어떻게 바뀌었는지는 법원에서 증명되지 않았습니다."
+          },
+          {
+            "title": "김씨가 낳은 아이의 행방",
+            "description": "김씨가 2018년에 낳은 아이가 어디에 있는지는 밝혀지지 않았습니다."
+          }
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.segye.com/newsView/20210605500888",
+          "title": "만기 출소해도 40대… ‘구미 여아’ 친언니, 징역 20년에 전자장치 부착 명령도 기각돼",
+          "publisher": "세계일보",
+          "type": "NEWS",
+          "publishedAt": "2021-06-05",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://www.asiae.co.kr/en/article/2021091610435001234",
+          "title": "Court Rejects Appeal of Gumi 3-Year-Old Girl's Biological Older Sister Sentenced to 20 Years in First Trial",
+          "publisher": "아시아경제",
+          "type": "NEWS",
+          "publishedAt": "2021-09-16",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://www.newstomato.com/ReadNews.aspx?no=1129238",
+          "title": "'구미 3세 여아' 친모 유죄, 대법원에서 뒤집혀",
+          "publisher": "뉴스토마토",
+          "type": "NEWS",
+          "publishedAt": "2022-06-16",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://v.daum.net/v/20230202144850462",
+          "title": "'구미 여아' 친모, 바꿔치기 혐의 무죄…2년만에 '석방'",
+          "publisher": "다음뉴스(연합뉴스)",
+          "type": "NEWS_AGENCY",
+          "publishedAt": "2023-02-02",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://nocutnews.co.kr/news/5696640",
+          "title": "'구미 3세 사망사건' 친모, 항소심서도 유죄…징역 8년",
+          "publisher": "노컷뉴스",
+          "type": "NEWS",
+          "accessedAt": "2026-11-21"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "kitty-genovese-murder",
+      "content": {
+        "title": "키티 제노비스 사건",
+        "summary": "1964년 3월 미국 뉴욕 퀸스에서 28세 키티 제노비스가 퇴근길에 살해된 사건으로, '목격자 38명이 아무도 돕지 않았다'는 보도로 방관자 효과 연구와 911 긴급전화 도입 논의를 불러왔지만 그 보도는 훗날 과장된 것으로 확인됐습니다",
+        "overview": "1964년 3월 13일 새벽, 뉴욕 퀸스 큐가든스에서 술집 매니저로 일하던 28세 키티 제노비스가 퇴근해 집 근처에 차를 세운 뒤 윈스턴 모슬리에게 흉기로 공격당했습니다. 모슬리는 한 번 자리를 떴다가 돌아와 다시 공격했고, 제노비스는 결국 숨졌습니다. 2주 뒤 뉴욕타임스는 이웃 38명이 이를 보거나 듣고도 아무도 경찰에 신고하지 않았다고 보도했고, 이 기사는 '도시의 무관심'을 상징하는 이야기로 퍼졌습니다. 심리학자들은 이 사건을 계기로 주변에 사람이 많을수록 서로 돕지 않게 되는 '방관자 효과'를 연구했고, 하나의 번호로 경찰을 부를 수 있는 긴급전화(911)를 만들자는 논의에도 영향을 주었습니다. 하지만 이후 조사에서 실제로 공격 장면을 본 사람은 몇 명뿐이었고, 경찰에 전화한 이웃과 쓰러진 그를 안아 준 이웃도 있었던 것으로 드러났습니다. 뉴욕타임스는 2016년 당시 보도에 결함이 있었다고 인정했습니다. 모슬리는 1964년 사형을 선고받았다가 1967년 무기징역으로 감형됐고, 가석방을 18번 거절당한 끝에 2016년 3월 교도소에서 숨졌습니다.",
+        "victimCountNote": "사망 1명",
+        "country": "US",
+        "category": "MURDER",
+        "status": "SOLVED",
+        "location": "미국 뉴욕시 퀸스 큐가든스",
+        "occurredAt": "1964-03-13",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": "1964-06-11",
+        "timeline": [
+          {
+            "occurredAt": "1964-03-13",
+            "occurredAtPrecision": "DAY",
+            "title": "퇴근길에 습격당해 숨짐"
+          },
+          {
+            "occurredAt": "1964-03-18",
+            "occurredAtPrecision": "DAY",
+            "title": "윈스턴 모슬리 체포",
+            "description": "다른 절도 사건으로 붙잡힌 뒤 범행을 자백했습니다."
+          },
+          {
+            "occurredAt": "1964-03-27",
+            "occurredAtPrecision": "DAY",
+            "title": "'목격자 38명' 보도",
+            "description": "뉴욕타임스 기사가 큰 반향을 일으켰지만, 훗날 과장된 것으로 확인됐습니다."
+          },
+          {
+            "occurredAt": "1964-06-15",
+            "occurredAtPrecision": "DAY",
+            "title": "사형 선고"
+          },
+          {
+            "occurredAt": "1967-01-01",
+            "occurredAtPrecision": "YEAR",
+            "title": "무기징역으로 감형"
+          },
+          {
+            "occurredAt": "2016-03-28",
+            "occurredAtPrecision": "DAY",
+            "title": "모슬리 교도소에서 사망",
+            "description": "52년을 복역했고, 가석방은 18번 모두 거절됐습니다."
+          }
+        ],
+        "victims": [
+          {
+            "name": "키티 제노비스 (Kitty Genovese)",
+            "age": 28,
+            "gender": "FEMALE",
+            "status": "DECEASED",
+            "description": "퀸스의 술집에서 매니저로 일했습니다."
+          }
+        ],
+        "suspects": [
+          {
+            "name": "윈스턴 모슬리 (Winston Moseley)",
+            "status": "CONVICTED",
+            "charges": "살인",
+            "description": "체포 뒤 범행을 자백했습니다. 2016년 81세로 교도소에서 숨졌습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "뉴욕주 퀸스 법원",
+                "type": "DEATH",
+                "verdict": "살인 유죄로 사형을 선고했습니다.",
+                "penalty": "사형",
+                "isFinal": false,
+                "decidedAt": "1964-06-15"
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "뉴욕주 항소법원",
+                "type": "LIFE",
+                "verdict": "사형을 무기징역으로 감형했습니다.",
+                "penalty": "무기징역",
+                "isFinal": true
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "위험한 장면을 본 사람이 '누군가 신고했겠지' 하고 지나치지 않으려면 무엇이 필요할까요?"
+          },
+          {
+            "question": "긴급 신고를 망설이지 않고 쉽게 할 수 있도록 하려면 신고 제도는 어떻게 만들어져야 할까요?"
+          },
+          {
+            "question": "충격적인 사건을 보도할 때 사실을 과장하지 않으려면 언론은 무엇을 지켜야 할까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Murder_of_Kitty_Genovese",
+          "title": "Murder of Kitty Genovese",
+          "publisher": "Wikipedia",
+          "type": "OTHER",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://www.npr.org/2016/04/05/473057061/winston-moseley-dies-at-81-his-crime-spurred-adoption-of-the-911-system",
+          "title": "Winston Moseley Dies At 81; His Crime Spurred Adoption Of The 911 System",
+          "publisher": "NPR",
+          "type": "BROADCAST",
+          "publishedAt": "2016-04-05",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://www.cbsnews.com/news/killer-of-new-yorks-kitty-genovese-dies-in-prison-at-81",
+          "title": "Killer of New York's Kitty Genovese dies in prison at 81",
+          "publisher": "CBS News",
+          "type": "BROADCAST",
+          "publishedAt": "2016-04-04",
+          "accessedAt": "2026-11-21"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "adam-walsh-murder",
+      "content": {
+        "title": "애덤 월시 사건",
+        "summary": "1981년 미국 플로리다의 쇼핑몰에서 6세 애덤 월시가 사라진 뒤 숨진 채 발견된 사건으로, 27년 만인 2008년 경찰이 이미 숨진 오티스 툴을 범인으로 발표하며 수사를 종결했고, 실종 아동 제도와 '코드 애덤'을 만드는 계기가 됐습니다",
+        "overview": "1981년 7월 27일, 플로리다주 할리우드의 쇼핑몰 안 백화점에서 엄마와 함께 있던 6세 애덤 월시가 사라졌습니다. 2주 뒤인 8월 10일, 약 200km 떨어진 베로비치의 수로에서 아이의 머리가 발견됐습니다. 연쇄 범죄자 오티스 툴이 1983년 범행을 자백했다가 번복했고, 수사 과정에서 핏자국이 있던 차량 카펫 같은 증거를 경찰이 잃어버려 기소되지 못했습니다. 툴은 1996년 다른 사건으로 복역하다 교도소에서 숨졌습니다. 할리우드 경찰은 2008년 12월 16일 기록을 다시 검토한 끝에 툴이 살아 있었다면 체포됐을 것이라며 사건을 종결했고, 수사 과정의 잘못을 가족에게 사과했습니다. 다만 결정적인 물증 없이 내린 결론이라는 지적도 있습니다. 아버지 존 월시는 아들을 잃은 뒤 실종 아동 운동에 나섰고, 1982년 실종아동법, 국립실종착취아동센터 설립, 매장에서 아이가 사라지면 출입구를 막고 찾는 '코드 애덤', 2006년 성범죄자 등록을 강화한 애덤월시법으로 이어졌습니다. 그는 1988년부터 수배자를 찾는 TV 프로그램 '아메리카스 모스트 원티드'를 진행했습니다.",
+        "victimCountNote": "사망 1명",
+        "country": "US",
+        "category": "KIDNAPPING",
+        "status": "SOLVED",
+        "location": "미국 플로리다주 할리우드",
+        "occurredAt": "1981-07-27",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": "2008-12-16",
+        "timeline": [
+          {
+            "occurredAt": "1981-07-27",
+            "occurredAtPrecision": "DAY",
+            "title": "쇼핑몰 백화점에서 실종"
+          },
+          {
+            "occurredAt": "1981-08-10",
+            "occurredAtPrecision": "DAY",
+            "title": "베로비치 수로에서 시신 일부 발견"
+          },
+          {
+            "occurredAt": "1982-10-12",
+            "occurredAtPrecision": "DAY",
+            "title": "실종아동법 제정",
+            "description": "실종 아동 정보를 연방 수사기관 전산망에 올릴 수 있게 됐습니다."
+          },
+          {
+            "occurredAt": "1983-10-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "오티스 툴 자백, 이후 번복"
+          },
+          {
+            "occurredAt": "1996-09-15",
+            "occurredAtPrecision": "DAY",
+            "title": "툴, 교도소에서 사망"
+          },
+          {
+            "occurredAt": "2006-07-27",
+            "occurredAtPrecision": "DAY",
+            "title": "애덤월시 아동보호·안전법 제정",
+            "description": "성범죄자 등록·공개 제도를 전국 기준으로 강화했습니다."
+          },
+          {
+            "occurredAt": "2008-12-16",
+            "occurredAtPrecision": "DAY",
+            "title": "경찰, 툴을 범인으로 발표하고 수사 종결"
+          }
+        ],
+        "victims": [
+          {
+            "name": "애덤 월시 (Adam Walsh)",
+            "age": 6,
+            "gender": "MALE",
+            "status": "DECEASED",
+            "description": "아버지 존 월시는 이후 실종 아동 운동가이자 TV 진행자로 활동했습니다."
+          }
+        ],
+        "suspects": [
+          {
+            "name": "오티스 툴 (Ottis Toole)",
+            "status": "DECEASED",
+            "charges": "기소되지 않음 (경찰이 2008년 범인으로 발표)",
+            "description": "1983년 범행을 자백했다가 번복했습니다. 1996년 교도소에서 숨졌고, 경찰은 2008년 그가 살아 있었다면 체포됐을 것이라고 발표했습니다.",
+            "nameExceptionReason": "수사기관(플로리다주 할리우드 경찰)이 2008년 공식 기자회견에서 범인으로 발표했고 본인은 1996년 사망함",
+            "nameExceptionDecidedAt": "2026-11-21",
+            "sentences": []
+          }
+        ],
+        "questions": [
+          {
+            "question": "사람이 많은 매장에서 아이가 보이지 않을 때 직원과 손님이 함께 빠르게 움직이려면 어떤 약속이 필요할까요?"
+          },
+          {
+            "question": "실종 아동 정보를 여러 기관이 바로 나누려면 어떤 체계가 필요할까요?"
+          },
+          {
+            "question": "오래된 사건의 증거를 잃어버리지 않고 보관하려면 수사기관은 무엇을 갖춰야 할까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://www.npr.org/2008/12/16/98361783/police-name-killer-close-adam-walsh-murder-case",
+          "title": "Police Name Killer, Close Adam Walsh Murder Case",
+          "publisher": "NPR",
+          "type": "BROADCAST",
+          "publishedAt": "2008-12-16",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://abcnews.go.com/TheLaw/story?id=6471791",
+          "title": "Case Closed: Police ID Adam Walsh Killer",
+          "publisher": "ABC News",
+          "type": "BROADCAST",
+          "publishedAt": "2008-12-16",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://www.nbcnews.com/id/wbna28314608",
+          "title": "Questions linger in Adam Walsh probe",
+          "publisher": "NBC News (AP)",
+          "type": "NEWS_AGENCY",
+          "publishedAt": "2008-12-20",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Murder_of_Adam_Walsh",
+          "title": "Murder of Adam Walsh",
+          "publisher": "Wikipedia",
+          "type": "OTHER",
+          "accessedAt": "2026-11-21"
+        }
+      ],
+      "claims": []
+    },
+    {
+      "slug": "lee-rigby-murder",
+      "content": {
+        "title": "리 릭비 살해 사건",
+        "summary": "2013년 5월 영국 런던 울리치 거리에서 25세 군인 리 릭비가 극단주의에 빠진 두 남성에게 대낮에 살해된 사건으로, 주범은 가석방 없는 종신형, 공범은 최소 45년 복역의 종신형을 받았습니다",
+        "overview": "2013년 5월 22일 오후, 런던 남동부 울리치의 왕립포병대 막사 근처 거리에서 영국 육군 소속 리 릭비 일병이 근무를 마치고 걸어가다 차에 치였습니다. 차에서 내린 마이클 아데볼라조와 마이클 아데보왈레는 흉기로 그를 공격해 살해했고, 현장에 남아 지나가는 사람들에게 영국의 해외 군사 개입에 대한 보복이라고 주장했습니다. 일부 시민은 쓰러진 릭비 곁을 지키고 범인들에게 말을 걸며 다른 사람을 해치지 않도록 막았습니다. 두 사람은 출동한 무장 경찰의 총에 맞아 다친 채 체포됐습니다. 2013년 12월 19일 런던 중앙형사법원(올드 베일리)에서 두 사람 모두 살인 유죄가 인정됐고, 2014년 2월 26일 아데볼라조는 가석방 없는 종신형(whole life order)을, 아데보왈레는 최소 45년을 복역해야 하는 종신형을 선고받았습니다. 의회 정보보안위원회는 두 사람이 이미 정보기관의 관찰 대상이었다는 점을 들어 온라인 극단주의 대응과 기관 간 정보 공유를 점검했습니다.",
+        "victimCountNote": "사망 1명",
+        "country": "GB",
+        "category": "TERROR",
+        "status": "SOLVED",
+        "location": "영국 런던 울리치",
+        "occurredAt": "2013-05-22",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": "2014-02-26",
+        "timeline": [
+          {
+            "occurredAt": "2013-05-22",
+            "occurredAtPrecision": "DAY",
+            "title": "울리치 거리에서 피습, 사망",
+            "description": "범인 두 명은 출동한 무장 경찰의 총에 맞아 다친 채 체포됐습니다."
+          },
+          {
+            "occurredAt": "2013-12-19",
+            "occurredAtPrecision": "DAY",
+            "title": "두 사람 모두 살인 유죄"
+          },
+          {
+            "occurredAt": "2014-02-26",
+            "occurredAtPrecision": "DAY",
+            "title": "선고: 아데볼라조 가석방 없는 종신형, 아데보왈레 최소 45년"
+          },
+          {
+            "occurredAt": "2014-11-25",
+            "occurredAtPrecision": "DAY",
+            "title": "의회 정보보안위원회 보고서 발표"
+          },
+          {
+            "occurredAt": "2014-12-03",
+            "occurredAtPrecision": "DAY",
+            "title": "항소법원, 두 사람의 항소 기각"
+          }
+        ],
+        "victims": [
+          {
+            "name": "리 릭비 (Lee Rigby)",
+            "age": 25,
+            "gender": "MALE",
+            "status": "DECEASED",
+            "description": "영국 육군 왕립퓨질리어연대 소속 일병으로, 아프가니스탄에 파병된 적이 있습니다. 어린 아들을 둔 아버지였습니다."
+          }
+        ],
+        "suspects": [
+          {
+            "name": "마이클 아데볼라조 (Michael Adebolajo)",
+            "status": "CONVICTED",
+            "charges": "살인",
+            "description": "범행 당시 28세로, 범행을 주도한 것으로 판단됐습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "런던 중앙형사법원 (올드 베일리)",
+                "type": "LIFE",
+                "verdict": "살인 유죄로 가석방 없는 종신형을 선고했습니다.",
+                "penalty": "가석방 없는 종신형 (whole life order)",
+                "isFinal": false,
+                "decidedAt": "2014-02-26"
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "잉글랜드·웨일스 항소법원",
+                "type": "LIFE",
+                "verdict": "항소를 받아들이지 않아 형이 유지됐습니다.",
+                "penalty": "가석방 없는 종신형 (whole life order)",
+                "isFinal": true,
+                "decidedAt": "2014-12-03"
+              }
+            ]
+          },
+          {
+            "name": "마이클 아데보왈레 (Michael Adebowale)",
+            "status": "CONVICTED",
+            "charges": "살인",
+            "description": "범행 당시 21세로, 법원은 역할이 상대적으로 작았다고 보았습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "런던 중앙형사법원 (올드 베일리)",
+                "type": "LIFE",
+                "verdict": "살인 유죄로 최소 45년 복역의 종신형을 선고했습니다.",
+                "penalty": "종신형 (최소 45년 복역)",
+                "isFinal": false,
+                "decidedAt": "2014-02-26"
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "잉글랜드·웨일스 항소법원",
+                "type": "LIFE",
+                "verdict": "항소를 기각해 형이 유지됐습니다.",
+                "penalty": "종신형 (최소 45년 복역)",
+                "isFinal": true,
+                "decidedAt": "2014-12-03"
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "온라인에서 극단주의에 빠져드는 사람을 일찍 알아차리고 돕으려면 무엇이 필요할까요?"
+          },
+          {
+            "question": "이미 위험 신호가 보인 사람에 대한 정보를 여러 기관이 제때 나누려면 어떤 체계가 필요할까요?"
+          },
+          {
+            "question": "거리에서 공격이 벌어졌을 때 시민이 자신을 지키면서 피해자를 도울 수 있는 방법에는 무엇이 있을까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://www.npr.org/sections/thetwo-way/2014/02/26/283030285/killers-sentenced-in-hacking-death-of-british-soldier",
+          "title": "Killers Sentenced In Hacking Death Of British Soldier",
+          "publisher": "NPR",
+          "type": "BROADCAST",
+          "publishedAt": "2014-02-26",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://caselaw.nationalarchives.gov.uk/ewca/crim/2014/2779",
+          "title": "R v Adebolajo and Adebowale [2014] EWCA Crim 2779",
+          "publisher": "The National Archives (Court of Appeal)",
+          "type": "COURT",
+          "publishedAt": "2014-12-03",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://www.aljazeera.com/news/2014/2/27/lee-rigby-killers-handed-life-sentences",
+          "title": "Lee Rigby killers handed life sentences",
+          "publisher": "Al Jazeera",
+          "type": "NEWS",
+          "publishedAt": "2014-02-27",
+          "accessedAt": "2026-11-21"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Murder_of_Lee_Rigby",
+          "title": "Murder of Lee Rigby",
+          "publisher": "Wikipedia",
+          "type": "OTHER",
+          "accessedAt": "2026-11-21"
+        }
+      ],
+      "claims": []
+    }
+  ]
+}
