@@ -1,5 +1,8 @@
 # Wishwind (위시윈드)
 
+- 사이트: [wishwind.vercel.app](https://wishwind.vercel.app)
+- 인스타그램: [@wishwind.official](https://www.instagram.com/wishwind.official/)
+
 ## 왜 Wishwind인가요
 
 한국어 '바람'에는 두 가지 뜻이 있습니다. 불어오는 바람(wind)과, 무언가를 간절히 바라는 마음(wish)입니다. Wishwind는 이 두 뜻을 하나로 묶은 이름입니다.
