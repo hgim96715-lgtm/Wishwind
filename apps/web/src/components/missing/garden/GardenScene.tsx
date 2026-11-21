@@ -1352,7 +1352,8 @@ function Player({
         blockedFor.current += dt;
         if (blockedFor.current > 0.5 && !blockedTold.current && !controls.current.autoWalk) {
           blockedTold.current = true;
-          onBlocked?.(blockedReason(p.x, p.z));
+          const why = blockedReason(p.x, p.z);
+          if (why) onBlocked?.(why);
         }
       } else {
         speedRef.current = speed;
@@ -1424,8 +1425,10 @@ function nextAutoLantern(slots: Slot[], from: number) {
   return -1;
 }
 
-/** 왜 더 못 가는지: 바닷가·연못가·그 밖의 언덕 끝 */
-function blockedReason(x: number, z: number): BlockedAt {
+/** 왜 더 못 가는지: 바닷가·연못가·그 밖의 언덕 끝. 다리 위에서는 난간에 막힌 것이 눈에 보이므로 안내하지 않음(null) */
+function blockedReason(x: number, z: number): BlockedAt | null {
+  const onBridge = pondsNear(z, 6).some((p) => Math.abs(x - p.x) < BRIDGE_HALF_WIDTH + 0.3 && Math.abs(z - p.z) < bridgeHalfLength(p) + 0.3);
+  if (onBridge) return null;
   if (x - coastX(z) < 2.2) return "sea";
   if (pondsNear(z, 4).some((p) => pondDistance(p, x, z) < 1.4)) return "pond";
   return "edge";
