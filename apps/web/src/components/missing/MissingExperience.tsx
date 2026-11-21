@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LuClock, LuCloud, LuCloudFog, LuCloudRain, LuCloudSnow, LuList, LuMap, LuMapPin, LuSun, LuUserRound, LuWind } from "react-icons/lu";
 import { WEATHER_LABEL, type Weather, type WeatherKind } from "@/lib/weather/types";
-import type { RegionGroup } from "@/lib/missing/regions";
+import { formatMissingDate, type RegionGroup } from "@/lib/missing/regions";
 import type { CloudMessage } from "@/lib/missing/types";
 import { THEME_KEY } from "@/components/common/ThemeToggle";
 import { AvatarSetup, loadAvatar, type AvatarChoice } from "./garden/AvatarSetup";
@@ -49,6 +49,7 @@ const BLOCKED_HINT: Record<BlockedAt, string> = {
 
 export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   const slots = useMemo(() => buildSlots(groups), [groups]);
+  const people = useMemo(() => new Map(groups.flatMap((g) => g.people).map((p) => [p.id, p])), [groups]);
   const [mode, setMode] = useState<Mode>("checking");
   const [touch, setTouch] = useState(false);
   const [savedAvatar, setAvatar] = useState<AvatarChoice | null>(null);
@@ -67,6 +68,9 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
     return () => ac.abort();
   }, []);
   const [editingAvatar, setEditingAvatar] = useState(false);
+  // 천천히 걷기: 켜져 있는지, 방금 도착한 등불의 그 분 (잠깐 이름을 보여 줌)
+  const [autoWalking, setAutoWalking] = useState(false);
+  const [meeting, setMeeting] = useState<{ name: string; detail: string } | null>(null);
   // 닉네임 없이 둘러보던 사람이 바람개비를 꽂으려 할 때 이름부터 정하게 함
   const [namingForWish, setNamingForWish] = useState(false);
   const [selected, setSelected] = useState<{ id: string; regionLabel: string } | null>(null);
@@ -102,6 +106,13 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
     setAvatar(loadAvatar());
     /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
+
+  // 등불 앞에서 보여 준 이름은 멈춰 있는 동안만 (다음 등불로 걸어갈 때는 지움)
+  useEffect(() => {
+    if (!meeting) return;
+    const id = setTimeout(() => setMeeting(null), 4500);
+    return () => clearTimeout(id);
+  }, [meeting]);
 
   useEffect(() => {
     if (!toast) return;
@@ -201,6 +212,13 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   };
 
   const total = groups.reduce((n, g) => n + g.people.length, 0);
+  const toggleAutoWalk = () => {
+    const next = !autoWalking;
+    controls.current.autoWalk = next;
+    setAutoWalking(next);
+    setMeeting(null);
+    if (next) setToast("등불 앞에서 잠깐씩 멈추며 천천히 걷습니다. 직접 움직이면 멈춥니다");
+  };
   if (total === 0) {
     return <Veil text="아직 길에 놓인 등불이 없습니다. 실종자 정보를 불러오는 중이니 잠시 후 다시 와 주세요." />;
   }
@@ -225,6 +243,15 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
               onSelect={select}
               onStatus={setStatus}
               onBlocked={(where) => setToast(BLOCKED_HINT[where])}
+              onAutoArrive={(id) => {
+                const person = people.get(id);
+                if (person) setMeeting({ name: person.name, detail: [person.missingDate ? `${formatMissingDate(person.missingDate)} 실종` : null, person.lastSeenPlace].filter(Boolean).join(" · ") });
+              }}
+              onAutoEnd={(why) => {
+                setAutoWalking(false);
+                setMeeting(null);
+                if (why === "end") setToast("등불 길 끝까지 함께 걸었습니다");
+              }}
             />
           </div>
 
@@ -248,6 +275,14 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
 
           {!overlay && (
             <div className="absolute right-4 bottom-6 z-20 flex flex-col items-end gap-2 md:right-5">
+              <button
+                type="button"
+                onClick={toggleAutoWalk}
+                aria-pressed={autoWalking}
+                className={`rounded-full px-4 py-2 text-sm shadow-sm backdrop-blur ${autoWalking ? "bg-[#6b5a46] text-white" : "bg-white/90 text-[#6b5a46] hover:bg-white"}`}
+              >
+                {autoWalking ? "멈추기" : "천천히 걷기"}
+              </button>
               {status.nearId && (
                 <button
                   type="button"
@@ -294,6 +329,14 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
             <p className="pointer-events-none absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 rounded-full bg-white/60 px-3 py-1 text-xs text-[#7a6650] backdrop-blur md:block">
               WASD·방향키로 걷고(Shift 달리기), 드래그로 둘러봅니다. 등불을 누르면 카드가 열립니다
             </p>
+          )}
+
+          {/* 천천히 걷기 중 등불 앞에 도착하면 그 분 이름을 잠깐 보여 줌 */}
+          {autoWalking && meeting && !overlay && (
+            <div aria-live="polite" className="pointer-events-none absolute top-24 left-1/2 z-20 -translate-x-1/2 rounded-2xl bg-white/85 px-5 py-3 text-center shadow-sm backdrop-blur md:top-20">
+              <p className="text-base font-semibold text-[#5b4d3c]">{meeting.name}</p>
+              {meeting.detail && <p className="mt-0.5 text-xs text-[#7a6650]">{meeting.detail}</p>}
+            </div>
           )}
 
           <AnimatePresence>
