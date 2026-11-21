@@ -1,4 +1,4 @@
-import type { CaseCategory, CaseStatus, Country } from "@/lib/cases/types";
+import type { CaseCategory, CaseStatus, Country, RelatedContent } from "@/lib/cases/types";
 
 export type ReviewStatus = "DRAFT" | "NEEDS_REVIEW" | "VERIFIED" | "REJECTED";
 export type ContentStatus = "PUBLISHED" | "HELD" | "BLOCKED" | "HIDDEN";
@@ -67,6 +67,8 @@ export interface AdminCaseDetail {
     publishedAt: string | null;
     _count: { claims: number };
   }[];
+  /** 관련 콘텐츠(다큐·방송·유튜브 등). 사실의 출처가 아니라 '더 보기' 링크 */
+  relatedContents: RelatedContent[];
   briefingPosts: { id: string; kind: BriefingKind; status: BriefingStatus; title: string; createdAt: string }[];
   _count: Record<
     "timeline" | "suspects" | "victims" | "unsolvedQuestions" | "suspiciousCircumstances" | "userQuestions",

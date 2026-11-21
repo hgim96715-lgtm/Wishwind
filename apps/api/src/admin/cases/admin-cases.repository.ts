@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import type { Prisma } from '../../generated/prisma/client.js';
 import { BriefingKind, BriefingStatus, CaseReviewStatus } from '../../generated/prisma/enums.js';
 import { PrismaService } from '../../prisma/prisma.service.js';
-import type { CaseEdit, CaseListQuery, SourceAdd } from './dto/admin-cases.dto.js';
+import type { CaseEdit, CaseListQuery, RelatedAdd, SourceAdd } from './dto/admin-cases.dto.js';
 
 export const adminCaseRowSelect = {
   id: true,
@@ -30,6 +30,21 @@ const detailInclude = {
       type: true,
       publishedAt: true,
       _count: { select: { claims: true } },
+    },
+  },
+  relatedContents: {
+    orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+    select: {
+      id: true,
+      kind: true,
+      title: true,
+      platform: true,
+      creator: true,
+      url: true,
+      releaseYear: true,
+      language: true,
+      note: true,
+      isDramatized: true,
     },
   },
   briefingPosts: {
@@ -127,6 +142,30 @@ export class AdminCasesRepository {
   async removeSource(caseId: string, sourceId: string) {
     const { count } = await this.prisma.caseSource.deleteMany({ where: { id: sourceId, caseId } });
     if (count > 0) await this.invalidateReview(caseId);
+    return count > 0;
+  }
+
+  findRelatedByUrl(caseId: string, url: string) {
+    return this.prisma.relatedContent.findUnique({ where: { caseId_url: { caseId, url } }, select: { id: true } });
+  }
+
+  /** 관련 콘텐츠는 '더 보기' 링크라 검토 상태를 바꾸지 않음. 새로 넣은 것은 맨 뒤에 붙음 */
+  async addRelated(caseId: string, item: RelatedAdd) {
+    const last = await this.prisma.relatedContent.aggregate({ where: { caseId }, _max: { sortOrder: true } });
+    return this.prisma.relatedContent.create({
+      data: { caseId, ...item, sortOrder: (last._max.sortOrder ?? -1) + 1 },
+    });
+  }
+
+  /** 고친 것이 있으면 true */
+  async updateRelated(caseId: string, relatedId: string, item: RelatedAdd) {
+    const { count } = await this.prisma.relatedContent.updateMany({ where: { id: relatedId, caseId }, data: item });
+    return count > 0;
+  }
+
+  /** 지운 것이 있으면 true */
+  async removeRelated(caseId: string, relatedId: string) {
+    const { count } = await this.prisma.relatedContent.deleteMany({ where: { id: relatedId, caseId } });
     return count > 0;
   }
 

@@ -5,8 +5,10 @@ import {
   caseEditSchema,
   caseListSchema,
   publishSchema,
+  relatedAddSchema,
   reviewSchema,
   sourceAddSchema,
+  type RelatedAdd,
   type CaseEdit,
   type CaseListQuery,
   type PublishInput,
@@ -65,5 +67,28 @@ export class AdminCasesController {
     @Param('sourceId', ParseUUIDPipe) sourceId: string,
   ) {
     return this.cases.removeSource(id, sourceId);
+  }
+
+  /** 관련 콘텐츠(방송·다큐·유튜브 등) 추가·수정·삭제 */
+  @Post(':id/related')
+  addRelated(@Param('id', ParseUUIDPipe) id: string, @Body(new ZodPipe(relatedAddSchema)) body: RelatedAdd) {
+    return this.cases.addRelated(id, body);
+  }
+
+  @Patch(':id/related/:relatedId')
+  updateRelated(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('relatedId', ParseUUIDPipe) relatedId: string,
+    @Body(new ZodPipe(relatedAddSchema)) body: RelatedAdd,
+  ) {
+    return this.cases.updateRelated(id, relatedId, body);
+  }
+
+  @Delete(':id/related/:relatedId')
+  removeRelated(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('relatedId', ParseUUIDPipe) relatedId: string,
+  ) {
+    return this.cases.removeRelated(id, relatedId);
   }
 }

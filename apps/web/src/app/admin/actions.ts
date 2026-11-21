@@ -123,6 +123,33 @@ export async function removeCaseSource(id: string, sourceId: string) {
   return run(() => adminSend(`/cases/${id}/sources/${sourceId}`, "DELETE"), "출처를 지웠습니다.");
 }
 
+/** 관련 콘텐츠(방송·다큐·유튜브 등) 폼 값 → API 형식 */
+function relatedBody(form: FormData) {
+  return {
+    kind: text(form, "kind"),
+    title: text(form, "title"),
+    platform: text(form, "platform"),
+    creator: text(form, "creator") || null,
+    url: text(form, "url"),
+    releaseYear: text(form, "releaseYear") || null,
+    language: text(form, "language") || "ko",
+    note: text(form, "note") || null,
+    isDramatized: form.get("isDramatized") === "on",
+  };
+}
+
+export async function addCaseRelated(id: string, _: ActionState, form: FormData) {
+  return run(() => adminSend(`/cases/${id}/related`, "POST", relatedBody(form)), "관련 콘텐츠를 추가했습니다.");
+}
+
+export async function updateCaseRelated(id: string, relatedId: string, _: ActionState, form: FormData) {
+  return run(() => adminSend(`/cases/${id}/related/${relatedId}`, "PATCH", relatedBody(form)), "관련 콘텐츠를 고쳤습니다.");
+}
+
+export async function removeCaseRelated(id: string, relatedId: string) {
+  return run(() => adminSend(`/cases/${id}/related/${relatedId}`, "DELETE"), "관련 콘텐츠를 지웠습니다.");
+}
+
 /** 사건방에 넣을 필요가 없는 초안을 지움. 공개 중이면 API가 막음 */
 export async function deleteCase(id: string): Promise<ActionState> {
   try {

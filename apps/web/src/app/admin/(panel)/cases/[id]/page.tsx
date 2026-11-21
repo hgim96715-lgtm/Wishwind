@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ActionForm, Button } from "@/components/admin/ActionForm";
 import { Badge, Card, ErrorBox, Field, Skeleton, inputClass } from "@/components/admin/ui";
-import { addCaseSource, deleteCase, publishCase, removeCaseSource, reviewCase, updateCase } from "@/app/admin/actions";
+import { addCaseRelated, addCaseSource, deleteCase, publishCase, removeCaseRelated, removeCaseSource, reviewCase, updateCase, updateCaseRelated } from "@/app/admin/actions";
 import {
   BRIEFING_KIND_LABEL,
   BRIEFING_STATUS_LABEL,
@@ -12,11 +12,72 @@ import {
 } from "@/lib/admin/labels";
 import { AdminApiError, adminGet } from "@/lib/admin/session";
 import type { AdminCaseDetail, ReviewStatus } from "@/lib/admin/types";
+import type { RelatedContent } from "@/lib/cases/types";
 import { CATEGORY_LABEL, COUNTRY_LABEL, COUNTRY_ORDER, STATUS_STAMP, caseRoomCountry } from "@/lib/cases/labels";
 
 const PRECISION = { DAY: "일까지", MONTH: "월까지", YEAR: "연도만", UNKNOWN: "모름" } as const;
 const REVIEWS: ReviewStatus[] = ["DRAFT", "NEEDS_REVIEW", "VERIFIED", "REJECTED"];
 const dateValue = (iso: string | null) => iso?.slice(0, 10) ?? "";
+
+/** 관련 콘텐츠 종류 (사건 페이지의 '더 보기' 묶음과 같은 이름) */
+const RELATED_KIND_LABEL: Record<string, string> = {
+  DOCUMENTARY: "다큐멘터리",
+  TV_PROGRAM: "방송",
+  YOUTUBE: "유튜브",
+  PODCAST: "팟캐스트",
+  MOVIE: "영화",
+  SERIES: "시리즈",
+  BOOK: "책",
+};
+
+/** 관련 콘텐츠 추가·고치기에 같이 쓰는 입력 칸. item이 있으면 그 값으로 채움 */
+function RelatedFields({ item }: { item?: RelatedContent }) {
+  return (
+    <>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Field label="종류">
+          <select name="kind" defaultValue={item?.kind ?? "TV_PROGRAM"} className={inputClass}>
+            {Object.entries(RELATED_KIND_LABEL).map(([k, v]) => (
+              <option key={k} value={k}>{v}</option>
+            ))}
+          </select>
+        </Field>
+        <Field label="방송사·채널·플랫폼">
+          <input name="platform" required maxLength={100} defaultValue={item?.platform} placeholder="예: SBS, 넷플릭스, 유튜브" className={inputClass} />
+        </Field>
+      </div>
+      <Field label="제목" hint="예: 그것이 알고 싶다 1234회 ‘…’">
+        <input name="title" required maxLength={300} defaultValue={item?.title} className={inputClass} />
+      </Field>
+      <Field label="주소(URL)" hint="https 주소만 됩니다. 위키는 넣지 않습니다.">
+        <input name="url" type="url" required maxLength={1000} defaultValue={item?.url} placeholder="https://" className={inputClass} />
+      </Field>
+      <div className="grid gap-3 sm:grid-cols-3">
+        <Field label="만든 사람" hint="비워도 됩니다.">
+          <input name="creator" maxLength={200} defaultValue={item?.creator ?? ""} className={inputClass} />
+        </Field>
+        <Field label="공개 연도">
+          <input name="releaseYear" type="number" min={1900} max={2100} defaultValue={item?.releaseYear ?? ""} className={inputClass} />
+        </Field>
+        <Field label="언어">
+          <select name="language" defaultValue={item?.language ?? "ko"} className={inputClass}>
+            <option value="ko">한국어</option>
+            <option value="en">영어</option>
+            <option value="ja">일본어</option>
+            <option value="zh">중국어</option>
+          </select>
+        </Field>
+      </div>
+      <Field label="메모" hint="각색 작품이면 ‘사건을 모티브로 한 극영화’처럼 꼭 적어 주세요.">
+        <input name="note" maxLength={300} defaultValue={item?.note ?? ""} className={inputClass} />
+      </Field>
+      <label className="flex items-center gap-2 text-sm">
+        <input type="checkbox" name="isDramatized" defaultChecked={item?.isDramatized ?? false} />
+        각색 작품입니다 (영화·드라마처럼 사실과 다를 수 있음)
+      </label>
+    </>
+  );
+}
 
 const SOURCE_TYPE_LABEL: Record<string, string> = {
   NEWS: "언론 기사",
@@ -237,6 +298,52 @@ async function CaseEditor({ id }: { id: string }) {
                 </Field>
                 <Button tone="primary">출처 추가</Button>
                 <p className="text-xs text-subtle">나무위키는 단서용이라 검증 출처 2곳에 세지 않습니다. 출처를 바꾸면 검토 상태를 다시 확인해야 합니다.</p>
+              </ActionForm>
+            </details>
+          </Card>
+
+          <Card>
+            <h2 className="mb-1 text-sm font-semibold">관련 콘텐츠 {c.relatedContents.length}개</h2>
+            <p className="mb-3 text-xs text-subtle">방송·다큐·유튜브·영화처럼 사건 페이지의 ‘더 보기’에 나오는 링크입니다. 검토 상태에는 영향이 없습니다.</p>
+            <ul className="space-y-3 text-sm">
+              {c.relatedContents.map((r) => (
+                <li key={r.id} className="border-b border-line pb-3 last:border-0">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <a href={r.url} target="_blank" rel="noreferrer noopener" className="break-words transition-opacity hover:opacity-70">
+                        {r.title}
+                      </a>
+                      <p className="text-xs text-subtle">
+                        {RELATED_KIND_LABEL[r.kind] ?? r.kind} · {r.platform}
+                        {r.releaseYear && ` · ${r.releaseYear}`}
+                        {r.isDramatized && " · 각색"}
+                      </p>
+                    </div>
+                    <ActionForm
+                      inline
+                      action={removeCaseRelated.bind(null, c.id, r.id)}
+                      confirmMessage={`이 관련 콘텐츠를 지울까요?\n${r.title}`}
+                    >
+                      <button type="submit" className="shrink-0 text-xs text-subtle hover:text-[#b5543a]" aria-label="관련 콘텐츠 지우기">
+                        지우기
+                      </button>
+                    </ActionForm>
+                  </div>
+                  <details className="mt-2">
+                    <summary className="cursor-pointer text-xs text-muted">고치기</summary>
+                    <ActionForm action={updateCaseRelated.bind(null, c.id, r.id)} className="mt-3">
+                      <RelatedFields item={r} />
+                      <Button tone="primary">저장</Button>
+                    </ActionForm>
+                  </details>
+                </li>
+              ))}
+            </ul>
+            <details className="mt-4 border-t border-line pt-4">
+              <summary className="cursor-pointer text-sm font-medium">관련 콘텐츠 추가</summary>
+              <ActionForm action={addCaseRelated.bind(null, c.id)} className="mt-3">
+                <RelatedFields />
+                <Button tone="primary">관련 콘텐츠 추가</Button>
               </ActionForm>
             </details>
           </Card>

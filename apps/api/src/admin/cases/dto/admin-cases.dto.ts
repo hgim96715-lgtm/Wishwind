@@ -5,6 +5,7 @@ import {
   CaseStatus,
   Country,
   DatePrecision,
+  RelatedKind,
   SourceType,
 } from '../../../generated/prisma/enums.js';
 
@@ -62,3 +63,36 @@ export const sourceAddSchema = z.object({
   publishedAt: dateOrNull.optional(),
 });
 export type SourceAdd = z.infer<typeof sourceAddSchema>;
+
+/** 위키는 '더 보기' 링크로 넣지 않음 (JSON 가져오기 규칙과 같음) */
+const notWiki = (url: string) => !/(^|\.)(namu\.(wiki|moe)|wikipedia\.org)$/i.test(new URL(url).hostname);
+const optionalText = (max: number) =>
+  z
+    .union([z.string().trim().max(max), z.null()])
+    .optional()
+    .transform((v) => (v ? v : null));
+
+/** 관련 콘텐츠(다큐·방송·유튜브·영화 등) 하나. 사실의 출처가 아니라 '더 보기' 링크라 검토 상태에 영향 없음 */
+const relatedFields = {
+  kind: z.enum(RelatedKind),
+  title: z.string().trim().min(1).max(300),
+  platform: z.string().trim().min(1).max(100),
+  creator: optionalText(200),
+  url: z
+    .url({ protocol: /^https$/ })
+    .max(1000)
+    .refine(notWiki, '위키는 관련 콘텐츠로 넣지 않습니다'),
+  releaseYear: z
+    .union([z.coerce.number().int().min(1900).max(2100), z.literal(''), z.null()])
+    .optional()
+    .transform((v) => (typeof v === 'number' ? v : null)),
+  language: z.string().trim().regex(/^[a-z]{2}$/).default('ko'),
+  note: optionalText(300),
+  isDramatized: z.boolean().default(false),
+};
+export const relatedAddSchema = z.object(relatedFields).refine((v) => !v.isDramatized || !!v.note, {
+  message: '각색 작품은 메모에 "사건을 모티브로 한 극영화"처럼 적어 주세요',
+  path: ['note'],
+});
+/** 추가와 고치기 모두 칸 전체를 보냄 (고치기는 통째로 바꿈) */
+export type RelatedAdd = z.infer<typeof relatedAddSchema>;

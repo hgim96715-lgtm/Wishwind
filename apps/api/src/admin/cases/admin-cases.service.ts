@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { reviewCase, setPublished } from '../../case-import/case-import.repository.js';
 import { asBadRequest } from '../../common/errors/as-bad-request.js';
 import type { CaseReviewStatus } from '../../generated/prisma/enums.js';
-import type { CaseEdit, CaseListQuery, SourceAdd } from './dto/admin-cases.dto.js';
+import type { CaseEdit, CaseListQuery, RelatedAdd, SourceAdd } from './dto/admin-cases.dto.js';
 import { newCaseDraft, statusChangedDraft, toAdminCaseRow, toReviewCounts } from './admin-cases.mapper.js';
 import { AdminCasesRepository } from './admin-cases.repository.js';
 
@@ -86,6 +86,32 @@ export class AdminCasesService {
     await this.findOrThrow(id);
     const removed = await this.repo.removeSource(id, sourceId);
     if (!removed) throw new NotFoundException('출처를 찾을 수 없습니다.');
+    return this.detail(id);
+  }
+
+  /** 관련 콘텐츠(다큐·방송·유튜브 등) 추가. 같은 주소가 이미 있으면 막음 */
+  async addRelated(id: string, item: RelatedAdd) {
+    await this.findOrThrow(id);
+    if (await this.repo.findRelatedByUrl(id, item.url)) {
+      throw new BadRequestException('이미 등록된 관련 콘텐츠입니다.');
+    }
+    await this.repo.addRelated(id, item);
+    return this.detail(id);
+  }
+
+  async updateRelated(id: string, relatedId: string, item: RelatedAdd) {
+    await this.findOrThrow(id);
+    const same = await this.repo.findRelatedByUrl(id, item.url);
+    if (same && same.id !== relatedId) throw new BadRequestException('이미 등록된 관련 콘텐츠 주소입니다.');
+    const updated = await this.repo.updateRelated(id, relatedId, item);
+    if (!updated) throw new NotFoundException('관련 콘텐츠를 찾을 수 없습니다.');
+    return this.detail(id);
+  }
+
+  async removeRelated(id: string, relatedId: string) {
+    await this.findOrThrow(id);
+    const removed = await this.repo.removeRelated(id, relatedId);
+    if (!removed) throw new NotFoundException('관련 콘텐츠를 찾을 수 없습니다.');
     return this.detail(id);
   }
 }
