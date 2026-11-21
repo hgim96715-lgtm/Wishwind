@@ -12,6 +12,7 @@ import type { Slot } from "../path-layout";
 import type { Weather } from "@/lib/weather/types";
 import { currentHour, paletteAt, withWeather, type SkyPalette } from "../time-of-day";
 import { Avatar } from "./Avatar";
+import { Flowers } from "./Flowers";
 import { createLabelStore, LabelOverlay, LabelProjector, type Label, type LabelStore } from "./labels";
 import {
   clampToLand,
@@ -158,7 +159,7 @@ function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, on
       <PinwheelGarden wishes={wishes} wishCount={wishCount} freshId={freshId} player={player} labels={labels} />
       <Butterflies />
       <RoamingButterflies player={player} />
-      <Meadow player={player} ground={ground} />
+      <Flowers player={player} ground={ground} />
       <FootGlow player={player} amount={night ? 1 : Math.max(0, (palette.lamp - 1.2) / 1.6)} />
       <Ponds nearSlot={nearSlot} />
       {wishCount >= SUNLIGHT_AT && <GardenSunlight golden={home} />}
@@ -896,78 +897,6 @@ function GardenSunlight({ golden }: { golden: boolean }) {
       <cylinderGeometry args={[2, 9, 12, 32, 1, true]} />
       <meshBasicMaterial color={golden ? "#ffe0a0" : "#fff3d6"} transparent opacity={golden ? 0.14 : 0.08} side={THREE.DoubleSide} depthWrite={false} blending={THREE.AdditiveBlending} toneMapped={false} />
     </mesh>
-  );
-}
-
-const FLOWER_COLORS = ["#ffe08a", "#f7b6c8", "#c9b5f0", "#ffffff", "#ffc98a", "#ff9fb0", "#a8d4ff"];
-
-/**
- * 언덕 전체 들꽃. 플레이어 주변 120×120만 그리고, 멀리 걸어가면 그 자리 기준으로 다시 깜
- * 격자 칸마다 같은 난수(hash2)를 쓰므로 돌아와도 꽃 자리가 그대로임. 꽃밭은 큰 물결 무늬로 군데군데 몰림
- */
-function Meadow({ player, ground }: { player: React.RefObject<THREE.Vector3>; ground: React.RefObject<GroundState> }) {
-  const ref = useRef<THREE.InstancedMesh>(null);
-  const COUNT = 5200;
-  const RANGE = 60;
-  const CELL = 1.6;
-  const center = useRef<{ x: number; z: number } | null>(null);
-  const m = useMemo(() => new THREE.Matrix4(), []);
-  const c = useMemo(() => new THREE.Color(), []);
-
-  const rebuild = (cx: number, cz: number) => {
-    const mesh = ref.current;
-    if (!mesh) return;
-    let i = 0;
-    const gx0 = Math.floor((cx - RANGE) / CELL);
-    const gz0 = Math.floor((cz - RANGE) / CELL);
-    const cells = Math.ceil((RANGE * 2) / CELL);
-    for (let a = 0; a < cells && i < COUNT; a++) {
-      for (let b = 0; b < cells && i < COUNT; b++) {
-        const gx = gx0 + a;
-        const gz = gz0 + b;
-        const h = hash2(gx, gz);
-        const patch = 0.5 + 0.5 * Math.sin(gx * CELL * 0.11 + 1.3) * Math.sin(gz * CELL * 0.09 + 0.4);
-        if (h > 0.12 + patch * 0.6) continue;
-        const x = (gx + hash2(gz, gx)) * CELL;
-        const z = (gz + hash2(gx + 7, gz - 3)) * CELL;
-        if (grassAmount(x, z) < 0.8 || pathAmount(x, z) > 0.05) continue;
-        if (pondsNear(z, 7).some((p) => pondDistance(p, x, z) < 1.15)) continue;
-        const s = 0.07 + hash2(gz + 11, gx) * 0.07;
-        m.makeScale(s, s * 0.75, s).setPosition(x, heightAt(x, z) + 0.12, z);
-        mesh.setMatrixAt(i, m);
-        mesh.setColorAt(i, c.set(FLOWER_COLORS[Math.floor(hash2(gz, gx + 5) * FLOWER_COLORS.length)]));
-        i++;
-      }
-    }
-    mesh.count = i;
-    mesh.instanceMatrix.needsUpdate = true;
-    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
-    center.current = { x: cx, z: cz };
-  };
-
-  useLayoutEffect(() => {
-    const p = player.current;
-    rebuild(Math.round(p.x / 10) * 10, Math.round(p.z / 10) * 10);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useFrame(() => {
-    const p = player.current;
-    const cc = center.current;
-    if (cc && Math.hypot(p.x - cc.x, p.z - cc.z) > 20) rebuild(Math.round(p.x / 10) * 10, Math.round(p.z / 10) * 10);
-    // 눈이 쌓이면 꽃이 눈 속으로 묻힘
-    if (ref.current) {
-      const snow = ground.current.snow;
-      ref.current.position.y = -0.24 * Math.min(1, snow * 1.3);
-      ref.current.visible = snow < 0.95;
-    }
-  });
-
-  return (
-    <instancedMesh ref={ref} args={[undefined, undefined, COUNT]} frustumCulled={false}>
-      <sphereGeometry args={[1, 6, 4]} />
-      <meshStandardMaterial roughness={1} />
-    </instancedMesh>
   );
 }
 
