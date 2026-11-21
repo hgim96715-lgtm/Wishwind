@@ -4,3 +4,5 @@ export const SITE_NAME = "Wishwind";
 export const SITE_DESCRIPTION =
   "지난 사건을 함께 기억하고, 실종자가 돌아오길, 같은 일이 다시 없기를 바라는 곳입니다.";
 export const SITE_KEYWORDS = ["미제사건", "사건 기록", "실종자", "실종자 찾기", "사건 파일", "Wishwind", "위시윈드"];
+/** 공식 인스타그램 (홈 아래 링크, 검색엔진 sameAs) */
+export const INSTAGRAM_URL = "https://www.instagram.com/wishwind.official/";

@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
 import { PageViewTracker } from "@/components/PageViewTracker";
 import "./globals.css";
-import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL } from "@/lib/site";
+import { INSTAGRAM_URL, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL } from "@/lib/site";
 import { HelpBar } from "@/components/help/HelpBar";
 import { DevViewerSwitch } from "@/components/dev/DevViewerSwitch";
 import { THEME_INIT_SCRIPT } from "@/components/common/ThemeToggle";
@@ -85,6 +85,7 @@ const JSON_LD = {
       name: SITE_NAME,
       url: SITE_URL,
       logo: `${SITE_URL}/icon.png`,
+      sameAs: [INSTAGRAM_URL],
     },
   ],
 };

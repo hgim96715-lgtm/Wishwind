@@ -5,6 +5,7 @@ import { LuHeartHandshake } from "react-icons/lu";
 import { AccountLink } from "@/components/home/AccountLink";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
 import { RoomGrid } from "@/components/home/RoomGrid";
+import { INSTAGRAM_URL } from "@/lib/site";
 
 // 서버 컴포넌트. 정적인 텍스트는 서버에서 HTML로 내려가고,
 // 애니메이션이 필요한 카드 영역(RoomGrid)만 클라이언트 번들에 포함됨
@@ -70,6 +71,13 @@ export default function Home() {
       </div>
 
       <RoomGrid />
+
+      {/* 공식 SNS: 새 사건·실종자 소식을 인스타그램에서도 전함 */}
+      <footer className="mt-10 flex justify-center border-t border-line pt-5 text-sm text-muted">
+        <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer noopener" className="transition-colors hover:text-foreground">
+          인스타그램 @wishwind.official
+        </a>
+      </footer>
     </main>
   );
 }

@@ -52,7 +52,7 @@ function Number_({ label, value, hint }: { label: string; value: number; hint?: 
 }
 
 /** 막대 길이 = 값/최댓값. 숫자를 함께 적어 색에만 의존하지 않음 */
-function Bars({ rows }: { rows: { label: string; value: number; sub?: string; title?: string }[] }) {
+function Bars({ rows, unit = "번" }: { rows: { label: string; value: number; sub?: string; title?: string }[]; unit?: string }) {
   const max = Math.max(1, ...rows.map((r) => r.value));
   return (
     <ul className="space-y-2">
@@ -62,7 +62,8 @@ function Bars({ rows }: { rows: { label: string; value: number; sub?: string; ti
             <span className="truncate" title={r.title}>{r.label}</span>
             <span className="shrink-0 tabular-nums text-muted">
               {r.value.toLocaleString("ko-KR")}
-              {r.sub && <span className="ml-1 text-xs text-subtle">{r.sub}</span>}
+              {unit}
+              {r.sub && <span className="ml-1 text-xs text-subtle">· {r.sub}</span>}
             </span>
           </div>
           <div className="mt-1 h-1.5 rounded-full bg-line/60">
@@ -119,11 +120,11 @@ async function Report({ days }: { days: number }) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Number_ label="오늘 방문자" value={a.today.visitors} hint={`조회 ${a.today.views}`} />
-        <Number_ label={`${days}일 조회수`} value={a.totals.views} />
-        <Number_ label={`${days}일 방문자 (일별 합계)`} value={a.totals.visitorDays} />
+        <Number_ label="오늘 방문자 (명)" value={a.today.visitors} hint={`오늘 페이지를 연 횟수 ${a.today.views}번`} />
+        <Number_ label={`${days}일 페이지 조회 (번)`} value={a.totals.views} hint="페이지를 연 횟수 합계" />
+        <Number_ label={`${days}일 방문자 (명)`} value={a.totals.visitorDays} hint="같은 사람도 다른 날 오면 따로 셉니다" />
         <Number_
-          label="하루 평균 방문자"
+          label="하루 평균 방문자 (명)"
           value={Math.round(a.totals.visitorDays / Math.max(1, days))}
         />
       </div>
@@ -135,7 +136,10 @@ async function Report({ days }: { days: number }) {
         <Card>
           <h2 className="mb-4 text-sm font-semibold">방별 조회수</h2>
           {a.rooms.length ? (
-            <Bars rows={a.rooms.map((r) => ({ label: ROOM_LABEL[r.room] ?? r.room, value: r.views }))} />
+            <>
+              <Bars rows={a.rooms.map((r) => ({ label: ROOM_LABEL[r.room] ?? r.room, value: r.views }))} />
+              <p className="mt-3 text-xs text-subtle">숫자는 그 방의 페이지를 연 횟수입니다.</p>
+            </>
           ) : (
             <p className="text-sm text-subtle">아직 기록이 없습니다.</p>
           )}
@@ -143,6 +147,7 @@ async function Report({ days }: { days: number }) {
         <Card>
           <h2 className="mb-4 text-sm font-semibold">참여 ({days}일)</h2>
           <Bars
+            unit="건"
             rows={[
               { label: "형량 의견", value: p.votes },
               { label: "수사 노트 답변", value: p.answers },
@@ -155,21 +160,23 @@ async function Report({ days }: { days: number }) {
           <p className="mt-3 text-xs text-subtle">차단·숨김된 답변 {p.blockedAnswers}개</p>
         </Card>
         <Card>
-          <h2 className="mb-4 text-sm font-semibold">많이 본 페이지</h2>
+          <h2 className="mb-1 text-sm font-semibold">많이 본 페이지</h2>
+          <p className="mb-4 text-xs text-subtle">연 횟수 · 연 사람 수</p>
           {a.topPaths.length ? (
-            <Bars rows={a.topPaths.map((r) => ({ label: r.label, value: r.views, sub: `방문자 ${r.visitors}`, title: safeDecode(r.path) }))} />
+            <Bars rows={a.topPaths.map((r) => ({ label: r.label, value: r.views, sub: `${r.visitors}명`, title: safeDecode(r.path) }))} />
           ) : (
             <p className="text-sm text-subtle">아직 기록이 없습니다.</p>
           )}
         </Card>
         <Card>
-          <h2 className="mb-4 text-sm font-semibold">많이 본 사건</h2>
+          <h2 className="mb-1 text-sm font-semibold">많이 본 사건</h2>
+          <p className="mb-4 text-xs text-subtle">연 횟수 · 연 사람 수</p>
           {a.topCases.length ? (
             <Bars
               rows={a.topCases.map((r) => ({
                 label: r.label.replace(/^사건방 · /, ""),
                 value: r.views,
-                sub: `방문자 ${r.visitors}`,
+                sub: `${r.visitors}명`,
                 title: safeDecode(r.path),
               }))}
             />
