@@ -12,7 +12,6 @@ import type { Slot } from "../path-layout";
 import type { Weather } from "@/lib/weather/types";
 import { currentHour, paletteAt, withWeather, type SkyPalette } from "../time-of-day";
 import { Avatar } from "./Avatar";
-import { Airplane, beamMaterial } from "./scenery";
 import { createLabelStore, LabelOverlay, LabelProjector, type Label, type LabelStore } from "./labels";
 import {
   clampToLand,
@@ -151,7 +150,6 @@ function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, on
       <Meadow player={player} ground={ground} />
       <FootGlow player={player} amount={night ? 1 : Math.max(0, (palette.lamp - 1.2) / 1.6)} />
       <Ponds nearSlot={nearSlot} />
-      <Airplane night={night} />
       {wishCount >= SUNLIGHT_AT && <GardenSunlight golden={home} />}
       <Player
         slots={slots}
@@ -698,6 +696,22 @@ function Lighthouse({ lit: dusk, home }: { lit: boolean; home: boolean }) {
     </group>
   );
 }
+
+/* ───────────────────────── 등대 불빛 ───────────────────────── */
+
+/** 등대 불빛 줄기: 등 쪽은 밝고 끝으로 갈수록 사라짐 (끝이 잘린 회색 원판처럼 보이던 문제) */
+const beamMaterial = (opacity: number) =>
+  new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    side: THREE.DoubleSide,
+    fog: false,
+    uniforms: { color: { value: new THREE.Color("#ffe9b0") }, opacity: { value: opacity } },
+    vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+    fragmentShader: `uniform vec3 color; uniform float opacity; varying vec2 vUv;
+      void main(){ float a = pow(vUv.y, 2.2) * opacity; gl_FragColor = vec4(color * a, a); }`,
+  });
 
 /* ───────────────────────── 바람개비 정원 ───────────────────────── */
 
