@@ -8,7 +8,7 @@ import { getAllMissing, getMissing } from "@/lib/missing/api";
 import { formatMissingDate, groupByRegion } from "@/lib/missing/regions";
 import { displayName } from "@/lib/og/helpers";
 
-const ROOM_DESCRIPTION = "지금도 집으로 돌아오지 못한 분들이 있습니다. 실종된 분들을 기억하고 제보 창구를 확인한 뒤, 무사 귀가를 바라는 바람개비를 꽂아 주세요.";
+const ROOM_DESCRIPTION = "지금도 집으로 돌아오지 못한 분들을 기억하고, 무사 귀가를 바라는 바람개비를 꽂습니다.";
 
 /**
  * 공유 미리보기: 실종방 링크는 찾고 있는 분들의 사진·인원 수·QR이 담긴 이미지로,
