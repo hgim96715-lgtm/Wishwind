@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 export type Theme = "light" | "dark";
 export const THEME_KEY = "theme";
+export const MOBILE_THEME_QUERY = "(max-width: 767px)";
 
 function systemTheme(): Theme {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -43,18 +44,27 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
     setTheme(document.documentElement.dataset.theme === "dark" ? "dark" : "light");
     const id = requestAnimationFrame(() => setAnimate(true));
 
-    // 직접 고르기 전에는 폰 설정이 바뀌면 따라감
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = () => {
-      if (savedTheme()) return;
+    const systemMq = window.matchMedia("(prefers-color-scheme: dark)");
+    const mobileMq = window.matchMedia(MOBILE_THEME_QUERY);
+    const applyPreferredTheme = () => {
+      const saved = mobileMq.matches ? null : savedTheme();
+      const next = saved ?? systemTheme();
+      document.documentElement.dataset.theme = next;
+      setTheme(next);
+    };
+    // 모바일은 항상 기기 설정을 따르고, 데스크톱은 직접 고르기 전까지만 기기 설정을 따름
+    const onSystemChange = () => {
+      if (!mobileMq.matches && savedTheme()) return;
       const next = systemTheme();
       document.documentElement.dataset.theme = next;
       setTheme(next);
     };
-    mq.addEventListener("change", onChange);
+    systemMq.addEventListener("change", onSystemChange);
+    mobileMq.addEventListener("change", applyPreferredTheme);
     return () => {
       cancelAnimationFrame(id);
-      mq.removeEventListener("change", onChange);
+      systemMq.removeEventListener("change", onSystemChange);
+      mobileMq.removeEventListener("change", applyPreferredTheme);
     };
   }, []);
 
@@ -72,7 +82,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   };
 
   return (
-    <div className={`inline-flex items-center gap-2 text-xs ${className}`}>
+    <div className={`hidden items-center gap-2 text-xs md:inline-flex ${className}`}>
       <span className={dark ? "text-subtle" : "font-semibold text-foreground"}>낮</span>
       <button
         type="button"
@@ -111,5 +121,5 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   );
 }
 
-/** <head>에서 화면을 그리기 전에 실행 → 밤을 고른 사람에게 밝은 화면이 깜빡이지 않음. 실종방은 언덕의 시간을 따르므로 늘 밝게 시작 */
-export const THEME_INIT_SCRIPT = `(function(){try{var t=location.pathname.indexOf('/missing')===0?'light':localStorage.getItem('${THEME_KEY}');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=d?'dark':'light';}catch(e){}})();`;
+/** 화면을 그리기 전에 실행 → 모바일은 기기 설정, 데스크톱은 저장한 선택을 적용. 실종방은 언덕의 시간을 따름 */
+export const THEME_INIT_SCRIPT = `(function(){try{var m=window.matchMedia('${MOBILE_THEME_QUERY}').matches;var t=location.pathname.indexOf('/missing')===0?'light':m?null:localStorage.getItem('${THEME_KEY}');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=d?'dark':'light';}catch(e){}})();`;

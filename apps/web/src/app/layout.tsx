@@ -7,7 +7,6 @@ import "./globals.css";
 import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL } from "@/lib/site";
 import { HelpBar } from "@/components/help/HelpBar";
 import { DevViewerSwitch } from "@/components/dev/DevViewerSwitch";
-import { AdminReturn } from "@/components/admin/AdminReturn";
 import { THEME_INIT_SCRIPT } from "@/components/common/ThemeToggle";
 
 const geistSans = Geist({
@@ -112,10 +111,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* 개발 모드에서만: 다른 사람 눈에 보이는 화면 확인 */}
         <Suspense fallback={null}>
           <DevViewerSwitch />
-        </Suspense>
-        {/* 관리자로 로그인한 채 둘러볼 때 관리실로 돌아가는 버튼 */}
-        <Suspense fallback={null}>
-          <AdminReturn />
         </Suspense>
       </body>
     </html>
