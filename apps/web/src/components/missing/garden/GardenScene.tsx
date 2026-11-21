@@ -656,7 +656,7 @@ function Lanterns({ slots, lamp, onSelect }: { slots: Slot[]; lamp: number; onSe
   );
 }
 
-/** 가까운 등불 위에 짧은 '살펴보기' 이름표를 띄움 (누르면 카드). 이름 등은 길어져서 넣지 않고, 가까이 있는 동안 계속 보임 */
+/** 가까운 등불 지붕 바로 위에 짧은 '기억의 등불' 이름표를 띄움 (누르면 카드). 이름 등은 길어져서 넣지 않고, 가까이 있는 동안 계속 보임 */
 function LanternPrompt({
   id,
   slots,
@@ -683,10 +683,10 @@ function LanternPrompt({
     labels.set("lantern-prompt", [
       {
         id: `lantern-prompt-${id}`,
-        text: "살펴보기",
+        text: "기억의 등불",
         variant: "lantern-prompt",
-        pos: [x, y + 2.6, z],
-        ariaLabel: "이 등불의 실종자 살펴보기",
+        pos: [x, y + 2.15, z],
+        ariaLabel: "기억의 등불: 이 등불의 실종자 살펴보기",
         onClick: () => onSelect(id),
       },
     ]);
