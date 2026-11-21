@@ -12,7 +12,7 @@ import type { Slot } from "../path-layout";
 import type { Weather } from "@/lib/weather/types";
 import { currentHour, paletteAt, withWeather, type SkyPalette } from "../time-of-day";
 import { Avatar } from "./Avatar";
-import { Airplane, beamMaterial, Benches, benchSpots, makeTreeBlocker, SEAT_HEIGHT, Trees, treeSpots, type Bench } from "./scenery";
+import { Airplane, beamMaterial } from "./scenery";
 import { createLabelStore, LabelOverlay, LabelProjector, type Label, type LabelStore } from "./labels";
 import {
   clampToLand,
@@ -63,9 +63,6 @@ export interface PlayerStatus {
   place: string;
   nearId: string | null;
   inGarden: boolean;
-  /** 앉을 수 있을 만큼 가까운 벤치 (앉아 있으면 그 벤치) */
-  benchId?: string | null;
-  sitting?: boolean;
 }
 
 /** DOM(조이스틱·버튼)에서 3D 세계로 넘기는 입력. ref라서 매 프레임 읽어도 리렌더 없음 */
@@ -75,9 +72,6 @@ export interface WorldControls {
   teleport?: (x: number, z: number) => void;
   /** 지금 서 있는 곳 바로 앞, 바람개비를 꽂을 수 있는 자리 [x, z] */
   plantSpot?: () => [number, number];
-  /** 가까운 벤치에 앉기 / 일어나기 */
-  sit?: () => void;
-  stand?: () => void;
 }
 
 interface SceneProps {
@@ -143,9 +137,6 @@ function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, on
   const [nearSlot, setNearSlot] = useState(0);
   const home = wishCount >= HOME_PATH_AT;
   const night = palette.dark;
-  const benches = useMemo(() => benchSpots(slots), [slots]);
-  const trees = useMemo(() => treeSpots(slots, benches), [slots, benches]);
-  const blocked = useMemo(() => makeTreeBlocker(trees), [trees]);
 
   return (
     <>
@@ -160,8 +151,6 @@ function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, on
       <Meadow player={player} ground={ground} />
       <FootGlow player={player} amount={night ? 1 : Math.max(0, (palette.lamp - 1.2) / 1.6)} />
       <Ponds nearSlot={nearSlot} />
-      <Trees trees={trees} />
-      <Benches benches={benches} />
       <Airplane night={night} />
       {wishCount >= SUNLIGHT_AT && <GardenSunlight golden={home} />}
       <Player
@@ -174,8 +163,6 @@ function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, on
         onSelect={onSelect}
         onStatus={onStatus}
         onSlot={setNearSlot}
-        benches={benches}
-        blocked={blocked}
       />
     </>
   );
@@ -1220,11 +1207,7 @@ function Player({
   onSelect,
   onStatus,
   onSlot,
-  benches,
-  blocked,
 }: {
-  benches: Bench[];
-  blocked: (x: number, z: number) => boolean;
   slots: Slot[];
   paused: boolean;
   avatar: { url: string | null; nickname: string };
@@ -1251,9 +1234,6 @@ function Player({
   const pausedRef = useRef(paused);
   const lastStatus = useRef("");
   const lastSlot = useRef(0);
-  // 벤치에 앉아 있으면 그 벤치. 앞뒤로 움직이면 일어남
-  const seat = useRef<Bench | null>(null);
-  const poseRef = useRef<"sit" | null>(null);
 
   useLayoutEffect(() => {
     pausedRef.current = paused;
@@ -1270,25 +1250,6 @@ function Player({
   useEffect(() => {
     const c = controls.current;
     c.teleport = (x, z) => {
-      player.current.set(x, walkHeight(x, z), z);
-    };
-    const nearBench = () => benches.find((b) => Math.hypot(b.x - player.current.x, b.z - player.current.z) < 2.6) ?? null;
-    c.sit = () => {
-      const b = nearBench();
-      if (!b) return;
-      seat.current = b;
-      poseRef.current = "sit";
-      // 바로 뒤에서 보면 등받이에 몸이 가려서, 비스듬히 뒤에서 앉은 모습과 바다가 함께 보이게 함
-      yaw.current = b.yaw + 1.35;
-    };
-    c.stand = () => {
-      const b = seat.current;
-      if (!b) return;
-      seat.current = null;
-      poseRef.current = null;
-      // 벤치 바로 앞에 섬
-      const x = b.x - Math.sin(b.yaw) * 1.0;
-      const z = b.z - Math.cos(b.yaw) * 1.0;
       player.current.set(x, walkHeight(x, z), z);
     };
     c.plantSpot = () => {
@@ -1326,8 +1287,6 @@ function Player({
     return () => {
       c.teleport = undefined;
       c.plantSpot = undefined;
-      c.sit = undefined;
-      c.stand = undefined;
       window.removeEventListener("keydown", down);
       window.removeEventListener("keyup", up);
       window.removeEventListener("blur", blur);
@@ -1335,7 +1294,7 @@ function Player({
       window.removeEventListener("pointermove", pmove);
       window.removeEventListener("pointerup", pup);
     };
-  }, [controls, gl, onSelect, player, benches]);
+  }, [controls, gl, onSelect, player]);
 
   const camTarget = useMemo(() => new THREE.Vector3(), []);
   const look = useMemo(() => new THREE.Vector3(), []);
@@ -1362,17 +1321,7 @@ function Player({
     const fx = -Math.sin(yaw.current);
     const fz = -Math.cos(yaw.current);
 
-    // 앉아 있을 때 앞뒤로 가려 하면 일어남 (좌우는 둘러보기)
-    if (seat.current && Math.abs(iy) > 0.05) controls.current.stand?.();
-    const sat = seat.current;
-
-    if (sat) {
-      // 앉은 자세 모델은 엉덩이가 원점보다 뒤에 있어 앉는 판 앞쪽으로 당김 (등받이를 뚫지 않게)
-      const sx = sat.x - Math.sin(sat.yaw) * SIT_FORWARD;
-      const sz = sat.z - Math.cos(sat.yaw) * SIT_FORWARD;
-      p.set(sx, heightAt(sat.x, sat.z) + SEAT_HEIGHT + SIT_OFFSET, sz);
-      speedRef.current = 0;
-    } else if (Math.abs(iy) > 0.05) {
+    if (Math.abs(iy) > 0.05) {
       const speed = (k.has("Shift") ? 9 : 4.5) * Math.min(1, Math.abs(iy));
       const dir = Math.sign(iy);
       const mx = fx * dir * speed * dt;
@@ -1380,11 +1329,9 @@ function Player({
       // 연못 물에는 들어가지 않음 (다리 위는 걸을 수 있음). 막히면 물가를 따라 미끄러지듯 비켜 감
       // 이미 물가 안쪽에 서 있으면(순간 이동 직후 등) 어느 쪽으로든 나갈 수 있게 함
       const stuck = inWater(p.x, p.z);
-      // 나무 기둥은 지나가지 못함 (이미 나무 안이면 빠져나올 수 있게)
-      const inTree = blocked(p.x, p.z);
       for (const [ax, az] of [[mx, mz], [mx, 0], [0, mz]] as const) {
         const [nx, nz] = clampToLand(p.x + ax, p.z + az, slots.length);
-        if ((stuck || !inWater(nx, nz)) && (inTree || !blocked(nx, nz))) {
+        if (stuck || !inWater(nx, nz)) {
           p.set(nx, walkHeight(nx, nz), nz);
           break;
         }
@@ -1395,8 +1342,8 @@ function Player({
       speedRef.current = Math.abs(ix) > 0.3 ? 1 : 0;
       p.y = walkHeight(p.x, p.z);
     }
-    // 캐릭터는 늘 카메라가 보는 쪽(앞)을 바라봄. 뒤로 걸을 때도 몸은 앞을 향한 채 뒷걸음. 앉아 있으면 벤치 앞쪽
-    const target = sat ? Math.atan2(-Math.sin(sat.yaw), -Math.cos(sat.yaw)) : Math.atan2(fx, fz);
+    // 캐릭터는 늘 카메라가 보는 쪽(앞)을 바라봄. 뒤로 걸을 때도 몸은 앞을 향한 채 뒷걸음
+    const target = Math.atan2(fx, fz);
     let diff = target - heading.current;
     diff = Math.atan2(Math.sin(diff), Math.cos(diff));
     heading.current += diff * (1 - Math.exp(-dt * 12));
@@ -1421,11 +1368,10 @@ function Player({
     const slot = Math.max(0, Math.round(slotAtZ(p.z)));
     const inGarden = Math.hypot(p.x - GARDEN_CENTER[0], p.z - GARDEN_CENTER[1]) < 14;
     const place = placeName(p.x, p.z, inGarden);
-    const benchId = sat ? sat.id : (benches.find((b) => Math.hypot(b.x - p.x, b.z - p.z) < 2.6)?.id ?? null);
-    const key = `${place}|${nearId}|${inGarden}|${benchId}|${!!sat}`;
+    const key = `${place}|${nearId}|${inGarden}`;
     if (key !== lastStatus.current) {
       lastStatus.current = key;
-      onStatus({ place, nearId, inGarden, benchId, sitting: !!sat });
+      onStatus({ place, nearId, inGarden });
     }
     const coarse = Math.round(slot / 5) * 5;
     if (coarse !== lastSlot.current) {
@@ -1436,14 +1382,10 @@ function Player({
 
   return (
     <group ref={body}>
-      <Avatar key={avatar.url ?? "none"} url={avatar.url} speedRef={speedRef} poseRef={poseRef} />
+      <Avatar key={avatar.url ?? "none"} url={avatar.url} speedRef={speedRef} />
     </group>
   );
 }
-
-/** 앉은 자세 모델의 엉덩이 높이 보정 (모델 원점은 발바닥) */
-const SIT_OFFSET = -0.14;
-const SIT_FORWARD = 0.12;
 
 /** 화면 위에 보여 줄 지금 있는 곳 이름 */
 function placeName(x: number, z: number, inGarden: boolean) {

@@ -226,16 +226,7 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
 
           {!overlay && (
             <div className="absolute right-4 bottom-6 z-20 flex flex-col items-end gap-2 md:right-5">
-              {status.benchId && (
-                <button
-                  type="button"
-                  onClick={() => (status.sitting ? controls.current.stand?.() : controls.current.sit?.())}
-                  className="rounded-full bg-white/90 px-4 py-2.5 text-sm text-[#6b5a46] shadow-sm backdrop-blur hover:bg-white"
-                >
-                  {status.sitting ? "일어나기" : "벤치에 앉기"}
-                </button>
-              )}
-              {status.nearId && !status.sitting && (
+              {status.nearId && (
                 <button
                   type="button"
                   onClick={() => status.nearId && select(status.nearId)}
