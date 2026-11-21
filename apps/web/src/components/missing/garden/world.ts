@@ -295,6 +295,11 @@ export function plantableSpot(x: number, z: number): [number, number] {
   return [x, z];
 }
 
+/** 바람개비가 도는 평균 빠르기(라디안/초). 정원에 바람개비가 많을수록 힘차게 돎 (화면 연출과 '○번 돌았습니다'가 같은 값을 씀) */
+export function pinwheelSpeed(wishCount: number) {
+  return 2 + Math.min(5, wishCount / 12);
+}
+
 /** 같은 입력에 늘 같은 값을 주는 0~1 난수 (꽃·나비 배치용) */
 export function hash2(x: number, z: number): number {
   const v = Math.sin(x * 127.1 + z * 311.7) * 43758.5453;

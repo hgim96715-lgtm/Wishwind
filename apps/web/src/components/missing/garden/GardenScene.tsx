@@ -34,6 +34,7 @@ import {
   hash2,
   inWater,
   pathAmount,
+  pinwheelSpeed,
   plantableSpot,
   pondDistance,
   pondsNear,
@@ -72,8 +73,6 @@ export interface PlayerStatus {
 export interface WorldControls {
   /** 조이스틱 입력 (-1~1). y가 앞 */
   stick: { x: number; y: number };
-  /** 천천히 걷기: 켜면 캐릭터가 등불 길 옆 등불을 차례로 찾아가며 잠깐씩 멈춤. 방향키·조이스틱을 쓰면 꺼짐 */
-  autoWalk?: boolean;
   /** (x, z)로 옮김. lookAt을 주면 그쪽을 바라보게 함 */
   teleport?: (x: number, z: number, lookAt?: [number, number]) => void;
   /** 지금 서 있는 곳 바로 앞, 바람개비를 꽂을 수 있는 자리 [x, z] */
@@ -92,9 +91,6 @@ interface SceneProps {
   onStatus: (s: PlayerStatus) => void;
   /** 바다·연못·언덕 끝에 막혀 더 못 갈 때 (잠깐 안내를 띄움) */
   onBlocked?: (where: BlockedAt) => void;
-  /** 천천히 걷기: 등불 앞에 도착함(그 분 id) / 끝남(직접 움직였거나 길 끝) */
-  onAutoArrive?: (id: string) => void;
-  onAutoEnd?: (why: "input" | "end") => void;
   /** 보는 사람 동네(기본 서울)의 지금 날씨 */
   weather?: Weather | null;
 }
@@ -141,7 +137,7 @@ export default function GardenScene(props: SceneProps & { onPalette?: (p: SkyPal
   );
 }
 
-function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, onSelect, onStatus, onBlocked, onAutoArrive, onAutoEnd, palette, labels, weather }: SceneProps & { palette: SkyPalette; labels: LabelStore }) {
+function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, onSelect, onStatus, onBlocked, palette, labels, weather }: SceneProps & { palette: SkyPalette; labels: LabelStore }) {
   const player = useRef(new THREE.Vector3(SPAWN[0], heightAt(SPAWN[0], SPAWN[1]), SPAWN[1]));
   const ground = useGroundWeather(weather?.kind ?? "clear");
   // 표지판·말풍선은 플레이어 근처만 그림 → 수천 개 DOM을 만들지 않음 (5칸 단위로만 갱신)
@@ -173,8 +169,6 @@ function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, on
         onSelect={onSelect}
         onStatus={onStatus}
         onBlocked={onBlocked}
-        onAutoArrive={onAutoArrive}
-        onAutoEnd={onAutoEnd}
         onSlot={setNearSlot}
       />
     </>
@@ -829,7 +823,7 @@ function PinwheelGarden({
     const t = clock.elapsedTime;
     if (freshIndex >= 0 && bornAt.current?.k !== freshIndex) bornAt.current = { k: freshIndex, t };
     // 바다 쪽에서 부는 바람: 기본 속도 + 모인 수만큼 더 힘차게 + 살랑이는 돌풍
-    const speed = (2 + Math.min(5, wishCount / 12)) * (1 + 0.35 * Math.sin(t * 0.6) + 0.15 * Math.sin(t * 1.7));
+    const speed = pinwheelSpeed(wishCount) * (1 + 0.35 * Math.sin(t * 0.6) + 0.15 * Math.sin(t * 1.7));
     angle.current += dt * speed;
     const r = rotors.current;
     if (r) {
@@ -1164,8 +1158,6 @@ function Player({
   onSelect,
   onStatus,
   onBlocked,
-  onAutoArrive,
-  onAutoEnd,
   onSlot,
 }: {
   slots: Slot[];
@@ -1177,8 +1169,6 @@ function Player({
   onSelect: (id: string) => void;
   onStatus: (s: PlayerStatus) => void;
   onBlocked?: (where: BlockedAt) => void;
-  onAutoArrive?: (id: string) => void;
-  onAutoEnd?: (why: "input" | "end") => void;
   onSlot: (slot: number) => void;
 }) {
   useEffect(() => {
@@ -1199,9 +1189,6 @@ function Player({
   // 앞으로 가려는데 거의 못 움직인 시간. 잠깐 넘으면 왜 막혔는지 알려 줌 (한 번 막힐 때마다 한 번)
   const blockedFor = useRef(0);
   const blockedTold = useRef(false);
-  // 천천히 걷기: 지금 찾아가는 등불 칸, 그 앞에서 멈춰 있는 남은 시간
-  const autoTarget = useRef(-1);
-  const autoPause = useRef(0);
   const lastSlot = useRef(0);
 
   useLayoutEffect(() => {
@@ -1282,43 +1269,6 @@ function Player({
     if (pausedRef.current) ix = iy = 0;
     const p = player.current;
 
-    // 천천히 걷기: 직접 움직이면 바로 멈추고, 아니면 다음 등불 쪽으로 몸을 돌려 천천히 걸어감
-    const auto = controls.current.autoWalk && !pausedRef.current;
-    if (auto && (Math.abs(ix) > 0.05 || Math.abs(iy) > 0.05)) {
-      controls.current.autoWalk = false;
-      autoTarget.current = -1;
-      onAutoEnd?.("input");
-    } else if (auto) {
-      if (autoTarget.current < 0) autoTarget.current = nextAutoLantern(slots, Math.max(0, Math.floor(slotAtZ(p.z))));
-      const ti = autoTarget.current;
-      const ts = slots[ti];
-      if (!ts || ts.kind !== "lantern") {
-        controls.current.autoWalk = false;
-        autoTarget.current = -1;
-        onAutoEnd?.("end");
-      } else if (autoPause.current > 0) {
-        autoPause.current -= dt;
-        if (autoPause.current <= 0) autoTarget.current = nextAutoLantern(slots, ti + 1);
-      } else {
-        const [tx, , tz] = lanternPoint(ti, ts.side, 0);
-        const dist = Math.hypot(tx - p.x, tz - p.z);
-        // 물가에 막혀 한동안 못 가면 그 등불은 건너뜀
-        if (dist < 1.4 || blockedFor.current > 1.5) {
-          blockedFor.current = 0;
-          if (dist < 1.4) {
-            autoPause.current = AUTO_PAUSE;
-            onAutoArrive?.(ts.person.id);
-          } else autoTarget.current = nextAutoLantern(slots, ti + 1);
-        } else {
-          const want = Math.atan2(-(tx - p.x), -(tz - p.z));
-          let turn = want - yaw.current;
-          turn = Math.atan2(Math.sin(turn), Math.cos(turn));
-          yaw.current += turn * Math.min(1, dt * 1.8);
-          iy = Math.abs(turn) < 0.7 ? AUTO_SPEED : 0.12;
-        }
-      }
-    }
-
     /*
      * 조종 방식: 좌우(A·D·←·→·조이스틱 좌우) = 몸과 시선을 함께 돌림, 앞뒤 = 바라보는 쪽으로 걷기
      * → 돌면 배경(카메라)도 같이 돌아서, 모바일 게임처럼 자연스럽게 방향을 바꿀 수 있음
@@ -1350,7 +1300,7 @@ function Player({
       if (moved < speed * dt * 0.25) {
         speedRef.current = 0;
         blockedFor.current += dt;
-        if (blockedFor.current > 0.5 && !blockedTold.current && !controls.current.autoWalk) {
+        if (blockedFor.current > 0.5 && !blockedTold.current) {
           blockedTold.current = true;
           const why = blockedReason(p.x, p.z);
           if (why) onBlocked?.(why);
@@ -1408,21 +1358,6 @@ function Player({
       <Avatar key={avatar.url ?? "none"} url={avatar.url} speedRef={speedRef} />
     </group>
   );
-}
-
-/** 천천히 걷기 속도(걷기의 비율)와 등불 앞에서 멈추는 시간(초) */
-const AUTO_SPEED = 0.5;
-const AUTO_PAUSE = 3.5;
-
-/** from 칸부터 앞으로, 길에서 너무 멀지 않은 다음 등불 칸 (들판 깊숙한 등불까지 가면 너무 오래 걸림). 없으면 -1 */
-function nextAutoLantern(slots: Slot[], from: number) {
-  for (let i = Math.max(1, from); i < slots.length; i++) {
-    const s = slots[i];
-    if (s.kind !== "lantern") continue;
-    const [x] = lanternPoint(i, s.side, 0);
-    if (Math.abs(x - trailX(i)) < 14) return i;
-  }
-  return -1;
 }
 
 /** 왜 더 못 가는지: 바닷가·연못가·그 밖의 언덕 끝. 다리 위에서는 난간에 막힌 것이 눈에 보이므로 안내하지 않음(null) */

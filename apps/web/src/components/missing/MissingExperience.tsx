@@ -11,7 +11,7 @@ import { THEME_KEY } from "@/components/common/ThemeToggle";
 import { AvatarSetup, loadAvatar, type AvatarChoice } from "./garden/AvatarSetup";
 import type { BlockedAt, PlayerStatus, Wish, WorldControls } from "./garden/GardenScene";
 import { Joystick } from "./garden/Joystick";
-import { GARDEN_CENTER, lanternPoint, LIGHTHOUSE, pinwheelSpot, START_POND_VIEW, trailPoint } from "./garden/world";
+import { GARDEN_CENTER, lanternPoint, LIGHTHOUSE, pinwheelSpeed, pinwheelSpot, START_POND_VIEW, trailPoint } from "./garden/world";
 import { MissingCard } from "./MissingCard";
 import { MissingList } from "./MissingList";
 import { buildSlots } from "./path-layout";
@@ -69,11 +69,8 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
     return () => ac.abort();
   }, []);
   const [editingAvatar, setEditingAvatar] = useState(false);
-  // 천천히 걷기: 켜져 있는지, 방금 도착한 등불의 그 분 (잠깐 이름을 보여 줌)
-  const [autoWalking, setAutoWalking] = useState(false);
   // 파도·바람 소리: 처음엔 꺼 둠 (브라우저는 사용자가 누르기 전엔 소리를 막음)
   const sound = useAmbientSound();
-  const [meeting, setMeeting] = useState<{ name: string; detail: string } | null>(null);
   // 닉네임 없이 둘러보던 사람이 바람개비를 꽂으려 할 때 이름부터 정하게 함
   const [namingForWish, setNamingForWish] = useState(false);
   const [selected, setSelected] = useState<{ id: string; regionLabel: string } | null>(null);
@@ -109,13 +106,6 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
     setAvatar(loadAvatar());
     /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
-
-  // 등불 앞에서 보여 준 이름은 멈춰 있는 동안만 (다음 등불로 걸어갈 때는 지움)
-  useEffect(() => {
-    if (!meeting) return;
-    const id = setTimeout(() => setMeeting(null), 4500);
-    return () => clearTimeout(id);
-  }, [meeting]);
 
   useEffect(() => {
     if (!toast) return;
@@ -204,8 +194,11 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
     setWishOpen(false);
     controls.current.teleport?.(x, z + 2.6, [x, z]);
     setFreshId(myLatest.id);
-    setToast("내가 꽂은 바람개비입니다");
-  }, [myLatest]);
+    // 꽂은 뒤 지금까지 바람에 몇 바퀴 돌았는지 (화면 속 바람개비가 도는 빠르기 기준)
+    const seconds = Math.max(0, (Date.now() - new Date(myLatest.createdAt).getTime()) / 1000);
+    const turns = Math.floor((seconds * pinwheelSpeed(wishCount)) / (Math.PI * 2));
+    setToast(turns > 0 ? `내 바람개비가 그동안 ${turns.toLocaleString("ko-KR")}번 돌았습니다` : "내가 꽂은 바람개비입니다");
+  }, [myLatest, wishCount]);
 
   const jumpTo = (slot: number) => {
     const s = slots[slot + 1];
@@ -215,13 +208,8 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   };
 
   const total = groups.reduce((n, g) => n + g.people.length, 0);
-  const toggleAutoWalk = () => {
-    const next = !autoWalking;
-    controls.current.autoWalk = next;
-    setAutoWalking(next);
-    setMeeting(null);
-    if (next) setToast("등불 앞에서 잠깐씩 멈추며 천천히 걷습니다. 직접 움직이면 멈춥니다");
-  };
+  // 가까이 있는 등불의 그 분: 그냥 지나치지 않도록 화면 아래에 이름과 '확인하기'를 띄움
+  const near = status.nearId ? people.get(status.nearId) : undefined;
   if (total === 0) {
     return <Veil text="아직 길에 놓인 등불이 없습니다. 실종자 정보를 불러오는 중이니 잠시 후 다시 와 주세요." />;
   }
@@ -246,15 +234,6 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
               onSelect={select}
               onStatus={setStatus}
               onBlocked={(where) => setToast(BLOCKED_HINT[where])}
-              onAutoArrive={(id) => {
-                const person = people.get(id);
-                if (person) setMeeting({ name: person.name, detail: [person.missingDate ? `${formatMissingDate(person.missingDate)} 실종` : null, person.lastSeenPlace].filter(Boolean).join(" · ") });
-              }}
-              onAutoEnd={(why) => {
-                setAutoWalking(false);
-                setMeeting(null);
-                if (why === "end") setToast("등불 길 끝까지 함께 걸었습니다");
-              }}
             />
           </div>
 
@@ -287,23 +266,6 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
               >
                 {sound.on ? "소리 끄기" : "파도 소리 켜기"}
               </button>
-              <button
-                type="button"
-                onClick={toggleAutoWalk}
-                aria-pressed={autoWalking}
-                className={`rounded-full px-4 py-2 text-sm shadow-sm backdrop-blur ${autoWalking ? "bg-[#6b5a46] text-white" : "bg-white/90 text-[#6b5a46] hover:bg-white"}`}
-              >
-                {autoWalking ? "멈추기" : "천천히 걷기"}
-              </button>
-              {status.nearId && (
-                <button
-                  type="button"
-                  onClick={() => status.nearId && select(status.nearId)}
-                  className="rounded-full bg-[#e9a94f] px-5 py-3 text-sm font-medium text-white shadow-sm"
-                >
-                  등불 보기
-                </button>
-              )}
               <button
                 type="button"
                 onClick={() => (avatar?.nickname ? setWishOpen(true) : setNamingForWish(true))}
@@ -343,12 +305,19 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
             </p>
           )}
 
-          {/* 천천히 걷기 중 등불 앞에 도착하면 그 분 이름을 잠깐 보여 줌 */}
-          {autoWalking && meeting && !overlay && (
-            <div aria-live="polite" className="pointer-events-none absolute top-24 left-1/2 z-20 -translate-x-1/2 rounded-2xl bg-white/85 px-5 py-3 text-center shadow-sm backdrop-blur md:top-20">
-              <p className="text-base font-semibold text-[#5b4d3c]">{meeting.name}</p>
-              {meeting.detail && <p className="mt-0.5 text-xs text-[#7a6650]">{meeting.detail}</p>}
-            </div>
+          {/* 등불 가까이 오면: 그 분 이름과 실종일, 누르면 카드가 열림 */}
+          {near && status.nearId && !overlay && (
+            <button
+              type="button"
+              aria-live="polite"
+              onClick={() => status.nearId && select(status.nearId)}
+              className="absolute bottom-28 left-1/2 z-20 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 flex-col items-center rounded-2xl bg-white/90 px-5 py-3 text-center shadow-md backdrop-blur transition-colors hover:bg-white md:top-24 md:bottom-auto"
+            >
+              <span className="text-xs text-[#9a8a76]">이 등불의 주인을 기억해 주세요</span>
+              <span className="mt-0.5 text-base font-semibold text-[#5b4d3c]">{near.name}</span>
+              {near.missingDate && <span className="text-xs text-[#7a6650]">{formatMissingDate(near.missingDate)} 실종{near.lastSeenPlace ? ` · ${near.lastSeenPlace}` : ""}</span>}
+              <span className="mt-2 rounded-full bg-[#e9a94f] px-4 py-1.5 text-sm font-medium text-white">이 분 확인하기</span>
+            </button>
           )}
 
           <AnimatePresence>
