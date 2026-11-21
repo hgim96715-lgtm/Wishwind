@@ -31,6 +31,16 @@ export class CloudsRepository {
     });
   }
 
+  /** 내가 꽂아서 언덕에 공개된 바람개비 (내 바람개비 찾아가기) */
+  findMyPublished(voterId: string, take: number) {
+    return this.prisma.cloudMessage.findMany({
+      where: { voterId, status: UserContentStatus.PUBLISHED },
+      orderBy: { createdAt: 'desc' },
+      take,
+      select: cloudSelect,
+    });
+  }
+
   countSince(voterId: string, since: Date) {
     return this.prisma.cloudMessage.count({ where: { voterId, createdAt: { gte: since } } });
   }

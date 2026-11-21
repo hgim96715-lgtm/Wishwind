@@ -5,8 +5,17 @@ import { UserContentStatus } from '../generated/prisma/enums.js';
 import { CloudsRepository } from './clouds.repository.js';
 import { filterCloud } from './cloud-filter.js';
 
-const DAY_MS = 24 * 60 * 60 * 1000;
-const DAILY_LIMIT = 5;
+/** 한 사람이 하루(한국 시간 자정 기준)에 꽂을 수 있는 바람개비 수. 많이 꽂으면 정원이 어수선해짐 (사용자 요청 2026-11-21) */
+export const DAILY_LIMIT = 1;
+const MINE_LIMIT = 20;
+const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
+
+/** 한국 시간으로 오늘 0시 (UTC Date) */
+export function startOfKstDay(now = new Date()) {
+  const kst = new Date(now.getTime() + KST_OFFSET_MS);
+  kst.setUTCHours(0, 0, 0, 0);
+  return new Date(kst.getTime() - KST_OFFSET_MS);
+}
 const RECENT_LIMIT = 40;
 const PENDING_LIMIT = 10;
 /** 글 내용이 아니라 검사 장치 문제(키 없음·시간 초과 등)로 보류된 구름 → 나중에 다시 검사해도 됨 */
@@ -73,14 +82,16 @@ export class CloudsService implements OnApplicationBootstrap, OnApplicationShutd
     return this.repo.countPublished();
   }
 
-  /** 공개된 구름 최근 순 + 내가 남겼지만 확인 중인 구름 */
+  /** 공개된 구름 최근 순 + 내가 남겼지만 확인 중인 구름 + 내가 꽂은 바람개비 + 오늘 이미 꽂았는지 */
   async list(voterId?: string) {
-    const [cloudCount, clouds, pending] = await Promise.all([
+    const [cloudCount, clouds, pending, mine, today] = await Promise.all([
       this.count(),
       this.repo.findRecentPublished(RECENT_LIMIT),
       voterId ? this.repo.findMyHeld(voterId, PENDING_LIMIT) : [],
+      voterId ? this.repo.findMyPublished(voterId, MINE_LIMIT) : [],
+      voterId ? this.repo.countSince(voterId, startOfKstDay()) : 0,
     ]);
-    return { cloudCount, milestones: MILESTONES, clouds, pending };
+    return { cloudCount, milestones: MILESTONES, clouds, pending, mine, placedToday: today >= DAILY_LIMIT };
   }
 
   async place(voterId: string, body: string, position?: { x: number; z: number }, nickname?: string) {
@@ -90,9 +101,9 @@ export class CloudsService implements OnApplicationBootstrap, OnApplicationShutd
     }
 
     await assertNotBlocked(this.repo.prisma, voterId);
-    const today = await this.repo.countSince(voterId, new Date(Date.now() - DAY_MS));
+    const today = await this.repo.countSince(voterId, startOfKstDay());
     if (today >= DAILY_LIMIT) {
-      throw new HttpException('오늘은 바람개비를 충분히 꽂아 주셨습니다. 내일 다시 찾아와 주세요.', HttpStatus.TOO_MANY_REQUESTS);
+      throw new HttpException('바람개비는 하루에 하나씩 꽂을 수 있습니다. 내일 다시 찾아와 주세요.', HttpStatus.TOO_MANY_REQUESTS);
     }
 
     const result = await this.moderator.moderate(moderationText(body, nickname), MODERATION_CONTEXT);

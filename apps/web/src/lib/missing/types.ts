@@ -49,6 +49,10 @@ export interface CloudsResponse {
   clouds: CloudMessage[];
   /** 내가 놓았지만 아직 확인 중인 구름 */
   pending: CloudMessage[];
+  /** 내가 꽂아 언덕에 공개된 바람개비 (최근 순) */
+  mine?: CloudMessage[];
+  /** 오늘(한국 시간) 이미 꽂았는지. 하루에 하나씩만 꽂을 수 있음 */
+  placedToday?: boolean;
 }
 
 export interface PlaceCloudResult {

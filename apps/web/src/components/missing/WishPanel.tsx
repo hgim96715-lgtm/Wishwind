@@ -84,6 +84,7 @@ export function WishPanel({
   setData,
   onClose,
   onPlaced,
+  onFindMine,
   getPosition,
   nickname,
 }: {
@@ -92,6 +93,8 @@ export function WishPanel({
   onClose: () => void;
   /** 꽂은 바람개비를 정원에서 바로 보여 주기 위해 알림 */
   onPlaced?: (id: string, message: string, placedHere: boolean) => void;
+  /** 내가 꽂은 바람개비 앞으로 가기 (꽂은 적이 있을 때만) */
+  onFindMine?: () => void;
   /** 지금 서 있는 자리 앞 (바람개비를 꽂을 곳). 목록 화면 등에서는 없음 → 정원 안에 꽂힘 */
   getPosition?: () => [number, number] | undefined;
   /** 정원 캐릭터 닉네임. 다른 사람 화면에 "○○님이 바람개비를 꽂았습니다"로 보임 */
@@ -147,6 +150,8 @@ export function WishPanel({
             cloudCount: r.cloudCount,
             clouds: r.status === "PUBLISHED" ? [cloud, ...d.clouds] : d.clouds,
             pending: r.status === "HELD" ? [cloud, ...d.pending] : d.pending,
+            mine: r.status === "PUBLISHED" ? [cloud, ...(d.mine ?? [])] : d.mine,
+            placedToday: true,
           },
         );
         onPlaced?.(cloud.id, r.message, cloud.posX != null);
@@ -188,6 +193,26 @@ export function WishPanel({
       <p className="mt-3 text-xs text-subtle">정원의 바람개비 {count}개</p>
       <Progress count={count} ms={ms} />
 
+      {data?.placedToday ? (
+        // 하루에 하나씩: 오늘 이미 꽂았으면 쓰는 칸 대신 안내와 내 바람개비 보러 가기
+        <div className="mt-3 rounded-2xl bg-[#f6eee2] px-4 py-3">
+          <p className="text-sm text-[#5b4d3c]">오늘의 바람개비를 꽂아 주셨습니다. 바람개비는 하루에 하나씩 꽂을 수 있어, 내일 다시 하나를 더 꽂을 수 있습니다.</p>
+          {onFindMine && (
+            <button
+              type="button"
+              onClick={onFindMine}
+              className="mt-2 rounded-full bg-[#e9a94f] px-4 py-1.5 text-sm font-medium text-white shadow-sm transition-opacity hover:opacity-90"
+            >
+              내 바람개비 보러 가기
+            </button>
+          )}
+          {notice && (
+            <p role="status" className={`mt-2 text-xs ${notice.tone === "warn" ? "text-[#b5563c]" : notice.tone === "wait" ? "text-[#7a6650]" : "text-[#4f8a7a]"}`}>
+              {notice.text}
+            </p>
+          )}
+        </div>
+      ) : (
       <form onSubmit={submit} className="mt-3">
         <div className="flex flex-wrap gap-1.5">
           {SUGGESTIONS.map((s) => (
@@ -235,6 +260,7 @@ export function WishPanel({
           </p>
         )}
       </form>
+      )}
 
       {data && (data.pending.length > 0 || data.clouds.length > 0) && (
         <ul className="mt-3 flex flex-wrap gap-1.5" aria-label="정원의 바람개비">
