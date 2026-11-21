@@ -16,6 +16,7 @@ import { MissingCard } from "./MissingCard";
 import { MissingList } from "./MissingList";
 import { buildSlots } from "./path-layout";
 import { currentHour, paletteAt } from "./time-of-day";
+import { useAmbientSound } from "./useAmbientSound";
 import { useWeather } from "./useWeather";
 import { arrivalMessage, useWishes, WishPanel } from "./WishPanel";
 
@@ -70,6 +71,8 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   const [editingAvatar, setEditingAvatar] = useState(false);
   // 천천히 걷기: 켜져 있는지, 방금 도착한 등불의 그 분 (잠깐 이름을 보여 줌)
   const [autoWalking, setAutoWalking] = useState(false);
+  // 파도·바람 소리: 처음엔 꺼 둠 (브라우저는 사용자가 누르기 전엔 소리를 막음)
+  const sound = useAmbientSound();
   const [meeting, setMeeting] = useState<{ name: string; detail: string } | null>(null);
   // 닉네임 없이 둘러보던 사람이 바람개비를 꽂으려 할 때 이름부터 정하게 함
   const [namingForWish, setNamingForWish] = useState(false);
@@ -275,6 +278,15 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
 
           {!overlay && (
             <div className="absolute right-4 bottom-6 z-20 flex flex-col items-end gap-2 md:right-5">
+              <button
+                type="button"
+                onClick={sound.toggle}
+                aria-pressed={sound.on}
+                title="파도와 바람 소리"
+                className="rounded-full bg-white/70 px-3 py-1.5 text-xs text-[#7a6650] backdrop-blur hover:bg-white"
+              >
+                {sound.on ? "소리 끄기" : "파도 소리 켜기"}
+              </button>
               <button
                 type="button"
                 onClick={toggleAutoWalk}
