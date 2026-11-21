@@ -3,6 +3,7 @@ import { ApiUnavailableError, getCase } from "@/lib/cases/api";
 import { COUNTRY_LABEL, STATUS_STAMP, formatCaseDate } from "@/lib/cases/labels";
 import { getMissing } from "@/lib/missing/api";
 import { formatMissingDate } from "@/lib/missing/regions";
+import { BRAND, loadBrand, PinwheelMark } from "@/lib/og/brand";
 import { clip, imageDataUrl, koreanFonts, qrDataUrl } from "@/lib/og/helpers";
 
 /**
@@ -14,9 +15,11 @@ const W = 1080;
 const H = 1920;
 const SITE_NAME = "Wishwind";
 
-const PAPER = "#f7f1e7";
-const INK = "#2f2a24";
-const MUTED = "#6b5a46";
+const PAPER = BRAND.paper;
+const INK = BRAND.ink;
+const MUTED = BRAND.muted;
+
+type Brand = Awaited<ReturnType<typeof loadBrand>>;
 
 type Ctx = RouteContext<"/api/flyer/[type]/[key]">;
 
@@ -24,8 +27,9 @@ export async function GET(request: Request, ctx: Ctx) {
   const { type, key } = await ctx.params;
   const origin = process.env.SITE_URL ?? new URL(request.url).origin;
   try {
-    if (type === "case") return await caseFlyer(key, origin);
-    if (type === "missing") return await missingFlyer(key, origin);
+    const brand = await loadBrand(new URL(request.url).origin);
+    if (type === "case") return await caseFlyer(key, origin, brand);
+    if (type === "missing") return await missingFlyer(key, origin, brand);
     return Response.json({ message: "잘못된 주소입니다" }, { status: 404 });
   } catch (error) {
     if (error instanceof ApiUnavailableError) {
@@ -35,7 +39,7 @@ export async function GET(request: Request, ctx: Ctx) {
   }
 }
 
-async function caseFlyer(slug: string, origin: string) {
+async function caseFlyer(slug: string, origin: string, brand: Brand) {
   const data = await getCase(slug);
   if (!data || data.unpublished) return Response.json({ message: "사건을 찾을 수 없습니다" }, { status: 404 });
   const stamp = STATUS_STAMP[data.status];
@@ -49,9 +53,9 @@ async function caseFlyer(slug: string, origin: string) {
 
   return new ImageResponse(
     (
-      <Frame>
+      <Frame brand={brand}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ fontSize: 34, letterSpacing: 6, color: "#9a8a76" }}>CASE FILE</div>
+          <div style={{ fontSize: 34, letterSpacing: 6, color: BRAND.teal }}>CASE FILE</div>
           <div
             style={{
               display: "flex",
@@ -83,7 +87,7 @@ async function caseFlyer(slug: string, origin: string) {
               padding: "44px 48px",
               borderRadius: 28,
               background: "#fffaf2",
-              border: "3px dashed #dccab0",
+              border: "3px dashed #b9d6cd",
             }}
           >
             <div style={{ fontSize: 34, color: stamp.color, fontWeight: 700 }}>함께 생각해 볼 질문</div>
@@ -98,7 +102,7 @@ async function caseFlyer(slug: string, origin: string) {
   );
 }
 
-async function missingFlyer(id: string, origin: string) {
+async function missingFlyer(id: string, origin: string, brand: Brand) {
   const data = await getMissing(id);
   if (!data) return Response.json({ message: "실종자 정보를 찾을 수 없습니다" }, { status: 404 });
   if (data.source !== "FBI") {
@@ -115,10 +119,10 @@ async function missingFlyer(id: string, origin: string) {
 
   return new ImageResponse(
     (
-      <Frame>
+      <Frame brand={brand}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ fontSize: 34, letterSpacing: 6, color: "#b08a52" }}>MISSING</div>
-          <div style={{ fontSize: 40, fontWeight: 700, color: "#c9873a" }}>이 분을 찾습니다</div>
+          <div style={{ fontSize: 34, letterSpacing: 6, color: BRAND.teal }}>MISSING</div>
+          <div style={{ fontSize: 40, fontWeight: 700, color: BRAND.orange }}>이 분을 찾습니다</div>
         </div>
         <div style={{ display: "flex", marginTop: 56, gap: 44 }}>
           {photo ? (
@@ -128,13 +132,13 @@ async function missingFlyer(id: string, origin: string) {
           <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
             <div style={{ display: "flex", fontSize: data.name.length > 14 ? 60 : 76, fontWeight: 700, lineHeight: 1.2, color: INK }}>{data.name}</div>
             <div style={{ display: "flex", marginTop: 24, fontSize: 38, color: MUTED }}>{missingOn}</div>
-            <div style={{ display: "flex", marginTop: 40, fontSize: 30, color: "#b08a52", fontWeight: 700 }}>마지막으로 목격된 곳</div>
+            <div style={{ display: "flex", marginTop: 40, fontSize: 30, color: BRAND.teal, fontWeight: 700 }}>마지막으로 목격된 곳</div>
             <div style={{ display: "flex", marginTop: 10, fontSize: 38, lineHeight: 1.4, color: INK }}>{clip(place, 60)}</div>
           </div>
         </div>
         {appearance && (
           <div style={{ display: "flex", flexDirection: "column", marginTop: 56, padding: "36px 40px", borderRadius: 28, background: "#fffaf2" }}>
-            <div style={{ fontSize: 30, color: "#b08a52", fontWeight: 700 }}>인상착의</div>
+            <div style={{ fontSize: 30, color: BRAND.teal, fontWeight: 700 }}>인상착의</div>
             <div style={{ display: "flex", marginTop: 14, fontSize: 42, lineHeight: 1.55, color: INK }}>{appearance}</div>
           </div>
         )}
@@ -145,7 +149,7 @@ async function missingFlyer(id: string, origin: string) {
             marginTop: 40,
             padding: "30px 40px",
             borderRadius: 28,
-            background: "#e9a94f",
+            background: BRAND.teal,
             color: "white",
           }}
         >
@@ -162,7 +166,8 @@ async function missingFlyer(id: string, origin: string) {
 
 const cacheHeaders = { "cache-control": "public, max-age=600" };
 
-function Frame({ children }: { children: React.ReactNode }) {
+/** 전단지 바탕: 위에 Wishwind 로고, 오른쪽 아래에 옅은 바람개비 등대 */
+function Frame({ brand, children }: { brand: Brand; children: React.ReactNode }) {
   return (
     <div
       style={{
@@ -170,11 +175,20 @@ function Frame({ children }: { children: React.ReactNode }) {
         height: "100%",
         display: "flex",
         flexDirection: "column",
+        position: "relative",
+        overflow: "hidden",
         background: PAPER,
-        padding: "110px 90px 90px",
+        padding: "80px 90px 90px",
         fontFamily: "NotoSansKR",
       }}
     >
+      <PinwheelMark icon={brand.icon} size={760} right={-230} bottom={-170} opacity={0.1} />
+      {brand.logo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={brand.logo} width={330} height={110} style={{ marginBottom: 50, marginLeft: -12 }} alt="" />
+      ) : (
+        <div style={{ display: "flex", marginBottom: 50, fontSize: 56, fontWeight: 700, color: BRAND.tealDark }}>{SITE_NAME}</div>
+      )}
       {children}
     </div>
   );
@@ -182,7 +196,7 @@ function Frame({ children }: { children: React.ReactNode }) {
 
 function Footer({ qr, caption, note }: { qr: string; caption: string; note: string }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 40, borderTop: "3px solid #e3d6c3", paddingTop: 50 }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 40, borderTop: `3px solid ${BRAND.line}`, paddingTop: 50 }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={qr} width={230} height={230} style={{ borderRadius: 20, background: "white", padding: 14 }} alt="" />
       <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
