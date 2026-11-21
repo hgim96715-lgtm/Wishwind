@@ -21,10 +21,14 @@ export async function generateMetadata({ searchParams }: PageProps<"/missing">):
   let description = ROOM_DESCRIPTION;
   if (person) {
     const data = await getMissing(person).catch(() => null);
-    if (data?.source === "FBI") {
+    if (data) {
       const place = data.lastSeenPlace ?? data.region;
+      const when = data.missingDate ? `${formatMissingDate(data.missingDate)} ` : "";
       title = `${displayName(data.name)} 님을 찾습니다`;
-      description = `${data.missingDate ? `${formatMissingDate(data.missingDate)} ` : ""}${place}에서 실종되었습니다. 보셨다면 공식 제보 창구(${data.tip.label})에 알려 주세요.`;
+      description =
+        data.source === "SAFE182"
+          ? `${when}${place}에서 실종되었습니다. 보셨다면 실종 신고 182(긴급할 때는 112)로 알려 주세요.`
+          : `${when}${place}에서 실종되었습니다. 보셨다면 공식 제보 창구(${data.tip.label})에 알려 주세요.`;
     }
   }
   const image = { url: person ? `/api/og/missing?person=${encodeURIComponent(person)}` : "/api/og/missing", width: 1200, height: 630, alt: title };

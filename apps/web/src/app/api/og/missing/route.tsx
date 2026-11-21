@@ -8,7 +8,8 @@ import { clip, displayName, imageDataUrl, koreanFonts, qrDataUrl } from "@/lib/o
 /**
  * 실종방 링크를 메신저·SNS에 붙였을 때 보이는 미리보기 이미지 (1200×630).
  * - 기본: 지금 찾고 있는 분들의 사진 몇 장 + 인원 수 + 실종방 QR
- * - ?person=id: 그 분의 사진·이름·실종일·장소·제보처 + QR (FBI 공개 자료만. 국내 자료는 이용 조건 확인 전이라 기본 카드로 대신함)
+ * - ?person=id: 그 분의 이름·실종일·장소·제보처 + QR
+ *   FBI 자료는 사진도 넣고, 국내(경찰청 안전Dream) 자료는 사진 이용 조건 확인 전이라 사진 대신 '182' 신고 안내를 크게 넣음
  */
 const W = 1200;
 const H = 630;
@@ -112,13 +113,15 @@ async function roomCard(origin: string) {
 
 async function personCard(id: string, origin: string) {
   const data = await getMissing(id);
-  if (!data || data.source !== "FBI") return null;
-  const photo = (data.photoUrl ? await imageDataUrl(data.photoUrl) : null) ?? (data.thumbUrl ? await imageDataUrl(data.thumbUrl) : null);
+  if (!data) return null;
+  const domestic = data.source === "SAFE182";
+  const photo = domestic ? null : (data.photoUrl ? await imageDataUrl(data.photoUrl) : null) ?? (data.thumbUrl ? await imageDataUrl(data.thumbUrl) : null);
   const qr = await qrDataUrl(`${origin}/missing?person=${encodeURIComponent(id)}`);
   const name = displayName(data.name);
-  const missingOn = data.missingDate ? `${formatMissingDate(data.missingDate)} 실종` : "실종";
+  const age = data.ageAtMissing != null ? ` · 실종 당시 ${data.ageAtMissing}세` : "";
+  const missingOn = `${data.missingDate ? `${formatMissingDate(data.missingDate)} 실종` : "실종"}${domestic ? age : ""}`;
   const place = clip(data.lastSeenPlace ?? data.region, 40);
-  const texts = ["MISSING", "이 분을 찾습니다", name, missingOn, "마지막으로 목격된 곳", place, "보셨다면 공식 창구로 알려 주세요", data.tip.label, "QR을 찍으면 실종방에서 자세히 볼 수 있습니다", `자료 출처: ${data.sourceLabel}`, "Wishwind"];
+  const texts = ["MISSING", "이 분을 찾습니다", "실종 신고", "182", "경찰청 실종아동찾기센터", "긴급할 때는 112", name, missingOn, "마지막으로 목격된 곳", place, "보셨다면 공식 창구로 알려 주세요", data.tip.label, "QR을 찍으면 실종방에서 자세히 볼 수 있습니다", `자료 출처: ${data.sourceLabel}`, "Wishwind"];
 
   return new ImageResponse(
     (
@@ -126,6 +129,14 @@ async function personCard(id: string, origin: string) {
         {photo && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={photo} width={400} height={526} style={{ borderRadius: 28, objectFit: "cover", border: "6px solid #fffaf2" }} alt="" />
+        )}
+        {domestic && (
+          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: 360, height: 526, borderRadius: 28, background: "linear-gradient(160deg, #fbe3b5, #e9a94f)", border: "6px solid #fffaf2", color: "#4a3520" }}>
+            <div style={{ fontSize: 30, fontWeight: 700 }}>실종 신고</div>
+            <div style={{ display: "flex", fontSize: 150, fontWeight: 700, lineHeight: 1.1, color: "#3a2814" }}>182</div>
+            <div style={{ fontSize: 22, marginTop: 8 }}>경찰청 실종아동찾기센터</div>
+            <div style={{ fontSize: 22, marginTop: 18, fontWeight: 700, color: "#7a3b22" }}>긴급할 때는 112</div>
+          </div>
         )}
         <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
@@ -153,7 +164,7 @@ async function personCard(id: string, origin: string) {
         </div>
       </div>
     ),
-    { width: W, height: H, fonts: await koreanFonts(texts.join("")), headers: photo ? cacheHeaders : shortCache },
+    { width: W, height: H, fonts: await koreanFonts(texts.join("")), headers: photo || domestic ? cacheHeaders : shortCache },
   );
 }
 
