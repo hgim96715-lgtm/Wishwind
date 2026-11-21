@@ -3,7 +3,7 @@
 import { AnimatePresence } from "motion/react";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { LuBell, LuBellOff, LuClock, LuCloud, LuCloudFog, LuCloudRain, LuCloudSnow, LuList, LuMap, LuMapPin, LuSun, LuUserRound, LuWind } from "react-icons/lu";
+import { LuClock, LuCloud, LuCloudFog, LuCloudRain, LuCloudSnow, LuList, LuMap, LuMapPin, LuSun, LuUserRound, LuVolume2, LuVolumeX, LuWind } from "react-icons/lu";
 import { WEATHER_LABEL, type Weather, type WeatherKind } from "@/lib/weather/types";
 import type { RegionGroup } from "@/lib/missing/regions";
 import type { CloudMessage } from "@/lib/missing/types";
@@ -270,8 +270,8 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
                 title={sound.on ? "파도 소리 끄기" : "파도 소리 켜기"}
                 className="rounded-full bg-white/70 p-2 text-[#7a6650] backdrop-blur hover:bg-white"
               >
-                {/* 종 = 소리 켜짐, 줄 그은 종 = 꺼짐 */}
-                {sound.on ? <LuBell aria-hidden className="size-4" /> : <LuBellOff aria-hidden className="size-4" />}
+                {/* 스피커 = 소리 켜짐, 엑스 표시 스피커 = 꺼짐 */}
+                {sound.on ? <LuVolume2 aria-hidden className="size-4" /> : <LuVolumeX aria-hidden className="size-4" />}
               </button>
               <button
                 type="button"
