@@ -12,7 +12,7 @@ import * as THREE from "three";
  * "synchronously unmount a root" 경고가 남. 여기서는 일반 React 트리에 그리고
  * 위치만 매 프레임 카메라로 투영해 style.transform에 직접 씀 (리렌더 없음)
  */
-export type LabelVariant = "sign" | "bubble" | "bubble-fresh" | "bubble-pending" | "name";
+export type LabelVariant = "sign" | "bubble" | "bubble-fresh" | "bubble-pending" | "name" | "lantern-prompt";
 
 export interface Label {
   id: string;
@@ -23,6 +23,9 @@ export interface Label {
   /** 움직이는 대상(플레이어)을 따라감 */
   follow?: React.RefObject<THREE.Vector3>;
   offsetY?: number;
+  /** 3D 위치에 붙은 DOM 버튼으로 쓸 때의 동작. 없으면 기존처럼 장식용 글자임 */
+  onClick?: () => void;
+  ariaLabel?: string;
 }
 
 export interface LabelStore {
@@ -63,6 +66,7 @@ const STYLE: Record<LabelVariant, { className: string; size: number }> = {
     size: 9,
   },
   name: { className: "rounded-full bg-white/85 px-2.5 py-0.5 text-xs font-medium whitespace-nowrap text-[#5b4d3c] shadow-sm", size: 8 },
+  "lantern-prompt": { className: "", size: 10 },
 };
 
 /** 캔버스 위에 겹치는 DOM 층 (Canvas 밖, 같은 부모 안) */
@@ -70,23 +74,40 @@ export function LabelOverlay({ store }: { store: LabelStore }) {
   const labels = useSyncExternalStore(store.subscribe, store.all, store.all);
   return (
     // isolate: 글자끼리의 z-index(거리순)가 이 층 안에서만 비교되게 함 → 카드·패널 위로 뚫고 나오지 않음
-    <div className="pointer-events-none absolute inset-0 isolate z-0 overflow-hidden" aria-hidden>
-      {labels.map((l) => (
-        <div
-          key={l.id}
-          ref={(el) => {
-            if (el) store.els.set(l.id, el);
-            else store.els.delete(l.id);
-          }}
-          className="absolute top-0 left-0 origin-bottom will-change-transform"
-          style={{ visibility: "hidden" }}
-        >
-          <div className={STYLE[l.variant].className}>
-            {l.text}
-            {l.variant === "bubble-pending" && <span className="ml-1 text-[10px] text-[#9a8a76]">(확인 중)</span>}
+    <div className="pointer-events-none absolute inset-0 isolate z-0 overflow-hidden">
+      {labels.map((l) => {
+        const prompt = l.variant === "lantern-prompt" && l.onClick;
+        return (
+          <div
+            key={l.id}
+            ref={(el) => {
+              if (el) store.els.set(l.id, el);
+              else store.els.delete(l.id);
+            }}
+            aria-hidden={prompt ? undefined : true}
+            className="absolute top-0 left-0 origin-bottom will-change-transform"
+            style={{ visibility: "hidden" }}
+          >
+            {prompt ? (
+              <button
+                type="button"
+                aria-live="polite"
+                aria-label={l.ariaLabel}
+                onClick={l.onClick}
+                className="lantern-prompt pointer-events-auto relative whitespace-nowrap rounded-full bg-white/90 px-3.5 py-1.5 text-sm font-medium text-[#5b4d3c] shadow-md backdrop-blur hover:bg-white"
+              >
+                {l.text}
+                <span aria-hidden className="absolute -bottom-1 left-1/2 size-2.5 -translate-x-1/2 rotate-45 bg-white/90" />
+              </button>
+            ) : (
+              <div className={STYLE[l.variant].className}>
+                {l.text}
+                {l.variant === "bubble-pending" && <span className="ml-1 text-[10px] text-[#9a8a76]">(확인 중)</span>}
+              </div>
+            )}
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

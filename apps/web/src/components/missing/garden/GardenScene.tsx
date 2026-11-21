@@ -84,6 +84,8 @@ interface SceneProps {
   wishes: Wish[];
   wishCount: number;
   freshId: string | null;
+  /** 가까이 다가가 방금 발견한 등불. 안내를 해당 등불의 3D 위치에 붙임 */
+  nearNotice: string | null;
   paused: boolean;
   avatar: { url: string | null; nickname: string };
   controls: React.RefObject<WorldControls>;
@@ -137,7 +139,7 @@ export default function GardenScene(props: SceneProps & { onPalette?: (p: SkyPal
   );
 }
 
-function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, onSelect, onStatus, onBlocked, palette, labels, weather }: SceneProps & { palette: SkyPalette; labels: LabelStore }) {
+function World({ slots, wishes, wishCount, freshId, nearNotice, paused, avatar, controls, onSelect, onStatus, onBlocked, palette, labels, weather }: SceneProps & { palette: SkyPalette; labels: LabelStore }) {
   const player = useRef(new THREE.Vector3(SPAWN[0], heightAt(SPAWN[0], SPAWN[1]), SPAWN[1]));
   const ground = useGroundWeather(weather?.kind ?? "clear");
   // 표지판·말풍선은 플레이어 근처만 그림 → 수천 개 DOM을 만들지 않음 (5칸 단위로만 갱신)
@@ -150,6 +152,7 @@ function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, on
       <Terrain palette={palette} player={player} ground={ground} />
       <Sea palette={palette} player={player} />
       <Lanterns slots={slots} lamp={palette.lamp} onSelect={onSelect} />
+      <LanternPrompt id={nearNotice} slots={slots} labels={labels} onSelect={onSelect} />
       {/* 해 질 녘(등불 밝기가 오르기 시작할 때)부터 등대에 불이 들어옴 */}
       <Lighthouse lit={night || palette.lamp >= 1.5} home={home} />
       <PinwheelGarden wishes={wishes} wishCount={wishCount} freshId={freshId} player={player} labels={labels} />
@@ -651,6 +654,45 @@ function Lanterns({ slots, lamp, onSelect }: { slots: Slot[]; lamp: number; onSe
       )}
     </group>
   );
+}
+
+/** 가까운 등불 위에 짧은 '살펴보기' 이름표를 띄움 (누르면 카드). 이름 등은 길어져서 넣지 않고, 가까이 있는 동안 계속 보임 */
+function LanternPrompt({
+  id,
+  slots,
+  labels,
+  onSelect,
+}: {
+  id: string | null;
+  slots: Slot[];
+  labels: LabelStore;
+  onSelect: (id: string) => void;
+}) {
+  useEffect(() => {
+    if (!id) {
+      labels.set("lantern-prompt", []);
+      return;
+    }
+    const index = slots.findIndex((slot) => slot.kind === "lantern" && slot.person.id === id);
+    const slot = slots[index];
+    if (index < 0 || slot?.kind !== "lantern") {
+      labels.set("lantern-prompt", []);
+      return;
+    }
+    const [x, y, z] = lanternPoint(index, slot.side);
+    labels.set("lantern-prompt", [
+      {
+        id: `lantern-prompt-${id}`,
+        text: "살펴보기",
+        variant: "lantern-prompt",
+        pos: [x, y + 2.6, z],
+        ariaLabel: "이 등불의 실종자 살펴보기",
+        onClick: () => onSelect(id),
+      },
+    ]);
+    return () => labels.set("lantern-prompt", []);
+  }, [id, labels, onSelect, slots]);
+  return null;
 }
 
 

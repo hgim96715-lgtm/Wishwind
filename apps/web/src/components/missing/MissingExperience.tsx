@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LuClock, LuCloud, LuCloudFog, LuCloudRain, LuCloudSnow, LuList, LuMap, LuMapPin, LuSun, LuUserRound, LuWind } from "react-icons/lu";
 import { WEATHER_LABEL, type Weather, type WeatherKind } from "@/lib/weather/types";
-import { formatMissingDate, type RegionGroup } from "@/lib/missing/regions";
+import type { RegionGroup } from "@/lib/missing/regions";
 import type { CloudMessage } from "@/lib/missing/types";
 import { THEME_KEY } from "@/components/common/ThemeToggle";
 import { AvatarSetup, loadAvatar, type AvatarChoice } from "./garden/AvatarSetup";
@@ -50,7 +50,6 @@ const BLOCKED_HINT: Record<BlockedAt, string> = {
 
 export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   const slots = useMemo(() => buildSlots(groups), [groups]);
-  const people = useMemo(() => new Map(groups.flatMap((g) => g.people).map((p) => [p.id, p])), [groups]);
   const [mode, setMode] = useState<Mode>("checking");
   const [touch, setTouch] = useState(false);
   const [savedAvatar, setAvatar] = useState<AvatarChoice | null>(null);
@@ -119,7 +118,9 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
     const root = document.documentElement;
     const apply = () => {
       const night = paletteAt(currentHour()).dark;
-      root.dataset.garden = night ? "night" : "day";
+      const h = ((currentHour() % 24) + 24) % 24;
+      // 노을·해 질 녘(오후 6시~밤 되기 전)에는 창도 노을빛으로 (globals.css의 dusk 규칙)
+      root.dataset.garden = night ? "night" : h >= 17.9 ? "dusk" : "day";
       // 창(캐릭터 고르기·바람개비 꽂기·등불 카드)도 밤이면 어둡게 (globals.css의 밤 정원 창 색)
       root.dataset.theme = night ? "dark" : "light";
     };
@@ -154,7 +155,12 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
     },
     [slots],
   );
-  const select = useCallback((id: string) => setSelected({ id, regionLabel: regionOf(id) }), [regionOf]);
+  const select = useCallback(
+    (id: string) => {
+      setSelected({ id, regionLabel: regionOf(id) });
+    },
+    [regionOf],
+  );
   const close = useCallback(() => setSelected(null), []);
 
   // 전단지 QR·공유 링크(/missing?person=id)로 들어오면 그 분의 카드를 바로 엶
@@ -208,8 +214,6 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   };
 
   const total = groups.reduce((n, g) => n + g.people.length, 0);
-  // 가까이 있는 등불의 그 분: 그냥 지나치지 않도록 화면 아래에 이름과 '확인하기'를 띄움
-  const near = status.nearId ? people.get(status.nearId) : undefined;
   if (total === 0) {
     return <Veil text="아직 길에 놓인 등불이 없습니다. 실종자 정보를 불러오는 중이니 잠시 후 다시 와 주세요." />;
   }
@@ -228,6 +232,7 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
               wishes={wishes}
               wishCount={wishCount}
               freshId={freshId}
+              nearNotice={status.nearId}
               paused={overlay}
               avatar={avatar ?? { url: null, nickname: "" }}
               controls={controls}
@@ -303,21 +308,6 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
             <p className="pointer-events-none absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 rounded-full bg-white/60 px-3 py-1 text-xs text-[#7a6650] backdrop-blur md:block">
               WASD·방향키로 걷고(Shift 달리기), 드래그로 둘러봅니다. 등불을 누르면 카드가 열립니다
             </p>
-          )}
-
-          {/* 등불 가까이 오면: 그 분 이름과 실종일, 누르면 카드가 열림 */}
-          {near && status.nearId && !overlay && (
-            <button
-              type="button"
-              aria-live="polite"
-              onClick={() => status.nearId && select(status.nearId)}
-              className="absolute bottom-28 left-1/2 z-20 flex max-w-[calc(100vw-2rem)] -translate-x-1/2 flex-col items-center rounded-2xl bg-white/90 px-5 py-3 text-center shadow-md backdrop-blur transition-colors hover:bg-white md:top-24 md:bottom-auto"
-            >
-              <span className="text-xs text-[#9a8a76]">이 등불의 주인을 기억해 주세요</span>
-              <span className="mt-0.5 text-base font-semibold text-[#5b4d3c]">{near.name}</span>
-              {near.missingDate && <span className="text-xs text-[#7a6650]">{formatMissingDate(near.missingDate)} 실종{near.lastSeenPlace ? ` · ${near.lastSeenPlace}` : ""}</span>}
-              <span className="mt-2 rounded-full bg-[#e9a94f] px-4 py-1.5 text-sm font-medium text-white">이 분 확인하기</span>
-            </button>
           )}
 
           <AnimatePresence>

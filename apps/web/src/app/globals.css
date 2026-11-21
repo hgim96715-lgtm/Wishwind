@@ -111,6 +111,12 @@ html[data-garden="night"] .garden-page [role="dialog"] {
   border-color: rgb(255 255 255 / 0.12);
   box-shadow: 0 20px 60px rgb(0 0 0 / 0.45);
 }
+/* 노을 정원의 창: 크림색 대신 노을빛이 도는 따뜻한 살구색 */
+html[data-garden="dusk"] .garden-page [role="dialog"] {
+  background-color: rgb(255 236 220 / 0.95);
+  border-color: #f2c7a4;
+  box-shadow: 0 20px 60px rgb(150 70 40 / 0.28);
+}
 /* 불러오는 동안 보이는 안내 화면도 밤 하늘 색으로 */
 html[data-garden="night"] .garden-page .garden-veil {
   background-color: #0f1d40;
@@ -127,6 +133,22 @@ html[data-garden="night"] .garden-page .text-\[\#2f7469\]:not([role="dialog"] *)
 }
 html[data-garden="night"] .garden-page .text-\[\#b9772a\]:not([role="dialog"] *) {
   color: #f2bd6b;
+}
+
+/* 등불 발견 안내: 화면 HUD가 아니라 해당 등불 위에서 짧게 떠오름 */
+@keyframes lantern-prompt-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.lantern-prompt {
+  animation: lantern-prompt-in 220ms ease-out both;
 }
 
 /* ── 어두운 화면에서 직접 적어 둔 밝은 색들을 어울리는 색으로 바꿈 (컴포넌트를 하나씩 고치기 전 1차 처리) ── */
