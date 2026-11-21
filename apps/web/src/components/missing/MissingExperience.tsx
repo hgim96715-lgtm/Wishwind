@@ -3,7 +3,7 @@
 import { AnimatePresence } from "motion/react";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { LuClock, LuCloud, LuCloudFog, LuCloudRain, LuCloudSnow, LuList, LuMap, LuMapPin, LuSun, LuUserRound, LuWind } from "react-icons/lu";
+import { LuBell, LuBellOff, LuClock, LuCloud, LuCloudFog, LuCloudRain, LuCloudSnow, LuList, LuMap, LuMapPin, LuSun, LuUserRound, LuWind } from "react-icons/lu";
 import { WEATHER_LABEL, type Weather, type WeatherKind } from "@/lib/weather/types";
 import type { RegionGroup } from "@/lib/missing/regions";
 import type { CloudMessage } from "@/lib/missing/types";
@@ -266,10 +266,12 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
                 type="button"
                 onClick={sound.toggle}
                 aria-pressed={sound.on}
-                title="파도와 바람 소리"
-                className="rounded-full bg-white/70 px-3 py-1.5 text-xs text-[#7a6650] backdrop-blur hover:bg-white"
+                aria-label={sound.on ? "파도 소리 끄기" : "파도 소리 켜기"}
+                title={sound.on ? "파도 소리 끄기" : "파도 소리 켜기"}
+                className="rounded-full bg-white/70 p-2 text-[#7a6650] backdrop-blur hover:bg-white"
               >
-                {sound.on ? "소리 끄기" : "파도 소리 켜기"}
+                {/* 종 = 소리 켜짐, 줄 그은 종 = 꺼짐 */}
+                {sound.on ? <LuBell aria-hidden className="size-4" /> : <LuBellOff aria-hidden className="size-4" />}
               </button>
               <button
                 type="button"
