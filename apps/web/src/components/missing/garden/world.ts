@@ -130,7 +130,9 @@ export const LAND_INLAND_LIMIT = 70;
 export function clampToLand(x: number, z: number, slotCount: number): [number, number] {
   const zMin = -(slotCount + 4) * SLOT_SPACING;
   const zc = Math.min(60, Math.max(zMin, z));
-  const xc = Math.min(trailX(slotAtZ(zc)) + LAND_INLAND_LIMIT, Math.max(coastX(zc) + 1.5, x));
+  let xc = Math.min(trailX(slotAtZ(zc)) + LAND_INLAND_LIMIT, Math.max(coastX(zc) + 1.5, x));
+  // 해안선 바로 옆은 땅이 바다보다 낮아 몸이 물에 잠겨 보임 → 땅이 바다 위로 올라온 곳까지만 감
+  for (let i = 0; i < 40 && heightAt(xc, zc) < SEA_LEVEL + 0.15; i++) xc += 0.25;
   return [xc, zc];
 }
 

@@ -15,6 +15,7 @@ import { Avatar } from "./Avatar";
 import { createLabelStore, LabelOverlay, LabelProjector, type Label, type LabelStore } from "./labels";
 import {
   clampToLand,
+  coastX,
   GARDEN_CENTER,
   grassAmount,
   heightAt,
@@ -57,6 +58,8 @@ export interface Wish {
   pos?: [number, number];
 }
 
+export type BlockedAt = "sea" | "pond" | "edge";
+
 export interface PlayerStatus {
   /** 지금 있는 곳 이름 (바람개비 정원, 연못가, 갈래 길 …) */
   place: string;
@@ -68,7 +71,8 @@ export interface PlayerStatus {
 export interface WorldControls {
   /** 조이스틱 입력 (-1~1). y가 앞 */
   stick: { x: number; y: number };
-  teleport?: (x: number, z: number) => void;
+  /** (x, z)로 옮김. lookAt을 주면 그쪽을 바라보게 함 */
+  teleport?: (x: number, z: number, lookAt?: [number, number]) => void;
   /** 지금 서 있는 곳 바로 앞, 바람개비를 꽂을 수 있는 자리 [x, z] */
   plantSpot?: () => [number, number];
 }
@@ -83,6 +87,8 @@ interface SceneProps {
   controls: React.RefObject<WorldControls>;
   onSelect: (id: string) => void;
   onStatus: (s: PlayerStatus) => void;
+  /** 바다·연못·언덕 끝에 막혀 더 못 갈 때 (잠깐 안내를 띄움) */
+  onBlocked?: (where: BlockedAt) => void;
   /** 보는 사람 동네(기본 서울)의 지금 날씨 */
   weather?: Weather | null;
 }
@@ -129,7 +135,7 @@ export default function GardenScene(props: SceneProps & { onPalette?: (p: SkyPal
   );
 }
 
-function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, onSelect, onStatus, palette, labels, weather }: SceneProps & { palette: SkyPalette; labels: LabelStore }) {
+function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, onSelect, onStatus, onBlocked, palette, labels, weather }: SceneProps & { palette: SkyPalette; labels: LabelStore }) {
   const player = useRef(new THREE.Vector3(SPAWN[0], heightAt(SPAWN[0], SPAWN[1]), SPAWN[1]));
   const ground = useGroundWeather(weather?.kind ?? "clear");
   // 표지판·말풍선은 플레이어 근처만 그림 → 수천 개 DOM을 만들지 않음 (5칸 단위로만 갱신)
@@ -160,6 +166,7 @@ function World({ slots, wishes, wishCount, freshId, paused, avatar, controls, on
         labels={labels}
         onSelect={onSelect}
         onStatus={onStatus}
+        onBlocked={onBlocked}
         onSlot={setNearSlot}
       />
     </>
@@ -1220,6 +1227,7 @@ function Player({
   labels,
   onSelect,
   onStatus,
+  onBlocked,
   onSlot,
 }: {
   slots: Slot[];
@@ -1230,6 +1238,7 @@ function Player({
   labels: LabelStore;
   onSelect: (id: string) => void;
   onStatus: (s: PlayerStatus) => void;
+  onBlocked?: (where: BlockedAt) => void;
   onSlot: (slot: number) => void;
 }) {
   useEffect(() => {
@@ -1247,6 +1256,9 @@ function Player({
   const keys = useRef(new Set<string>());
   const pausedRef = useRef(paused);
   const lastStatus = useRef("");
+  // 앞으로 가려는데 거의 못 움직인 시간. 잠깐 넘으면 왜 막혔는지 알려 줌 (한 번 막힐 때마다 한 번)
+  const blockedFor = useRef(0);
+  const blockedTold = useRef(false);
   const lastSlot = useRef(0);
 
   useLayoutEffect(() => {
@@ -1263,8 +1275,9 @@ function Player({
 
   useEffect(() => {
     const c = controls.current;
-    c.teleport = (x, z) => {
+    c.teleport = (x, z, lookAt) => {
       player.current.set(x, walkHeight(x, z), z);
+      if (lookAt) yaw.current = Math.atan2(-(lookAt[0] - x), -(lookAt[1] - z));
     };
     c.plantSpot = () => {
       const p = player.current;
@@ -1343,6 +1356,8 @@ function Player({
       // 연못 물에는 들어가지 않음 (다리 위는 걸을 수 있음). 막히면 물가를 따라 미끄러지듯 비켜 감
       // 이미 물가 안쪽에 서 있으면(순간 이동 직후 등) 어느 쪽으로든 나갈 수 있게 함
       const stuck = inWater(p.x, p.z);
+      const bx = p.x;
+      const bz = p.z;
       for (const [ax, az] of [[mx, mz], [mx, 0], [0, mz]] as const) {
         const [nx, nz] = clampToLand(p.x + ax, p.z + az, slots.length);
         if (stuck || !inWater(nx, nz)) {
@@ -1350,7 +1365,20 @@ function Player({
           break;
         }
       }
-      speedRef.current = speed;
+      // 벽에 막혀 제자리걸음만 하면 어색하므로, 실제로 거의 못 움직이면 멈춘 자세로 두고 이유를 알려 줌
+      const moved = Math.hypot(p.x - bx, p.z - bz);
+      if (moved < speed * dt * 0.25) {
+        speedRef.current = 0;
+        blockedFor.current += dt;
+        if (blockedFor.current > 0.5 && !blockedTold.current) {
+          blockedTold.current = true;
+          onBlocked?.(blockedReason(p.x, p.z));
+        }
+      } else {
+        speedRef.current = speed;
+        blockedFor.current = 0;
+        blockedTold.current = false;
+      }
     } else {
       // 제자리에서 돌 때는 걷는 동작만 살짝
       speedRef.current = Math.abs(ix) > 0.3 ? 1 : 0;
@@ -1399,6 +1427,13 @@ function Player({
       <Avatar key={avatar.url ?? "none"} url={avatar.url} speedRef={speedRef} />
     </group>
   );
+}
+
+/** 왜 더 못 가는지: 바닷가·연못가·그 밖의 언덕 끝 */
+function blockedReason(x: number, z: number): BlockedAt {
+  if (x - coastX(z) < 2.2) return "sea";
+  if (pondsNear(z, 4).some((p) => pondDistance(p, x, z) < 1.4)) return "pond";
+  return "edge";
 }
 
 /** 화면 위에 보여 줄 지금 있는 곳 이름 */

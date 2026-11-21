@@ -9,7 +9,7 @@ import type { RegionGroup } from "@/lib/missing/regions";
 import type { CloudMessage } from "@/lib/missing/types";
 import { THEME_KEY } from "@/components/common/ThemeToggle";
 import { AvatarSetup, loadAvatar, type AvatarChoice } from "./garden/AvatarSetup";
-import type { PlayerStatus, Wish, WorldControls } from "./garden/GardenScene";
+import type { BlockedAt, PlayerStatus, Wish, WorldControls } from "./garden/GardenScene";
 import { Joystick } from "./garden/Joystick";
 import { GARDEN_CENTER, lanternPoint, LIGHTHOUSE, pinwheelSpot, START_POND_VIEW, trailPoint } from "./garden/world";
 import { MissingCard } from "./MissingCard";
@@ -39,6 +39,13 @@ function canUseScene(): boolean {
 
 /** 방금 꽂은 바람개비 말풍선을 강조해 보여 주는 시간 */
 const FRESH_BUBBLE_MS = 6000;
+
+/** 더 걸어갈 수 없을 때 잠깐 보여 주는 안내 (보이지 않는 벽에 막혀 당황하지 않게) */
+const BLOCKED_HINT: Record<BlockedAt, string> = {
+  sea: "바다에는 들어갈 수 없습니다. 바닷가를 따라 걸어 보세요",
+  pond: "연못에는 들어갈 수 없습니다. 다리로 건너 보세요",
+  edge: "언덕 끝입니다. 등불 길 쪽으로 돌아가 보세요",
+};
 
 export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   const slots = useMemo(() => buildSlots(groups), [groups]);
@@ -75,13 +82,16 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   const [freshId, setFreshId] = useState<string | null>(null);
   const closeWish = useCallback(() => setWishOpen(false), []);
 
-  const wishes: Wish[] = useMemo(
-    () => [
+  const wishes: Wish[] = useMemo(() => {
+    const clouds = wishData?.clouds ?? [];
+    const shown = new Set(clouds.map((c) => c.id));
+    return [
       ...(wishData?.pending ?? []).map((w) => ({ id: w.id, body: w.body, pending: true, pos: wishPos(w) })),
-      ...(wishData?.clouds ?? []).map((w) => ({ id: w.id, body: w.body, pos: wishPos(w) })),
-    ],
-    [wishData],
-  );
+      ...clouds.map((w) => ({ id: w.id, body: w.body, pos: wishPos(w) })),
+      // 내 바람개비가 최근 목록에서 밀려났어도 언덕에 그대로 보이게 함 (내 바람개비 찾아가기)
+      ...(wishData?.mine ?? []).filter((w) => !shown.has(w.id) && wishPos(w)).map((w) => ({ id: w.id, body: w.body, pos: wishPos(w) })),
+    ];
+  }, [wishData]);
   const wishCount = wishData?.cloudCount ?? 0;
 
   useEffect(() => {
@@ -172,6 +182,17 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
     [wishData, wishCount],
   );
 
+  /** 내가 가장 최근에 꽂은 바람개비 앞으로 데려가서 말풍선을 잠깐 띄움 */
+  const myLatest = wishData?.mine?.find((w) => wishPos(w));
+  const findMine = useCallback(() => {
+    if (!myLatest) return;
+    const [x, z] = wishPos(myLatest)!;
+    setWishOpen(false);
+    controls.current.teleport?.(x, z + 2.6, [x, z]);
+    setFreshId(myLatest.id);
+    setToast("내가 꽂은 바람개비입니다");
+  }, [myLatest]);
+
   const jumpTo = (slot: number) => {
     const s = slots[slot + 1];
     // 첫 등불 바로 옆 길 위에 세움 → 도착하자마자 "등불 보기"·Enter가 됨
@@ -203,6 +224,7 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
               controls={controls}
               onSelect={select}
               onStatus={setStatus}
+              onBlocked={(where) => setToast(BLOCKED_HINT[where])}
             />
           </div>
 
@@ -244,6 +266,15 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
                 바람개비 꽂기
                 {wishData && <span className="text-xs text-subtle">{wishCount}</span>}
               </button>
+              {myLatest && (
+                <button
+                  type="button"
+                  onClick={findMine}
+                  className="rounded-full bg-white/70 px-3 py-1.5 text-xs text-[#7a6650] backdrop-blur hover:bg-white"
+                >
+                  내 바람개비 찾아가기
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => setEditingAvatar(true)}
@@ -312,7 +343,7 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
         )}
       </AnimatePresence>
       <AnimatePresence>
-        {wishOpen && <WishPanel key="wishes" data={wishData} setData={setWishData} onClose={closeWish} onPlaced={onPlaced} nickname={avatar?.nickname} getPosition={() => (mode === "scene" ? controls.current.plantSpot?.() : undefined)} />}
+        {wishOpen && <WishPanel key="wishes" data={wishData} setData={setWishData} onClose={closeWish} onPlaced={onPlaced} onFindMine={myLatest ? findMine : undefined} nickname={avatar?.nickname} getPosition={() => (mode === "scene" ? controls.current.plantSpot?.() : undefined)} />}
       </AnimatePresence>
       <AnimatePresence>
         {selected && <MissingCard key={selected.id} id={selected.id} regionLabel={selected.regionLabel} onClose={close} />}
