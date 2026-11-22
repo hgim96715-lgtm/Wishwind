@@ -1,0 +1,320 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "etan-patz-disappearance",
+      "content": {
+        "title": "이튼 패츠 실종 사건",
+        "summary": "1979년 5월 25일 미국 뉴욕 맨해튼에서 6세 이튼 패츠가 스쿨버스 정류장으로 걸어가다 사라진 사건으로, 우유팩에 얼굴이 실린 첫 실종 아동 가운데 한 명이었고 실종된 날은 '실종아동의 날'이 됐습니다",
+        "overview": "1979년 5월 25일 아침, 뉴욕 맨해튼 소호에 살던 6세 이튼 패츠가 처음으로 혼자 스쿨버스 정류장까지 걸어가다 사라졌습니다. 경찰과 가족이 오랫동안 찾았지만 아이는 돌아오지 않았고, 시신도 찾지 못했습니다. 이튼은 우유팩에 얼굴이 실린 첫 실종 아동 가운데 한 명이었고, 1983년 레이건 대통령은 아이가 사라진 5월 25일을 '전국 실종아동의 날'로 선포했습니다. 사건은 30년 넘게 풀리지 않다가 2012년 당시 근처 가게 점원이었던 페드로 에르난데스가 경찰 조사에서 범행을 인정하면서 다시 움직였습니다. 2015년 첫 재판은 배심원 의견이 갈려 무효가 됐고, 2017년 다시 열린 재판에서 유죄가 선고됐습니다. 변호인은 정신질환 때문에 거짓 자백을 했다고 주장해 왔습니다. 2025년 연방 항소법원은 재판 중 판사가 배심원 질문에 답한 방식이 잘못됐다며 유죄 판결을 뒤집었지만, 2026년 6월 연방 대법원이 6대 3으로 유죄 판결을 되살렸습니다.",
+        "victimCountNote": "사망 1명",
+        "country": "US",
+        "category": "KIDNAPPING",
+        "status": "SOLVED",
+        "location": "미국 뉴욕시 맨해튼 소호",
+        "occurredAt": "1979-05-25",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": "2017-02-14",
+        "timeline": [
+          {
+            "occurredAt": "1979-05-25",
+            "occurredAtPrecision": "DAY",
+            "title": "스쿨버스 정류장 가는 길에 실종"
+          },
+          {
+            "occurredAt": "1983-05-25",
+            "occurredAtPrecision": "DAY",
+            "title": "첫 '전국 실종아동의 날'",
+            "description": "레이건 대통령이 이튼을 기억하며 5월 25일을 실종아동의 날로 선포했습니다."
+          },
+          {
+            "occurredAt": "2012-05-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "페드로 에르난데스 자백",
+            "description": "경찰 조사에서 범행을 인정했고, 살인 혐의로 기소됐습니다."
+          },
+          {
+            "occurredAt": "2015-05-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "첫 재판 무효",
+            "description": "배심원 의견이 하나로 모이지 않았습니다."
+          },
+          {
+            "occurredAt": "2017-02-14",
+            "occurredAtPrecision": "DAY",
+            "title": "다시 연 재판에서 유죄"
+          },
+          {
+            "occurredAt": "2025-07-21",
+            "occurredAtPrecision": "DAY",
+            "title": "연방 항소법원, 유죄 판결 뒤집음",
+            "description": "판사가 배심원 질문에 답한 방식이 잘못됐다고 판단했습니다."
+          },
+          {
+            "occurredAt": "2026-06-22",
+            "occurredAtPrecision": "DAY",
+            "title": "연방 대법원, 유죄 판결 되살림",
+            "description": "6대 3으로 항소법원 판단을 뒤집었습니다."
+          }
+        ],
+        "victims": [
+          {
+            "name": "이튼 패츠 (Etan Patz)",
+            "age": 6,
+            "gender": "MALE",
+            "status": "DECEASED",
+            "description": "시신은 끝내 찾지 못했습니다."
+          }
+        ],
+        "suspects": [
+          {
+            "name": "페드로 에르난데스 (Pedro Hernandez)",
+            "status": "CONVICTED",
+            "charges": "살인·유괴",
+            "description": "사건 당시 이튼의 집 근처 가게에서 일했습니다. 2012년 자백했고, 변호인은 정신질환에 따른 거짓 자백이라고 주장했습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "뉴욕주 맨해튼 법원",
+                "type": "LIFE",
+                "verdict": "배심원단이 유죄로 평결했고, 최소 25년 뒤에야 가석방 심사를 받을 수 있는 종신형을 선고했습니다.",
+                "penalty": "25년 이상 종신형",
+                "isFinal": false,
+                "decidedAt": "2017-04-18"
+              },
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "미국 연방 대법원",
+                "type": "LIFE",
+                "verdict": "연방 항소법원이 권한을 넘어 판결을 뒤집었다며 유죄 판결을 되살렸습니다.",
+                "penalty": "25년 이상 종신형",
+                "isFinal": true,
+                "decidedAt": "2026-06-22"
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "아이가 처음 혼자 길을 나설 때, 동네와 학교는 어떤 안전망을 갖춰야 할까요?"
+          },
+          {
+            "question": "실종 신고가 들어온 뒤 처음 몇 시간 동안 수색이 빨리 이뤄지려면 무엇이 필요할까요?"
+          },
+          {
+            "question": "오랜 시간이 지난 자백만으로 판단해야 할 때, 거짓 자백을 가려내려면 어떤 장치가 필요할까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://www.pbs.org/newshour/nation/supreme-court-reinstates-murder-conviction-in-case-of-etan-patz-missing-new-york-city-boy",
+          "title": "Supreme Court reinstates murder conviction in case of Etan Patz, missing New York City boy",
+          "publisher": "PBS NewsHour (AP)",
+          "type": "BROADCAST",
+          "publishedAt": "2026-06-22",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://abc7.com/post/appeals-court-orders-new-trial-pedro-hernandez-convicted-1979-case-etan-patz-among-1st-missing-kids-milk-cartons/17231132/",
+          "title": "New trial ordered for man convicted in killing of Etan Patz, among 1st missing kids on milk cartons",
+          "publisher": "ABC7 (AP)",
+          "type": "BROADCAST",
+          "publishedAt": "2025-07-21",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://ojjdp.ojp.gov/nmcd/about-missing-childrens-day",
+          "title": "About Missing Children's Day",
+          "publisher": "U.S. Department of Justice, OJJDP",
+          "type": "GOVERNMENT",
+          "accessedAt": "2026-11-22"
+        }
+      ],
+      "claims": [],
+      "changes": [
+        {
+          "kind": "DAY",
+          "name": "전국 실종아동의 날 (National Missing Children's Day)",
+          "year": 1983,
+          "observedOn": "05-25",
+          "country": "US",
+          "description": "레이건 대통령이 이튼이 사라진 5월 25일을 실종아동의 날로 선포했습니다. 이후 이날은 여러 나라에서 실종 아동을 기억하는 날이 됐습니다.",
+          "sourceUrl": "https://ojjdp.ojp.gov/nmcd/about-missing-childrens-day",
+          "sourceTitle": "About Missing Children's Day (미국 법무부)"
+        },
+        {
+          "kind": "DAY",
+          "name": "한국 실종아동의 날",
+          "year": 2007,
+          "observedOn": "05-25",
+          "country": "KR",
+          "description": "한국도 실종아동법에 따라 5월 25일을 실종아동의 날로 정해, 2007년부터 해마다 보건복지부와 경찰청이 기념식을 엽니다.",
+          "sourceUrl": "https://m.korea.kr/briefing/pressReleaseView.do?newsId=156271515",
+          "sourceTitle": "제12회 실종아동의 날 행사 (경찰청 보도자료, 2018)"
+        }
+      ]
+    },
+    {
+      "slug": "sewol-ferry-disaster",
+      "content": {
+        "title": "세월호 참사",
+        "summary": "2014년 4월 16일 인천에서 제주로 가던 여객선 세월호가 전남 진도 앞바다에서 침몰해 수학여행 중이던 단원고 학생 250명을 포함해 304명이 숨지거나 실종된 참사로, 정부는 매년 4월 16일을 국민안전의 날로 정했습니다",
+        "overview": "2014년 4월 16일 아침, 인천을 떠나 제주로 가던 여객선 세월호가 전남 진도군 맹골수도 해역에서 기울어 침몰했습니다. 배에는 제주도로 수학여행을 가던 안산 단원고 2학년 학생 325명과 교사 14명을 포함해 476명이 타고 있었습니다. 이 참사로 304명이 숨지거나 실종됐고, 그 가운데 단원고 학생이 250명이었습니다. 배가 기우는 동안 선장과 일부 선원은 승객에게 배를 떠나라는 지시를 하지 않은 채 먼저 빠져나왔습니다. 대법원은 2015년 11월 선장에게 구조 의무를 저버린 '부작위에 의한 살인'을 인정해 무기징역을 확정했고, 이는 이런 사고에서 이 죄를 인정한 첫 대법원 판결이었습니다. 1·2등 항해사와 기관장은 징역 7~12년, 다른 선원 11명은 징역 1년 6개월~5년이 확정됐습니다. 다만 배가 왜 기울었는지는 판결로 분명히 가려지지 않았고, 이후에도 여러 차례 조사가 이어졌습니다. 선체는 2017년 3월 인양됐습니다. 정부는 참사 이후 매년 4월 16일을 '국민안전의 날'로 정해 기념식을 열고 있습니다.",
+        "victimCountNote": "사망·실종 304명",
+        "country": "KR",
+        "category": "OTHER",
+        "status": "SOLVED",
+        "location": "전남 진도군 맹골수도 해역",
+        "occurredAt": "2014-04-16",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": "2015-11-12",
+        "timeline": [
+          {
+            "occurredAt": "2014-04-16",
+            "occurredAtPrecision": "DAY",
+            "title": "세월호 침몰",
+            "description": "476명이 탄 배가 진도 앞바다에서 기울어 가라앉았습니다."
+          },
+          {
+            "occurredAt": "2014-11-11",
+            "occurredAtPrecision": "DAY",
+            "title": "1심, 선장 징역 36년",
+            "description": "살인의 고의는 인정하지 않고 유기치사 등을 유죄로 봤습니다."
+          },
+          {
+            "occurredAt": "2015-04-28",
+            "occurredAtPrecision": "DAY",
+            "title": "항소심, 선장 무기징역",
+            "description": "살인을 인정해 형을 높였습니다."
+          },
+          {
+            "occurredAt": "2015-11-12",
+            "occurredAtPrecision": "DAY",
+            "title": "대법원, 선장 무기징역 확정",
+            "description": "대법관 전원 일치로 부작위에 의한 살인을 인정했습니다."
+          },
+          {
+            "occurredAt": "2017-03-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "선체 인양"
+          }
+        ],
+        "victims": [],
+        "suspects": [
+          {
+            "name": "이준석",
+            "status": "CONVICTED",
+            "charges": "살인(부작위)·유기치사 등",
+            "description": "세월호 선장입니다. 승객을 대피시키지 않고 먼저 배를 떠났습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "광주지방법원",
+                "type": "IMPRISONMENT",
+                "verdict": "살인의 고의는 인정하지 않고 유기치사 등을 유죄로 판단했습니다.",
+                "penalty": "징역 36년",
+                "isFinal": false,
+                "decidedAt": "2014-11-11"
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "광주고등법원",
+                "type": "LIFE",
+                "verdict": "승객이 숨질 수 있음을 알고도 퇴선 조치를 하지 않았다며 살인을 인정했습니다.",
+                "penalty": "무기징역",
+                "isFinal": false,
+                "decidedAt": "2015-04-28"
+              },
+              {
+                "courtLevel": "SUPREME",
+                "courtName": "대법원",
+                "type": "LIFE",
+                "verdict": "대법관 전원 일치로 부작위에 의한 살인을 인정해 원심을 확정했습니다.",
+                "penalty": "무기징역",
+                "isFinal": true,
+                "decidedAt": "2015-11-12"
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "배나 건물에서 사고가 났을 때 승객이 스스로 안전하게 대피할 수 있으려면 평소 무엇을 갖춰야 할까요?"
+          },
+          {
+            "question": "재난 현장에서 구조 지휘가 빠르고 분명하게 이뤄지려면 어떤 체계가 필요할까요?"
+          },
+          {
+            "question": "많은 학생이 함께 이동하는 수학여행의 안전은 누가 어떻게 점검해야 할까요?"
+          },
+          {
+            "question": "유가족과 생존자가 오랫동안 회복할 수 있도록 어떤 지원이 필요할까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://www.lawtimes.co.kr/news/articleViewAmp.html?idxno=96694",
+          "title": "[판결] '대법관 전원일치' 세월호 선장 살인죄 무기징역 확정",
+          "publisher": "법률신문",
+          "type": "NEWS",
+          "publishedAt": "2015-11-12",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://www.segye.com/newsView/20170414001488",
+          "title": "<세월호 참사 뉴스속 그들과 기타, 지금은…> 죽거나 옥살이하거나 흩어지거나",
+          "publisher": "세계일보",
+          "type": "NEWS",
+          "publishedAt": "2017-04-14",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://mobile.newsis.com/view/NISX20260416_0003594120",
+          "title": "'세월호 12주기' 국민안전의 날…윤호중 \"비극 반복 안돼\"",
+          "publisher": "뉴시스",
+          "type": "NEWS_AGENCY",
+          "publishedAt": "2026-04-16",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://www.mt.co.kr/society/2016/04/16/2016041513380390225",
+          "title": "2년 전 오늘… 전국민 울린 '해난 참사' 발생하다",
+          "publisher": "머니투데이",
+          "type": "NEWS",
+          "publishedAt": "2016-04-16",
+          "accessedAt": "2026-11-22"
+        }
+      ],
+      "claims": [],
+      "changes": [
+        {
+          "kind": "DAY",
+          "name": "국민안전의 날",
+          "observedOn": "04-16",
+          "country": "KR",
+          "description": "세월호 참사를 잊지 않고 안전의 중요성을 되새기려고 정부가 매년 4월 16일을 국민안전의 날로 정했습니다. 해마다 행정안전부가 기념식을 엽니다.",
+          "sourceUrl": "https://mobile.newsis.com/view/NISX20260416_0003594120",
+          "sourceTitle": "'세월호 12주기' 국민안전의 날 (뉴시스, 2026)"
+        }
+      ]
+    },
+    {
+      "slug": "ulsan-stepmother-child-abuse-death",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "아동학대처벌법 제정 (일명 서현이법)",
+          "year": 2014,
+          "country": "KR",
+          "description": "아동을 학대해 숨지게 하면 무기 또는 5년 이상의 징역에 처하고, 신고가 들어오면 아동보호전문기관과 경찰이 바로 조사하도록 했습니다. 2014년 9월부터 시행됐습니다.",
+          "sourceUrl": "https://m.seoul.co.kr/news/2014/04/11/20140411800090",
+          "sourceTitle": "울산 계모의 의붓딸 학대치사 사건이 남긴 것 (서울신문, 2014)"
+        }
+      ]
+    }
+  ]
+}
