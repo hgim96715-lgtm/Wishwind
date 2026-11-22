@@ -1,0 +1,142 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "mirabal-sisters-murder",
+      "content": {
+        "title": "미라발 자매 사건",
+        "summary": "1960년 11월 25일 도미니카공화국에서 독재에 맞서던 미라발 세 자매와 운전기사가 트루히요 정권의 비밀경찰에게 살해된 사건으로, 자매가 숨진 날은 유엔이 정한 '세계 여성폭력 추방의 날'이 됐습니다",
+        "overview": "1960년 11월 25일, 도미니카공화국의 파트리아·미네르바·마리아 테레사 미라발 세 자매는 감옥에 갇힌 남편들을 만나러 푸에르토플라타에 다녀오던 길이었습니다. 세 자매는 1930년부터 나라를 통치한 독재자 라파엘 트루히요에 맞선 저항 운동의 중심에 있었고, '나비들(라스 마리포사스)'이라고 불렸습니다. 산길에서 트루히요 정권의 비밀경찰이 차를 세웠고, 운전기사 루피노 데 라 크루스와 세 자매를 때리고 목을 졸라 살해한 뒤 자동차가 절벽 아래로 떨어진 사고처럼 꾸몄습니다. 정권은 처음에 교통사고라고 발표했지만, 자매의 죽음은 국내외에서 독재에 대한 분노를 키웠습니다. 자매를 살해한 요원들은 뒤에 체포돼 유죄를 선고받았지만, 탈옥해 형을 다 살지 않았습니다. 1981년 중남미·카리브 지역 여성운동가들이 자매가 숨진 날을 여성 살해 희생자를 기리는 날로 정했고, 1999년 유엔이 이날을 '세계 여성폭력 추방의 날'로 지정했습니다. 살아남은 동생 데데 미라발은 언니들의 아이들을 키우며 자매의 이야기를 전했습니다.",
+        "victimCountNote": "사망 4명",
+        "country": "OTHER",
+        "category": "MURDER",
+        "status": "SOLVED",
+        "location": "도미니카공화국 푸에르토플라타 인근 산길",
+        "occurredAt": "1960-11-25",
+        "occurredAtPrecision": "DAY",
+        "timeline": [
+          {
+            "occurredAt": "1960-11-25",
+            "occurredAtPrecision": "DAY",
+            "title": "세 자매와 운전기사 살해",
+            "description": "남편들을 면회하고 돌아오던 길에 비밀경찰에게 붙잡혀 살해됐고, 정권은 교통사고로 꾸몄습니다."
+          },
+          {
+            "occurredAt": "1962-11-24",
+            "occurredAtPrecision": "DAY",
+            "title": "비밀경찰 요원들 유죄 선고",
+            "description": "살인죄로 30년 강제노역 등이 선고됐습니다."
+          },
+          {
+            "occurredAt": "1981-01-01",
+            "occurredAtPrecision": "YEAR",
+            "title": "여성운동가들이 11월 25일을 기념일로",
+            "description": "중남미·카리브 지역 여성운동가들이 여성 살해 희생자를 기리는 날로 정했습니다."
+          },
+          {
+            "occurredAt": "1999-01-01",
+            "occurredAtPrecision": "YEAR",
+            "title": "유엔, 세계 여성폭력 추방의 날 지정"
+          }
+        ],
+        "victims": [
+          {
+            "name": "파트리아 미라발 (Patria Mirabal)",
+            "gender": "FEMALE",
+            "status": "DECEASED",
+            "description": "세 자매 가운데 맏이입니다. 남편과 함께 저항 운동에 참여했습니다."
+          },
+          {
+            "name": "미네르바 미라발 (Minerva Mirabal)",
+            "gender": "FEMALE",
+            "status": "DECEASED",
+            "description": "법학을 공부했고, 남편과 함께 저항 운동을 이끌었습니다."
+          },
+          {
+            "name": "마리아 테레사 미라발 (María Teresa Mirabal)",
+            "gender": "FEMALE",
+            "status": "DECEASED",
+            "description": "세 자매 가운데 막내입니다. 남편과 함께 저항 운동에 참여했습니다."
+          },
+          {
+            "name": "루피노 데 라 크루스 (Rufino de la Cruz)",
+            "gender": "MALE",
+            "status": "DECEASED",
+            "description": "자매가 탄 차를 운전했습니다."
+          }
+        ],
+        "suspects": [
+          {
+            "alias": "트루히요 정권 군사정보국(SIM) 요원들",
+            "status": "CONVICTED",
+            "charges": "살인",
+            "description": "트루히요 정권이 무너진 뒤 체포돼 유죄를 선고받았지만, 탈옥해 형을 다 살지 않았습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "도미니카공화국 형사법원(Cámara Penal)",
+                "type": "IMPRISONMENT",
+                "verdict": "요원들에게 살인죄로 30년 강제노역 등을 선고했고, 국외로 달아난 군사정보국장에게는 궐석 재판으로 유죄를 선고했습니다.",
+                "penalty": "30년 강제노역 등",
+                "isFinal": true,
+                "decidedAt": "1962-11-24"
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "권력을 비판하는 사람이 안전하게 목소리를 낼 수 있으려면 사회는 무엇을 지켜야 할까요?"
+          },
+          {
+            "question": "여성을 향한 폭력을 '사고'나 '집안일'로 덮지 않으려면 무엇이 필요할까요?"
+          },
+          {
+            "question": "유죄를 선고받은 사람이 형을 피하지 못하게 하려면 사법 제도는 어떻게 작동해야 할까요?"
+          }
+        ],
+        "circumstances": [],
+        "solvedAt": "1962-11-24"
+      },
+      "sources": [
+        {
+          "url": "https://www.history.com/articles/mirabal-sisters-trujillo-dictator",
+          "title": "How the Mirabal Sisters Helped Topple a Dictator",
+          "publisher": "HISTORY",
+          "type": "BROADCAST",
+          "publishedAt": "2021-03-08",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://www.nationalgeographic.com/history/article/mirabal-sisters-heroes-dominican-republic",
+          "title": "How three sisters took down a dictator in the Dominican Republic",
+          "publisher": "National Geographic",
+          "type": "NEWS",
+          "publishedAt": "2024-11-25",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://acento.com.do/politica/trujillo-contra-las-hermanas-mirabal-la-camara-penal-aporto-detalles-espeluznantes-sobre-el-multiple-asesinato-4-8753519.html",
+          "title": "Trujillo contra las hermanas Mirabal: La Cámara Penal aportó detalles espeluznantes sobre el múltiple asesinato (4)",
+          "publisher": "Acento",
+          "type": "NEWS",
+          "accessedAt": "2026-11-22",
+          "publishedAt": "2019-11-23"
+        }
+      ],
+      "claims": [],
+      "changes": [
+        {
+          "kind": "DAY",
+          "name": "세계 여성폭력 추방의 날 (International Day for the Elimination of Violence against Women)",
+          "year": 1999,
+          "observedOn": "11-25",
+          "country": "OTHER",
+          "description": "미라발 자매가 숨진 11월 25일을 여성 폭력을 없애기 위한 날로 정했습니다. 1981년 중남미 여성운동가들이 먼저 기리기 시작했고, 1999년 유엔이 국제 기념일로 지정했습니다.",
+          "sourceUrl": "https://www.nationalgeographic.com/history/article/mirabal-sisters-heroes-dominican-republic",
+          "sourceTitle": "How three sisters took down a dictator in the Dominican Republic (National Geographic, 2024)"
+        }
+      ]
+    }
+  ]
+}
