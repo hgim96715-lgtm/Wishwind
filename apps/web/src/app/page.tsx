@@ -4,6 +4,7 @@ import Link from "next/link";
 import { LuHeartHandshake } from "react-icons/lu";
 import { AccountLink } from "@/components/home/AccountLink";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
+import { DidYouKnow } from "@/components/home/DidYouKnow";
 import { RoomGrid } from "@/components/home/RoomGrid";
 import { INSTAGRAM_URL } from "@/lib/site";
 
@@ -69,6 +70,10 @@ export default function Home() {
           </Link>
         </div>
       </div>
+
+      <Suspense fallback={null}>
+        <DidYouKnow />
+      </Suspense>
 
       <RoomGrid />
 

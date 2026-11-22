@@ -151,6 +151,8 @@ export interface CaseDetail extends CaseListItem {
   newsItems?: CaseNewsItem[];
   /** 다큐·방송·영화·유튜브 등 더 볼거리 */
   relatedContents?: RelatedContent[];
+  /** 이 사건 뒤에 바뀐 것(법·기념일·제도) */
+  changes?: CaseChange[];
   /** 사건 정리에 쓴 기사·판결·공공기관 자료 (나무위키 제외) */
   sources?: CaseSourceLink[];
   updatedAt?: string;
@@ -236,4 +238,25 @@ export interface CaseNotesState {
 export interface CaseNoteSaveResult {
   result: { status: UserContentStatus; message: string };
   notes: CaseNotesState;
+}
+
+export type ChangeKind = "LAW" | "DAY" | "SYSTEM";
+
+/** 사건을 계기로 생긴 법·기념일·제도 하나 */
+export interface CaseChange {
+  id: string;
+  kind: ChangeKind;
+  name: string;
+  year: number | null;
+  /** 기념일이면 매년 돌아오는 날 (MM-DD) */
+  observedOn: string | null;
+  country: Country | null;
+  description: string;
+  sourceUrl: string;
+  sourceTitle: string;
+}
+
+/** 모아 보기용: 어느 사건에서 비롯됐는지 함께 */
+export interface CaseChangeWithCase extends CaseChange {
+  case: { slug: string; title: string; country: Country };
 }

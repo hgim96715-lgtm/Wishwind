@@ -12,6 +12,12 @@ export class CasesController {
     return this.cases.list(query);
   }
 
+  /** 사건을 계기로 생긴 법·기념일·제도. ':slug'보다 먼저 둬야 'changes'가 사건 주소로 잡히지 않음 */
+  @Get('changes')
+  changes() {
+    return this.cases.changes();
+  }
+
   @Get(':slug')
   detail(@Param('slug') slug: string) {
     return this.cases.findBySlug(slug);

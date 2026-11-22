@@ -2,6 +2,7 @@ import { z } from 'zod';
 import {
   CaseCategory,
   CaseStatus,
+  ChangeKind,
   ClaimStatus,
   Country,
   CourtLevel,
@@ -180,6 +181,28 @@ const claimSchema = z.strictObject({
   status: z.enum(ClaimStatus).default(ClaimStatus.UNVERIFIED),
 });
 
+/**
+ * 사건이 바꾼 것(법·기념일·제도). 이름 기준으로 추가·수정(누적).
+ * 기념일(DAY)은 매년 돌아오는 날을 observedOn에 MM-DD로 적음. 출처는 법령·정부·언론 원문(위키 아님)
+ */
+const changeSchema = z
+  .strictObject({
+    kind: z.enum(ChangeKind),
+    name: text(200),
+    year: z.int().min(1800).max(2100).nullish(),
+    observedOn: z
+      .string()
+      .regex(/^(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, '기념일은 MM-DD 형식입니다 (예: 12-06)')
+      .nullish(),
+    country: z.enum(Country).nullish(),
+    description: text(500),
+    sourceUrl: z.url({ protocol: /^https?$/ }).max(1000),
+    sourceTitle: text(300),
+  })
+  .superRefine((c, ctx) => {
+    if (c.kind === ChangeKind.DAY && !c.observedOn) ctx.addIssue({ code: 'custom', message: '기념일(DAY)에는 observedOn(MM-DD)이 필요합니다' });
+  });
+
 const entrySchema = z.strictObject({
   slug: z
     .string()
@@ -190,6 +213,8 @@ const entrySchema = z.strictObject({
   claims: z.array(claimSchema).default([]),
   /** 없으면 기존 관련 콘텐츠를 건드리지 않음. 있으면 url 기준으로 추가·수정(누적) */
   related: z.array(relatedSchema).optional(),
+  /** 없으면 기존 '바뀐 것'을 건드리지 않음. 있으면 name 기준으로 추가·수정(누적) */
+  changes: z.array(changeSchema).optional(),
 });
 
 export const importFileSchema = z.strictObject({
@@ -283,6 +308,12 @@ export function checkEntry(entry: ImportEntry) {
   }
   if (urls.some(isClueOnlySource)) {
     warnings.push(at('나무위키는 검증 출처 2곳에 포함되지 않습니다'));
+  }
+
+  for (const change of entry.changes ?? []) {
+    if (isClueOnlySource(change.sourceUrl) || /wikipedia\.org$/i.test(new URL(change.sourceUrl).hostname)) {
+      errors.push(at(`'바뀐 것'의 출처로 위키는 쓸 수 없습니다: ${change.name}`));
+    }
   }
 
   const related = entry.related ?? [];

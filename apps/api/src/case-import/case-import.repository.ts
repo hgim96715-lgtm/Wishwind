@@ -22,6 +22,7 @@ const asTimelineDate = (value: string | null | undefined) =>
 export interface ImportResult {
   slug: string;
   action: 'created' | 'updated' | 'sources-only' | 'related-only';
+  changes?: number;
   sources: number;
   related: number;
   claims: number;
@@ -246,6 +247,27 @@ async function syncRelated(
   }
 }
 
+/** 사건이 바꾼 것(법·기념일·제도): 이름 기준 추가·수정. 목록에 없는 기존 항목은 지우지 않음 */
+async function syncChanges(tx: Prisma.TransactionClient, caseId: string, entry: ImportEntry) {
+  for (const [index, item] of (entry.changes ?? []).entries()) {
+    const data = {
+      kind: item.kind,
+      year: item.year ?? null,
+      observedOn: item.observedOn ?? null,
+      country: item.country ?? null,
+      description: item.description,
+      sourceUrl: item.sourceUrl,
+      sourceTitle: item.sourceTitle,
+      sortOrder: index,
+    };
+    await tx.caseChange.upsert({
+      where: { caseId_name: { caseId, name: item.name } },
+      create: { ...data, caseId, name: item.name },
+      update: data,
+    });
+  }
+}
+
 export async function importEntry(
   tx: Prisma.TransactionClient,
   entry: ImportEntry,
@@ -272,6 +294,7 @@ export async function importEntry(
   }
   await syncSources(tx, saved.id, entry);
   await syncRelated(tx, saved.id, entry);
+  await syncChanges(tx, saved.id, entry);
 
   // 내용이나 출처가 바뀌면 이전 검토 결과는 더 이상 유효하지 않음 (관련 콘텐츠만 바뀐 경우는 그대로 둠)
   const factsChanged = Boolean(entry.content) || entry.sources.length > 0;
@@ -296,6 +319,7 @@ export async function importEntry(
           : 'related-only',
     sources: entry.sources.length,
     related: entry.related?.length ?? 0,
+    changes: entry.changes?.length ?? 0,
     claims: entry.claims.length,
   };
 }

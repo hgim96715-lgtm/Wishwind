@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ActionForm, Button } from "@/components/admin/ActionForm";
 import { Badge, Card, ErrorBox, Field, Skeleton, inputClass } from "@/components/admin/ui";
-import { addCaseRelated, addCaseSource, deleteCase, publishCase, removeCaseRelated, removeCaseSource, reviewCase, updateCase, updateCaseRelated } from "@/app/admin/actions";
+import { addCaseChange, addCaseRelated, addCaseSource, deleteCase, publishCase, removeCaseChange, removeCaseRelated, removeCaseSource, reviewCase, updateCase, updateCaseChange, updateCaseRelated } from "@/app/admin/actions";
 import {
   BRIEFING_KIND_LABEL,
   BRIEFING_STATUS_LABEL,
@@ -12,12 +12,59 @@ import {
 } from "@/lib/admin/labels";
 import { AdminApiError, adminGet } from "@/lib/admin/session";
 import type { AdminCaseDetail, ReviewStatus } from "@/lib/admin/types";
-import type { RelatedContent } from "@/lib/cases/types";
+import type { CaseChange, RelatedContent } from "@/lib/cases/types";
 import { CATEGORY_LABEL, COUNTRY_LABEL, COUNTRY_ORDER, STATUS_STAMP, caseRoomCountry } from "@/lib/cases/labels";
 
 const PRECISION = { DAY: "일까지", MONTH: "월까지", YEAR: "연도만", UNKNOWN: "모름" } as const;
 const REVIEWS: ReviewStatus[] = ["DRAFT", "NEEDS_REVIEW", "VERIFIED", "REJECTED"];
 const dateValue = (iso: string | null) => iso?.slice(0, 10) ?? "";
+
+const CHANGE_KIND: Record<string, string> = { LAW: "법", SYSTEM: "제도", DAY: "기념일" };
+
+/** '바뀐 것' 추가·고치기 칸. item이 있으면 그 값으로 채움 */
+function ChangeFields({ item }: { item?: CaseChange }) {
+  return (
+    <>
+      <div className="grid gap-3 sm:grid-cols-3">
+        <Field label="종류">
+          <select name="kind" defaultValue={item?.kind ?? "LAW"} className={inputClass}>
+            {Object.entries(CHANGE_KIND).map(([k, v]) => (
+              <option key={k} value={k}>{v}</option>
+            ))}
+          </select>
+        </Field>
+        <Field label="생긴 해">
+          <input name="year" type="number" min={1800} max={2100} defaultValue={item?.year ?? ""} className={inputClass} />
+        </Field>
+        <Field label="나라">
+          <select name="country" defaultValue={item?.country ?? ""} className={inputClass}>
+            <option value="">사건과 같음</option>
+            {COUNTRY_ORDER.map((k) => (
+              <option key={k} value={k}>{COUNTRY_LABEL[k]}</option>
+            ))}
+          </select>
+        </Field>
+      </div>
+      <Field label="이름" hint="예: 애덤월시법 (Adam Walsh Act), 여성 폭력 추모·행동의 날 (12월 6일)">
+        <input name="name" required maxLength={200} defaultValue={item?.name} className={inputClass} />
+      </Field>
+      <Field label="기념일이면 매년 돌아오는 날" hint="MM-DD 형식 (예: 12-06). 법·제도는 비워 두세요.">
+        <input name="observedOn" pattern="(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])" placeholder="12-06" defaultValue={item?.observedOn ?? ""} className={inputClass} />
+      </Field>
+      <Field label="한두 문장 설명 (합니다체)">
+        <textarea name="description" required maxLength={500} rows={3} defaultValue={item?.description} className={inputClass} />
+      </Field>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Field label="출처 주소" hint="법령·정부·언론 원문. 위키는 안 됩니다.">
+          <input name="sourceUrl" type="url" required maxLength={1000} defaultValue={item?.sourceUrl} placeholder="https://" className={inputClass} />
+        </Field>
+        <Field label="출처 제목">
+          <input name="sourceTitle" required maxLength={300} defaultValue={item?.sourceTitle} className={inputClass} />
+        </Field>
+      </div>
+    </>
+  );
+}
 
 /** 관련 콘텐츠 종류 (사건 페이지의 '더 보기' 묶음과 같은 이름) */
 const RELATED_KIND_LABEL: Record<string, string> = {
@@ -298,6 +345,46 @@ async function CaseEditor({ id }: { id: string }) {
                 </Field>
                 <Button tone="primary">출처 추가</Button>
                 <p className="text-xs text-subtle">나무위키는 단서용이라 검증 출처 2곳에 세지 않습니다. 출처를 바꾸면 검토 상태를 다시 확인해야 합니다.</p>
+              </ActionForm>
+            </details>
+          </Card>
+
+          <Card>
+            <h2 className="mb-1 text-sm font-semibold">이 사건 뒤에 바뀐 것 {c.changes.length}개</h2>
+            <p className="mb-3 text-xs text-subtle">사건을 계기로 생긴 법·기념일·제도입니다. 사건 페이지, 홈 ‘알고 계셨나요?’, ‘사건이 바꾼 것들’ 페이지에 나옵니다.</p>
+            <ul className="space-y-3 text-sm">
+              {c.changes.map((ch) => (
+                <li key={ch.id} className="border-b border-line pb-3 last:border-0">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="font-medium">{ch.name}</p>
+                      <p className="text-xs text-subtle">
+                        {CHANGE_KIND[ch.kind]}
+                        {ch.year && ` · ${ch.year}년`}
+                        {ch.observedOn && ` · 매년 ${ch.observedOn}`}
+                      </p>
+                    </div>
+                    <ActionForm inline action={removeCaseChange.bind(null, c.id, ch.id)} confirmMessage={`이 항목을 지울까요?\n${ch.name}`}>
+                      <button type="submit" className="shrink-0 text-xs text-subtle hover:text-[#b5543a]" aria-label="바뀐 것 지우기">
+                        지우기
+                      </button>
+                    </ActionForm>
+                  </div>
+                  <details className="mt-2">
+                    <summary className="cursor-pointer text-xs text-muted">고치기</summary>
+                    <ActionForm action={updateCaseChange.bind(null, c.id, ch.id)} className="mt-3">
+                      <ChangeFields item={ch} />
+                      <Button tone="primary">저장</Button>
+                    </ActionForm>
+                  </details>
+                </li>
+              ))}
+            </ul>
+            <details className="mt-4 border-t border-line pt-4">
+              <summary className="cursor-pointer text-sm font-medium">바뀐 것 추가</summary>
+              <ActionForm action={addCaseChange.bind(null, c.id)} className="mt-3">
+                <ChangeFields />
+                <Button tone="primary">추가</Button>
               </ActionForm>
             </details>
           </Card>

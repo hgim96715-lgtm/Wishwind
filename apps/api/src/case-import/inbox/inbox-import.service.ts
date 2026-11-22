@@ -121,9 +121,13 @@ export class InboxImportService implements OnApplicationBootstrap, OnApplication
     const day = /^\d{4}-\d{2}-\d{2}/.test(name) ? name.slice(0, 10) : new Date().toISOString().slice(0, 10);
     for (const entry of parsed.data.cases) {
       if (existing.has(entry.slug)) {
-        // 이미 있는 사건은 덮어쓰지 않음. 단 관련 콘텐츠(영화·다큐 등)만 담긴 항목은 '더 보기' 링크만 더함
-        // (내용·출처·공개 상태는 그대로. 관련 콘텐츠는 검토 상태에 영향 없음)
-        const relatedOnly = !entry.content && entry.sources.length === 0 && entry.claims.length === 0 && (entry.related?.length ?? 0) > 0;
+        // 이미 있는 사건은 덮어쓰지 않음. 단 관련 콘텐츠(영화·다큐 등)나 '바뀐 것'(법·기념일·제도)만 담긴 항목은 그것만 더함
+        // (내용·출처·공개 상태는 그대로. 둘 다 검토 상태에 영향 없음)
+        const relatedOnly =
+          !entry.content &&
+          entry.sources.length === 0 &&
+          entry.claims.length === 0 &&
+          (entry.related?.length ?? 0) + (entry.changes?.length ?? 0) > 0;
         if (!relatedOnly) {
           result.skipped.push({ slug: entry.slug, reason: '이미 있는 사건' });
           continue;

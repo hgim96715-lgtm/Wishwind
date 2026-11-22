@@ -3,6 +3,7 @@ import {
   CaseCategory,
   CaseReviewStatus,
   CaseStatus,
+  ChangeKind,
   Country,
   DatePrecision,
   RelatedKind,
@@ -96,3 +97,30 @@ export const relatedAddSchema = z.object(relatedFields).refine((v) => !v.isDrama
 });
 /** 추가와 고치기 모두 칸 전체를 보냄 (고치기는 통째로 바꿈) */
 export type RelatedAdd = z.infer<typeof relatedAddSchema>;
+
+/** 사건이 바꾼 것(법·기념일·제도) 하나. 추가와 고치기 모두 칸 전체를 보냄 */
+export const changeAddSchema = z
+  .object({
+    kind: z.enum(ChangeKind),
+    name: z.string().trim().min(1).max(200),
+    year: z
+      .union([z.coerce.number().int().min(1800).max(2100), z.literal(''), z.null()])
+      .optional()
+      .transform((v) => (typeof v === 'number' ? v : null)),
+    observedOn: z
+      .union([z.string().regex(/^(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, '날짜는 MM-DD 형식입니다 (예: 12-06)'), z.literal(''), z.null()])
+      .optional()
+      .transform((v) => (v ? v : null)),
+    country: z
+      .union([z.enum(Country), z.literal(''), z.null()])
+      .optional()
+      .transform((v) => (v ? v : null)),
+    description: z.string().trim().min(1).max(500),
+    sourceUrl: z
+      .url({ protocol: /^https?$/ })
+      .max(1000)
+      .refine(notWiki, '위키는 출처로 쓸 수 없습니다'),
+    sourceTitle: z.string().trim().min(1).max(300),
+  })
+  .refine((v) => v.kind !== ChangeKind.DAY || !!v.observedOn, { message: '기념일은 매년 돌아오는 날(MM-DD)을 적어 주세요', path: ['observedOn'] });
+export type ChangeAdd = z.infer<typeof changeAddSchema>;

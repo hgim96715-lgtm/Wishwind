@@ -186,6 +186,7 @@ model Case {
   briefingPosts           BriefingPost[]
   newsItems               NewsItem[]
   relatedContents         RelatedContent[]
+  changes                 CaseChange[]
 
   @@index([isPublished, occurredAt(sort: Desc)])
   @@index([reviewStatus])
@@ -214,6 +215,40 @@ model CaseSource {
 
   @@unique([caseId, url])
   @@map("case_sources")
+}
+
+/// 사건 뒤에 바뀐 것: 사건을 계기로 생긴 법·기념일·제도
+enum ChangeKind {
+  LAW
+  DAY
+  SYSTEM
+}
+
+/// 사건이 바꾼 것 하나 (예: 애덤월시법, 12월 6일 여성 폭력 추모의 날, 코드 애덤). 사건 페이지·홈 '알고 계셨나요?'·/changes 에 씀
+model CaseChange {
+  id     String @id @default(uuid(7)) @db.Uuid
+  caseId String @map("case_id") @db.Uuid
+
+  kind        ChangeKind
+  name        String   @db.VarChar(200)
+  year        Int?     @db.SmallInt
+  /// 기념일이면 매년 돌아오는 날 (MM-DD, 예: "12-06")
+  observedOn  String?  @map("observed_on") @db.VarChar(5)
+  /// 법·제도가 생긴 나라. 사건 나라와 다를 수 있음
+  country     Country?
+  description String   @db.VarChar(500)
+  sourceUrl   String   @map("source_url") @db.VarChar(1000)
+  sourceTitle String   @map("source_title") @db.VarChar(300)
+  sortOrder   Int      @default(0) @map("sort_order")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  case Case @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@unique([caseId, name])
+  @@index([observedOn])
+  @@map("case_changes")
 }
 
 model RelatedContent {

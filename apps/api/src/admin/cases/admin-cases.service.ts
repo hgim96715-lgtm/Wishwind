@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { reviewCase, setPublished } from '../../case-import/case-import.repository.js';
 import { asBadRequest } from '../../common/errors/as-bad-request.js';
 import type { CaseReviewStatus } from '../../generated/prisma/enums.js';
-import type { CaseEdit, CaseListQuery, RelatedAdd, SourceAdd } from './dto/admin-cases.dto.js';
+import type { CaseEdit, CaseListQuery, ChangeAdd, RelatedAdd, SourceAdd } from './dto/admin-cases.dto.js';
 import { newCaseDraft, statusChangedDraft, toAdminCaseRow, toReviewCounts } from './admin-cases.mapper.js';
 import { AdminCasesRepository } from './admin-cases.repository.js';
 
@@ -105,6 +105,28 @@ export class AdminCasesService {
     if (same && same.id !== relatedId) throw new BadRequestException('이미 등록된 관련 콘텐츠 주소입니다.');
     const updated = await this.repo.updateRelated(id, relatedId, item);
     if (!updated) throw new NotFoundException('관련 콘텐츠를 찾을 수 없습니다.');
+    return this.detail(id);
+  }
+
+  /** 사건이 바꾼 것(법·기념일·제도) 추가. 같은 이름이 이미 있으면 막음 */
+  async addChange(id: string, item: ChangeAdd) {
+    await this.findOrThrow(id);
+    if (await this.repo.findChangeByName(id, item.name)) throw new BadRequestException('이미 등록된 이름입니다.');
+    await this.repo.addChange(id, item);
+    return this.detail(id);
+  }
+
+  async updateChange(id: string, changeId: string, item: ChangeAdd) {
+    await this.findOrThrow(id);
+    const same = await this.repo.findChangeByName(id, item.name);
+    if (same && same.id !== changeId) throw new BadRequestException('이미 등록된 이름입니다.');
+    if (!(await this.repo.updateChange(id, changeId, item))) throw new NotFoundException('항목을 찾을 수 없습니다.');
+    return this.detail(id);
+  }
+
+  async removeChange(id: string, changeId: string) {
+    await this.findOrThrow(id);
+    if (!(await this.repo.removeChange(id, changeId))) throw new NotFoundException('항목을 찾을 수 없습니다.');
     return this.detail(id);
   }
 

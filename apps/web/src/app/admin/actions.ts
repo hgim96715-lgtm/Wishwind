@@ -158,6 +158,32 @@ export async function updateCaseRelated(id: string, relatedId: string, _: Action
   return run(() => adminSend(`/cases/${id}/related/${relatedId}`, "PATCH", relatedBody(form)), "관련 콘텐츠를 고쳤습니다.");
 }
 
+/** 사건이 바꾼 것(법·기념일·제도) 폼 값 → API 형식 */
+function changeBody(form: FormData) {
+  return {
+    kind: text(form, "kind"),
+    name: text(form, "name"),
+    year: text(form, "year") || null,
+    observedOn: text(form, "observedOn") || null,
+    country: text(form, "country") || null,
+    description: text(form, "description"),
+    sourceUrl: text(form, "sourceUrl"),
+    sourceTitle: text(form, "sourceTitle"),
+  };
+}
+
+export async function addCaseChange(id: string, _: ActionState, form: FormData) {
+  return run(() => adminSend(`/cases/${id}/changes`, "POST", changeBody(form)), "‘바뀐 것’을 추가했습니다.");
+}
+
+export async function updateCaseChange(id: string, changeId: string, _: ActionState, form: FormData) {
+  return run(() => adminSend(`/cases/${id}/changes/${changeId}`, "PATCH", changeBody(form)), "‘바뀐 것’을 고쳤습니다.");
+}
+
+export async function removeCaseChange(id: string, changeId: string) {
+  return run(() => adminSend(`/cases/${id}/changes/${changeId}`, "DELETE"), "‘바뀐 것’을 지웠습니다.");
+}
+
 export async function removeCaseRelated(id: string, relatedId: string) {
   return run(() => adminSend(`/cases/${id}/related/${relatedId}`, "DELETE"), "관련 콘텐츠를 지웠습니다.");
 }

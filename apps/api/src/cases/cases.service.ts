@@ -15,6 +15,12 @@ export class CasesService {
     return toCasePage(rows, query.take, preview);
   }
 
+  /** 사건이 바꾼 것(법·기념일·제도) 모아 보기 */
+  async changes() {
+    const rows = await this.repo.findChanges(draftsVisible());
+    return { items: rows };
+  }
+
   async findBySlug(slug: string) {
     const preview = draftsVisible();
     const found = await this.repo.findVisibleBySlug(slug, preview);

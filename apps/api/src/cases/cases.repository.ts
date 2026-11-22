@@ -22,6 +22,19 @@ const caseListSelect = {
   reviewStatus: true,
 } satisfies Prisma.CaseSelect;
 
+/** 사건이 바꾼 것(법·기념일·제도)에서 화면에 내보내는 칸 */
+const changeSelect = {
+  id: true,
+  kind: true,
+  name: true,
+  year: true,
+  observedOn: true,
+  country: true,
+  description: true,
+  sourceUrl: true,
+  sourceTitle: true,
+} satisfies Prisma.CaseChangeSelect;
+
 const caseDetailInclude = {
   timeline: {
     orderBy: [{ occurredAt: { sort: 'asc', nulls: 'last' } }, byOrder],
@@ -34,6 +47,10 @@ const caseDetailInclude = {
   victims: { orderBy: byOrder },
   unsolvedQuestions: { orderBy: byOrder },
   suspiciousCircumstances: { orderBy: byOrder },
+  changes: {
+    orderBy: [{ year: { sort: 'asc', nulls: 'last' } }, byOrder],
+    select: changeSelect,
+  },
   relatedContents: {
     orderBy: [{ kind: 'asc' }, byOrder],
     select: {
@@ -74,6 +91,15 @@ export class CasesRepository {
       orderBy: [{ occurredAt: { sort: 'desc', nulls: 'last' } }, { id: 'desc' }],
       take: take + 1,
       ...(cursor && { cursor: { id: cursor }, skip: 1 }),
+    });
+  }
+
+  /** 공개 사건의 '바뀐 것' 전체 (홈 '알고 계셨나요?'·/changes). 많아야 수백 개라 한 번에 보냄 */
+  findChanges(preview: boolean) {
+    return this.prisma.caseChange.findMany({
+      where: { case: visibilityWhere(preview) },
+      orderBy: [{ year: { sort: 'asc', nulls: 'last' } }, { sortOrder: 'asc' }],
+      select: { ...changeSelect, case: { select: { slug: true, title: true, country: true } } },
     });
   }
 

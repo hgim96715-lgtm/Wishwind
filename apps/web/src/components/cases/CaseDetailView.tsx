@@ -13,6 +13,7 @@ import {
   formatCaseDate,
 } from "@/lib/cases/labels";
 import type { CaseDetail, Sentence, Suspect } from "@/lib/cases/types";
+import { CaseChanges } from "./CaseChanges";
 import { CaseNotes } from "./CaseNotes";
 import { CaseTabs, type CaseTab } from "./CaseTabs";
 import { Notice } from "./Notice";
@@ -238,6 +239,7 @@ function OverviewPanel({ data }: { data: CaseDetail }) {
         <Fact label="유형" value={CATEGORY_LABEL[data.category]} />
         <Fact label="피해자" value={`${data.victims.length}명`} />
       </dl>
+      <CaseChanges items={data.changes ?? []} />
       <RecentNews data={data} />
     </div>
   );

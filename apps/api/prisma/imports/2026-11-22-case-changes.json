@@ -1,0 +1,192 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "adam-walsh-murder",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "실종아동법 (Missing Children Act)",
+          "year": 1982,
+          "country": "US",
+          "description": "실종 아동 신고를 FBI 범죄정보센터(NCIC) 전산망에 올려 전국 수사기관이 함께 찾을 수 있게 했습니다.",
+          "sourceUrl": "https://www.govinfo.gov/link/statute/96/1259",
+          "sourceTitle": "Missing Children Act, Public Law 97-292 (1982)"
+        },
+        {
+          "kind": "LAW",
+          "name": "애덤월시법 (Adam Walsh Child Protection and Safety Act)",
+          "year": 2006,
+          "country": "US",
+          "description": "성범죄자 등록·공개 제도를 전국 기준으로 강화하고, 실종 아동 신고를 2시간 안에 전산망에 올리도록 했습니다.",
+          "sourceUrl": "https://www.congress.gov/109/plaws/publ248/PLAW-109publ248.htm",
+          "sourceTitle": "Public Law 109-248, Adam Walsh Child Protection and Safety Act of 2006"
+        }
+      ]
+    },
+    {
+      "slug": "amber-hagerman-abduction",
+      "changes": [
+        {
+          "kind": "SYSTEM",
+          "name": "앰버 경보 (AMBER Alert)",
+          "year": 1996,
+          "country": "US",
+          "description": "아이가 유괴되면 방송과 휴대전화로 곧바로 알리는 긴급 경보입니다. 텍사스 댈러스·포트워스 지역 방송사와 경찰이 처음 만들었고, 이름은 앰버 해거먼에게서 따왔습니다.",
+          "sourceUrl": "https://amberalert.ojp.gov/about",
+          "sourceTitle": "About AMBER Alert (미국 법무부)"
+        }
+      ]
+    },
+    {
+      "slug": "ecole-polytechnique-massacre",
+      "changes": [
+        {
+          "kind": "DAY",
+          "name": "여성 폭력 추모·행동의 날 (12월 6일)",
+          "year": 1991,
+          "country": "OTHER",
+          "description": "캐나다 의회가 사건이 일어난 12월 6일을 '여성 폭력 추모·행동의 날'로 정했습니다. 해마다 희생된 여성 14명을 기억하고 젠더 폭력을 없애기 위한 행동을 다짐합니다.",
+          "sourceUrl": "https://www.canada.ca/en/women-gender-equality/commemorations-celebrations/16-days/national-day-remembrance.html",
+          "sourceTitle": "The National Day of Remembrance and Action on Violence Against Women (캐나다 정부)",
+          "observedOn": "12-06"
+        }
+      ]
+    },
+    {
+      "slug": "port-arthur-massacre",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "국가총기협정 (National Firearms Agreement)",
+          "year": 1996,
+          "country": "OTHER",
+          "description": "사건 12일 만에 호주 연방과 주 정부가 합의해 반자동 소총·산탄총을 금지하고 전국 공통의 엄격한 총기 면허 제도를 만들었습니다.",
+          "sourceUrl": "https://peo.gov.au/understand-our-parliament/history-of-parliament/history-milestones/australian-parliament-history-timeline/events/national-firearms-agreement",
+          "sourceTitle": "National Firearms Agreement (호주 의회 교육청)"
+        }
+      ]
+    },
+    {
+      "slug": "dunblane-school-shooting",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "총기 개정법 (Firearms (Amendment) Act 1997)",
+          "year": 1997,
+          "country": "GB",
+          "description": "영국(북아일랜드 제외)에서 소구경을 뺀 권총의 개인 소지를 금지했고, 같은 해 두 번째 개정법으로 모든 권총까지 넓혔습니다.",
+          "sourceUrl": "https://www.legislation.gov.uk/ukpga/1997/5/contents",
+          "sourceTitle": "Firearms (Amendment) Act 1997 (legislation.gov.uk)"
+        }
+      ]
+    },
+    {
+      "slug": "christchurch-mosque-attack",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "무기(금지 총기·탄창·부품) 개정법",
+          "year": 2019,
+          "country": "OTHER",
+          "description": "사건 한 달이 안 돼 뉴질랜드가 반자동 총기와 대용량 탄창을 금지하고, 이미 있는 총기는 정부가 사들였습니다.",
+          "sourceUrl": "https://legislation.govt.nz/act/public/2019/12/en/latest/",
+          "sourceTitle": "Arms (Prohibited Firearms, Magazines, and Parts) Amendment Act 2019 (뉴질랜드 법령)"
+        }
+      ]
+    },
+    {
+      "slug": "yangcheon-adopted-child-abuse",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "아동학대처벌법 개정 (이른바 '정인이법')",
+          "year": 2021,
+          "country": "KR",
+          "description": "아동학대 신고가 들어오면 지방자치단체와 수사기관이 곧바로 조사·수사에 나서도록 의무를 정했습니다.",
+          "sourceUrl": "https://www.newsis.com/view/NISX20210108_0001299193",
+          "sourceTitle": "여야 모처럼 한뜻…속전속결로 아동학대처벌법 처리 (뉴시스)"
+        }
+      ]
+    },
+    {
+      "slug": "nth-room-digital-sex-crimes",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "이른바 'n번방 방지법'",
+          "year": 2020,
+          "country": "KR",
+          "description": "아동·청소년 성착취물을 사거나 갖고 있거나 보기만 해도 처벌하고, 인터넷 사업자에게 불법 촬영물 유통을 막을 의무를 지웠습니다.",
+          "sourceUrl": "https://www.korea.kr/news/visualNewsView.do?newsId=148872800",
+          "sourceTitle": "'n번방 방지법' 국회 통과 (대한민국 정책브리핑)"
+        }
+      ]
+    },
+    {
+      "slug": "sindang-station-stalking-murder",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "스토킹처벌법 개정 (반의사불벌 조항 삭제)",
+          "year": 2023,
+          "country": "KR",
+          "description": "피해자가 처벌을 원하지 않아도 가해자를 재판에 넘길 수 있게 했고, 문자·사진 등을 보내는 온라인 스토킹도 처벌 대상에 넣었습니다.",
+          "sourceUrl": "https://m.seoul.co.kr/news/2023/06/21/20230621500234",
+          "sourceTitle": "스토킹, 피해자가 원치 않아도 가해자 처벌…문자·사진 등 전송도 ‘온라인 스토킹’ (서울신문)"
+        }
+      ]
+    },
+    {
+      "slug": "stephen-lawrence-murder",
+      "changes": [
+        {
+          "kind": "SYSTEM",
+          "name": "맥퍼슨 보고서 (Macpherson Report)",
+          "year": 1999,
+          "country": "GB",
+          "description": "공식 조사 보고서가 런던경찰청의 '제도적 인종차별'을 지적하고 경찰 개혁을 권고했습니다. 영국 사회가 인종차별을 다루는 방식을 바꾼 계기가 됐습니다.",
+          "sourceUrl": "https://gloucestershire.gov.uk/your-community/black-history-month/black-history-month-2020/race-relations-acts-1965-2000/the-murder-of-stephen-lawrence-and-the-macpherson-report/",
+          "sourceTitle": "The Murder of Stephen Lawrence and the Macpherson Report (글로스터셔 주정부)"
+        },
+        {
+          "kind": "LAW",
+          "name": "형사사법법 2003 (같은 죄 다시 재판 금지 원칙 완화)",
+          "year": 2003,
+          "country": "GB",
+          "description": "새롭고 확실한 증거가 나오면 무죄가 난 중대 범죄도 다시 재판할 수 있게 했습니다. 이 규정으로 가해자 중 한 명이 다시 재판을 받아 2012년 유죄 판결을 받았습니다.",
+          "sourceUrl": "https://www.legislation.gov.uk/ukpga/2003/44/notes/division/2/10",
+          "sourceTitle": "Criminal Justice Act 2003, Part 10 해설 (legislation.gov.uk)"
+        }
+      ]
+    },
+    {
+      "slug": "soham-murders",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "취약계층 보호법 (Safeguarding Vulnerable Groups Act 2006)",
+          "year": 2006,
+          "country": "GB",
+          "description": "사건 뒤 비처드 조사 보고서의 권고에 따라, 아이나 취약한 성인과 일하는 사람의 기록을 미리 확인하고 부적격자를 막는 제도를 만들었습니다.",
+          "sourceUrl": "https://www.legislation.gov.uk/ukpga/2006/47/notes",
+          "sourceTitle": "Safeguarding Vulnerable Groups Act 2006 해설 (legislation.gov.uk)"
+        }
+      ]
+    },
+    {
+      "slug": "milly-dowler-murder",
+      "changes": [
+        {
+          "kind": "SYSTEM",
+          "name": "레버슨 조사 (Leveson Inquiry)",
+          "year": 2011,
+          "country": "GB",
+          "description": "신문사가 실종 중이던 밀리 다울러의 휴대전화 음성사서함을 해킹한 사실이 드러나, 영국 정부가 언론 윤리를 살피는 공식 조사위원회를 꾸렸습니다.",
+          "sourceUrl": "https://www.gov.uk/government/speeches/pm-statement-on-phone-hacking",
+          "sourceTitle": "PM statement on phone hacking (영국 정부)"
+        }
+      ]
+    }
+  ]
+}

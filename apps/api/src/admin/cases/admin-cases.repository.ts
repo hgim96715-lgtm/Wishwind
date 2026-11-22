@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import type { Prisma } from '../../generated/prisma/client.js';
 import { BriefingKind, BriefingStatus, CaseReviewStatus } from '../../generated/prisma/enums.js';
 import { PrismaService } from '../../prisma/prisma.service.js';
-import type { CaseEdit, CaseListQuery, RelatedAdd, SourceAdd } from './dto/admin-cases.dto.js';
+import type { CaseEdit, CaseListQuery, ChangeAdd, RelatedAdd, SourceAdd } from './dto/admin-cases.dto.js';
 
 export const adminCaseRowSelect = {
   id: true,
@@ -30,6 +30,20 @@ const detailInclude = {
       type: true,
       publishedAt: true,
       _count: { select: { claims: true } },
+    },
+  },
+  changes: {
+    orderBy: [{ year: { sort: 'asc', nulls: 'last' } }, { sortOrder: 'asc' }],
+    select: {
+      id: true,
+      kind: true,
+      name: true,
+      year: true,
+      observedOn: true,
+      country: true,
+      description: true,
+      sourceUrl: true,
+      sourceTitle: true,
     },
   },
   relatedContents: {
@@ -166,6 +180,26 @@ export class AdminCasesRepository {
   /** 지운 것이 있으면 true */
   async removeRelated(caseId: string, relatedId: string) {
     const { count } = await this.prisma.relatedContent.deleteMany({ where: { id: relatedId, caseId } });
+    return count > 0;
+  }
+
+  findChangeByName(caseId: string, name: string) {
+    return this.prisma.caseChange.findUnique({ where: { caseId_name: { caseId, name } }, select: { id: true } });
+  }
+
+  /** '바뀐 것'은 사건 사실이 아니라 보충 설명이라 검토 상태를 바꾸지 않음 */
+  async addChange(caseId: string, item: ChangeAdd) {
+    const last = await this.prisma.caseChange.aggregate({ where: { caseId }, _max: { sortOrder: true } });
+    return this.prisma.caseChange.create({ data: { caseId, ...item, sortOrder: (last._max.sortOrder ?? -1) + 1 } });
+  }
+
+  async updateChange(caseId: string, changeId: string, item: ChangeAdd) {
+    const { count } = await this.prisma.caseChange.updateMany({ where: { id: changeId, caseId }, data: item });
+    return count > 0;
+  }
+
+  async removeChange(caseId: string, changeId: string) {
+    const { count } = await this.prisma.caseChange.deleteMany({ where: { id: changeId, caseId } });
     return count > 0;
   }
 

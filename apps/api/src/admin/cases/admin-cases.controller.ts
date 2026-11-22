@@ -5,9 +5,11 @@ import {
   caseEditSchema,
   caseListSchema,
   publishSchema,
+  changeAddSchema,
   relatedAddSchema,
   reviewSchema,
   sourceAddSchema,
+  type ChangeAdd,
   type RelatedAdd,
   type CaseEdit,
   type CaseListQuery,
@@ -67,6 +69,26 @@ export class AdminCasesController {
     @Param('sourceId', ParseUUIDPipe) sourceId: string,
   ) {
     return this.cases.removeSource(id, sourceId);
+  }
+
+  /** 사건이 바꾼 것(법·기념일·제도) 추가·수정·삭제 */
+  @Post(':id/changes')
+  addChange(@Param('id', ParseUUIDPipe) id: string, @Body(new ZodPipe(changeAddSchema)) body: ChangeAdd) {
+    return this.cases.addChange(id, body);
+  }
+
+  @Patch(':id/changes/:changeId')
+  updateChange(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('changeId', ParseUUIDPipe) changeId: string,
+    @Body(new ZodPipe(changeAddSchema)) body: ChangeAdd,
+  ) {
+    return this.cases.updateChange(id, changeId, body);
+  }
+
+  @Delete(':id/changes/:changeId')
+  removeChange(@Param('id', ParseUUIDPipe) id: string, @Param('changeId', ParseUUIDPipe) changeId: string) {
+    return this.cases.removeChange(id, changeId);
   }
 
   /** 관련 콘텐츠(방송·다큐·유튜브 등) 추가·수정·삭제 */
