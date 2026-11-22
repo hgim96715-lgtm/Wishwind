@@ -1,0 +1,345 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "sampoong-department-store-collapse",
+      "content": {
+        "title": "삼풍백화점 붕괴 참사",
+        "summary": "1995년 6월 29일 서울 서초동 삼풍백화점이 무너져 502명이 숨지고 937명이 다친 참사로, 붕괴 징후를 알고도 영업을 계속한 경영진이 처벌받았고 국가와 지자체의 재난 관리 책임을 법으로 정하는 계기가 됐습니다",
+        "overview": "1995년 6월 29일 오후, 서울 서초구 서초동의 삼풍백화점 건물이 무너졌습니다. 이 참사로 502명이 숨지고 937명이 다쳤으며, 숨진 사람 가운데 302명이 백화점 직원이었습니다. 붕괴 몇 달 전부터 5층 식당가 천장과 벽에 금이 가고 바닥이 내려앉는 징후가 있었고, 사고 당일에도 금이 커지는 것이 보였습니다. 일부 임원이 손님과 직원을 대피시키자고 했지만 이준 회장은 이를 받아들이지 않았다고 법원 기록은 전합니다. 건물은 처음부터 설계와 시공이 잘못돼 있었습니다. 이 회장은 업무상과실치사상 등으로 기소돼 징역 7년 6개월을 확정받았습니다. 참사 뒤 국가와 지방자치단체의 재난 관리 책임을 처음 법으로 정한 재난관리법이 만들어졌고, 이는 지금의 재난 및 안전관리 기본법으로 이어졌습니다. 서울 양재시민의숲에는 희생자를 기리는 위령탑이 있습니다.",
+        "victimCountNote": "사망 502명 · 부상 937명",
+        "country": "KR",
+        "category": "OTHER",
+        "status": "SOLVED",
+        "location": "서울 서초구 서초동",
+        "occurredAt": "1995-06-29",
+        "occurredAtPrecision": "DAY",
+        "timeline": [
+          {
+            "occurredAt": "1995-04-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "5층 천장에 금이 감",
+            "description": "이후 바닥이 내려앉는 등 붕괴 징후가 이어졌지만 영업은 계속됐습니다."
+          },
+          {
+            "occurredAt": "1995-06-29",
+            "occurredAtPrecision": "DAY",
+            "title": "백화점 붕괴",
+            "description": "손님과 직원이 가득한 오후에 건물이 무너졌습니다."
+          },
+          {
+            "occurredAt": "1995-07-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "재난관리법 제정",
+            "description": "국가와 지자체의 재난 관리 책임을 법으로 정했습니다."
+          },
+          {
+            "occurredAt": "1996-01-01",
+            "occurredAtPrecision": "YEAR",
+            "title": "이준 회장 징역 7년 6개월",
+            "description": "1심의 징역 10년 6개월에서 줄어든 형이 확정됐습니다."
+          }
+        ],
+        "victims": [],
+        "suspects": [
+          {
+            "name": "이준",
+            "status": "CONVICTED",
+            "charges": "업무상과실치사상 등",
+            "description": "삼풍건설산업 회장입니다. 붕괴 징후를 보고받고도 대피를 받아들이지 않았습니다. 2003년 출소한 뒤 숨졌습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "서울지방법원",
+                "type": "IMPRISONMENT",
+                "verdict": "업무상과실치사상 등을 유죄로 판단했습니다.",
+                "penalty": "징역 10년 6개월",
+                "isFinal": false
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "서울고등법원",
+                "type": "IMPRISONMENT",
+                "verdict": "형을 징역 7년 6개월로 줄였고, 이 형이 확정됐습니다.",
+                "penalty": "징역 7년 6개월",
+                "isFinal": true
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "건물에 금이 가는 등 위험 신호가 보일 때, 누가 영업을 멈추고 대피를 결정할 수 있어야 할까요?"
+          },
+          {
+            "question": "설계 변경과 증축이 안전 기준을 지키는지 제대로 확인하려면 어떤 점검 체계가 필요할까요?"
+          },
+          {
+            "question": "일하는 곳이 위험하다고 느낀 직원이 불이익 없이 알릴 수 있으려면 무엇이 필요할까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://www.koreaherald.com/article/3188019",
+          "title": "Sampoong: A deep national wound",
+          "publisher": "The Korea Herald",
+          "type": "NEWS",
+          "publishedAt": "2023-08-09",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://www.segye.com/newsView/20140420000677",
+          "title": "‘502명 사망’ 삼풍백화점 회장, 어떤 처벌 받았나",
+          "publisher": "세계일보",
+          "type": "NEWS",
+          "publishedAt": "2014-04-20",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://www.news1.kr/society/incident-accident/5827393",
+          "title": "삼풍백화점 희생이 만든 재난안전법…\"이젠 생명안전기본법 제정해야\"",
+          "publisher": "뉴스1",
+          "type": "NEWS_AGENCY",
+          "publishedAt": "2025-06-27",
+          "accessedAt": "2026-11-22"
+        }
+      ],
+      "claims": [],
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "재난관리법",
+          "year": 1995,
+          "country": "KR",
+          "description": "삼풍 참사 뒤 국가와 지방자치단체의 재난 관리 책임을 처음 법으로 정했습니다. 지금의 재난 및 안전관리 기본법으로 이어졌습니다.",
+          "sourceUrl": "https://www.news1.kr/society/incident-accident/5827393",
+          "sourceTitle": "삼풍백화점 희생이 만든 재난안전법 (뉴스1, 2025)"
+        },
+        {
+          "kind": "DAY",
+          "name": "삼풍백화점 참사 추모일",
+          "observedOn": "06-29",
+          "country": "KR",
+          "description": "참사가 난 6월 29일이면 서울 양재시민의숲 위령탑에서 유가족이 모여 추모제를 엽니다.",
+          "sourceUrl": "https://www.news1.kr/society/incident-accident/5827393",
+          "sourceTitle": "삼풍백화점 붕괴 참사 30주기 (뉴스1, 2025)"
+        }
+      ]
+    },
+    {
+      "slug": "seongsu-bridge-collapse",
+      "content": {
+        "title": "성수대교 붕괴 참사",
+        "summary": "1994년 10월 21일 아침 서울 성수대교 상판 48m가 무너져 등굣길 학생과 출근길 시민 32명이 숨진 참사로, 다리와 건물 같은 시설물을 정기적으로 점검하게 한 시설물안전법이 만들어졌습니다",
+        "overview": "1994년 10월 21일 오전 7시 40분쯤, 서울 성동구 성수동과 강남구 압구정동을 잇는 성수대교의 10번과 11번 교각 사이 상판 48m가 한강으로 떨어졌습니다. 그 위를 지나던 버스와 승용차가 함께 추락해 학교와 직장으로 가던 32명이 숨지고 17명이 다쳤습니다. 다리의 용접이 부실했고, 오랫동안 제대로 점검하거나 고치지 않은 데다 기준보다 무거운 차량의 통행을 단속하지 않은 것이 원인으로 지목됐습니다. 사고 뒤 정부는 서울의 교량과 주요 시설물을 정밀 진단했고, 시설물의 안전관리에 관한 특별법을 만들어 다리와 건물을 정기적으로 점검하고 정밀안전진단을 받도록 했습니다. 성수대교 북단에는 희생자 위령탑이 있습니다.",
+        "victimCountNote": "사망 32명 · 부상 17명",
+        "country": "KR",
+        "category": "OTHER",
+        "status": "SOLVED",
+        "location": "서울 성동구 성수동 ~ 강남구 압구정동 (성수대교)",
+        "occurredAt": "1994-10-21",
+        "occurredAtPrecision": "DAY",
+        "timeline": [
+          {
+            "occurredAt": "1994-10-21",
+            "occurredAtPrecision": "DAY",
+            "title": "성수대교 상판 붕괴",
+            "description": "출근·등교 시간에 상판 48m가 무너져 버스와 승용차가 한강으로 떨어졌습니다."
+          },
+          {
+            "occurredAt": "1995-01-01",
+            "occurredAtPrecision": "YEAR",
+            "title": "시설물안전법 제정",
+            "description": "교량 등 주요 시설물의 정기점검과 정밀안전진단을 의무로 정했습니다."
+          }
+        ],
+        "victims": [],
+        "suspects": [],
+        "questions": [
+          {
+            "question": "오래된 다리와 건물이 위험해지기 전에 알아차리려면 점검은 얼마나 자주, 누가 해야 할까요?"
+          },
+          {
+            "question": "기준보다 무거운 차량이 다리를 지나지 않도록 하려면 어떤 관리가 필요할까요?"
+          },
+          {
+            "question": "공사를 맡은 회사와 관리 기관이 안전을 소홀히 하지 않게 하려면 무엇을 확인해야 할까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://news.seoul.go.kr/safe/archives/28907",
+          "title": "성수대교 붕괴 20년, 교량 안전관리 무엇이 달라졌을까?",
+          "publisher": "서울특별시",
+          "type": "GOVERNMENT",
+          "publishedAt": "2014-10-16",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://knnews.co.kr/news/articleView.php?idxno=1127223",
+          "title": "성수대교 붕괴 참사 20주년… \"안전사회 아직 요원\"",
+          "publisher": "경남신문(연합뉴스)",
+          "type": "NEWS",
+          "publishedAt": "2014-10-21",
+          "accessedAt": "2026-11-22"
+        }
+      ],
+      "claims": [],
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "시설물의 안전관리에 관한 특별법",
+          "year": 1995,
+          "country": "KR",
+          "description": "다리·터널·건물 같은 주요 시설물을 정기적으로 점검하고, 안전등급에 따라 몇 년마다 정밀안전진단을 받도록 했습니다.",
+          "sourceUrl": "https://news.seoul.go.kr/safe/archives/28907",
+          "sourceTitle": "성수대교 붕괴 20년, 교량 안전관리 무엇이 달라졌을까? (서울시)"
+        },
+        {
+          "kind": "DAY",
+          "name": "성수대교 참사 위령제",
+          "observedOn": "10-21",
+          "country": "KR",
+          "description": "사고가 난 10월 21일이면 성수대교 북단 위령탑에서 유가족이 모여 위령제를 엽니다.",
+          "sourceUrl": "https://knnews.co.kr/news/articleView.php?idxno=1127223",
+          "sourceTitle": "성수대교 붕괴 참사 20주년 (경남신문·연합뉴스, 2014)"
+        }
+      ]
+    },
+    {
+      "slug": "itaewon-crowd-crush",
+      "content": {
+        "title": "10·29 이태원 참사",
+        "summary": "2022년 10월 29일 밤 서울 이태원의 좁은 골목에 핼러윈 인파가 몰려 159명이 숨진 참사로, 인파 관리 책임을 둘러싼 재판이 이어지고 있고 진상 규명을 위한 특별법이 만들어졌습니다",
+        "overview": "2022년 10월 29일 밤, 핼러윈을 앞두고 많은 사람이 모인 서울 용산구 이태원동 해밀톤호텔 옆 좁은 내리막 골목에서 사람들이 한꺼번에 밀려 넘어지고 깔렸습니다. 이 참사로 159명이 숨졌습니다. 경찰과 구청이 인파를 관리하고 통제하는 조치를 제때 하지 않았다는 지적이 이어졌습니다. 검찰은 경찰과 구청 관계자들을 업무상과실치사상 등 혐의로 기소했습니다. 2024년 9월 1심 법원은 전 용산경찰서장에게 금고 3년을 선고하며 현장 경찰 책임자의 과실을 처음 인정했지만, 용산구청장에게는 무죄를 선고했습니다. 2025년 항소심이 시작됐고, 피고인들은 2심에서도 혐의를 부인하고 있습니다. 국회는 2024년 5월 여야 합의로 이태원 참사 특별법을 통과시켜 독립된 특별조사위원회가 진상을 조사하도록 했습니다.",
+        "victimCountNote": "사망 159명",
+        "country": "KR",
+        "category": "OTHER",
+        "status": "IN_PROGRESS",
+        "location": "서울 용산구 이태원동",
+        "occurredAt": "2022-10-29",
+        "occurredAtPrecision": "DAY",
+        "timeline": [
+          {
+            "occurredAt": "2022-10-29",
+            "occurredAtPrecision": "DAY",
+            "title": "이태원 골목 인파 참사",
+            "description": "좁은 골목에 몰린 사람들이 밀려 넘어지며 159명이 숨졌습니다."
+          },
+          {
+            "occurredAt": "2024-05-02",
+            "occurredAtPrecision": "DAY",
+            "title": "이태원 참사 특별법 국회 통과",
+            "description": "1월 야당 단독 처리 뒤 거부권이 행사됐고, 여야가 수정안에 합의해 다시 통과됐습니다."
+          },
+          {
+            "occurredAt": "2024-09-30",
+            "occurredAtPrecision": "DAY",
+            "title": "1심, 전 용산경찰서장 금고 3년",
+            "description": "같은 날 용산구청장에게는 무죄가 선고됐습니다."
+          },
+          {
+            "occurredAt": "2025-03-17",
+            "occurredAtPrecision": "DAY",
+            "title": "경찰 지휘부 항소심 시작",
+            "description": "피고인들은 2심에서도 혐의를 부인했습니다."
+          }
+        ],
+        "victims": [],
+        "suspects": [
+          {
+            "alias": "전 용산경찰서장",
+            "status": "INDICTED",
+            "charges": "업무상과실치사상 등 혐의",
+            "description": "참사 당일 현장 경찰 대응을 지휘할 책임이 있었습니다. 2심이 진행 중입니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "서울서부지방법원",
+                "type": "IMPRISONMENT",
+                "verdict": "업무상과실치사상 혐의를 유죄로 보고, 위증과 허위공문서 작성 혐의는 무죄로 판단했습니다.",
+                "penalty": "금고 3년",
+                "isFinal": false,
+                "decidedAt": "2024-09-30"
+              }
+            ]
+          },
+          {
+            "alias": "용산구청장",
+            "status": "INDICTED",
+            "charges": "업무상과실치사상 등 혐의",
+            "description": "인파 사고에 대비할 책임이 있었다는 이유로 기소됐습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "서울서부지방법원",
+                "type": "ACQUITTAL",
+                "verdict": "혐의를 인정하지 않았습니다.",
+                "penalty": "무죄",
+                "isFinal": false,
+                "decidedAt": "2024-09-30"
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "주최자가 없는 축제나 모임에 사람이 몰릴 때, 인파 관리는 누가 책임져야 할까요?"
+          },
+          {
+            "question": "위험을 알리는 신고가 잇따를 때 경찰과 구청이 곧바로 움직이려면 어떤 체계가 필요할까요?"
+          },
+          {
+            "question": "좁은 길에 사람이 몰리는 것을 미리 알아차리고 흩어지게 하려면 어떤 기술과 방법을 쓸 수 있을까요?"
+          },
+          {
+            "question": "희생자 가족과 생존자가 2차 피해 없이 회복할 수 있도록 우리 사회는 무엇을 해야 할까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://www.segye.com/newsView/20240930515592",
+          "title": "박희영 용산구청장 등 무죄에 이태원 유족 단체 “법원이 정의 역할 저버려”",
+          "publisher": "세계일보",
+          "type": "NEWS",
+          "publishedAt": "2024-09-30",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://economist.co.kr/article/view/ecn202405020049",
+          "title": "‘참사 551일만’ 이태원특별법, 여야 합의로 국회 통과",
+          "publisher": "이코노미스트",
+          "type": "NEWS",
+          "publishedAt": "2024-05-02",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://news.tf.co.kr/read/life/2188140.htm",
+          "title": "'이태원 참사' 경찰 지휘부 항소심 시작…모두 혐의 부인",
+          "publisher": "더팩트",
+          "type": "NEWS",
+          "publishedAt": "2025-03-17",
+          "accessedAt": "2026-11-22"
+        }
+      ],
+      "claims": [],
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "10·29 이태원 참사 특별법",
+          "year": 2024,
+          "country": "KR",
+          "description": "피해자의 권리를 보장하고 독립된 특별조사위원회가 참사의 진상을 조사하도록 했습니다. 참사 551일 만에 여야 합의로 국회를 통과했습니다.",
+          "sourceUrl": "https://economist.co.kr/article/view/ecn202405020049",
+          "sourceTitle": "‘참사 551일만’ 이태원특별법, 여야 합의로 국회 통과 (이코노미스트, 2024)"
+        }
+      ]
+    }
+  ]
+}
