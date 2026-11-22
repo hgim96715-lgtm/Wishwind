@@ -17,9 +17,10 @@ export function changeMeta(c: CaseChange) {
 }
 
 /** 공개 사건의 '바뀐 것' 전체. API가 꺼져 있으면 빈 목록 (홈·모아 보기가 깨지지 않게) */
+// 새로 가져온 '바뀐 것'이 몇 분 안에 보이도록 사건 페이지와 같은 주기로 다시 받음
 export async function getChanges(): Promise<CaseChangeWithCase[]> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("minutes");
   try {
     const res = await fetch(`${API_URL}/cases/changes`);
     if (!res.ok) return [];
@@ -40,9 +41,9 @@ export function pickToday(items: CaseChangeWithCase[], now = new Date()) {
   return { item: items[dayNumber % items.length], isToday: false };
 }
 
-/** 오늘의 '알고 계셨나요?' 한 건. 날짜를 쓰므로 캐시 안에서 고름 (몇 시간마다 다시 고름) */
+/** 오늘의 '알고 계셨나요?' 한 건. 날짜를 쓰므로 캐시 안에서 고름 (몇 분마다 다시 고름) */
 export async function getTodayChange() {
   "use cache";
-  cacheLife("hours");
+  cacheLife("minutes");
   return pickToday(await getChanges(), new Date());
 }
