@@ -1,0 +1,207 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "september-11-attacks",
+      "content": {
+        "title": "9·11 테러",
+        "summary": "2001년 9월 11일 알카에다 조직원 19명이 미국 여객기 4대를 공중 납치해 뉴욕 세계무역센터와 워싱턴 펜타곤 등에 충돌시켜 2,977명이 숨진 사건으로, 공항 보안과 국가 안보 제도를 크게 바꿨고 공격을 계획한 혐의를 받는 칼리드 셰이크 모하메드의 재판은 아직 열리지 않았습니다",
+        "overview": "2001년 9월 11일 아침, 알카에다 조직원 19명에게 미국 여객기 4대가 공중 납치됐습니다. 오전 8시 46분 아메리칸항공 11편이 뉴욕 세계무역센터 북쪽 건물에, 9시 3분 유나이티드항공 175편이 남쪽 건물에 부딪혔고, 두 건물은 오전 중 모두 무너졌습니다. 아메리칸항공 77편은 워싱턴 근처의 국방부 건물(펜타곤)에 충돌했고, 유나이티드항공 93편은 승객들이 조종실로 맞서 들어간 끝에 펜실베이니아주 생크스빌 들판에 추락했습니다. 이 공격으로 90여 개 나라 출신 2,977명이 숨졌고, 그 가운데에는 구조에 나선 소방관과 경찰관도 많았습니다. 2004년 9·11 진상조사위원회는 정보기관들이 위험 신호를 서로 나누지 못했다고 지적했습니다. 미국은 사건 두 달 만에 공항 검색을 연방 정부가 맡도록 교통보안청(TSA)을 만들었고, 2002년에는 여러 기관을 합쳐 국토안보부를 세웠습니다. 알카에다 지도자 오사마 빈라덴은 2011년 미군 작전으로 사살됐습니다. 공격을 계획한 혐의로 기소된 칼리드 셰이크 모하메드와 공범 혐의자 3명은 쿠바 관타나모 기지의 군사위원회 재판을 기다리고 있으며, 재판은 2028년 6월로 잡혀 있습니다.",
+        "victimCountNote": "사망 2,977명 (납치범 19명 제외)",
+        "country": "US",
+        "category": "TERROR",
+        "status": "IN_PROGRESS",
+        "location": "미국 뉴욕 세계무역센터, 버지니아주 알링턴 펜타곤, 펜실베이니아주 생크스빌",
+        "occurredAt": "2001-09-11",
+        "occurredAtPrecision": "DAY",
+        "timeline": [
+          {
+            "occurredAt": "2001-09-11",
+            "occurredAtPrecision": "DAY",
+            "title": "여객기 4대 공중 납치·충돌",
+            "description": "세계무역센터 두 건물과 펜타곤에 여객기가 부딪혔고, 한 대는 펜실베이니아 들판에 추락했습니다."
+          },
+          {
+            "occurredAt": "2001-11-19",
+            "occurredAtPrecision": "DAY",
+            "title": "항공교통보안법 제정",
+            "description": "공항 검색을 연방 정부가 맡도록 교통보안청(TSA)을 만들었습니다."
+          },
+          {
+            "occurredAt": "2003-03-01",
+            "occurredAtPrecision": "DAY",
+            "title": "칼리드 셰이크 모하메드 체포",
+            "description": "파키스탄에서 붙잡혔고, 2006년 관타나모 기지로 옮겨졌습니다."
+          },
+          {
+            "occurredAt": "2004-07-22",
+            "occurredAtPrecision": "DAY",
+            "title": "9·11 진상조사위원회 최종 보고서",
+            "description": "정보기관 사이에 위험 정보가 제대로 공유되지 않았다고 지적했습니다."
+          },
+          {
+            "occurredAt": "2006-05-04",
+            "occurredAtPrecision": "DAY",
+            "title": "자카리아스 무사위 종신형 선고",
+            "description": "9·11 공모로 미국 법정에서 유죄가 선고된 유일한 사람입니다."
+          },
+          {
+            "occurredAt": "2011-05-02",
+            "occurredAtPrecision": "DAY",
+            "title": "오사마 빈라덴 사망",
+            "description": "파키스탄 아보타바드에서 미군 특수부대 작전으로 사살됐습니다."
+          },
+          {
+            "occurredAt": "2026-08-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "군사위원회 재판 2028년 6월로 지정",
+            "description": "형량 합의가 2025년 최종 무산된 뒤, 군사 판사가 본재판 날짜를 2028년 6월 5일로 정했습니다."
+          }
+        ],
+        "victims": [],
+        "suspects": [
+          {
+            "name": "오사마 빈라덴 (Osama bin Laden)",
+            "status": "DECEASED",
+            "description": "알카에다 지도자로, 미국 정부와 9·11 진상조사위원회는 그가 공격을 승인했다고 결론 내렸습니다. 2011년 사살돼 재판을 받지 않았습니다."
+          },
+          {
+            "name": "칼리드 셰이크 모하메드 (Khalid Sheikh Mohammed)",
+            "status": "INDICTED",
+            "charges": "9·11 공격 공모·살인 등 혐의 (관타나모 군사위원회)",
+            "description": "9·11 공격을 계획한 혐의로 기소됐습니다. 2007년 FBI에 했다는 자백은 물고문 이후라는 이유로 증거에서 빠졌고, 재판은 2028년 6월로 잡혀 있습니다."
+          },
+          {
+            "name": "자카리아스 무사위 (Zacarias Moussaoui)",
+            "status": "CONVICTED",
+            "charges": "9·11 테러 공모",
+            "description": "2001년 8월 다른 혐의로 붙잡혀 있다가 9·11 공모로 기소됐고, 2005년 유죄를 인정했습니다.",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "courtName": "미국 버지니아 동부 연방지방법원",
+                "type": "LIFE",
+                "verdict": "배심원단이 사형 대신 종신형을 택했고, 판사가 가석방 없는 종신형을 선고했습니다.",
+                "penalty": "가석방 없는 종신형",
+                "isFinal": false,
+                "decidedAt": "2006-05-04"
+              },
+              {
+                "courtLevel": "APPEAL",
+                "courtName": "미국 제4순회 연방항소법원",
+                "type": "LIFE",
+                "verdict": "유죄 인정을 철회해 달라는 요청을 받아들이지 않고 원심을 유지했습니다.",
+                "penalty": "가석방 없는 종신형",
+                "isFinal": true,
+                "decidedAt": "2010-01-04"
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "큰 공격의 위험 신호를 미리 알아차리려면 여러 기관이 정보를 어떻게 나눠야 할까요?"
+          },
+          {
+            "question": "안전을 위한 검색과 감시를 늘리면서도 시민의 사생활과 인권을 지키려면 어떤 기준이 필요할까요?"
+          },
+          {
+            "question": "구조에 나섰다가 병을 얻은 소방관과 주민을 오래 돌보려면 어떤 지원이 필요할까요?"
+          },
+          {
+            "question": "테러 뒤 특정 종교나 출신을 향한 혐오가 퍼지지 않게 하려면 무엇을 할 수 있을까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://www.9-11commission.gov/report/",
+          "title": "The 9/11 Commission Report",
+          "publisher": "National Commission on Terrorist Attacks Upon the United States",
+          "type": "GOVERNMENT",
+          "publishedAt": "2004-07-22",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://www.911memorial.org/911-faqs",
+          "title": "9/11 FAQs",
+          "publisher": "National September 11 Memorial & Museum",
+          "type": "OTHER",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://www.pbs.org/newshour/world/trial-remains-elusive-for-purported-mastermind-accused-of-plotting-9-11-attacks",
+          "title": "Trial remains elusive for purported mastermind accused of plotting 9/11 attacks",
+          "publisher": "PBS NewsHour (AP)",
+          "type": "BROADCAST",
+          "publishedAt": "2026-09-11",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://www.npr.org/2006/05/04/5382315/judge-sentences-moussaoui-to-life-in-prison",
+          "title": "Judge Sentences Moussaoui to Life in Prison",
+          "publisher": "NPR",
+          "type": "BROADCAST",
+          "publishedAt": "2006-05-04",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://obamawhitehouse.archives.gov/blog/2011/05/02/osama-bin-laden-dead",
+          "title": "Osama Bin Laden Dead",
+          "publisher": "The White House (archives)",
+          "type": "GOVERNMENT",
+          "publishedAt": "2011-05-02",
+          "accessedAt": "2026-11-22"
+        },
+        {
+          "url": "https://www.dhs.gov/creation-department-homeland-security",
+          "title": "Creation of the Department of Homeland Security",
+          "publisher": "U.S. Department of Homeland Security",
+          "type": "GOVERNMENT",
+          "accessedAt": "2026-11-22"
+        }
+      ],
+      "claims": [],
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "항공교통보안법 (Aviation and Transportation Security Act)",
+          "year": 2001,
+          "country": "US",
+          "description": "교통보안청(TSA)을 만들어 민간 업체가 하던 공항 보안 검색을 연방 정부가 맡게 했습니다.",
+          "sourceUrl": "https://www.congress.gov/107/plaws/publ71/PLAW-107publ71.htm",
+          "sourceTitle": "Public Law 107-71, Aviation and Transportation Security Act (2001)"
+        },
+        {
+          "kind": "LAW",
+          "name": "애국자법 (USA PATRIOT Act)",
+          "year": 2001,
+          "country": "US",
+          "description": "테러 수사를 위해 감청과 금융·통신 기록 조회 등 수사기관의 정보 수집 권한을 넓혔습니다. 사생활 침해 논란이 이어져 일부 조항은 뒤에 고쳐졌습니다.",
+          "sourceUrl": "https://www.congress.gov/107/plaws/publ56/PLAW-107publ56.htm",
+          "sourceTitle": "Public Law 107-56, USA PATRIOT Act (2001)"
+        },
+        {
+          "kind": "SYSTEM",
+          "name": "국토안보부 (Department of Homeland Security)",
+          "year": 2002,
+          "country": "US",
+          "description": "흩어져 있던 22개 연방 기관을 하나로 묶어 테러 대비와 국경·재난 대응을 맡겼고, 2003년 3월 문을 열었습니다.",
+          "sourceUrl": "https://www.dhs.gov/creation-department-homeland-security",
+          "sourceTitle": "Creation of the Department of Homeland Security (미국 국토안보부)"
+        },
+        {
+          "kind": "DAY",
+          "name": "9·11 추모일 (Patriot Day)",
+          "year": 2001,
+          "observedOn": "09-11",
+          "country": "US",
+          "description": "매년 9월 11일을 희생자를 기리는 날로 정했습니다. 이날 미국 곳곳에서 조기를 달고 묵념합니다.",
+          "sourceUrl": "https://www.congress.gov/107/plaws/publ89/PLAW-107publ89.htm",
+          "sourceTitle": "Public Law 107-89, Patriot Day (2001)"
+        }
+      ]
+    }
+  ]
+}

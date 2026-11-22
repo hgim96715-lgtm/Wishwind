@@ -187,6 +187,28 @@
           "sourceTitle": "PM statement on phone hacking (영국 정부)"
         }
       ]
+    },
+    {
+      "slug": "daegu-subway-fire",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "철도안전법",
+          "year": 2004,
+          "country": "KR",
+          "description": "참사 이듬해 기존 철도법을 나누면서 철도안전법을 따로 만들어, 철도 차량과 시설의 안전관리와 비상 대응을 법으로 정했습니다.",
+          "sourceUrl": "https://www.ytn.co.kr/_ln/0103_202402170703333300",
+          "sourceTitle": "[좋은·나쁜·이상한 늬우스] 대구 지하철 화재 참사 21주기 (YTN)"
+        },
+        {
+          "kind": "SYSTEM",
+          "name": "전동차 내장재 불연재 교체",
+          "country": "KR",
+          "description": "불이 쉽게 번졌던 의자·바닥재·내장판을 불에 타지 않는 재질로 바꿨습니다. 대구에서는 2013년까지 501억 원을 들여 전동차에 화재감지기 816개도 달았습니다.",
+          "sourceUrl": "https://www.newsis.com/view/NISX20230217_0002196829",
+          "sourceTitle": "[대구 지하철 참사 20주기] 어느덧 20년…참사 후 무엇이 달라졌나 (뉴시스)"
+        }
+      ]
     }
   ]
 }

@@ -237,7 +237,8 @@ function OverviewPanel({ data }: { data: CaseDetail }) {
         <Fact label="발생" value={formatCaseDate(data.occurredAt, data.occurredAtPrecision)} />
         <Fact label="국가" value={COUNTRY_LABEL[caseRoomCountry(data.country)]} />
         <Fact label="유형" value={CATEGORY_LABEL[data.category]} />
-        <Fact label="피해자" value={`${data.victims.length}명`} />
+        {/* 대형 참사처럼 피해자 명단 없이 수만 적은 사건은 그 수를 보여 줌 (명단 0명으로 보이지 않게) */}
+        <Fact label="피해자" value={data.victims.length === 0 && data.victimCountNote ? data.victimCountNote : `${data.victims.length}명`} />
       </dl>
       <CaseChanges items={data.changes ?? []} />
       <RecentNews data={data} />
