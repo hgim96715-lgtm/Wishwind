@@ -226,6 +226,43 @@
           "description": "불이 쉽게 번졌던 의자·바닥재·내장판을 불에 타지 않는 재질로 바꿨습니다. 대구에서는 2013년까지 501억 원을 들여 전동차에 화재감지기 816개도 달았습니다.",
           "sourceUrl": "https://www.newsis.com/view/NISX20230217_0002196829",
           "sourceTitle": "[대구 지하철 참사 20주기] 어느덧 20년…참사 후 무엇이 달라졌나 (뉴시스)"
+        },
+        {
+          "kind": "DAY",
+          "name": "2·18 대구지하철참사 추모일",
+          "observedOn": "02-18",
+          "country": "KR",
+          "description": "해마다 2월 18일 2·18안전문화재단이 추모식을 열고, 참사가 난 오전 9시 53분에 맞춰 희생자를 기립니다.",
+          "sourceUrl": "https://www.imaeil.com/page/view/2025021811540157834",
+          "sourceTitle": "대구지하철 참사 22주기 추모식 (매일신문, 2025)"
+        }
+      ]
+    },
+    {
+      "slug": "gangnam-station-toilet-murder",
+      "changes": [
+        {
+          "kind": "DAY",
+          "name": "강남역 여성살해 사건 추모일",
+          "observedOn": "05-17",
+          "country": "KR",
+          "description": "사건이 일어난 5월 17일이면 여성·시민단체가 강남역 10번 출구에서 추모 행동을 엽니다. 2026년 10주기에는 157개 단체와 시민 500여 명이 모였습니다.",
+          "sourceUrl": "https://www.newsis.com/view/NISX20260517_0003632888",
+          "sourceTitle": "강남역 여성살해사건 10주기 추모행동 (뉴시스, 2026)"
+        }
+      ]
+    },
+    {
+      "slug": "oklahoma-city-bombing",
+      "changes": [
+        {
+          "kind": "DAY",
+          "name": "오클라호마시티 폭탄 테러 추모일",
+          "observedOn": "04-19",
+          "country": "US",
+          "description": "해마다 4월 19일 오클라호마시티 국립기념관에서 추모식을 열고, 희생자 168명을 기려 168초 동안 묵념하며 이름을 한 명씩 부릅니다.",
+          "sourceUrl": "https://www.tpr.org/2025-04-19/oklahoma-city-bombing-victims-honored-in-anniversary-service",
+          "sourceTitle": "Oklahoma City bombing victims honored in anniversary service (NPR, 2025)"
         }
       ]
     }
