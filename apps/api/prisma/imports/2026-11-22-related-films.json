@@ -1,0 +1,411 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "ecole-polytechnique-massacre",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "폴리테크닉 (Polytechnique)",
+          "platform": "극장 영화",
+          "url": "https://www.imdb.com/title/tt1194238/",
+          "releaseYear": 2009,
+          "language": "fr",
+          "isDramatized": true,
+          "creator": "드니 빌뇌브",
+          "note": "사건을 바탕으로 한 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "lee-hyeongho-kidnapping",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "그놈 목소리",
+          "platform": "극장 영화",
+          "url": "https://www.imdb.com/title/tt0969268/",
+          "releaseYear": 2007,
+          "language": "ko",
+          "isDramatized": true,
+          "creator": "박진표",
+          "note": "사건을 바탕으로 한 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "yakchon-ogeori-taxi-murder",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "재심",
+          "platform": "극장 영화",
+          "url": "https://www.imdb.com/title/tt6731636/",
+          "releaseYear": 2017,
+          "language": "ko",
+          "isDramatized": true,
+          "creator": "김태윤",
+          "note": "사건을 바탕으로 한 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "jo-du-sun",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "소원",
+          "platform": "극장 영화",
+          "url": "https://www.imdb.com/title/tt3153634/",
+          "releaseYear": 2013,
+          "language": "ko",
+          "isDramatized": true,
+          "creator": "이준익",
+          "note": "사건에서 모티브를 얻은 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "yoo-young-chul-serial-murders",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "추격자",
+          "platform": "극장 영화",
+          "url": "https://www.imdb.com/title/tt1190539/",
+          "releaseYear": 2008,
+          "language": "ko",
+          "isDramatized": true,
+          "creator": "나홍진",
+          "note": "사건에서 모티브를 얻은 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "sandy-hook",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "뉴타운 (Newtown)",
+          "platform": "다큐멘터리 영화",
+          "url": "https://www.imdb.com/title/tt5278578/",
+          "releaseYear": 2016,
+          "language": "en",
+          "isDramatized": false,
+          "creator": "킴 A. 스나이더"
+        }
+      ]
+    },
+    {
+      "slug": "columbine-high-school-shooting",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "볼링 포 콜럼바인",
+          "platform": "다큐멘터리 영화",
+          "url": "https://www.imdb.com/title/tt0310793/",
+          "releaseYear": 2002,
+          "language": "en",
+          "isDramatized": false,
+          "creator": "마이클 무어"
+        },
+        {
+          "kind": "MOVIE",
+          "title": "엘리펀트",
+          "platform": "극장 영화",
+          "url": "https://www.imdb.com/title/tt0363589/",
+          "releaseYear": 2003,
+          "language": "en",
+          "isDramatized": true,
+          "creator": "거스 밴 샌트",
+          "note": "사건에서 모티브를 얻은 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "black-dahlia",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "블랙 달리아",
+          "platform": "극장 영화",
+          "url": "https://www.imdb.com/title/tt0387877/",
+          "releaseYear": 2006,
+          "language": "en",
+          "isDramatized": true,
+          "creator": "브라이언 드 팔마",
+          "note": "사건을 바탕으로 한 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "unabomber-bombings",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "Unabomber: In His Own Words",
+          "platform": "Netflix",
+          "url": "https://www.imdb.com/title/tt11833494/",
+          "releaseYear": 2020,
+          "language": "en",
+          "isDramatized": false
+        },
+        {
+          "kind": "SERIES",
+          "title": "맨헌트: 유나바머",
+          "platform": "Discovery",
+          "url": "https://www.imdb.com/title/tt5618256/",
+          "releaseYear": 2017,
+          "language": "en",
+          "isDramatized": true,
+          "note": "사건을 바탕으로 한 극 시리즈"
+        }
+      ]
+    },
+    {
+      "slug": "cleveland-ariel-castro-kidnappings",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "Cleveland Abduction",
+          "platform": "Lifetime TV 영화",
+          "url": "https://www.imdb.com/title/tt4262142/",
+          "releaseYear": 2015,
+          "language": "en",
+          "isDramatized": true,
+          "note": "사건을 바탕으로 한 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "glico-morinaga",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "죄의 목소리 (罪の声)",
+          "platform": "극장 영화",
+          "url": "https://www.imdb.com/title/tt10206818/",
+          "releaseYear": 2020,
+          "language": "ja",
+          "isDramatized": true,
+          "creator": "도이 노부히로",
+          "note": "사건에서 모티브를 얻은 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "moors-murders",
+      "related": [
+        {
+          "kind": "SERIES",
+          "title": "See No Evil: The Moors Murders",
+          "platform": "ITV",
+          "url": "https://www.imdb.com/title/tt0491807/",
+          "releaseYear": 2006,
+          "language": "en",
+          "isDramatized": true,
+          "note": "사건을 바탕으로 한 극 시리즈"
+        }
+      ]
+    },
+    {
+      "slug": "fred-rosemary-west-murders",
+      "related": [
+        {
+          "kind": "SERIES",
+          "title": "어프로프리어트 어덜트 (Appropriate Adult)",
+          "platform": "ITV",
+          "url": "https://www.imdb.com/title/tt1831575/",
+          "releaseYear": 2011,
+          "language": "en",
+          "isDramatized": true,
+          "note": "사건을 바탕으로 한 극 시리즈"
+        }
+      ]
+    },
+    {
+      "slug": "jack-the-ripper",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "프롬 헬",
+          "platform": "극장 영화",
+          "url": "https://www.imdb.com/title/tt0120681/",
+          "releaseYear": 2001,
+          "language": "en",
+          "isDramatized": true,
+          "creator": "휴즈 형제",
+          "note": "사건에서 모티브를 얻은 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "natascha-kampusch-abduction",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "3096일 (3096 Tage)",
+          "platform": "극장 영화",
+          "url": "https://www.imdb.com/title/tt1667355/",
+          "releaseYear": 2013,
+          "language": "de",
+          "isDramatized": true,
+          "creator": "셰리 혼만",
+          "note": "사건을 바탕으로 한 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "olof-palme-assassination",
+      "related": [
+        {
+          "kind": "SERIES",
+          "title": "뜻밖의 살인자",
+          "platform": "Netflix",
+          "url": "https://www.imdb.com/title/tt13735930/",
+          "releaseYear": 2021,
+          "language": "sv",
+          "isDramatized": true,
+          "note": "사건을 바탕으로 한 극 시리즈"
+        }
+      ]
+    },
+    {
+      "slug": "norway-utoya-attacks",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "U - 줄라이 22",
+          "platform": "극장 영화",
+          "url": "https://www.imdb.com/title/tt7959216/",
+          "releaseYear": 2018,
+          "language": "no",
+          "isDramatized": true,
+          "creator": "에릭 포페",
+          "note": "사건을 바탕으로 한 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "port-arthur-massacre",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "니트람 (Nitram)",
+          "platform": "극장 영화",
+          "url": "https://www.imdb.com/title/tt13694628/",
+          "releaseYear": 2021,
+          "language": "en",
+          "isDramatized": true,
+          "creator": "저스틴 커젤",
+          "note": "사건에서 모티브를 얻은 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "azaria-chamberlain-death",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "A Cry in the Dark (Evil Angels)",
+          "platform": "극장 영화",
+          "url": "https://www.imdb.com/title/tt0094924/",
+          "releaseYear": 1988,
+          "language": "en",
+          "isDramatized": true,
+          "creator": "프레드 셰피시",
+          "note": "사건을 바탕으로 한 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "gregory-villemin-case",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "누가 어린 그레고리를 죽였나? (Grégory)",
+          "platform": "Netflix",
+          "url": "https://www.imdb.com/title/tt11269714/",
+          "releaseYear": 2019,
+          "language": "fr",
+          "isDramatized": false
+        }
+      ]
+    },
+    {
+      "slug": "jeffrey-dahmer",
+      "related": [
+        {
+          "kind": "SERIES",
+          "title": "몬스터: 제프리 다머 이야기",
+          "platform": "Netflix",
+          "url": "https://www.imdb.com/title/tt13207736/",
+          "releaseYear": 2022,
+          "language": "en",
+          "isDramatized": true,
+          "note": "사건을 바탕으로 한 극 시리즈"
+        }
+      ]
+    },
+    {
+      "slug": "ted-bundy",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "Extremely Wicked, Shockingly Evil and Vile",
+          "platform": "Netflix",
+          "url": "https://www.imdb.com/title/tt2481498/",
+          "releaseYear": 2019,
+          "language": "en",
+          "isDramatized": true,
+          "creator": "조 벌린저",
+          "note": "사건을 바탕으로 한 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "kitty-genovese-murder",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "The Witness",
+          "platform": "다큐멘터리 영화",
+          "url": "https://www.imdb.com/title/tt3568002/",
+          "releaseYear": 2015,
+          "language": "en",
+          "isDramatized": false,
+          "creator": "제임스 솔로몬"
+        }
+      ]
+    },
+    {
+      "slug": "adam-walsh-murder",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "Adam",
+          "platform": "NBC TV 영화",
+          "url": "https://www.imdb.com/title/tt0085136/",
+          "releaseYear": 1983,
+          "language": "en",
+          "isDramatized": true,
+          "note": "사건을 바탕으로 한 극영화"
+        }
+      ]
+    },
+    {
+      "slug": "elizabeth-smart-kidnapping",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "Elizabeth Smart: Autobiography",
+          "platform": "A&E",
+          "url": "https://www.imdb.com/title/tt7722262/",
+          "releaseYear": 2017,
+          "language": "en",
+          "isDramatized": false
+        }
+      ]
+    }
+  ]
+}
