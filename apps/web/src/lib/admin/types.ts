@@ -175,6 +175,15 @@ export interface Analytics {
     feedback: number;
     blockedAnswers: number;
   };
+  /** 선택 기간에 공개 답변이 많이 모인 수사 노트 질문 */
+  topAnsweredQuestions: {
+    questionId: string;
+    question: string;
+    caseSlug: string;
+    caseTitle: string;
+    answers: number;
+    empathy: number;
+  }[];
 }
 
 export type NewsStatus = "NEW" | "PUBLISHED" | "DISMISSED";

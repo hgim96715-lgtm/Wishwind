@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service.js';
 
 type PathRow = { path: string; views: number; visitors: number };
 
-/** page_views 집계는 날짜 변환·DISTINCT가 필요해 SQL로 씀 (모두 바인딩 파라미터) */
+
 @Injectable()
 export class AnalyticsRepository {
   constructor(private readonly prisma: PrismaService) {}
@@ -127,5 +127,41 @@ export class AnalyticsRepository {
       feedback,
       blockedAnswers,
     }));
+  }
+
+  async topAnsweredQuestions(since: Date) {
+    const grouped = await this.prisma.userAnswer.groupBy({
+      by: ['questionId'],
+      where: {
+        createdAt: { gte: since },
+        status: UserContentStatus.PUBLISHED,
+        question: { case: { isPublished: true } },
+      },
+      _count: true,
+      _sum: { empathyCount: true },
+      orderBy: { _count: { questionId: 'desc' } },
+      take: 20,
+    });
+    if (grouped.length === 0) return [];
+
+    const questions = await this.prisma.unsolvedQuestion.findMany({
+      where: { id: { in: grouped.map((row) => row.questionId) }, case: { isPublished: true } },
+      select: { id: true, question: true, case: { select: { slug: true, title: true } } },
+    });
+    const byId = new Map(questions.map((question) => [question.id, question]));
+
+    return grouped.flatMap((row) => {
+      const question = byId.get(row.questionId);
+      return question
+        ? [{
+            questionId: question.id,
+            question: question.question,
+            caseSlug: question.case.slug,
+            caseTitle: question.case.title,
+            answers: row._count,
+            empathy: row._sum.empathyCount ?? 0,
+          }]
+        : [];
+    });
   }
 }

@@ -42,7 +42,7 @@ export class AnalyticsService {
   async stats(days: number) {
     const since = new Date(Date.now() - days * DAY_MS);
     const todayStart = new Date(`${kstDay()}T00:00:00+09:00`);
-    const [daily, topPaths, topCases, referrers, rooms, today, participation, firstVisits, singlePageVisitors, hourlyRows] = await Promise.all([
+    const [daily, topPaths, topCases, referrers, rooms, today, participation, topAnsweredQuestions, firstVisits, singlePageVisitors, hourlyRows] = await Promise.all([
       this.repo.daily(since),
       this.repo.topPaths(since),
       this.repo.topCases(since),
@@ -50,6 +50,7 @@ export class AnalyticsService {
       this.repo.rooms(since),
       this.repo.since(todayStart),
       this.repo.participation(since),
+      this.repo.topAnsweredQuestions(since),
       this.repo.firstVisits(since),
       this.repo.singlePageVisitors(since),
       this.repo.hourly(since),
@@ -95,6 +96,7 @@ export class AnalyticsService {
       referrers,
       rooms,
       participation,
+      topAnsweredQuestions,
     };
   }
 

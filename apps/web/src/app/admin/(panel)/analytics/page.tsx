@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
+import Link from "next/link";
 import { Suspense } from "react";
 import { setDeviceExcluded } from "@/app/admin/actions";
+import { AnalyticsTabs } from "@/components/admin/AnalyticsTabs";
 import { Card, ErrorBox, FilterTabs, PageTitle, Skeleton } from "@/components/admin/ui";
 import { AdminApiError, NO_ANALYTICS_COOKIE, adminGet } from "@/lib/admin/session";
 import type { Analytics } from "@/lib/admin/types";
@@ -26,6 +28,7 @@ export default function AnalyticsPage({ searchParams }: { searchParams: Promise<
       <Suspense fallback={null}>
         <ThisDevice />
       </Suspense>
+      <AnalyticsTabs current="traffic" />
       <Suspense fallback={<Skeleton />}>
         {searchParams.then((sp) => {
           const days = ["7", "90"].includes(String(sp.days)) ? Number(sp.days) : 30;
@@ -66,11 +69,13 @@ async function ThisDevice() {
   );
 }
 
-function Number_({ label, value, hint }: { label: string; value: number; hint?: string }) {
+function Number_({ label, value, hint }: { label: string; value: number | string; hint?: string }) {
   return (
     <div className="rounded-lg border border-line bg-surface p-4">
       <p className="text-xs text-muted">{label}</p>
-      <p className="mt-1 text-2xl font-semibold tabular-nums">{value.toLocaleString("ko-KR")}</p>
+      <p className="mt-1 text-2xl font-semibold tabular-nums">
+        {typeof value === "number" ? value.toLocaleString("ko-KR") : value}
+      </p>
       {hint && <p className="mt-1 text-xs text-subtle">{hint}</p>}
     </div>
   );
@@ -100,49 +105,151 @@ function Bars({ rows, unit = "번" }: { rows: { label: string; value: number; su
   );
 }
 
+function shortDay(day: string) {
+  const [, month = "", date = ""] = day.split("-");
+  return `${Number(month)}.${Number(date)}`;
+}
+
+function dayRange(first: string, last: string) {
+  if (first === last) return shortDay(first);
+  const [, firstMonth = "", firstDate = ""] = first.split("-");
+  const [, lastMonth = "", lastDate = ""] = last.split("-");
+  return firstMonth === lastMonth
+    ? `${Number(firstMonth)}.${Number(firstDate)}–${Number(lastDate)}`
+    : `${shortDay(first)}–${shortDay(last)}`;
+}
+
+/** 긴 조회 기간도 막대가 너무 가늘어지지 않도록 30일은 3일, 90일은 7일 단위로 묶음 */
+function groupDaily(daily: Analytics["daily"]) {
+  const chunkSize = daily.length <= 14 ? 1 : daily.length <= 31 ? 3 : 7;
+  const groups: { key: string; label: string; views: number; visitors: number; title: string }[] = [];
+
+  for (let i = 0; i < daily.length; i += chunkSize) {
+    const rows = daily.slice(i, i + chunkSize);
+    const first = rows[0];
+    const last = rows.at(-1);
+    if (!first || !last) continue;
+    const label = dayRange(first.day, last.day);
+    const views = rows.reduce((sum, row) => sum + row.views, 0);
+    const visitors = rows.reduce((sum, row) => sum + row.visitors, 0);
+    groups.push({
+      key: `${first.day}-${last.day}`,
+      label,
+      views,
+      visitors,
+      title: `${label} · 방문자 ${visitors}명 · 조회 ${views}번`,
+    });
+  }
+
+  return groups;
+}
+
 function DailyChart({ daily }: { daily: Analytics["daily"] }) {
-  const max = Math.max(1, ...daily.map((d) => d.views));
+  const groups = groupDaily(daily);
+  const max = Math.max(1, ...groups.map((d) => d.views));
+  const activeDays = daily.filter((d) => d.views > 0).length;
+  const peak = daily.reduce<(typeof daily)[number] | null>((best, row) => (!best || row.views > best.views ? row : best), null);
+  const middleLabelIndex = Math.floor((groups.length - 1) / 2);
+
   return (
-    <div>
-      <div className="flex h-40 items-end gap-px" role="img" aria-label="일별 방문자와 조회수 막대 그래프">
-        {daily.map((d) => (
-          <div key={d.day} className="flex h-full flex-1 flex-col justify-end" title={`${d.day} · 방문자 ${d.visitors} · 조회 ${d.views}`}>
-            <div className="flex flex-col justify-end rounded-t-sm bg-[#4f78a8]/25" style={{ height: `${(d.views / max) * 100}%` }}>
-              <div className="rounded-t-sm bg-[#4f78a8]" style={{ height: `${d.views ? (d.visitors / d.views) * 100 : 0}%` }} />
+    <div aria-label="기간별 방문자와 조회수 막대 그래프">
+      <div className="mb-5 flex flex-wrap gap-x-6 gap-y-2 rounded-lg bg-background/60 px-4 py-3 text-sm">
+        <p>
+          <span className="text-subtle">방문이 있었던 날</span>{" "}
+          <strong className="ml-1 tabular-nums">{activeDays}일</strong>
+        </p>
+        <p>
+          <span className="text-subtle">조회가 가장 많았던 날</span>{" "}
+          <strong className="ml-1 tabular-nums">
+            {peak && peak.views > 0 ? `${shortDay(peak.day)} · ${peak.views.toLocaleString("ko-KR")}번` : "아직 없음"}
+          </strong>
+        </p>
+      </div>
+
+      <div className="flex gap-2" role="img" aria-label="기간별 방문자와 조회수 막대 그래프">
+        <div className="relative h-48 w-8 shrink-0 text-[11px] tabular-nums text-subtle" aria-hidden>
+          <span className="absolute top-0 right-0 -translate-y-1/2">{max.toLocaleString("ko-KR")}</span>
+          <span className="absolute top-1/2 right-0 -translate-y-1/2">{Math.round(max / 2).toLocaleString("ko-KR")}</span>
+          <span className="absolute right-0 bottom-0 translate-y-1/2">0</span>
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="relative h-48">
+            <div className="pointer-events-none absolute inset-0 flex flex-col justify-between" aria-hidden>
+              <span className="border-t border-line/80" />
+              <span className="border-t border-dashed border-line/70" />
+              <span className="border-t border-line/80" />
+            </div>
+            <div className="relative flex h-full items-end gap-1 sm:gap-2">
+              {groups.map((d) => (
+                <div key={d.key} className="group flex h-full min-w-0 flex-1 items-end justify-center gap-px" title={d.title}>
+                  <div
+                    className="w-[42%] max-w-6 rounded-t-[3px] bg-[#2f7469] transition-opacity group-hover:opacity-75"
+                    style={{ height: `${(d.visitors / max) * 100}%`, minHeight: d.visitors ? 3 : 0 }}
+                  />
+                  <div
+                    className="w-[42%] max-w-6 rounded-t-[3px] bg-[#c46a4b] transition-opacity group-hover:opacity-75"
+                    style={{ height: `${(d.views / max) * 100}%`, minHeight: d.views ? 3 : 0 }}
+                  />
+                </div>
+              ))}
             </div>
           </div>
-        ))}
+          {groups.length <= 7 ? (
+            <div className="mt-2 grid text-[11px] tabular-nums text-subtle" style={{ gridTemplateColumns: `repeat(${Math.max(1, groups.length)}, minmax(0, 1fr))` }}>
+              {groups.map((d) => <span key={d.key} className="text-center">{d.label}</span>)}
+            </div>
+          ) : (
+            <div className="mt-2 flex justify-between text-[11px] tabular-nums text-subtle">
+              <span>{groups[0]?.label}</span>
+              <span>{groups[middleLabelIndex]?.label}</span>
+              <span>{groups.at(-1)?.label}</span>
+            </div>
+          )}
+        </div>
       </div>
-      <div className="mt-2 flex justify-between text-[11px] text-subtle">
-        <span>{daily[0]?.day}</span>
-        <span>{daily.at(-1)?.day}</span>
-      </div>
-      <p className="mt-2 flex gap-4 text-xs text-muted">
-        <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-[#4f78a8]" /> 방문자</span>
-        <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-[#4f78a8]/25" /> 조회수</span>
+      <p className="mt-4 flex flex-wrap gap-4 pl-10 text-xs text-muted">
+        <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-[#2f7469]" /> 방문자</span>
+        <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-[#c46a4b]" /> 페이지 조회</span>
+        {daily.length > 14 && <span className="text-subtle">막대 하나는 {daily.length <= 31 ? "3일" : "7일"} 합계</span>}
       </p>
+      <dl className="sr-only">
+        {groups.map((d) => <div key={d.key}><dt>{d.label}</dt><dd>방문자 {d.visitors}명, 조회 {d.views}번</dd></div>)}
+      </dl>
     </div>
   );
 }
 
-/** 한국 시간 시각별 조회수 막대 (방문이 많은 시간에 게시물을 올리면 더 많이 보임) */
+/** 24개의 가는 막대 대신 3시간 단위로 묶어 값과 차이를 함께 읽을 수 있게 표시 */
 function HourlyChart({ hourly }: { hourly: Analytics["hourly"] }) {
-  const max = Math.max(1, ...hourly.map((h) => h.views));
+  const groups = Array.from({ length: 8 }, (_, index) => {
+    const start = index * 3;
+    return {
+      label: `${start}–${start + 2}시`,
+      views: hourly.filter((h) => h.hour >= start && h.hour < start + 3).reduce((sum, h) => sum + h.views, 0),
+    };
+  });
+  const max = Math.max(1, ...groups.map((h) => h.views));
+  const peak = groups.reduce((best, group) => (group.views > best.views ? group : best), groups[0]);
+
   return (
     <div>
-      <div className="flex h-28 items-end gap-0.5" role="img" aria-label="시간대별 조회수 막대 그래프">
-        {hourly.map((h) => (
-          <div key={h.hour} className="flex h-full flex-1 flex-col justify-end" title={`${h.hour}시 · 조회 ${h.views}번`}>
-            <div className="rounded-t-sm bg-[#2f7469]" style={{ height: `${(h.views / max) * 100}%`, minHeight: h.views ? 2 : 0 }} />
+      <p className="mb-4 rounded-lg bg-background/60 px-4 py-3 text-sm">
+        <span className="text-subtle">가장 많이 보는 시간</span>{" "}
+        <strong className="ml-1 tabular-nums">{peak.views > 0 ? `${peak.label} · ${peak.views.toLocaleString("ko-KR")}번` : "아직 없음"}</strong>
+      </p>
+      <div className="grid gap-x-6 gap-y-3 sm:grid-cols-2" role="img" aria-label="3시간대별 조회수 막대 그래프">
+        {groups.map((h) => (
+          <div key={h.label} className="grid grid-cols-[3.5rem_minmax(0,1fr)_2.5rem] items-center gap-2 text-sm" title={`${h.label} · 조회 ${h.views}번`}>
+            <span className="text-xs tabular-nums text-muted">{h.label}</span>
+            <div className="h-2.5 overflow-hidden rounded-full bg-line/60">
+              <div
+                className={`h-full rounded-full ${h === peak && h.views > 0 ? "bg-[#c46a4b]" : "bg-[#2f7469]"}`}
+                style={{ width: `${(h.views / max) * 100}%`, minWidth: h.views ? 3 : 0 }}
+              />
+            </div>
+            <strong className="text-right text-xs tabular-nums">{h.views.toLocaleString("ko-KR")}</strong>
           </div>
         ))}
-      </div>
-      <div className="mt-1 flex justify-between text-[11px] text-subtle">
-        <span>0시</span>
-        <span>6시</span>
-        <span>12시</span>
-        <span>18시</span>
-        <span>23시</span>
       </div>
     </div>
   );
@@ -187,52 +294,101 @@ async function Report({ days }: { days: number }) {
   }
   const p = a.participation;
   const sourceTotal = Object.values(a.sources).reduce((n, v) => n + v, 0);
+  const recentViews = a.daily.slice(-7).reduce((sum, row) => sum + row.views, 0);
+  const previousViews = a.daily.slice(-14, -7).reduce((sum, row) => sum + row.views, 0);
+  const trend = previousViews > 0 ? Math.round(((recentViews - previousViews) / previousViews) * 100) : null;
+  const discoveryVisitors = a.sources.search + a.sources.sns + a.sources.other;
+  const directShare = sourceTotal > 0 ? Math.round((a.sources.direct / sourceTotal) * 100) : 0;
+  const participationTotal = p.answers + p.questions + p.votes + p.clouds + p.inquiries + p.feedback;
+
   return (
     <div className="space-y-6">
-      {a.tips.length > 0 && (
-        <Card>
-          <h2 className="mb-1 text-sm font-semibold">해 볼 일</h2>
-          <p className="mb-3 text-xs text-subtle">아래 숫자를 보고 방문자를 늘리는 데 도움이 될 만한 일을 골랐습니다.</p>
-          <ul className="list-disc space-y-2 pl-5 text-sm leading-6">
-            {a.tips.map((t) => (
-              <li key={t}>{t}</li>
-            ))}
-          </ul>
-        </Card>
-      )}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Number_ label="오늘 방문자 (명)" value={a.today.visitors} hint={`오늘 페이지를 연 횟수 ${a.today.views}번`} />
         <Number_ label={`${days}일 페이지 조회 (번)`} value={a.totals.views} hint="페이지를 연 횟수 합계" />
         <Number_ label={`${days}일 방문자 (명)`} value={a.totals.visitorDays} hint="같은 사람도 다른 날 오면 따로 셉니다" />
         <Number_
           label="하루 평균 방문자 (명)"
-          value={Math.round(a.totals.visitorDays / Math.max(1, days))}
+          value={(a.totals.visitorDays / Math.max(1, days)).toLocaleString("ko-KR", { maximumFractionDigits: 1 })}
+          hint="선택한 기간의 일평균"
         />
       </div>
+      <Card>
+        <div className="mb-4">
+          <h2 className="text-sm font-semibold">분석 요약</h2>
+          <p className="mt-1 text-xs text-subtle">단순 합계보다 지금 바뀌고 있는 부분을 먼저 보여 줍니다.</p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <div className="rounded-lg border border-line/80 bg-background/50 p-4">
+            <p className="text-xs text-subtle">최근 7일 조회 흐름</p>
+            <p className="mt-1 text-xl font-semibold tabular-nums">
+              {days >= 14
+                ? trend === null
+                  ? recentViews > 0 ? "새 방문 발생" : "변화 없음"
+                  : `${trend > 0 ? "+" : ""}${trend}%`
+                : `${recentViews.toLocaleString("ko-KR")}번`}
+            </p>
+            <p className="mt-1 text-xs leading-5 text-muted">
+              {days >= 14
+                ? `이전 7일 ${previousViews.toLocaleString("ko-KR")}번 → 최근 ${recentViews.toLocaleString("ko-KR")}번`
+                : "조회 기간 전체의 페이지 조회"}
+            </p>
+          </div>
+          <div className="rounded-lg border border-line/80 bg-background/50 p-4">
+            <p className="text-xs text-subtle">새로운 사람을 만난 경로</p>
+            <p className="mt-1 text-xl font-semibold tabular-nums">{discoveryVisitors.toLocaleString("ko-KR")}명</p>
+            <p className="mt-1 text-xs leading-5 text-muted">
+              검색·SNS·외부 사이트 유입 합계 · 직접 유입 {directShare}%
+            </p>
+          </div>
+          <Link href={`/admin/analytics/engagement?days=${days}`} className="rounded-lg border border-line/80 bg-background/50 p-4 transition-colors hover:border-foreground/30">
+            <p className="text-xs text-subtle">사이트 안에서 한 참여</p>
+            <p className="mt-1 text-xl font-semibold tabular-nums">{participationTotal.toLocaleString("ko-KR")}건</p>
+            <p className="mt-1 text-xs leading-5 text-muted">형량 의견·수사 노트·실종방 응원·문의·의견 합계</p>
+          </Link>
+        </div>
+      </Card>
       <Card>
         <h2 className="mb-4 text-sm font-semibold">일별 방문</h2>
         <DailyChart daily={a.daily} />
       </Card>
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
-          <h2 className="mb-1 text-sm font-semibold">어떻게 들어왔나요</h2>
-          <p className="mb-4 text-xs text-subtle">방문자가 처음 들어온 길입니다. 검색이 늘어야 모르는 사람도 찾아옵니다.</p>
-          {sourceTotal ? (
-            <Bars
-              unit="명"
-              rows={(Object.keys(SOURCE_LABEL) as (keyof Analytics["sources"])[]).map((k) => ({
-                label: SOURCE_LABEL[k],
-                value: a.sources[k],
-                sub: `${Math.round((a.sources[k] / sourceTotal) * 100)}%`,
-              }))}
-            />
-          ) : (
-            <p className="text-sm text-subtle">아직 기록이 없습니다.</p>
-          )}
-          <p className="mt-3 text-xs text-subtle">
-            한 페이지만 보고 나간 방문자 {a.singlePageVisitors.toLocaleString("ko-KR")}명
-            {sourceTotal > 0 && ` (${Math.round((a.singlePageVisitors / sourceTotal) * 100)}%)`}
+        <Card className="lg:col-span-2">
+          <h2 className="mb-1 text-sm font-semibold">유입 분석</h2>
+          <p className="mb-5 text-xs leading-5 text-subtle">
+            유입 유형은 방문자가 처음 들어온 방식이고, 참조 도메인은 모든 페이지 조회에서 확인된 이전 사이트입니다. 기준이 달라 숫자는 서로 같지 않을 수 있습니다.
           </p>
+          <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
+            <div>
+              <h3 className="mb-1 text-xs font-semibold text-muted">처음 들어온 방식 · 방문자 기준</h3>
+              <p className="mb-4 text-xs text-subtle">검색과 SNS가 늘수록 처음 보는 사람이 발견할 가능성이 커집니다.</p>
+              {sourceTotal ? (
+                <Bars
+                  unit="명"
+                  rows={(Object.keys(SOURCE_LABEL) as (keyof Analytics["sources"])[]).map((k) => ({
+                    label: SOURCE_LABEL[k],
+                    value: a.sources[k],
+                    sub: `${Math.round((a.sources[k] / sourceTotal) * 100)}%`,
+                  }))}
+                />
+              ) : (
+                <p className="text-sm text-subtle">아직 기록이 없습니다.</p>
+              )}
+              <p className="mt-4 rounded-md bg-background/60 px-3 py-2 text-xs text-muted">
+                한 페이지만 보고 나간 방문자 {a.singlePageVisitors.toLocaleString("ko-KR")}명
+                {sourceTotal > 0 && ` · ${Math.round((a.singlePageVisitors / sourceTotal) * 100)}%`}
+              </p>
+            </div>
+            <div className="border-t border-line pt-5 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8">
+              <h3 className="mb-1 text-xs font-semibold text-muted">참조 도메인 · 페이지 조회 기준</h3>
+              <p className="mb-4 text-xs text-subtle">링크를 누르기 직전에 머물던 외부 사이트입니다. 로그인 경유 주소도 포함될 수 있습니다.</p>
+              {a.referrers.length ? (
+                <Bars rows={a.referrers.map((r) => ({ label: r.host, value: r.views }))} />
+              ) : (
+                <p className="text-sm text-subtle">외부 사이트에서 들어온 기록이 아직 없습니다.</p>
+              )}
+            </div>
+          </div>
         </Card>
         <Card>
           <h2 className="mb-1 text-sm font-semibold">처음 연 페이지</h2>
@@ -273,21 +429,22 @@ async function Report({ days }: { days: number }) {
             <p className="text-sm text-subtle">아직 기록이 없습니다.</p>
           )}
         </Card>
-        <Card>
-          <h2 className="mb-4 text-sm font-semibold">참여 ({days}일)</h2>
-          <Bars
-            unit="건"
-            rows={[
-              { label: "형량 의견", value: p.votes },
-              { label: "수사 노트 답변", value: p.answers },
-              { label: "사용자 질문", value: p.questions },
-              { label: "실종방 응원", value: p.clouds },
-              { label: "문의", value: p.inquiries },
-              { label: "의견", value: p.feedback },
-            ]}
-          />
-          <p className="mt-3 text-xs text-subtle">차단·숨김된 답변 {p.blockedAnswers}개</p>
-        </Card>
+        {a.tips.length > 0 && (
+          <Card className="lg:col-span-2">
+            <h2 className="mb-1 text-sm font-semibold">다음 행동</h2>
+            <p className="mb-3 text-xs text-subtle">현재 숫자에서 바로 실행할 수 있는 일을 우선순위로 정리했습니다.</p>
+            <ol className="grid gap-3 sm:grid-cols-2">
+              {a.tips.map((tip, index) => (
+                <li key={tip} className="flex gap-3 rounded-lg border border-line/80 bg-background/50 p-3 text-sm leading-6">
+                  <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-foreground text-xs font-semibold text-surface">
+                    {index + 1}
+                  </span>
+                  <span>{tip}</span>
+                </li>
+              ))}
+            </ol>
+          </Card>
+        )}
         <Card>
           <h2 className="mb-1 text-sm font-semibold">많이 본 페이지</h2>
           <p className="mb-4 text-xs text-subtle">연 횟수 · 연 사람 수</p>
@@ -311,14 +468,6 @@ async function Report({ days }: { days: number }) {
             />
           ) : (
             <p className="text-sm text-subtle">아직 기록이 없습니다.</p>
-          )}
-        </Card>
-        <Card>
-          <h2 className="mb-4 text-sm font-semibold">어디서 왔나요</h2>
-          {a.referrers.length ? (
-            <Bars rows={a.referrers.map((r) => ({ label: r.host, value: r.views }))} />
-          ) : (
-            <p className="text-sm text-subtle">다른 사이트에서 들어온 기록이 아직 없습니다.</p>
           )}
         </Card>
       </div>
