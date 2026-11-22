@@ -55,6 +55,35 @@ export class AnalyticsRepository {
       LIMIT 10`;
   }
 
+  /** 방문자(하루 단위)마다 처음 연 페이지와 들어온 곳 */
+  firstVisits(since: Date) {
+    return this.prisma.$queryRaw<{ path: string; host: string | null }[]>`
+      SELECT DISTINCT ON (visitor_hash) path, referrer_host AS host
+      FROM page_views
+      WHERE created_at >= ${since}
+      ORDER BY visitor_hash, created_at`;
+  }
+
+  /** 한 페이지만 보고 나간 방문자 수 */
+  async singlePageVisitors(since: Date) {
+    const rows = await this.prisma.$queryRaw<{ n: number }[]>`
+      SELECT count(*)::int AS n FROM (
+        SELECT visitor_hash FROM page_views WHERE created_at >= ${since}
+        GROUP BY visitor_hash HAVING count(*) = 1
+      ) t`;
+    return rows[0]?.n ?? 0;
+  }
+
+  /** 한국 시간 시각(0~23시)별 조회수 */
+  hourly(since: Date) {
+    return this.prisma.$queryRaw<{ hour: number; views: number }[]>`
+      SELECT extract(hour FROM created_at AT TIME ZONE 'Asia/Seoul')::int AS hour, count(*)::int AS views
+      FROM page_views
+      WHERE created_at >= ${since}
+      GROUP BY 1
+      ORDER BY 1`;
+  }
+
   rooms(since: Date) {
     return this.prisma.$queryRaw<{ room: string; views: number }[]>`
       SELECT coalesce(nullif(split_part(path, '/', 2), ''), 'home') AS room, count(*)::int AS views

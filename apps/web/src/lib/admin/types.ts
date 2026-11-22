@@ -18,6 +18,8 @@ export interface Overview {
   moderation: { held: number; reported: number; blockedVoters: number };
   inquiries: { open: number; newFeedback: number };
   briefing: { drafts: number; newNews: number };
+  /** 자동 작업 안내: 언제·무엇을 하는지, 마지막으로 한 때 */
+  jobs: { key: string; name: string; schedule: string; description: string; lastAt: string | null; enabled: boolean }[];
 }
 
 export interface AdminCaseRow {
@@ -153,6 +155,15 @@ export interface Analytics {
   topCases: { path: string; label: string; views: number; visitors: number }[];
   referrers: { host: string; views: number }[];
   rooms: { room: string; views: number }[];
+  /** 방문자(하루 단위)가 처음 들어온 곳 */
+  sources: { search: number; sns: number; direct: number; other: number };
+  /** 처음 연 페이지 */
+  landing: { path: string; label: string; visitors: number }[];
+  /** 한국 시간 시각별 조회수 (0~23시) */
+  hourly: { hour: number; views: number }[];
+  singlePageVisitors: number;
+  /** 숫자를 보고 만든 할 일 제안 */
+  tips: string[];
   participation: {
     answers: number;
     questions: number;

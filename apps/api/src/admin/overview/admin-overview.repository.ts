@@ -58,6 +58,23 @@ export class AdminOverviewRepository {
     ]).then(([open, newFeedback]) => ({ open, newFeedback }));
   }
 
+  /** 자동 작업이 마지막으로 남긴 흔적의 시각 (새벽 사건 수집·뉴스 수집·실종자 정보 동기화) */
+  lastJobRuns() {
+    return Promise.all([
+      this.prisma.case.findFirst({
+        where: { reviewNote: { startsWith: AUTO_IMPORT_NOTE } },
+        orderBy: { createdAt: 'desc' },
+        select: { createdAt: true },
+      }),
+      this.prisma.newsItem.findFirst({ orderBy: { createdAt: 'desc' }, select: { createdAt: true } }),
+      this.prisma.missingPerson.findFirst({ orderBy: { lastSyncedAt: 'desc' }, select: { lastSyncedAt: true } }),
+    ]).then(([nightly, news, missing]) => ({
+      nightly: nightly?.createdAt ?? null,
+      news: news?.createdAt ?? null,
+      missing: missing?.lastSyncedAt ?? null,
+    }));
+  }
+
   briefingCounts() {
     return Promise.all([
       this.prisma.briefingPost.count({ where: { status: BriefingStatus.DRAFT } }),

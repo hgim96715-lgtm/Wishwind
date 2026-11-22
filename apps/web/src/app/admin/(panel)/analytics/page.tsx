@@ -100,6 +100,50 @@ function DailyChart({ daily }: { daily: Analytics["daily"] }) {
   );
 }
 
+/** 한국 시간 시각별 조회수 막대 (방문이 많은 시간에 게시물을 올리면 더 많이 보임) */
+function HourlyChart({ hourly }: { hourly: Analytics["hourly"] }) {
+  const max = Math.max(1, ...hourly.map((h) => h.views));
+  return (
+    <div>
+      <div className="flex h-28 items-end gap-0.5" role="img" aria-label="시간대별 조회수 막대 그래프">
+        {hourly.map((h) => (
+          <div key={h.hour} className="flex h-full flex-1 flex-col justify-end" title={`${h.hour}시 · 조회 ${h.views}번`}>
+            <div className="rounded-t-sm bg-[#2f7469]" style={{ height: `${(h.views / max) * 100}%`, minHeight: h.views ? 2 : 0 }} />
+          </div>
+        ))}
+      </div>
+      <div className="mt-1 flex justify-between text-[11px] text-subtle">
+        <span>0시</span>
+        <span>6시</span>
+        <span>12시</span>
+        <span>18시</span>
+        <span>23시</span>
+      </div>
+    </div>
+  );
+}
+
+const SOURCE_LABEL: Record<keyof Analytics["sources"], string> = {
+  search: "검색 (구글·네이버 등)",
+  sns: "SNS (인스타그램 등)",
+  direct: "직접 들어옴 (주소 입력·즐겨찾기·메신저 링크)",
+  other: "다른 사이트의 링크",
+};
+
+/** 검색 등록 관리 사이트 (사이트 주소가 등록된 계정으로 로그인해야 열림) */
+const SEARCH_CONSOLES = [
+  {
+    name: "구글 서치 콘솔",
+    href: "https://search.google.com/search-console?resource_id=https%3A%2F%2Fwishwind.vercel.app%2F",
+    hint: "색인 현황, 검색어, 'URL 검사'로 색인 생성 요청",
+  },
+  {
+    name: "네이버 서치어드바이저",
+    href: "https://searchadvisor.naver.com/console/board",
+    hint: "사이트맵 제출, '웹 페이지 수집' 요청, 검색 노출 현황",
+  },
+];
+
 function safeDecode(path: string) {
   try {
     return decodeURI(path);
@@ -117,8 +161,20 @@ async function Report({ days }: { days: number }) {
     throw error;
   }
   const p = a.participation;
+  const sourceTotal = Object.values(a.sources).reduce((n, v) => n + v, 0);
   return (
     <div className="space-y-6">
+      {a.tips.length > 0 && (
+        <Card>
+          <h2 className="mb-1 text-sm font-semibold">해 볼 일</h2>
+          <p className="mb-3 text-xs text-subtle">아래 숫자를 보고 방문자를 늘리는 데 도움이 될 만한 일을 골랐습니다.</p>
+          <ul className="list-disc space-y-2 pl-5 text-sm leading-6">
+            {a.tips.map((t) => (
+              <li key={t}>{t}</li>
+            ))}
+          </ul>
+        </Card>
+      )}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Number_ label="오늘 방문자 (명)" value={a.today.visitors} hint={`오늘 페이지를 연 횟수 ${a.today.views}번`} />
         <Number_ label={`${days}일 페이지 조회 (번)`} value={a.totals.views} hint="페이지를 연 횟수 합계" />
@@ -133,6 +189,54 @@ async function Report({ days }: { days: number }) {
         <DailyChart daily={a.daily} />
       </Card>
       <div className="grid gap-6 lg:grid-cols-2">
+        <Card>
+          <h2 className="mb-1 text-sm font-semibold">어떻게 들어왔나요</h2>
+          <p className="mb-4 text-xs text-subtle">방문자가 처음 들어온 길입니다. 검색이 늘어야 모르는 사람도 찾아옵니다.</p>
+          {sourceTotal ? (
+            <Bars
+              unit="명"
+              rows={(Object.keys(SOURCE_LABEL) as (keyof Analytics["sources"])[]).map((k) => ({
+                label: SOURCE_LABEL[k],
+                value: a.sources[k],
+                sub: `${Math.round((a.sources[k] / sourceTotal) * 100)}%`,
+              }))}
+            />
+          ) : (
+            <p className="text-sm text-subtle">아직 기록이 없습니다.</p>
+          )}
+          <p className="mt-3 text-xs text-subtle">
+            한 페이지만 보고 나간 방문자 {a.singlePageVisitors.toLocaleString("ko-KR")}명
+            {sourceTotal > 0 && ` (${Math.round((a.singlePageVisitors / sourceTotal) * 100)}%)`}
+          </p>
+        </Card>
+        <Card>
+          <h2 className="mb-1 text-sm font-semibold">처음 연 페이지</h2>
+          <p className="mb-4 text-xs text-subtle">사람들이 가장 먼저 만나는 곳입니다. 여기서 다른 방으로 이어지게 하면 더 오래 머뭅니다.</p>
+          {a.landing.length ? (
+            <Bars unit="명" rows={a.landing.map((r) => ({ label: r.label, value: r.visitors, title: safeDecode(r.path) }))} />
+          ) : (
+            <p className="text-sm text-subtle">아직 기록이 없습니다.</p>
+          )}
+        </Card>
+        <Card>
+          <h2 className="mb-1 text-sm font-semibold">시간대별 방문</h2>
+          <p className="mb-4 text-xs text-subtle">한국 시간 기준 페이지 조회입니다. 인스타그램 게시는 많이 오는 시간 조금 전에 올려 보세요.</p>
+          <HourlyChart hourly={a.hourly} />
+        </Card>
+        <Card>
+          <h2 className="mb-1 text-sm font-semibold">검색 등록 관리</h2>
+          <p className="mb-3 text-xs text-subtle">검색에 잘 나오려면 이곳에서 색인·수집을 요청하고 결과를 확인합니다.</p>
+          <ul className="space-y-3 text-sm">
+            {SEARCH_CONSOLES.map((c) => (
+              <li key={c.name}>
+                <a href={c.href} target="_blank" rel="noreferrer noopener" className="font-medium text-[#2f7469] transition-opacity hover:opacity-70">
+                  {c.name}
+                </a>
+                <p className="text-xs text-subtle">{c.hint}</p>
+              </li>
+            ))}
+          </ul>
+        </Card>
         <Card>
           <h2 className="mb-4 text-sm font-semibold">방별 조회수</h2>
           {a.rooms.length ? (

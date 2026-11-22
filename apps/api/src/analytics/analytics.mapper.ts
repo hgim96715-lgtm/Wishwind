@@ -59,3 +59,48 @@ export function pathLabel(path: string, caseTitles: Map<string, string>) {
   const base = room ? PAGE_LABEL[`/${room}`] : undefined;
   return base ? `${base} · ${decodeSafe(path.slice(room.length + 2))}` : decodeSafe(path);
 }
+
+export type TrafficSource = 'search' | 'sns' | 'direct' | 'other';
+
+/** 들어온 곳 분류: 검색(구글·네이버 등), SNS(인스타 등), 직접(주소 입력·북마크·앱 안 링크), 그 밖의 사이트 */
+export function sourceOf(host: string | null): TrafficSource {
+  if (!host) return 'direct';
+  if (/(^|\.)(google|naver|daum|bing|yahoo|duckduckgo|zum|nate|yandex|baidu)\./i.test(host)) return 'search';
+  if (/(^|\.)(instagram|facebook|threads|x|twitter|t|kakao|youtube|tiktok|band|reddit|l\.instagram)\./i.test(host) || host === 't.co') {
+    return 'sns';
+  }
+  return 'other';
+}
+
+/** 숫자를 보고 할 일을 짧게 제안함 (관리실 '해 볼 일') */
+export function growthTips(a: {
+  days: number;
+  visitorDays: number;
+  sources: Record<TrafficSource, number>;
+  singlePageVisitors: number;
+  topCase?: string;
+  topLanding?: string;
+  peakHour?: number;
+}) {
+  const tips: string[] = [];
+  const total = Object.values(a.sources).reduce((n, v) => n + v, 0);
+  const pct = (v: number) => (total ? Math.round((v / total) * 100) : 0);
+  if (a.visitorDays < a.days * 5) {
+    tips.push(`최근 ${a.days}일 방문자가 하루 평균 ${(a.visitorDays / a.days).toFixed(1)}명입니다. 처음에는 검색보다 공유로 사람이 옵니다. 인스타그램에 사건 카드나 실종자 카드를 꾸준히 올려 보세요.`);
+  }
+  if (total > 0 && pct(a.sources.search) < 20) {
+    tips.push(`검색으로 들어온 방문이 ${pct(a.sources.search)}%입니다. 구글 서치 콘솔과 네이버 서치어드바이저에서 주요 페이지의 색인·수집을 요청해 보세요.`);
+  }
+  if (total > 0 && a.sources.sns === 0) {
+    tips.push('인스타그램 등 SNS에서 들어온 방문이 아직 없습니다. 인스타그램 프로필 링크와 게시물 글에 사이트 주소를 넣어 보세요.');
+  }
+  if (total >= 5 && a.singlePageVisitors / total > 0.6) {
+    tips.push(`방문자의 ${Math.round((a.singlePageVisitors / total) * 100)}%가 한 페이지만 보고 나갔습니다.${a.topLanding ? ` 가장 많이 들어오는 ‘${a.topLanding}’에서` : ''} 다른 사건이나 실종방으로 이어지는 길을 더 눈에 띄게 만들어 보세요.`);
+  }
+  if (a.topCase) tips.push(`가장 많이 본 사건은 ‘${a.topCase}’입니다. 이 사건을 인스타그램에 소개하거나 관련 영화·다큐를 더 붙여 보세요.`);
+  if (a.peakHour !== undefined) {
+    const h = a.peakHour;
+    tips.push(`방문이 가장 많은 시간은 ${h < 12 ? '오전' : '오후'} ${h % 12 === 0 ? 12 : h % 12}시대입니다. 새 게시물은 이 시간 조금 전에 올리면 더 많이 보입니다.`);
+  }
+  return tips;
+}

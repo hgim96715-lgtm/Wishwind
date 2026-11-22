@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { processSalt } from '../admin/auth/admin-auth.js';
 import type { Env } from '../config/env.js';
 import type { PageViewInput } from './dto/analytics.dto.js';
-import { caseSlugOf, fillDays, kstDay, pathLabel, referrerHost } from './analytics.mapper.js';
+import { caseSlugOf, fillDays, growthTips, kstDay, pathLabel, referrerHost, sourceOf, type TrafficSource } from './analytics.mapper.js';
 import { AnalyticsRepository } from './analytics.repository.js';
 
 const BOT = /bot|crawl|spider|slurp|headless|preview|lighthouse|monitor|curl|wget|python|axios|node-fetch/i;
@@ -42,7 +42,7 @@ export class AnalyticsService {
   async stats(days: number) {
     const since = new Date(Date.now() - days * DAY_MS);
     const todayStart = new Date(`${kstDay()}T00:00:00+09:00`);
-    const [daily, topPaths, topCases, referrers, rooms, today, participation] = await Promise.all([
+    const [daily, topPaths, topCases, referrers, rooms, today, participation, firstVisits, singlePageVisitors, hourlyRows] = await Promise.all([
       this.repo.daily(since),
       this.repo.topPaths(since),
       this.repo.topCases(since),
@@ -50,16 +50,46 @@ export class AnalyticsService {
       this.repo.rooms(since),
       this.repo.since(todayStart),
       this.repo.participation(since),
+      this.repo.firstVisits(since),
+      this.repo.singlePageVisitors(since),
+      this.repo.hourly(since),
     ]);
+    // 들어온 곳(검색·SNS·직접·다른 사이트)과 처음 연 페이지
+    const sources: Record<TrafficSource, number> = { search: 0, sns: 0, direct: 0, other: 0 };
+    const landingCount = new Map<string, number>();
+    for (const v of firstVisits) {
+      sources[sourceOf(v.host)]++;
+      landingCount.set(v.path, (landingCount.get(v.path) ?? 0) + 1);
+    }
+    const landing = await this.labelPaths(
+      [...landingCount].sort((a, b) => b[1] - a[1]).slice(0, 8).map(([path, visitors]) => ({ path, visitors })),
+    );
+    const hourly = Array.from({ length: 24 }, (_, hour) => ({ hour, views: hourlyRows.find((r) => r.hour === hour)?.views ?? 0 }));
+    const peak = hourly.reduce((best, h) => (h.views > best.views ? h : best), hourly[0]);
+    const labeledCases = await this.labelPaths(topCases);
+    const visitorDays = daily.reduce((n, d) => n + d.visitors, 0);
     return {
       days,
       topPaths: await this.labelPaths(topPaths),
-      topCases: await this.labelPaths(topCases),
+      topCases: labeledCases,
+      sources,
+      landing,
+      hourly,
+      singlePageVisitors,
+      tips: growthTips({
+        days,
+        visitorDays,
+        sources,
+        singlePageVisitors,
+        topCase: labeledCases[0]?.label.replace(/^사건방 · /, ''),
+        topLanding: landing[0]?.label,
+        peakHour: peak.views > 0 ? peak.hour : undefined,
+      }),
       today,
       totals: {
         views: daily.reduce((n, d) => n + d.views, 0),
         // 방문자 해시가 날마다 바뀌므로 기간 합계는 "일별 방문자의 합"임
-        visitorDays: daily.reduce((n, d) => n + d.visitors, 0),
+        visitorDays,
       },
       daily: fillDays(daily, days),
       referrers,

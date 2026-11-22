@@ -15,6 +15,11 @@ export default function AdminHome() {
   );
 }
 
+/** 2026-11-22T16:52:00Z → '11월 23일 오전 1시 52분' (한국 시간) */
+function kstTime(iso: string) {
+  return new Date(iso).toLocaleString("ko-KR", { timeZone: "Asia/Seoul", month: "long", day: "numeric", hour: "numeric", minute: "2-digit" });
+}
+
 function Stat({ href, label, value, hint, alert }: { href: string; label: string; value: number; hint?: string; alert?: boolean }) {
   return (
     <Link
@@ -59,6 +64,24 @@ async function OverviewCards() {
           <Stat href="/admin/inquiries?status=OPEN" label="답변 안 한 문의" value={data.inquiries.open} alert />
           <Stat href="/admin/news" label="확인 안 한 새 뉴스" value={data.briefing.newNews} hint="공개한 기사만 브리핑룸에 보입니다" />
         </div>
+      </Card>
+      <Card>
+        <h2 className="mb-1 text-sm font-semibold">자동 작업</h2>
+        <p className="mb-3 text-xs text-subtle">사람이 손대지 않아도 정해진 때에 돌아가는 일입니다. 시각은 한국 시간입니다.</p>
+        <ul className="divide-y divide-line text-sm">
+          {data.jobs.map((j) => (
+            <li key={j.key} className="flex flex-col gap-1 py-3 sm:flex-row sm:items-start sm:gap-4">
+              <div className="w-40 shrink-0">
+                <p className="font-medium">{j.name}</p>
+                <p className="text-xs text-[#2f7469]">{j.enabled ? j.schedule : "꺼져 있음"}</p>
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-muted">{j.description}</p>
+                <p className="mt-1 text-xs text-subtle">마지막으로 한 때: {j.lastAt ? kstTime(j.lastAt) : j.key === "clouds" ? "보류된 글이 있을 때만 기록됩니다" : "아직 기록이 없습니다"}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
       </Card>
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
