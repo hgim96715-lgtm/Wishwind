@@ -140,19 +140,9 @@
           "year": 1983,
           "observedOn": "05-25",
           "country": "US",
-          "description": "레이건 대통령이 이튼이 사라진 5월 25일을 실종아동의 날로 선포했습니다. 이후 이날은 여러 나라에서 실종 아동을 기억하는 날이 됐습니다.",
+          "description": "레이건 대통령이 이튼이 사라진 5월 25일을 실종아동의 날로 선포했습니다. 이후 이날은 한국을 비롯한 여러 나라에서 실종 아동을 기억하는 날이 됐습니다.",
           "sourceUrl": "https://ojjdp.ojp.gov/nmcd/about-missing-childrens-day",
           "sourceTitle": "About Missing Children's Day (미국 법무부)"
-        },
-        {
-          "kind": "DAY",
-          "name": "한국 실종아동의 날",
-          "year": 2007,
-          "observedOn": "05-25",
-          "country": "KR",
-          "description": "한국도 실종아동법에 따라 5월 25일을 실종아동의 날로 정해, 2007년부터 해마다 보건복지부와 경찰청이 기념식을 엽니다.",
-          "sourceUrl": "https://m.korea.kr/briefing/pressReleaseView.do?newsId=156271515",
-          "sourceTitle": "제12회 실종아동의 날 행사 (경찰청 보도자료, 2018)"
         }
       ]
     },
