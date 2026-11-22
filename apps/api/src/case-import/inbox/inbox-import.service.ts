@@ -21,6 +21,8 @@ export const AUTO_IMPORT_NOTE = '자동 수집';
 export type InboxResult = {
   file: string;
   created: string[];
+  /** 이미 있는 사건에 관련 콘텐츠(영화·다큐 등)만 더한 것 */
+  relatedAdded?: string[];
   skipped: { slug: string; reason: string }[];
   error?: string;
 };
@@ -100,7 +102,7 @@ export class InboxImportService implements OnApplicationBootstrap, OnApplication
    * name은 결과 기록용 이름(앞 10자가 날짜면 검토 메모에 그 날짜를 씀)
    */
   async importData(name: string, data: unknown): Promise<InboxResult> {
-    const result: InboxResult = { file: name, created: [], skipped: [] };
+    const result: InboxResult = { file: name, created: [], relatedAdded: [], skipped: [] };
     const parsed = importFileSchema.safeParse(data);
     if (!parsed.success) {
       result.error = parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; ');
@@ -119,7 +121,24 @@ export class InboxImportService implements OnApplicationBootstrap, OnApplication
     const day = /^\d{4}-\d{2}-\d{2}/.test(name) ? name.slice(0, 10) : new Date().toISOString().slice(0, 10);
     for (const entry of parsed.data.cases) {
       if (existing.has(entry.slug)) {
-        result.skipped.push({ slug: entry.slug, reason: '이미 있는 사건' });
+        // 이미 있는 사건은 덮어쓰지 않음. 단 관련 콘텐츠(영화·다큐 등)만 담긴 항목은 '더 보기' 링크만 더함
+        // (내용·출처·공개 상태는 그대로. 관련 콘텐츠는 검토 상태에 영향 없음)
+        const relatedOnly = !entry.content && entry.sources.length === 0 && entry.claims.length === 0 && (entry.related?.length ?? 0) > 0;
+        if (!relatedOnly) {
+          result.skipped.push({ slug: entry.slug, reason: '이미 있는 사건' });
+          continue;
+        }
+        const { errors } = checkEntry(entry);
+        if (errors.length > 0) {
+          result.skipped.push({ slug: entry.slug, reason: errors.join(' / ') });
+          continue;
+        }
+        try {
+          await this.prisma.$transaction((tx) => importEntry(tx, entry), { timeout: 30_000 });
+          result.relatedAdded?.push(entry.slug);
+        } catch (error) {
+          result.skipped.push({ slug: entry.slug, reason: error instanceof Error ? error.message : String(error) });
+        }
         continue;
       }
       if (!entry.content) {
@@ -151,7 +170,9 @@ export class InboxImportService implements OnApplicationBootstrap, OnApplication
         result.skipped.push({ slug: entry.slug, reason: error instanceof Error ? error.message : String(error) });
       }
     }
-    this.logger.log(`사건 가져오기 ${name}: 새 초안 ${result.created.length}건, 건너뜀 ${result.skipped.length}건`);
+    this.logger.log(
+      `사건 가져오기 ${name}: 새 초안 ${result.created.length}건, 관련 콘텐츠 추가 ${result.relatedAdded?.length ?? 0}건, 건너뜀 ${result.skipped.length}건`,
+    );
     return result;
   }
 
