@@ -35,6 +35,15 @@
           "description": "아이가 유괴되면 방송과 휴대전화로 곧바로 알리는 긴급 경보입니다. 텍사스 댈러스·포트워스 지역 방송사와 경찰이 처음 만들었고, 이름은 앰버 해거먼에게서 따왔습니다.",
           "sourceUrl": "https://amberalert.ojp.gov/about",
           "sourceTitle": "About AMBER Alert (미국 법무부)"
+        },
+        {
+          "kind": "DAY",
+          "name": "앰버 경보의 날 (National AMBER Alert Awareness Day)",
+          "observedOn": "01-13",
+          "country": "US",
+          "description": "앰버 해거먼이 유괴된 1월 13일을 해마다 앰버 경보를 알리고 앰버를 기억하는 날로 지킵니다.",
+          "sourceUrl": "https://www.ojp.gov/sites/ojp/files/archives/pressreleases/2007/OJJDP07012.htm",
+          "sourceTitle": "Department of Justice Commemorates National AMBER Alert Awareness Day (미국 법무부, 2007)"
         }
       ]
     },
@@ -157,6 +166,16 @@
           "description": "새롭고 확실한 증거가 나오면 무죄가 난 중대 범죄도 다시 재판할 수 있게 했습니다. 이 규정으로 가해자 중 한 명이 다시 재판을 받아 2012년 유죄 판결을 받았습니다.",
           "sourceUrl": "https://www.legislation.gov.uk/ukpga/2003/44/notes/division/2/10",
           "sourceTitle": "Criminal Justice Act 2003, Part 10 해설 (legislation.gov.uk)"
+        },
+        {
+          "kind": "DAY",
+          "name": "스티븐 로런스의 날 (Stephen Lawrence Day)",
+          "year": 2019,
+          "observedOn": "04-22",
+          "country": "GB",
+          "description": "스티븐이 숨진 4월 22일을 해마다 그의 삶을 기억하고 인종차별을 돌아보는 날로 정했습니다. 2018년 정부가 발표했고 2019년 처음 열렸습니다.",
+          "sourceUrl": "https://www.politicshome.com/news/uk/home-affairs/policing/news/103360/theresa-may-says-stephen-lawrence-day-reminder-racism",
+          "sourceTitle": "Theresa May says Stephen Lawrence Day a reminder that 'racism still exists' in Britain (PoliticsHome, 2019)"
         }
       ]
     },
