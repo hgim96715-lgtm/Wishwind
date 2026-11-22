@@ -9,6 +9,8 @@ import {
   ADMIN_COOKIE_MAX_AGE,
   ADMIN_HINT_COOKIE,
   AdminApiError,
+  NO_ANALYTICS_COOKIE,
+  NO_ANALYTICS_MAX_AGE,
   adminSend,
   clientIp,
 } from "@/lib/admin/session";
@@ -55,7 +57,17 @@ export async function login(_: ActionState, form: FormData): Promise<ActionState
     maxAge: ADMIN_COOKIE_MAX_AGE,
   });
   (await cookies()).set(ADMIN_HINT_COOKIE, "1", { sameSite: "lax", path: "/", maxAge: ADMIN_COOKIE_MAX_AGE });
+  // 관리자가 로그인한 기기는 로그아웃 뒤에도 방문자 분석에서 뺌 (관리실 '방문자 분석'에서 다시 셀 수 있음)
+  (await cookies()).set(NO_ANALYTICS_COOKIE, "1", { sameSite: "lax", path: "/", httpOnly: true, maxAge: NO_ANALYTICS_MAX_AGE });
   redirect("/admin");
+}
+
+/** 이 기기에서 둘러본 것을 방문자 분석에서 빼거나 다시 셈 */
+export async function setDeviceExcluded(excluded: boolean) {
+  const jar = await cookies();
+  if (excluded) jar.set(NO_ANALYTICS_COOKIE, "1", { sameSite: "lax", path: "/", httpOnly: true, maxAge: NO_ANALYTICS_MAX_AGE });
+  else jar.delete({ name: NO_ANALYTICS_COOKIE, path: "/" });
+  refresh();
 }
 
 export async function logout() {

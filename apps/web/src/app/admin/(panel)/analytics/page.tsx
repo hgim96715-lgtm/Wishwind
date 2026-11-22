@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { Suspense } from "react";
+import { setDeviceExcluded } from "@/app/admin/actions";
 import { Card, ErrorBox, FilterTabs, PageTitle, Skeleton } from "@/components/admin/ui";
-import { AdminApiError, adminGet } from "@/lib/admin/session";
+import { AdminApiError, NO_ANALYTICS_COOKIE, adminGet } from "@/lib/admin/session";
 import type { Analytics } from "@/lib/admin/types";
 
 export const metadata: Metadata = { title: "방문자 분석" };
@@ -21,6 +23,9 @@ export default function AnalyticsPage({ searchParams }: { searchParams: Promise<
         title="방문자 분석"
         description="쿠키 없이 하루 단위로만 방문자를 셉니다. IP와 브라우저 정보는 저장하지 않고, 날마다 바뀌는 해시만 남깁니다."
       />
+      <Suspense fallback={null}>
+        <ThisDevice />
+      </Suspense>
       <Suspense fallback={<Skeleton />}>
         {searchParams.then((sp) => {
           const days = ["7", "90"].includes(String(sp.days)) ? Number(sp.days) : 30;
@@ -38,6 +43,26 @@ export default function AnalyticsPage({ searchParams }: { searchParams: Promise<
         })}
       </Suspense>
     </>
+  );
+}
+
+/** 관리자 본인 기기: 이 기기에서 둘러본 것은 세지 않음 (관리실에 로그인하면 자동으로 켜짐) */
+async function ThisDevice() {
+  const excluded = (await cookies()).get(NO_ANALYTICS_COOKIE)?.value === "1";
+  return (
+    <form
+      action={setDeviceExcluded.bind(null, !excluded)}
+      className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-line bg-surface px-4 py-3 text-sm"
+    >
+      <p className={excluded ? "text-[#2f7469]" : "text-muted"}>
+        {excluded
+          ? "이 기기에서 둘러본 것은 방문자 분석에 넣지 않습니다. 폰 등 다른 기기는 그 기기에서 관리실에 한 번 로그인하면 똑같이 빠집니다."
+          : "이 기기에서 둘러본 것도 지금은 방문자로 셉니다."}
+      </p>
+      <button type="submit" className="shrink-0 rounded-full border border-line px-3 py-1 text-xs hover:bg-black/5">
+        {excluded ? "이 기기도 세기" : "이 기기 빼기"}
+      </button>
+    </form>
   );
 }
 

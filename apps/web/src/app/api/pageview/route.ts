@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { ADMIN_HINT_COOKIE } from "@/lib/admin/session";
+import { ADMIN_HINT_COOKIE, NO_ANALYTICS_COOKIE } from "@/lib/admin/session";
 import { API_URL } from "@/lib/cases/api";
 
 /**
@@ -7,8 +7,11 @@ import { API_URL } from "@/lib/cases/api";
  * 기록 실패는 사용자에게 영향을 주지 않도록 항상 204로 답함
  */
 export async function POST(request: Request) {
-  // 관리자로 로그인한 사람(관리실 표시 쿠키)이 둘러본 것은 방문자 분석에 넣지 않음
-  if ((await cookies()).get(ADMIN_HINT_COOKIE)?.value === "1") return new Response(null, { status: 204 });
+  // 관리자로 로그인한 사람, 관리자 본인 기기로 표시된 곳에서 둘러본 것은 방문자 분석에 넣지 않음
+  const jar = await cookies();
+  if (jar.get(ADMIN_HINT_COOKIE)?.value === "1" || jar.get(NO_ANALYTICS_COOKIE)?.value === "1") {
+    return new Response(null, { status: 204 });
+  }
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "";
   const ua = request.headers.get("user-agent") ?? "";
   const host = (request.headers.get("host") ?? "").replace(/:\d+$/, "").replace(/^www\./, "");
