@@ -14,6 +14,19 @@ export function clip(text: string, max: number) {
   return t.length > max ? `${t.slice(0, max - 1)}…` : t;
 }
 
+/** 글자 수를 넘으면 문장·쉼표 끝에서 자름 (어절 중간에서 끊기지 않게). 끊을 곳이 너무 앞이면 어절 끝에서 자름 */
+export function clipAtBoundary(text: string, max: number) {
+  const t = text.replace(/\s+/g, " ").trim();
+  if (t.length <= max) return t;
+  const head = t.slice(0, max);
+  const sentence = Math.max(head.lastIndexOf(". "), head.lastIndexOf("다."));
+  if (sentence >= max * 0.5) return t.slice(0, head.indexOf(".", sentence) + 1);
+  const comma = head.lastIndexOf(",");
+  if (comma >= max * 0.5) return `${t.slice(0, comma)}…`;
+  const space = head.lastIndexOf(" ");
+  return `${t.slice(0, space > 0 ? space : max - 1)}…`;
+}
+
 /** 받아 온 사진은 서버가 켜져 있는 동안만 메모리에 둠 (FBI 사이트가 자동 요청을 자주 막아서, 한 번 받은 건 다시 받지 않음) */
 const imageCache = new Map<string, string>();
 

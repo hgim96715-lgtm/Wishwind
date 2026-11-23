@@ -4,7 +4,7 @@ import { COUNTRY_LABEL, STATUS_STAMP, formatCaseDate } from "@/lib/cases/labels"
 import { getMissing } from "@/lib/missing/api";
 import { formatMissingDate } from "@/lib/missing/regions";
 import { BRAND, loadBrand, PinwheelMark } from "@/lib/og/brand";
-import { clip, imageDataUrl, koreanFonts, qrDataUrl } from "@/lib/og/helpers";
+import { clip, clipAtBoundary, imageDataUrl, koreanFonts, qrDataUrl } from "@/lib/og/helpers";
 
 /**
  * 인스타그램 스토리용 전단지 (1080×1920 PNG).
@@ -44,11 +44,21 @@ async function caseFlyer(slug: string, origin: string, brand: Brand) {
   if (!data || data.unpublished) return Response.json({ message: "사건을 찾을 수 없습니다" }, { status: 404 });
   const stamp = STATUS_STAMP[data.status];
   const question = data.unsolvedQuestions[0]?.question ?? null;
-  const meta = [COUNTRY_LABEL[data.country], formatCaseDate(data.occurredAt, data.occurredAtPrecision), data.location]
-    .filter(Boolean)
-    .join(" · ");
+  // '기타' 나라는 장소 첫 어절(예: 코모로)을 나라 이름으로 씀
+  const [firstWord, ...restWords] = (data.location ?? "").split(" ");
+  const otherCountry = data.country === "OTHER" && restWords.length > 0;
+  const countryLabel = otherCountry ? firstWord : data.country === "OTHER" ? null : COUNTRY_LABEL[data.country];
+  const place = otherCountry ? restWords.join(" ") : data.location;
+  const meta = [countryLabel, formatCaseDate(data.occurredAt, data.occurredAtPrecision), place].filter(Boolean).join(" · ");
   const url = `${origin}/cases/${slug}`;
   const qr = await qrDataUrl(url);
+  // 제목이 길면 글자를 줄여 두 줄 안에 들어가게 함 (내용이 넘치면 Satori가 칸을 눌러 글자가 겹침)
+  // 끝의 괄호(예: '(김길태 사건)')는 줄바꿈이 어색해지지 않게 제목 아래 작은 줄로 뺌
+  const paren = data.title.match(/^(.+?)\s*\((.+)\)$/);
+  const titleMain = paren ? paren[1] : data.title;
+  const titleNote = paren ? `(${paren[2]})` : null;
+  const titleSize = titleMain.length > 22 ? 68 : titleMain.length > 14 ? 80 : 96;
+  const summary = clipAtBoundary(data.summary, question ? 110 : 160);
   const texts = [SITE_NAME, "CASE FILE", stamp.label, data.title, data.summary, meta, question ?? "", "함께 생각해 볼 질문", "QR을 찍으면 사건 파일이 열립니다", "같은 일이 다시 일어나지 않도록, 함께 기억해 주세요"];
 
   return new ImageResponse(
@@ -71,27 +81,33 @@ async function caseFlyer(slug: string, origin: string, brand: Brand) {
             {stamp.label}
           </div>
         </div>
-        <div style={{ display: "flex", marginTop: 90, fontSize: 96, fontWeight: 700, lineHeight: 1.25, color: INK }}>
-          {data.title}
+        <div style={{ display: "flex", flexShrink: 0, marginTop: 70, fontSize: titleSize, fontWeight: 700, lineHeight: 1.3, color: INK, wordBreak: "keep-all" }}>
+          {titleMain}
         </div>
-        <div style={{ display: "flex", marginTop: 32, fontSize: 38, color: "#9a8a76" }}>{meta}</div>
-        <div style={{ display: "flex", marginTop: 64, fontSize: 48, lineHeight: 1.6, color: MUTED }}>
-          {clip(data.summary, 120)}
+        {titleNote && (
+          <div style={{ display: "flex", flexShrink: 0, marginTop: 8, fontSize: Math.round(titleSize * 0.6), fontWeight: 700, color: MUTED }}>
+            {titleNote}
+          </div>
+        )}
+        <div style={{ display: "flex", flexShrink: 0, marginTop: 28, fontSize: 36, lineHeight: 1.45, color: "#9a8a76", wordBreak: "keep-all" }}>{clip(meta, 60)}</div>
+        <div style={{ display: "flex", flexShrink: 0, marginTop: 52, fontSize: 44, lineHeight: 1.6, color: MUTED, wordBreak: "keep-all" }}>
+          {summary}
         </div>
         {question && (
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              marginTop: 80,
-              padding: "44px 48px",
+              flexShrink: 0,
+              marginTop: 56,
+              padding: "40px 48px",
               borderRadius: 28,
               background: "#fffaf2",
               border: "3px dashed #b9d6cd",
             }}
           >
             <div style={{ fontSize: 34, color: stamp.color, fontWeight: 700 }}>함께 생각해 볼 질문</div>
-            <div style={{ display: "flex", marginTop: 18, fontSize: 48, lineHeight: 1.45, color: INK }}>{clip(question, 80)}</div>
+            <div style={{ display: "flex", marginTop: 18, fontSize: 44, lineHeight: 1.45, color: INK, wordBreak: "keep-all" }}>{clipAtBoundary(question, 80)}</div>
           </div>
         )}
         <div style={{ flex: 1, display: "flex" }} />
@@ -196,7 +212,7 @@ function Frame({ brand, children }: { brand: Brand; children: React.ReactNode })
 
 function Footer({ qr, caption, note }: { qr: string; caption: string; note: string }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 40, borderTop: `3px solid ${BRAND.line}`, paddingTop: 50 }}>
+    <div style={{ display: "flex", flexShrink: 0, alignItems: "center", gap: 40, borderTop: `3px solid ${BRAND.line}`, paddingTop: 50 }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={qr} width={230} height={230} style={{ borderRadius: 20, background: "white", padding: 14 }} alt="" />
       <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
