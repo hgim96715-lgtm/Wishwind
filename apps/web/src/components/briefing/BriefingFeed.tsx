@@ -7,7 +7,7 @@ import { HeadlineBoard } from "@/components/briefing/HeadlineBoard";
 import { NotesBoard } from "@/components/briefing/NotesBoard";
 import { getBriefing, type Briefing, type BriefingKind, type BriefingPost } from "@/lib/briefing/api";
 import { ApiUnavailableError } from "@/lib/cases/api";
-import { CASE_STAMP, CATEGORY_COLOR, CATEGORY_LABEL, COUNTRY_LABEL, caseRoomCountry, caseStamp } from "@/lib/cases/labels";
+import { CATEGORY_COLOR, CATEGORY_LABEL, COUNTRY_LABEL, caseRoomCountry, caseStamp, stampOfKey } from "@/lib/cases/labels";
 import type { Country } from "@/lib/cases/types";
 
 const KIND: Record<BriefingKind, { label: string; color: string; tab: string }> = {
@@ -320,15 +320,19 @@ function CaseStats({ stats }: { stats: Briefing["stats"] }) {
         ))}
       </ul>
       <div className="mt-5 flex flex-wrap gap-2 border-t border-line pt-4">
-        {stats.byStatus.map((s) => (
-          <span
-            key={s.key}
-            className="rounded-full border px-2.5 py-0.5 text-xs"
-            style={{ color: CASE_STAMP[s.key].color, borderColor: `${CASE_STAMP[s.key].color}55` }}
-          >
-            {CASE_STAMP[s.key].label} {s.count}
-          </span>
-        ))}
+        {stats.byStatus.map((s) => {
+          const stamp = stampOfKey(s.key);
+          if (!stamp) return null;
+          return (
+            <span
+              key={s.key}
+              className="rounded-full border px-2.5 py-0.5 text-xs"
+              style={{ color: stamp.color, borderColor: `${stamp.color}55` }}
+            >
+              {stamp.label} {s.count}
+            </span>
+          );
+        })}
       </div>
       <p className="mt-3 text-xs text-subtle">
         {countryCounts(stats.byCountry).map(([k, n]) => `${COUNTRY_LABEL[k]} ${n}`).join(" · ")}

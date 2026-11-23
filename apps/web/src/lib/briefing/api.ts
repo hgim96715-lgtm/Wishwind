@@ -65,7 +65,8 @@ export interface Briefing {
   stats: {
     total: number;
     byCategory: { key: CaseCategory; count: number }[];
-    byStatus: { key: CaseStampKey; count: number }[];
+    /** 새 API는 VERDICT·CLOSED, 예전 API는 SOLVED로 옴 */
+    byStatus: { key: CaseStampKey | "SOLVED"; count: number }[];
     byCountry: { key: Country; count: number }[];
   };
   opinions: {

@@ -67,8 +67,18 @@ export function stampKey(status: CaseStatus, closure: CaseClosure | null | undef
   return closure ?? "VERDICT";
 }
 
+/** API가 구분 값을 아직 주지 않을 때(배포 순서가 어긋날 때) 쓰는 도장 */
+const CLOSED_FALLBACK = { label: "종결", color: "#3f8f84" };
+
 export function caseStamp(c: { status: CaseStatus; closure?: CaseClosure | null }) {
+  if (c.status === "SOLVED" && !c.closure) return CLOSED_FALLBACK;
   return CASE_STAMP[stampKey(c.status, c.closure)];
+}
+
+/** 브리핑 통계처럼 키로만 올 때. 예전 API의 SOLVED도 받음, 모르는 키는 null */
+export function stampOfKey(key: string) {
+  if (key === "SOLVED") return CLOSED_FALLBACK;
+  return CASE_STAMP[key as CaseStampKey] ?? null;
 }
 
 /** 관리실에서 고르는 DB 상태값. 끝난 사건은 판결 자료에 따라 판결 확정·수사 종결로 자동 표시됨 */
