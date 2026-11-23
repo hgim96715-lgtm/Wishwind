@@ -195,6 +195,9 @@ function Links({ slug }: { slug: string }) {
       <a href={`/api/flyer/case/${slug}`} target="_blank" rel="noreferrer noopener" className={linkClass}>
         스토리 이미지 열기
       </a>
+      <a href={`/api/flyer/post/${slug}`} target="_blank" rel="noreferrer noopener" className={linkClass}>
+        게시물 이미지 열기 (4:5)
+      </a>
       <Link href={`/cases/${slug}`} target="_blank" className={linkClass}>
         사건 페이지
       </Link>

@@ -1,13 +1,14 @@
 import { ImageResponse } from "next/og";
 import { ApiUnavailableError, getCase } from "@/lib/cases/api";
 import { COUNTRY_LABEL, caseStamp, formatCaseDate } from "@/lib/cases/labels";
+import type { CaseDetail } from "@/lib/cases/types";
 import { getMissing } from "@/lib/missing/api";
 import { formatMissingDate } from "@/lib/missing/regions";
 import { BRAND, loadBrand, PinwheelMark } from "@/lib/og/brand";
 import { clip, clipAtBoundary, imageDataUrl, koreanFonts, qrDataUrl } from "@/lib/og/helpers";
 
 /**
- * 인스타그램 스토리용 전단지 (1080×1920 PNG).
+ * 인스타그램 스토리용 전단지 (1080×1920 PNG). /api/flyer/post/[slug]는 피드 게시물용 (1080×1350).
  * - 사건: 상태 도장, 제목, 요약, 함께 생각해 볼 질문, 사이트 QR (피해자 사진은 넣지 않음)
  * - 실종자: FBI 공개 자료만 (사진·인상착의·실종 지역·제보처). 국내 안전Dream 자료는 이용 조건 확인 전까지 만들지 않음
  */
@@ -29,6 +30,7 @@ export async function GET(request: Request, ctx: Ctx) {
   try {
     const brand = await loadBrand(new URL(request.url).origin);
     if (type === "case") return await caseFlyer(key, origin, brand);
+    if (type === "post") return await postFlyer(key, origin, brand);
     if (type === "missing") return await missingFlyer(key, origin, brand);
     return Response.json({ message: "잘못된 주소입니다" }, { status: 404 });
   } catch (error) {
@@ -44,12 +46,7 @@ async function caseFlyer(slug: string, origin: string, brand: Brand) {
   if (!data || data.unpublished) return Response.json({ message: "사건을 찾을 수 없습니다" }, { status: 404 });
   const stamp = caseStamp(data);
   const question = data.unsolvedQuestions[0]?.question ?? null;
-  // '기타' 나라는 장소 첫 어절(예: 코모로)을 나라 이름으로 씀
-  const [firstWord, ...restWords] = (data.location ?? "").split(" ");
-  const otherCountry = data.country === "OTHER" && restWords.length > 0;
-  const countryLabel = otherCountry ? firstWord : data.country === "OTHER" ? null : COUNTRY_LABEL[data.country];
-  const place = otherCountry ? restWords.join(" ") : data.location;
-  const meta = [countryLabel, formatCaseDate(data.occurredAt, data.occurredAtPrecision), place].filter(Boolean).join(" · ");
+  const meta = caseMeta(data);
   const url = `${origin}/cases/${slug}`;
   const qr = await qrDataUrl(url);
   // 제목이 길면 글자를 줄여 두 줄 안에 들어가게 함 (내용이 넘치면 Satori가 칸을 눌러 글자가 겹침)
@@ -118,6 +115,81 @@ async function caseFlyer(slug: string, origin: string, brand: Brand) {
   );
 }
 
+/** '나라 · 발생일 · 장소'. '기타' 나라는 장소 첫 어절(예: 코모로)을 나라 이름으로 씀 */
+function caseMeta(data: CaseDetail) {
+  const [firstWord, ...restWords] = (data.location ?? "").split(" ");
+  const otherCountry = data.country === "OTHER" && restWords.length > 0;
+  const countryLabel = otherCountry ? firstWord : data.country === "OTHER" ? null : COUNTRY_LABEL[data.country];
+  const place = otherCountry ? restWords.join(" ") : data.location;
+  return [countryLabel, formatCaseDate(data.occurredAt, data.occurredAtPrecision), place].filter(Boolean).join(" · ");
+}
+
+/**
+ * 인스타그램 피드 게시물용 (1080×1350, 4:5). 피드에서 가장 크게 보이는 비율.
+ * 질문은 넣지 않고 글(캡션)에 씀. 대신 피해 규모 한 줄과 요약을 크게 보여 줌
+ */
+async function postFlyer(slug: string, origin: string, brand: Brand) {
+  const data = await getCase(slug);
+  if (!data || data.unpublished) return Response.json({ message: "사건을 찾을 수 없습니다" }, { status: 404 });
+  const stamp = caseStamp(data);
+  const meta = caseMeta(data);
+  const paren = data.title.match(/^(.+?)\s*\((.+)\)$/);
+  const titleMain = paren ? paren[1] : data.title;
+  const titleNote = paren ? `(${paren[2]})` : null;
+  const titleSize = titleMain.length > 22 ? 60 : titleMain.length > 14 ? 70 : 84;
+  const summary = clipAtBoundary(data.summary, 110);
+  const qr = await qrDataUrl(`${origin}/cases/${slug}`);
+  const caption = "QR을 찍으면 사건 파일이 열립니다";
+  const note = "같은 일이 다시 일어나지 않도록, 함께 기억해 주세요";
+  const texts = [SITE_NAME, "CASE FILE", stamp.label, data.title, summary, meta, data.victimCountNote ?? "", caption, note];
+
+  return new ImageResponse(
+    (
+      <Frame brand={brand} compact>
+        <div style={{ display: "flex", flexShrink: 0, justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ fontSize: 30, letterSpacing: 6, color: BRAND.teal }}>CASE FILE</div>
+          <div
+            style={{
+              display: "flex",
+              border: `5px solid ${stamp.color}`,
+              color: stamp.color,
+              borderRadius: 16,
+              padding: "6px 24px",
+              fontSize: 40,
+              fontWeight: 700,
+              transform: "rotate(-6deg)",
+            }}
+          >
+            {stamp.label}
+          </div>
+        </div>
+        <div style={{ display: "flex", flexShrink: 0, marginTop: 44, fontSize: titleSize, fontWeight: 700, lineHeight: 1.3, color: INK, wordBreak: "keep-all" }}>
+          {titleMain}
+        </div>
+        {titleNote && (
+          <div style={{ display: "flex", flexShrink: 0, marginTop: 6, fontSize: Math.round(titleSize * 0.6), fontWeight: 700, color: MUTED }}>
+            {titleNote}
+          </div>
+        )}
+        <div style={{ display: "flex", flexShrink: 0, marginTop: 22, fontSize: 32, lineHeight: 1.45, color: "#9a8a76", wordBreak: "keep-all" }}>{clip(meta, 60)}</div>
+        {data.victimCountNote && (
+          <div style={{ display: "flex", flexShrink: 0, marginTop: 30 }}>
+            <div style={{ display: "flex", padding: "10px 24px", borderRadius: 999, background: "#efe6d8", fontSize: 32, fontWeight: 700, color: INK }}>
+              {data.victimCountNote}
+            </div>
+          </div>
+        )}
+        <div style={{ display: "flex", flexShrink: 0, marginTop: 36, fontSize: 40, lineHeight: 1.6, color: MUTED, wordBreak: "keep-all" }}>
+          {summary}
+        </div>
+        <div style={{ flex: 1, display: "flex" }} />
+        <Footer qr={qr} caption={caption} note={note} small />
+      </Frame>
+    ),
+    { width: W, height: 1350, fonts: await koreanFonts(texts.join("")), headers: cacheHeaders },
+  );
+}
+
 async function missingFlyer(id: string, origin: string, brand: Brand) {
   const data = await getMissing(id);
   if (!data) return Response.json({ message: "실종자 정보를 찾을 수 없습니다" }, { status: 404 });
@@ -183,7 +255,7 @@ async function missingFlyer(id: string, origin: string, brand: Brand) {
 const cacheHeaders = { "cache-control": "public, max-age=600" };
 
 /** 전단지 바탕: 위에 Wishwind 로고, 오른쪽 아래에 옅은 바람개비 등대 */
-function Frame({ brand, children }: { brand: Brand; children: React.ReactNode }) {
+function Frame({ brand, children, compact = false }: { brand: Brand; children: React.ReactNode; compact?: boolean }) {
   return (
     <div
       style={{
@@ -194,27 +266,28 @@ function Frame({ brand, children }: { brand: Brand; children: React.ReactNode })
         position: "relative",
         overflow: "hidden",
         background: PAPER,
-        padding: "80px 90px 90px",
+        padding: compact ? "60px 80px 64px" : "80px 90px 90px",
         fontFamily: "NotoSansKR",
       }}
     >
-      <PinwheelMark icon={brand.icon} size={760} right={-230} bottom={-170} opacity={0.1} />
+      <PinwheelMark icon={brand.icon} size={compact ? 600 : 760} right={-230} bottom={-170} opacity={0.1} />
       {brand.logo ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={brand.logo} width={330} height={110} style={{ marginBottom: 50, marginLeft: -12 }} alt="" />
+        <img src={brand.logo} width={compact ? 264 : 330} height={compact ? 88 : 110} style={{ marginBottom: compact ? 30 : 50, marginLeft: -12 }} alt="" />
       ) : (
-        <div style={{ display: "flex", marginBottom: 50, fontSize: 56, fontWeight: 700, color: BRAND.tealDark }}>{SITE_NAME}</div>
+        <div style={{ display: "flex", marginBottom: compact ? 30 : 50, fontSize: 56, fontWeight: 700, color: BRAND.tealDark }}>{SITE_NAME}</div>
       )}
       {children}
     </div>
   );
 }
 
-function Footer({ qr, caption, note }: { qr: string; caption: string; note: string }) {
+function Footer({ qr, caption, note, small = false }: { qr: string; caption: string; note: string; small?: boolean }) {
+  const size = small ? 180 : 230;
   return (
-    <div style={{ display: "flex", flexShrink: 0, alignItems: "center", gap: 40, borderTop: `3px solid ${BRAND.line}`, paddingTop: 50 }}>
+    <div style={{ display: "flex", flexShrink: 0, alignItems: "center", gap: 40, borderTop: `3px solid ${BRAND.line}`, paddingTop: small ? 34 : 50 }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={qr} width={230} height={230} style={{ borderRadius: 20, background: "white", padding: 14 }} alt="" />
+      <img src={qr} width={size} height={size} style={{ borderRadius: 20, background: "white", padding: 14 }} alt="" />
       <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
         <div style={{ fontSize: 40, fontWeight: 700, color: INK }}>{SITE_NAME}</div>
         <div style={{ display: "flex", marginTop: 12, fontSize: 30, color: MUTED }}>{caption}</div>
