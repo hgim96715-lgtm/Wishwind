@@ -17,7 +17,7 @@ function parseCurrent(body: unknown): { code: number; precipitation: number } | 
 }
 
 /**
- * 실종방 정원 날씨 (Open-Meteo, 키 없음). 15분 동안 같은 좌표는 캐시
+ * 실종방 정원 날씨 (Open-Meteo, 키 없음). 같은 좌표는 5분 동안 캐시 (비가 막 시작했을 때 늦게 바뀌지 않게)
  * 브라우저 위치는 사용자가 "내 위치 날씨"를 눌러 허락했을 때만 받음
  */
 export async function GET(request: Request) {
@@ -28,13 +28,13 @@ export async function GET(request: Request) {
   const { lat, lon } = mine ? { lat: la, lon: lo } : SEOUL;
   try {
     const q = new URLSearchParams({ latitude: String(lat), longitude: String(lon), current: "weather_code,precipitation" });
-    const res = await fetch(`https://api.open-meteo.com/v1/forecast?${q}`, { next: { revalidate: 900 } });
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?${q}`, { next: { revalidate: 300 } });
     const current = parseCurrent(await res.json());
     if (!res.ok || !current) throw new Error("weather");
     const weather: Weather = { ...fromWmo(current.code, current.precipitation), place: mine ? "내 위치" : "서울" };
-    return Response.json(weather, { headers: { "cache-control": "private, max-age=900" } });
+    return Response.json(weather, { headers: { "cache-control": "private, max-age=300" } });
   } catch {
-    // 날씨를 못 받아도 정원은 맑은 하늘로 그대로 보여 줌
-    return Response.json({ kind: "clear", intensity: 0, place: mine ? "내 위치" : "서울" } satisfies Weather);
+    // 날씨를 못 받으면 '맑음'이라고 잘못 알리지 않음. 화면은 날씨 표시 없이 기본 하늘로 보여 줌 (캐시하지 않음)
+    return Response.json({ message: "날씨를 가져오지 못했습니다" }, { status: 503, headers: { "cache-control": "no-store" } });
   }
 }

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { Weather, WeatherKind } from "@/lib/weather/types";
 
 const MINE_KEY = "missing-weather-mine";
-const REFRESH_MS = 15 * 60 * 1000;
+const REFRESH_MS = 5 * 60 * 1000;
 const KINDS: WeatherKind[] = ["clear", "cloudy", "fog", "rain", "snow"];
 
 function readFlag() {
@@ -37,6 +37,7 @@ function position(): Promise<{ lat: number; lon: number }> {
 async function load(coords?: { lat: number; lon: number }): Promise<Weather> {
   const q = coords ? `?lat=${coords.lat.toFixed(1)}&lon=${coords.lon.toFixed(1)}` : "";
   const res = await fetch(`/api/weather${q}`);
+  if (!res.ok) throw new Error("weather");
   return (await res.json()) as Weather;
 }
 
