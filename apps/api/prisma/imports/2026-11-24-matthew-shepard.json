@@ -1,0 +1,162 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "matthew-shepard-murder",
+      "content": {
+        "title": "매슈 셰퍼드 살인 사건",
+        "summary": "1998년 10월 미국 와이오밍주 래러미에서 동성애자 대학생 매슈 셰퍼드(21세)가 두 남성에게 폭행당해 외딴 울타리에 묶인 채 버려졌다가 숨진 사건으로, 성적 지향 등을 이유로 한 범죄를 연방이 처벌할 수 있게 한 '매슈 셰퍼드·제임스 버드 주니어 증오범죄 방지법'으로 이어졌습니다",
+        "overview": "1998년 10월 6일 저녁, 와이오밍 대학교 학생이던 21세 매슈 셰퍼드는 래러미의 한 술집에서 에런 매키니와 러셀 헨더슨을 만났습니다. 두 사람은 셰퍼드를 차에 태워 래러미 동쪽 외딴 곳으로 데려가 돈을 빼앗고 심하게 폭행한 뒤, 영하의 날씨 속에 나무 울타리에 묶어 두고 떠났습니다. 셰퍼드는 약 18시간 뒤인 10월 7일 자전거를 타던 사람에게 발견돼 콜로라도주 포트콜린스의 푸드레 밸리 병원으로 옮겨졌지만, 의식을 되찾지 못하고 10월 12일 새벽 숨졌습니다. 셰퍼드가 공개적으로 동성애자였다는 점이 알려지며 사건은 성소수자를 겨냥한 증오범죄로 미국 전역에 큰 충격을 줬습니다. 헨더슨은 1999년 4월 재판 전에 납치와 살인 혐의를 인정해 2회 연속 종신형을 받았습니다. 매키니는 같은 해 가을 재판을 받았고, 셰퍼드의 부모가 사형 대신 종신형에 동의하면서 역시 2회 연속 종신형을 받았습니다. 당시 와이오밍주와 연방에는 성적 지향을 이유로 한 범죄를 따로 다루는 증오범죄 법이 없었습니다. 셰퍼드의 부모는 이후 재단을 세워 법 개정 운동을 이어 갔고, 2009년 10월 28일 버락 오바마 대통령이 셰퍼드와 1998년 텍사스에서 인종 혐오로 살해된 제임스 버드 주니어의 이름을 딴 연방 증오범죄 방지법에 서명했습니다.",
+        "victimCountNote": "사망 1명",
+        "country": "US",
+        "category": "MURDER",
+        "status": "SOLVED",
+        "location": "미국 와이오밍주 래러미 동쪽 외곽",
+        "occurredAt": "1998-10-06",
+        "occurredAtPrecision": "DAY",
+        "timeline": [
+          {
+            "occurredAt": "1998-10-06",
+            "occurredAtPrecision": "DAY",
+            "title": "래러미 외곽에서 폭행당하고 울타리에 묶임",
+            "description": "술집에서 만난 두 남성이 셰퍼드를 외딴 곳으로 데려가 돈을 빼앗고 폭행한 뒤 울타리에 묶어 두고 떠났습니다."
+          },
+          {
+            "occurredAt": "1998-10-07",
+            "occurredAtPrecision": "DAY",
+            "title": "약 18시간 만에 발견",
+            "description": "자전거를 타던 사람이 셰퍼드를 발견했고, 셰퍼드는 콜로라도주 포트콜린스의 병원으로 옮겨졌습니다."
+          },
+          {
+            "occurredAt": "1998-10-12",
+            "occurredAtPrecision": "DAY",
+            "title": "병원에서 숨짐",
+            "description": "의식을 되찾지 못하고 10월 12일 새벽 숨졌습니다."
+          },
+          {
+            "occurredAt": "1999-04-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "러셀 헨더슨 혐의 인정, 2회 연속 종신형",
+            "description": "재판 전에 납치와 살인 혐의를 인정해 사형 대신 2회 연속 종신형을 받았습니다."
+          },
+          {
+            "occurredAt": "1999-11-01",
+            "occurredAtPrecision": "MONTH",
+            "title": "에런 매키니 2회 연속 종신형",
+            "description": "재판 중 '동성애 공포' 주장이 받아들여지지 않았고, 셰퍼드의 부모가 동의해 사형 대신 2회 연속 종신형이 정해졌습니다."
+          },
+          {
+            "occurredAt": "2009-10-28",
+            "occurredAtPrecision": "DAY",
+            "title": "연방 증오범죄 방지법 서명",
+            "description": "오바마 대통령이 매슈 셰퍼드와 제임스 버드 주니어의 이름을 딴 증오범죄 방지법에 서명했습니다."
+          }
+        ],
+        "victims": [
+          {
+            "name": "Matthew Shepard",
+            "alias": "매슈 셰퍼드",
+            "age": 21,
+            "gender": "MALE",
+            "status": "DECEASED",
+            "description": "와이오밍 대학교 학생이었고, 동성애자라는 사실을 숨기지 않았습니다."
+          }
+        ],
+        "suspects": [
+          {
+            "name": "Aaron McKinney",
+            "status": "CONVICTED",
+            "charges": "살인, 납치, 강도",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "type": "LIFE",
+                "penalty": "2회 연속 종신형 (가석방 없음)",
+                "isFinal": true,
+                "verdict": "1999년 가을 재판에서 셰퍼드의 부모가 동의해 사형 대신 2회 연속 종신형이 정해졌습니다."
+              }
+            ]
+          },
+          {
+            "name": "Russell Henderson",
+            "status": "CONVICTED",
+            "charges": "납치, 살인",
+            "sentences": [
+              {
+                "courtLevel": "FIRST",
+                "type": "LIFE",
+                "penalty": "2회 연속 종신형",
+                "isFinal": true,
+                "verdict": "1999년 4월 재판 전에 혐의를 인정했습니다."
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "누군가의 성적 지향이나 정체성을 이유로 한 폭력을 막으려면 학교와 지역 사회는 어떤 노력을 해야 할까요?"
+          },
+          {
+            "question": "범죄가 혐오에서 비롯됐는지 경찰과 검찰이 제대로 알아보고 기록하려면 어떤 기준과 교육이 필요할까요?"
+          },
+          {
+            "question": "혐오 표현이 폭력으로 번지기 전에 주변 사람들이 알아차리고 도울 수 있는 방법은 무엇일까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://wyohistory.org/encyclopedia/matthew-shepard",
+          "title": "The Murder of Matthew Shepard",
+          "publisher": "WyoHistory.org (Wyoming State Historical Society)",
+          "type": "OTHER",
+          "publishedAt": "2014-11-08",
+          "accessedAt": "2026-11-24"
+        },
+        {
+          "url": "https://www.history.com/this-day-in-history/october-12/the-victim-of-an-anti-gay-assault-dies",
+          "title": "Matthew Shepard, victim of anti-gay hate crime, dies",
+          "publisher": "HISTORY (A&E Television Networks)",
+          "type": "OTHER",
+          "accessedAt": "2026-11-24"
+        },
+        {
+          "url": "https://www.irishtimes.com/news/gay-student-s-murderer-gets-two-life-sentences-1.171122",
+          "title": "Gay student's murderer gets two life sentences",
+          "publisher": "The Irish Times",
+          "type": "NEWS",
+          "publishedAt": "1999-04-07",
+          "accessedAt": "2026-11-24"
+        },
+        {
+          "url": "https://obamawhitehouse.archives.gov/blog/2013/10/28/commemorating-fourth-anniversary-shepard-byrd-hate-crime-prevention-act",
+          "title": "Commemorating the Fourth Anniversary of the Shepard-Byrd Hate Crime Prevention Act",
+          "publisher": "The White House (archived)",
+          "type": "GOVERNMENT",
+          "publishedAt": "2013-10-28",
+          "accessedAt": "2026-11-24"
+        },
+        {
+          "url": "https://www.justice.gov/crt/about/crm/matthewshepard.php",
+          "title": "The Matthew Shepard and James Byrd, Jr., Hate Crimes Prevention Act of 2009",
+          "publisher": "U.S. Department of Justice, Civil Rights Division",
+          "type": "GOVERNMENT",
+          "accessedAt": "2026-11-24"
+        }
+      ],
+      "claims": [],
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "매슈 셰퍼드·제임스 버드 주니어 증오범죄 방지법 (Hate Crimes Prevention Act)",
+          "year": 2009,
+          "country": "US",
+          "description": "인종·종교·출신 국가뿐 아니라 성적 지향, 성별 정체성, 장애를 이유로 사람을 다치게 한 범죄도 연방 증오범죄로 처벌할 수 있게 했고, 주와 지역 수사기관의 증오범죄 수사를 지원하게 했습니다. 2009년 10월 28일 오바마 대통령이 서명했습니다.",
+          "sourceUrl": "https://www.justice.gov/crt/about/crm/matthewshepard.php",
+          "sourceTitle": "The Matthew Shepard and James Byrd, Jr., Hate Crimes Prevention Act of 2009 (미국 법무부)"
+        }
+      ]
+    }
+  ]
+}
