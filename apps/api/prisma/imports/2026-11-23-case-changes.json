@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "lindbergh-baby-kidnapping",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "연방 유괴법 (Federal Kidnapping Act, '린드버그 법')",
+          "year": 1932,
+          "country": "US",
+          "description": "주 경계를 넘는 유괴를 연방 범죄로 정하고, FBI가 유괴 사건을 맡아 수사할 수 있게 했습니다.",
+          "sourceUrl": "https://www.archives.gov/research/investigations/fbi/classifications/007-kidnapping.html",
+          "sourceTitle": "Classification 7: Kidnapping (미국 국립문서기록관리청)"
+        }
+      ]
+    },
+    {
+      "slug": "okegawa-stalker-murder",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "스토커 규제법 (ストーカー行為等の規制等に関する法律)",
+          "year": 2000,
+          "country": "JP",
+          "description": "따라다니기·기다리기·찾아가기 같은 행위를 '따라다니기 등'으로 정하고, 경찰의 경고와 공안위원회의 금지 명령으로 단계적으로 막게 했습니다. 2000년 5월 국회를 통과해 11월부터 시행됐습니다.",
+          "sourceUrl": "https://www.nippon.com/ja/in-depth/d00504/",
+          "sourceTitle": "nippon.com 스토커 규제법 해설"
+        }
+      ]
+    },
+    {
+      "slug": "kobe-serial-child-attacks",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "소년법 개정 (2000년)",
+          "year": 2000,
+          "country": "JP",
+          "description": "형사처벌을 받을 수 있는 나이를 16세 이상에서 14세 이상으로 낮췄습니다. 1949년 소년법 시행 뒤 처음 크게 바뀐 것으로, 2001년 4월부터 시행됐습니다.",
+          "sourceUrl": "https://www.kobe-np.co.jp/news/sougou/202203/sp/0015180238.shtml?pg=amp",
+          "sourceTitle": "<成人未満・第1部 3人の元少年>(1)生存者 連続児童殺傷、厳罰化の契機に (고베신문)"
+        }
+      ]
+    }
+  ]
+}

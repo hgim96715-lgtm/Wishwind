@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "hillsborough-disaster",
+      "changes": [
+        {
+          "kind": "SYSTEM",
+          "name": "전 좌석 경기장 (All-seater stadiums)",
+          "year": 1990,
+          "country": "GB",
+          "description": "참사를 조사한 테일러 보고서의 권고에 따라, 영국 정부는 1990년 축구장 입석을 없애기로 했습니다. 이에 따라 잉글랜드 최상위 리그 경기장들은 1994년 무렵부터 모든 관중이 좌석에 앉는 경기장으로 바뀌었습니다.",
+          "sourceUrl": "https://api.parliament.uk/historic-hansard/commons/1990/jan/29/hillsborough-stadium-disaster-taylor",
+          "sourceTitle": "Hillsborough Stadium Disaster (Taylor Report), 영국 하원 의사록 1990년 1월 29일"
+        }
+      ]
+    }
+  ]
+}
