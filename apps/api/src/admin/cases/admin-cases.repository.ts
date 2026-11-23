@@ -11,6 +11,8 @@ export const adminCaseRowSelect = {
   country: true,
   category: true,
   status: true,
+  occurredAt: true,
+  occurredAtPrecision: true,
   reviewStatus: true,
   isPublished: true,
   lastVerifiedAt: true,

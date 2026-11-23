@@ -29,6 +29,8 @@ export interface AdminCaseRow {
   country: Country;
   category: CaseCategory;
   status: CaseStatus;
+  occurredAt: string | null;
+  occurredAtPrecision: DatePrecision;
   reviewStatus: ReviewStatus;
   isPublished: boolean;
   lastVerifiedAt: string | null;

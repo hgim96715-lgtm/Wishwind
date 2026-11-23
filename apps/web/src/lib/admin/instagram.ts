@@ -1,3 +1,4 @@
+import type { AdminCaseRow } from "@/lib/admin/types";
 import type { CaseChangeWithCase, CaseDetail } from "@/lib/cases/types";
 
 /**
@@ -48,6 +49,44 @@ export function dayCaption({ item, date }: UpcomingDay) {
     `이날이 생기게 된 ${item.case.title}의 기록과 출처는 프로필 링크의 Wishwind에서 볼 수 있습니다.`,
     "",
     [...BASE_TAGS, "#사건이바꾼것", tagOf(item.case.title)].join(" "),
+  ].join("\n");
+}
+
+export type Anniversary = { row: AdminCaseRow; date: Date; daysLeft: number; yearsAgo: number };
+
+/** 발생한 날(월·일)이 앞으로 days일 안에 돌아오는 공개 사건 (날짜를 일 단위로 아는 사건만, 가까운 순) */
+export function upcomingAnniversaries(rows: AdminCaseRow[], now: Date, days = 7): Anniversary[] {
+  const today = kstToday(now);
+  const out: Anniversary[] = [];
+  for (const row of rows) {
+    if (!row.occurredAt || row.occurredAtPrecision !== "DAY") continue;
+    const occurred = new Date(`${row.occurredAt.slice(0, 10)}T00:00:00Z`);
+    const m = occurred.getUTCMonth();
+    const d = occurred.getUTCDate();
+    let year = today.getUTCFullYear();
+    let date = new Date(Date.UTC(year, m, d));
+    if (date < today) date = new Date(Date.UTC(++year, m, d));
+    const yearsAgo = year - occurred.getUTCFullYear();
+    const daysLeft = Math.round((date.getTime() - today.getTime()) / 86_400_000);
+    if (yearsAgo > 0 && daysLeft <= days) out.push({ row, date, daysLeft, yearsAgo });
+  }
+  return out.sort((a, b) => a.daysLeft - b.daysLeft);
+}
+
+/** 사건이 일어난 날에 올릴 글 ('○년 전 오늘') */
+export function anniversaryCaption(data: CaseDetail, { date, yearsAgo }: Pick<Anniversary, "date" | "yearsAgo">) {
+  const question = data.unsolvedQuestions[0]?.question;
+  const summary = data.summary.endsWith(".") ? data.summary : `${data.summary}.`;
+  return [
+    `${yearsAgo}년 전 오늘, ${dateLabel(date)}`,
+    data.title,
+    "",
+    summary,
+    ...(question ? ["", "함께 생각해 볼 질문", question] : []),
+    "",
+    "타임라인과 출처는 프로필 링크의 Wishwind에서 볼 수 있습니다.",
+    "",
+    [...BASE_TAGS, "#오늘의기억", tagOf(data.title)].join(" "),
   ].join("\n");
 }
 

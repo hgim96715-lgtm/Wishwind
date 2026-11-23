@@ -4,7 +4,16 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { CopyText } from "@/components/admin/CopyText";
 import { Card, Empty, ErrorBox, PageTitle, Skeleton } from "@/components/admin/ui";
-import { caseCaption, changeCaption, dateLabel, dayCaption, pickChanges, upcomingDays } from "@/lib/admin/instagram";
+import {
+  anniversaryCaption,
+  caseCaption,
+  changeCaption,
+  dateLabel,
+  dayCaption,
+  pickChanges,
+  upcomingAnniversaries,
+  upcomingDays,
+} from "@/lib/admin/instagram";
 import { AdminApiError, adminGet } from "@/lib/admin/session";
 import type { AdminCaseList } from "@/lib/admin/types";
 import { getCase } from "@/lib/cases/api";
@@ -20,10 +29,13 @@ export default function InstagramPage() {
     <>
       <PageTitle
         title="인스타 준비"
-        description="다가오는 기념일, 최근 공개한 사건, 사건이 바꾼 법·제도를 인스타 글감으로 모았습니다. 문구를 복사하고 스토리 이미지를 저장해 올리면 됩니다."
+        description="사건이 일어난 날, 다가오는 기념일, 최근 공개한 사건, 사건이 바꾼 법·제도를 인스타 글감으로 모았습니다. 문구를 복사하고 스토리 이미지를 저장해 올리면 됩니다."
       />
       <div className="space-y-8">
         <Guide />
+        <Suspense fallback={<Skeleton />}>
+          <Anniversaries />
+        </Suspense>
         <Suspense fallback={<Skeleton />}>
           <Upcoming />
         </Suspense>
@@ -80,6 +92,48 @@ async function Upcoming() {
               <Links slug={d.item.case.slug} />
             </Card>
           ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+/** 사건이 일어난 날(월·일)이 오늘부터 7일 안에 돌아오는 공개 사건 */
+async function Anniversaries() {
+  await connection();
+  let rows: AdminCaseList["items"];
+  try {
+    rows = (await adminGet<AdminCaseList>("/cases?published=true")).items;
+  } catch (error) {
+    if (error instanceof AdminApiError) return <ErrorBox message={error.message} />;
+    throw error;
+  }
+  const picks = upcomingAnniversaries(rows, new Date(), 7);
+  const details = await Promise.all(picks.map((p) => getCase(p.row.slug)));
+  return (
+    <section>
+      <h2 className="text-lg font-semibold">○년 전 이날 (7일)</h2>
+      <p className="mt-1 text-sm text-muted">사건이 일어난 날이 오늘부터 7일 안에 돌아오는 사건입니다. 그날 아침에 올리면 됩니다.</p>
+      {picks.length === 0 ? (
+        <div className="mt-3">
+          <Empty>앞으로 7일 안에 일어난 날이 돌아오는 사건이 없습니다.</Empty>
+        </div>
+      ) : (
+        <div className="mt-3 grid gap-4 lg:grid-cols-2">
+          {picks.map((p, i) => {
+            const d = details[i];
+            if (!d) return null;
+            return (
+              <Card key={p.row.id}>
+                <p className="text-xs text-subtle">
+                  {dateLabel(p.date)} · {p.daysLeft === 0 ? "오늘" : `${p.daysLeft}일 남음`} · {p.yearsAgo}년 전
+                </p>
+                <h3 className="mt-1 font-semibold">{d.title}</h3>
+                <CopyText text={anniversaryCaption(d, p)} />
+                <Links slug={d.slug} />
+              </Card>
+            );
+          })}
         </div>
       )}
     </section>
