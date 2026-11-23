@@ -261,7 +261,10 @@ function Words({ text }: { text: string }) {
   );
 }
 
-const cacheHeaders = { "cache-control": "public, max-age=600" };
+// 배포에서는 10분 캐시. 로컬 개발에서는 고친 결과가 바로 보이게 캐시하지 않음
+const cacheHeaders = {
+  "cache-control": process.env.NODE_ENV === "production" ? "public, max-age=600" : "no-store",
+};
 
 /** 전단지 바탕: 위에 Wishwind 로고, 오른쪽 아래에 옅은 바람개비 등대 */
 function Frame({ brand, children, compact = false }: { brand: Brand; children: React.ReactNode; compact?: boolean }) {
