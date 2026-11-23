@@ -1,15 +1,17 @@
-import { STATUS_STAMP } from "@/lib/cases/labels";
-import type { CaseStatus } from "@/lib/cases/types";
+import { caseStamp } from "@/lib/cases/labels";
+import type { CaseClosure, CaseStatus } from "@/lib/cases/types";
 
 /** 사건 파일 위에 찍힌 도장 느낌의 상태 표시 */
 export function StatusStamp({
   status,
+  closure,
   className = "",
 }: {
   status: CaseStatus;
+  closure?: CaseClosure | null;
   className?: string;
 }) {
-  const stamp = STATUS_STAMP[status];
+  const stamp = caseStamp({ status, closure });
   return (
     <span
       style={{ "--stamp": stamp.color } as React.CSSProperties}

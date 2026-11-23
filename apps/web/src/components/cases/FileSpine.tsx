@@ -2,7 +2,7 @@ import Link from "next/link";
 import {
   CATEGORY_COLOR,
   CATEGORY_LABEL,
-  STATUS_STAMP,
+  caseStamp,
   formatCaseDate,
 } from "@/lib/cases/labels";
 import type { CaseListItem } from "@/lib/cases/types";
@@ -49,7 +49,7 @@ function spineLayout(text: string, available: number) {
  */
 export function FileSpine({ item, fileNo }: { item: CaseListItem; fileNo: number }) {
   const color = CATEGORY_COLOR[item.category];
-  const stamp = STATUS_STAMP[item.status];
+  const stamp = caseStamp(item);
   // 제목 길이에 따라 책등 높이를 살짝 다르게 → 실제 책장처럼 들쭉날쭉한 느낌
   const height = 250 + (item.title.length % 4) * 14;
   const label = spineTitle(item.title);

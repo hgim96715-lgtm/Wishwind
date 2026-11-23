@@ -4,10 +4,10 @@ import {
   CATEGORY_LABEL,
   COUNTRY_LABEL,
   COUNTRY_ORDER,
-  STATUS_STAMP,
+  CASE_STAMP,
 } from "@/lib/cases/labels";
 import { hasActiveFilters, type CaseFilters } from "@/lib/cases/filters";
-import type { CaseCategory, CaseStatus } from "@/lib/cases/types";
+import type { CaseCategory, CaseStampKey } from "@/lib/cases/types";
 
 /**
  * 검색·필터 폼. 일반 GET 폼이라 JS 없이도 동작함 → 제출하면 /cases?q=...로 이동하고
@@ -56,9 +56,9 @@ export function CaseFiltersForm({ filters }: { filters: CaseFilters }) {
           ))}
         </Select>
         <Select name="status" label="상태" value={filters.status}>
-          {(Object.keys(STATUS_STAMP) as CaseStatus[]).map((s) => (
+          {(Object.keys(CASE_STAMP) as CaseStampKey[]).map((s) => (
             <option key={s} value={s}>
-              {STATUS_STAMP[s].label}
+              {CASE_STAMP[s].label}
             </option>
           ))}
         </Select>

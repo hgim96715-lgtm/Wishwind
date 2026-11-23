@@ -1,11 +1,12 @@
-import type { CaseCategory, CaseStatus, Country } from "./types";
+import type { CaseCategory, CaseStampKey, CaseStatus, Country } from "./types";
 
 /** /cases?q=&country=&category=&status=&yearFrom=&yearTo= */
 export interface CaseFilters {
   q?: string;
   country?: Country;
   category?: CaseCategory;
-  status?: CaseStatus;
+  /** 판결 확정(VERDICT)·수사 종결(CLOSED)도 받음. 예전 주소의 SOLVED는 둘 다 보여 줌 */
+  status?: CaseStatus | CaseStampKey;
   yearFrom?: string;
   yearTo?: string;
 }
@@ -38,7 +39,12 @@ export function toQueryString(f: CaseFilters) {
   const params = new URLSearchParams();
   for (const key of KEYS) {
     const v = f[key];
-    if (v) params.set(key, v);
+    if (!v) continue;
+    // 판결 확정·수사 종결은 API에 status=SOLVED&closure=로 보냄
+    if (key === "status" && (v === "VERDICT" || v === "CLOSED")) {
+      params.set("status", "SOLVED");
+      params.set("closure", v);
+    } else params.set(key, v);
   }
   return params.toString();
 }

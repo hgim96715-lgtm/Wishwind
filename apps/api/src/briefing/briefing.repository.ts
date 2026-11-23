@@ -3,11 +3,13 @@ import type { Prisma } from '../generated/prisma/client.js';
 import {
   BriefingKind,
   BriefingStatus,
+  CaseStatus,
   MissingStatus,
   NewsStatus,
   UserContentStatus,
 } from '../generated/prisma/enums.js';
 import { PrismaService } from '../prisma/prisma.service.js';
+import { closureSelect, hasFinalSentenceWhere } from '../cases/closure.js';
 import type { PostListQuery } from './dto/briefing.dto.js';
 
 const published = { status: BriefingStatus.PUBLISHED };
@@ -154,6 +156,7 @@ export class BriefingRepository {
         country: true,
         occurredAt: true,
         createdAt: true,
+        ...closureSelect,
       },
     });
   }
@@ -182,6 +185,7 @@ export class BriefingRepository {
       this.prisma.case.count({ where }),
       this.prisma.case.groupBy({ by: ['category'], where, _count: true }),
       this.prisma.case.groupBy({ by: ['status'], where, _count: true }),
+      this.prisma.case.count({ where: { ...where, status: CaseStatus.SOLVED, ...hasFinalSentenceWhere } }),
       this.prisma.case.groupBy({ by: ['country'], where, _count: true }),
     ]);
   }

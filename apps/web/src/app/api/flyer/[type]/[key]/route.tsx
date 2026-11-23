@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { ApiUnavailableError, getCase } from "@/lib/cases/api";
-import { COUNTRY_LABEL, STATUS_STAMP, formatCaseDate } from "@/lib/cases/labels";
+import { COUNTRY_LABEL, caseStamp, formatCaseDate } from "@/lib/cases/labels";
 import { getMissing } from "@/lib/missing/api";
 import { formatMissingDate } from "@/lib/missing/regions";
 import { BRAND, loadBrand, PinwheelMark } from "@/lib/og/brand";
@@ -42,7 +42,7 @@ export async function GET(request: Request, ctx: Ctx) {
 async function caseFlyer(slug: string, origin: string, brand: Brand) {
   const data = await getCase(slug);
   if (!data || data.unpublished) return Response.json({ message: "사건을 찾을 수 없습니다" }, { status: 404 });
-  const stamp = STATUS_STAMP[data.status];
+  const stamp = caseStamp(data);
   const question = data.unsolvedQuestions[0]?.question ?? null;
   // '기타' 나라는 장소 첫 어절(예: 코모로)을 나라 이름으로 씀
   const [firstWord, ...restWords] = (data.location ?? "").split(" ");

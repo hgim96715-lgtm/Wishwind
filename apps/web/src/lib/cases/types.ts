@@ -15,6 +15,10 @@ export type CaseCategory =
   | "FRAUD"
   | "OTHER";
 export type CaseStatus = "UNSOLVED" | "IN_PROGRESS" | "SOLVED";
+/** 끝난 사건(SOLVED)의 구분. 판결 확정(VERDICT) / 수사 종결(CLOSED). API가 판결 자료로 계산함 */
+export type CaseClosure = "VERDICT" | "CLOSED";
+/** 화면에 찍는 상태 도장 */
+export type CaseStampKey = "UNSOLVED" | "IN_PROGRESS" | CaseClosure;
 export type DatePrecision = "DAY" | "MONTH" | "YEAR" | "UNKNOWN";
 export type SuspectStatus =
   | "SUSPECTED"
@@ -50,6 +54,7 @@ export interface CaseListItem {
   country: Country;
   category: CaseCategory;
   status: CaseStatus;
+  closure: CaseClosure | null;
   location: string | null;
   occurredAt: string | null;
   occurredAtPrecision: DatePrecision;

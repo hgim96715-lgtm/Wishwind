@@ -2,6 +2,7 @@ import { CaseReviewStatus } from '../generated/prisma/enums.js';
 import type { CaseDetailRow, CaseListRow } from './cases.repository.js';
 import { isClueOnlySource } from '../case-import/case-import.schema.js';
 import { toPublicSuspect } from './public-suspect.js';
+import { closureOf, withClosure } from './closure.js';
 
 export interface PhotoPolicy {
   countries: ReadonlySet<string>;
@@ -24,7 +25,7 @@ export function toCaseListItem(
   { isPublished, reviewStatus, ...item }: CaseListRow,
   preview: boolean,
 ) {
-  return { ...item, ...reviewFlags(preview, isPublished, reviewStatus) };
+  return { ...withClosure(item), ...reviewFlags(preview, isPublished, reviewStatus) };
 }
 
 export function toCasePage(rows: CaseListRow[], take: number, preview: boolean) {
@@ -47,6 +48,10 @@ export function toCaseDetail(
   return {
     ...detail,
     ...reviewFlags(preview, isPublished, reviewStatus),
+    closure: closureOf(
+      found.status,
+      found.suspects.some((s) => s.sentences.some((x) => x.isFinal)),
+    ),
     // 나무위키는 단서용이라 화면의 관련 기사 목록에는 내보내지 않음
     sources: found.sources.filter((s) => !isClueOnlySource(s.url)),
     suspects: found.suspects.map((s) =>

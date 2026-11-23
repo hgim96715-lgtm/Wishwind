@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { countRows, tallyVotes, toPublicNews, topSentenceIds, voteTotal } from './briefing.mapper.js';
 import { BriefingRepository } from './briefing.repository.js';
+import { withClosure } from '../cases/closure.js';
 
 const POSTS = 30;
 const TOP = 5;
@@ -24,7 +25,7 @@ export class BriefingService {
       this.repo.participationCounts(),
       this.notesBoard(),
     ]);
-    return { notices, posts, news: news.map(toPublicNews), recentCases, missing, stats, opinions, participation, board };
+    return { notices, posts, news: news.map(toPublicNews), recentCases: recentCases.map(withClosure), missing, stats, opinions, participation, board };
   }
 
   /** 사람들의 생각 게시판: 오늘의 질문 + 그 질문에 남긴 수사 노트(질문이 없을 때만 최근 노트) + 실종방 응원. 공개(PUBLISHED) 글만 */
@@ -58,11 +59,11 @@ export class BriefingService {
   }
 
   private async caseStats() {
-    const [total, byCategory, byStatus, byCountry] = await this.repo.caseCounts();
+    const [total, byCategory, byStatus, verdictCount, byCountry] = await this.repo.caseCounts();
     return {
       total,
       byCategory: countRows(byCategory, 'category'),
-      byStatus: countRows(byStatus, 'status'),
+      byStatus: splitSolved(countRows(byStatus, 'status'), verdictCount),
       byCountry: countRows(byCountry, 'country'),
     };
   }
@@ -97,4 +98,19 @@ export class BriefingService {
 
     return { sentenceVotes, curious, mostAnswered };
   }
+}
+
+/** 끝난 사건(SOLVED)을 판결 확정(VERDICT)과 수사 종결(CLOSED)로 나눠 셈 */
+function splitSolved(rows: { key: string; count: number }[], verdictCount: number) {
+  return rows
+    .flatMap((r) =>
+      r.key === 'SOLVED'
+        ? [
+            { key: 'VERDICT', count: verdictCount },
+            { key: 'CLOSED', count: r.count - verdictCount },
+          ]
+        : [r],
+    )
+    .filter((r) => r.count > 0)
+    .sort((a, b) => b.count - a.count);
 }

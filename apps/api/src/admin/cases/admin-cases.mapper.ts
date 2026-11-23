@@ -1,14 +1,15 @@
 import type { CaseReviewStatus, CaseStatus } from '../../generated/prisma/enums.js';
 import type { AdminCaseRowRecord } from './admin-cases.repository.js';
+import { withClosure } from '../../cases/closure.js';
 
 export const STATUS_LABEL: Record<CaseStatus, string> = {
   UNSOLVED: '미제',
   IN_PROGRESS: '수사·재판 진행 중',
-  SOLVED: '해결',
+  SOLVED: '종결',
 };
 
 export function toAdminCaseRow({ _count, ...c }: AdminCaseRowRecord) {
-  return { ...c, sourceCount: _count.sources };
+  return { ...withClosure(c), sourceCount: _count.sources };
 }
 
 export function toReviewCounts(

@@ -227,7 +227,7 @@ async function CaseEditor({ id }: { id: string }) {
                   ))}
                 </select>
               </Field>
-              <Field label="해결일">
+              <Field label="종결일">
                 <input type="date" name="solvedAt" defaultValue={dateValue(c.solvedAt)} className={inputClass} />
               </Field>
             </div>

@@ -50,7 +50,7 @@ describe('draft preview', () => {
     vi.stubEnv('NODE_ENV', 'development');
     vi.stubEnv('SHOW_DRAFTS', 'true');
     const findMany = vi.fn().mockResolvedValue([
-      { id: '1', slug: 'a', isPublished: false, reviewStatus: 'DRAFT' },
+      { id: '1', slug: 'a', isPublished: false, reviewStatus: 'DRAFT', status: 'UNSOLVED', suspects: [] },
     ]);
     const { items } = await serviceWith(findMany).list(query);
     expect(findMany.mock.calls[0][0].where.isPublished).toBeUndefined();

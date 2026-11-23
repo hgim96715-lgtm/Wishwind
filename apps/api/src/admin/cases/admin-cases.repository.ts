@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import type { Prisma } from '../../generated/prisma/client.js';
 import { BriefingKind, BriefingStatus, CaseReviewStatus } from '../../generated/prisma/enums.js';
 import { PrismaService } from '../../prisma/prisma.service.js';
+import { closureSelect } from '../../cases/closure.js';
 import type { CaseEdit, CaseListQuery, ChangeAdd, RelatedAdd, SourceAdd } from './dto/admin-cases.dto.js';
 
 export const adminCaseRowSelect = {
@@ -18,6 +19,7 @@ export const adminCaseRowSelect = {
   lastVerifiedAt: true,
   updatedAt: true,
   _count: { select: { sources: true } },
+  ...closureSelect,
 } as const satisfies Prisma.CaseSelect;
 export type AdminCaseRowRecord = Prisma.CaseGetPayload<{ select: typeof adminCaseRowSelect }>;
 

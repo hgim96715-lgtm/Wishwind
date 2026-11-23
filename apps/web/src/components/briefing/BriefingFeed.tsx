@@ -7,7 +7,7 @@ import { HeadlineBoard } from "@/components/briefing/HeadlineBoard";
 import { NotesBoard } from "@/components/briefing/NotesBoard";
 import { getBriefing, type Briefing, type BriefingKind, type BriefingPost } from "@/lib/briefing/api";
 import { ApiUnavailableError } from "@/lib/cases/api";
-import { CATEGORY_COLOR, CATEGORY_LABEL, COUNTRY_LABEL, STATUS_STAMP, caseRoomCountry } from "@/lib/cases/labels";
+import { CASE_STAMP, CATEGORY_COLOR, CATEGORY_LABEL, COUNTRY_LABEL, caseRoomCountry, caseStamp } from "@/lib/cases/labels";
 import type { Country } from "@/lib/cases/types";
 
 const KIND: Record<BriefingKind, { label: string; color: string; tab: string }> = {
@@ -213,9 +213,9 @@ function RecentCases({ cases }: { cases: Briefing["recentCases"] }) {
                 </span>
                 <span
                   className="rounded-full border px-1.5 py-px text-[11px]"
-                  style={{ color: STATUS_STAMP[c.status].color, borderColor: `${STATUS_STAMP[c.status].color}55` }}
+                  style={{ color: caseStamp(c).color, borderColor: `${caseStamp(c).color}55` }}
                 >
-                  {STATUS_STAMP[c.status].label}
+                  {caseStamp(c).label}
                 </span>
                 <span className="ml-auto text-subtle">{COUNTRY_LABEL[caseRoomCountry(c.country)]}</span>
               </div>
@@ -324,9 +324,9 @@ function CaseStats({ stats }: { stats: Briefing["stats"] }) {
           <span
             key={s.key}
             className="rounded-full border px-2.5 py-0.5 text-xs"
-            style={{ color: STATUS_STAMP[s.key].color, borderColor: `${STATUS_STAMP[s.key].color}55` }}
+            style={{ color: CASE_STAMP[s.key].color, borderColor: `${CASE_STAMP[s.key].color}55` }}
           >
-            {STATUS_STAMP[s.key].label} {s.count}
+            {CASE_STAMP[s.key].label} {s.count}
           </span>
         ))}
       </div>

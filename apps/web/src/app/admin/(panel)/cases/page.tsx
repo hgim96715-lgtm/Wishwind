@@ -5,7 +5,7 @@ import { Badge, Empty, ErrorBox, FilterTabs, PageTitle, Skeleton, inputClass } f
 import { REVIEW_COLOR, REVIEW_LABEL, formatDateTime } from "@/lib/admin/labels";
 import { AdminApiError, adminGet } from "@/lib/admin/session";
 import type { AdminCaseList, ReviewStatus } from "@/lib/admin/types";
-import { CATEGORY_LABEL, COUNTRY_LABEL, STATUS_STAMP, caseRoomCountry } from "@/lib/cases/labels";
+import { CATEGORY_LABEL, COUNTRY_LABEL, caseRoomCountry, caseStamp } from "@/lib/cases/labels";
 
 export const metadata: Metadata = { title: "사건 검토·수정" };
 
@@ -95,7 +95,7 @@ async function CaseTable({ q, review, published }: { q: string; review: string; 
                   </td>
                   <td className="px-3 py-2.5">{c.isPublished ? "공개" : <span className="text-subtle">비공개</span>}</td>
                   <td className="px-3 py-2.5">
-                    <Badge color={STATUS_STAMP[c.status].color}>{STATUS_STAMP[c.status].label}</Badge>
+                    <Badge color={caseStamp(c).color}>{caseStamp(c).label}</Badge>
                   </td>
                   <td className={`px-3 py-2.5 tabular-nums ${c.sourceCount < 2 ? "text-[#b5543a]" : ""}`}>{c.sourceCount}</td>
                   <td className="px-3 py-2.5 text-xs text-muted">{formatDateTime(c.updatedAt)}</td>

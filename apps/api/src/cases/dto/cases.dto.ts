@@ -4,6 +4,7 @@ import {
   CaseStatus,
   Country,
 } from '../../generated/prisma/enums.js';
+import { CaseClosure } from '../closure.js';
 
 const DEFAULT_TAKE = 20;
 const MAX_TAKE = 100;
@@ -57,6 +58,8 @@ export const listCasesSchema = z
     country: enumParam('country', Country),
     category: enumParam('category', CaseCategory),
     status: enumParam('status', CaseStatus),
+    // 판결 확정(VERDICT) / 수사 종결(CLOSED). 고르면 status는 SOLVED로 봄
+    closure: enumParam('closure', CaseClosure),
     yearFrom: yearParam('yearFrom'),
     yearTo: yearParam('yearTo'),
     cursor: z

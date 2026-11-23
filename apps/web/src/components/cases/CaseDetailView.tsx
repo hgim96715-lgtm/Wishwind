@@ -112,7 +112,7 @@ export async function CaseDetailView({ slug }: { slug: string }) {
           </p>
           <div className="flex shrink-0 items-center gap-2">
             {data.reviewPending && <ReviewStamp />}
-            <StatusStamp status={data.status} className="text-sm" />
+            <StatusStamp status={data.status} closure={data.closure} className="text-sm" />
           </div>
         </div>
         <h1 className="mt-4 text-2xl font-bold tracking-tight md:text-3xl">

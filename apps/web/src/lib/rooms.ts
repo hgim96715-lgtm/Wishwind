@@ -24,7 +24,7 @@ export const ROOMS: readonly Room[] = [
     href: "/cases",
     title: "사건방",
     subtitle: "Case Files",
-    description: "해결된 사건과 미제 사건을 함께 살펴보는 곳",
+    description: "끝난 사건과 미제 사건을 함께 살펴보는 곳",
     icon: LuFolderSearch,
     accent: "#c46a4b",
   },

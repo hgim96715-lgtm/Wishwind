@@ -245,7 +245,7 @@ export function CaseNotes({
   return (
     <div className="space-y-3">
       {solved && (
-        <p className="text-sm text-subtle">사건은 해결됐지만, 함께 돌아볼 이야기입니다.</p>
+        <p className="text-sm text-subtle">수사·재판은 끝났지만, 함께 돌아볼 이야기입니다.</p>
       )}
       {readOnly && (
         <p className="rounded-lg border border-line bg-surface px-3 py-2 text-sm text-subtle">

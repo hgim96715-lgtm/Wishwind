@@ -4,6 +4,7 @@ import type { Prisma } from '../generated/prisma/client.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type { ListCasesQuery } from './dto/cases.dto.js';
 import { HIDE_NAME_STATUSES } from './public-suspect.js';
+import { closureSelect, closureWhere } from './closure.js';
 
 const byOrder = { sortOrder: 'asc' } as const;
 
@@ -20,6 +21,7 @@ const caseListSelect = {
   occurredAtPrecision: true,
   isPublished: true,
   reviewStatus: true,
+  ...closureSelect,
 } satisfies Prisma.CaseSelect;
 
 /** 사건이 바꾼 것(법·기념일·제도)에서 화면에 내보내는 칸 */
@@ -131,7 +133,7 @@ function visibilityWhere(preview: boolean): Prisma.CaseWhereInput {
  * - yearFrom/yearTo: 발생일 범위. occurred_at은 date 컬럼이라 UTC 자정 기준으로 비교함
  */
 function listWhere(
-  { q, country, category, status, yearFrom, yearTo }: ListCasesQuery,
+  { q, country, category, status, closure, yearFrom, yearTo }: ListCasesQuery,
   preview: boolean,
 ): Prisma.CaseWhereInput {
   const where: Prisma.CaseWhereInput = {
@@ -140,6 +142,7 @@ function listWhere(
     country: country === Country.OTHER || country === Country.CN ? { in: [Country.OTHER, Country.CN] } : country,
     category,
     status,
+    ...closureWhere(closure),
   };
 
   if (q) {

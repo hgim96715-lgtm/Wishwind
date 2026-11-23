@@ -1,5 +1,7 @@
 import type {
   CaseCategory,
+  CaseClosure,
+  CaseStampKey,
   CaseStatus,
   Country,
   CourtLevel,
@@ -49,11 +51,31 @@ export const CATEGORY_COLOR: Record<CaseCategory, string> = {
   OTHER: "#7d746a",
 };
 
-/** 상태 도장 문구와 색. 미제=테라코타(사건방 포인트색), 진행 중=호박색, 해결=청록 */
-export const STATUS_STAMP: Record<CaseStatus, { label: string; color: string }> = {
+/**
+ * 상태 도장 문구와 색. 미제=테라코타(사건방 포인트색), 진행 중=호박색, 판결 확정=청록, 수사 종결=회청색.
+ * '해결'은 좋게 마무리됐다는 인상을 줘서 쓰지 않음
+ */
+export const CASE_STAMP: Record<CaseStampKey, { label: string; color: string }> = {
   UNSOLVED: { label: "미제", color: "#c46a4b" },
   IN_PROGRESS: { label: "수사 중", color: "#b0832f" },
-  SOLVED: { label: "해결", color: "#3f8f84" },
+  VERDICT: { label: "판결 확정", color: "#3f8f84" },
+  CLOSED: { label: "수사 종결", color: "#5f7d8a" },
+};
+
+export function stampKey(status: CaseStatus, closure: CaseClosure | null | undefined): CaseStampKey {
+  if (status !== "SOLVED") return status;
+  return closure ?? "VERDICT";
+}
+
+export function caseStamp(c: { status: CaseStatus; closure?: CaseClosure | null }) {
+  return CASE_STAMP[stampKey(c.status, c.closure)];
+}
+
+/** 관리실에서 고르는 DB 상태값. 끝난 사건은 판결 자료에 따라 판결 확정·수사 종결로 자동 표시됨 */
+export const STATUS_STAMP: Record<CaseStatus, { label: string; color: string }> = {
+  UNSOLVED: CASE_STAMP.UNSOLVED,
+  IN_PROGRESS: CASE_STAMP.IN_PROGRESS,
+  SOLVED: { label: "종결 (판결 확정·수사 종결 자동)", color: CASE_STAMP.VERDICT.color },
 };
 
 export const SUSPECT_STATUS_LABEL: Record<SuspectStatus, string> = {

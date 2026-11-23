@@ -1,4 +1,4 @@
-import type { CaseCategory, CaseChange, CaseStatus, Country, RelatedContent } from "@/lib/cases/types";
+import type { CaseCategory, CaseChange, CaseClosure, CaseStatus, Country, RelatedContent } from "@/lib/cases/types";
 
 export type ReviewStatus = "DRAFT" | "NEEDS_REVIEW" | "VERIFIED" | "REJECTED";
 export type ContentStatus = "PUBLISHED" | "HELD" | "BLOCKED" | "HIDDEN";
@@ -29,6 +29,7 @@ export interface AdminCaseRow {
   country: Country;
   category: CaseCategory;
   status: CaseStatus;
+  closure: CaseClosure | null;
   occurredAt: string | null;
   occurredAtPrecision: DatePrecision;
   reviewStatus: ReviewStatus;

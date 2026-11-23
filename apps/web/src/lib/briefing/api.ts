@@ -1,6 +1,6 @@
 import { cacheLife, cacheTag } from "next/cache";
 import { API_URL, ApiUnavailableError } from "@/lib/cases/api";
-import type { CaseCategory, CaseStatus, Country } from "@/lib/cases/types";
+import type { CaseCategory, CaseClosure, CaseStampKey, CaseStatus, Country } from "@/lib/cases/types";
 
 export type BriefingKind = "NOTICE" | "NEWS" | "CASE_UPDATE" | "OPINION";
 
@@ -46,6 +46,7 @@ export interface Briefing {
     title: string;
     summary: string;
     status: CaseStatus;
+    closure: CaseClosure | null;
     category: CaseCategory;
     country: Country;
     occurredAt: string | null;
@@ -64,7 +65,7 @@ export interface Briefing {
   stats: {
     total: number;
     byCategory: { key: CaseCategory; count: number }[];
-    byStatus: { key: CaseStatus; count: number }[];
+    byStatus: { key: CaseStampKey; count: number }[];
     byCountry: { key: Country; count: number }[];
   };
   opinions: {
