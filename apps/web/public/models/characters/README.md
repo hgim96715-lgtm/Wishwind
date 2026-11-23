@@ -1,4 +1,4 @@
-# 실종방 캐릭터 모델
+# 실종자들의 정원 캐릭터 모델
 
 - 출처: [Kenney Mini Characters](https://kenney.nl/assets/mini-characters)
 - 라이선스: CC0 1.0 (출처 표기 의무 없음, 상업적 사용 가능)

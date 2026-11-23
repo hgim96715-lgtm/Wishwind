@@ -28,7 +28,7 @@ export function fillDays(rows: { day: string; views: number; visitors: number }[
 const PAGE_LABEL: Record<string, string> = {
   '/': '홈',
   '/cases': '사건방',
-  '/missing': '실종방',
+  '/missing': '실종자들의 정원',
   '/briefing': '브리핑룸',
   '/contact': '문의·의견 보내기',
 };
@@ -95,7 +95,7 @@ export function growthTips(a: {
     tips.push('인스타그램 등 SNS에서 들어온 방문이 아직 없습니다. 인스타그램 프로필 링크와 게시물 글에 사이트 주소를 넣어 보세요.');
   }
   if (total >= 5 && a.singlePageVisitors / total > 0.6) {
-    tips.push(`방문자의 ${Math.round((a.singlePageVisitors / total) * 100)}%가 한 페이지만 보고 나갔습니다.${a.topLanding ? ` 가장 많이 들어오는 ‘${a.topLanding}’에서` : ''} 다른 사건이나 실종방으로 이어지는 길을 더 눈에 띄게 만들어 보세요.`);
+    tips.push(`방문자의 ${Math.round((a.singlePageVisitors / total) * 100)}%가 한 페이지만 보고 나갔습니다.${a.topLanding ? ` 가장 많이 들어오는 ‘${a.topLanding}’에서` : ''} 다른 사건이나 실종자들의 정원으로 이어지는 길을 더 눈에 띄게 만들어 보세요.`);
   }
   if (a.topCase) tips.push(`가장 많이 본 사건은 ‘${a.topCase}’입니다. 이 사건을 인스타그램에 소개하거나 관련 영화·다큐를 더 붙여 보세요.`);
   if (a.peakHour !== undefined) {

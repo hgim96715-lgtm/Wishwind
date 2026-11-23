@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
-/** 계정 닉네임 바꾸기. 실종방 캐릭터 이름도 이 닉네임을 씀 */
+/** 계정 닉네임 바꾸기. 실종자들의 정원 캐릭터 이름도 이 닉네임을 씀 */
 export function NicknameForm({ initial }: { initial: string }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -58,7 +58,7 @@ export function NicknameForm({ initial }: { initial: string }) {
       <button type="button" onClick={() => { setOpen(false); setValue(initial); setMessage(null); }} className="px-2 py-1.5 text-sm text-subtle">
         취소
       </button>
-      <p className="w-full text-xs text-subtle">실종방에서 바람개비를 꽂을 때도 이 닉네임으로 보입니다.</p>
+      <p className="w-full text-xs text-subtle">실종자들의 정원에서 바람개비를 꽂을 때도 이 닉네임으로 보입니다.</p>
       {message && <p className="w-full text-xs text-[#a3523f]">{message}</p>}
     </form>
   );

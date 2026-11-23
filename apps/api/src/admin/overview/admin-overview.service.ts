@@ -50,7 +50,7 @@ export class AdminOverviewService {
         key: 'missing',
         name: '실종자 정보 동기화',
         schedule: `${this.config.get('MISSING_SYNC_INTERVAL_HOURS', { infer: true })}시간마다`,
-        description: '경찰청 안전Dream과 FBI 공개 자료에서 실종자 정보를 새로 받아 실종방 등불을 고칩니다.',
+        description: '경찰청 안전Dream과 FBI 공개 자료에서 실종자 정보를 새로 받아 실종자들의 정원 등불을 고칩니다.',
         lastAt: last.missing,
         enabled: missingOn,
       },

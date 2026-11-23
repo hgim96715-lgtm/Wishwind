@@ -33,7 +33,7 @@ function Memo({ index, children }: { index: number; children: React.ReactNode })
   );
 }
 
-/** 사람들의 생각: 코르크보드에 오늘의 질문을 꽂고, 주변에 수사 노트·실종방 응원을 메모지로 붙임 */
+/** 사람들의 생각: 코르크보드에 오늘의 질문을 꽂고, 주변에 수사 노트·실종자들의 정원 응원을 메모지로 붙임 */
 export function NotesBoard({
   board,
   participation,
@@ -81,7 +81,7 @@ export function NotesBoard({
                   <>
                     <p className="leading-relaxed">“{m.body}”</p>
                     <Link href="/missing" className="mt-2 block text-xs text-muted transition-colors hover:text-foreground">
-                      실종방 응원
+                      실종자들의 정원 응원
                     </Link>
                   </>
                 )}
@@ -114,7 +114,7 @@ export function NotesBoard({
       </div>
 
       <p className="mt-3 text-xs text-subtle">
-        지금까지 수사 노트 {participation.answers + participation.questions}개, 실종방 응원 {participation.clouds}개가 모였습니다.
+        지금까지 수사 노트 {participation.answers + participation.questions}개, 실종자들의 정원 응원 {participation.clouds}개가 모였습니다.
       </p>
     </section>
   );

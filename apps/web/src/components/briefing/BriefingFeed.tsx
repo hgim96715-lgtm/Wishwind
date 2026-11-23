@@ -360,7 +360,7 @@ function NewMissing({ missing }: { missing: Briefing["missing"] }) {
         ))}
       </ul>
       <Link href="/missing" className="mt-4 inline-block text-sm text-[#3f8f84] transition-opacity hover:opacity-70">
-        실종방에서 자세히 보기
+        실종자들의 정원에서 자세히 보기
       </Link>
     </section>
   );

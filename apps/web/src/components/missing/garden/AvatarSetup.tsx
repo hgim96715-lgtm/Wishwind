@@ -23,7 +23,7 @@ function storageKey() {
   const viewer = document.cookie.match(/(?:^|; )dev_viewing_as_other=([^;]+)/)?.[1];
   return viewer ? `${STORAGE_KEY}:dev-${viewer}` : STORAGE_KEY;
 }
-// 연락처·링크를 닉네임에 넣지 못하게 함 (실종방은 아이들도 보는 곳)
+// 연락처·링크를 닉네임에 넣지 못하게 함 (실종자들의 정원은 아이들도 보는 곳)
 const BAD = /(https?:|www\.|\.com|\.kr|\d{3,}|카톡|오픈채팅|텔레|line|discord)/i;
 
 export function loadAvatar(): AvatarChoice | null {

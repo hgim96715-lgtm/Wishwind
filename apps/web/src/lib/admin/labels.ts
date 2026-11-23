@@ -38,7 +38,7 @@ export const CONTENT_STATUS_COLOR: Record<ContentStatus, string> = {
 export const CONTENT_TYPE_LABEL = {
   answer: "수사 노트 답변",
   question: "사용자 질문",
-  cloud: "실종방 응원",
+  cloud: "실종자들의 정원 응원",
 } as const;
 
 export const BRIEFING_KIND_LABEL: Record<BriefingKind, string> = {

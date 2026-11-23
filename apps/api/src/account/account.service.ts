@@ -84,7 +84,7 @@ export class AccountService {
     return toMe(user, await this.repo.activity(user.voterId));
   }
 
-  /** 화면 머리·실종방에 쓰는 가벼운 정보 (닉네임만) */
+  /** 화면 머리·실종자들의 정원에 쓰는 가벼운 정보 (닉네임만) */
   /** '더 불러오기': 한 칸의 기록을 before 시각 이전으로 20개 더 */
   async moreActivity(token: string | undefined, kind: ActivityKind, before: Date) {
     const user = await this.userFrom(token);

@@ -17,7 +17,7 @@ function parseCurrent(body: unknown): { code: number; precipitation: number } | 
 }
 
 /**
- * 실종방 정원 날씨 (Open-Meteo, 키 없음). 같은 좌표는 5분 동안 캐시 (비가 막 시작했을 때 늦게 바뀌지 않게)
+ * 실종자들의 정원 날씨 (Open-Meteo, 키 없음). 같은 좌표는 5분 동안 캐시 (비가 막 시작했을 때 늦게 바뀌지 않게)
  * 브라우저 위치는 사용자가 "내 위치 날씨"를 눌러 허락했을 때만 받음
  */
 export async function GET(request: Request) {

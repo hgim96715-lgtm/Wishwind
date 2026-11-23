@@ -28,7 +28,7 @@ export class BriefingService {
     return { notices, posts, news: news.map(toPublicNews), recentCases: recentCases.map(withClosure), missing, stats, opinions, participation, board };
   }
 
-  /** 사람들의 생각 게시판: 오늘의 질문 + 그 질문에 남긴 수사 노트(질문이 없을 때만 최근 노트) + 실종방 응원. 공개(PUBLISHED) 글만 */
+  /** 사람들의 생각 게시판: 오늘의 질문 + 그 질문에 남긴 수사 노트(질문이 없을 때만 최근 노트) + 실종자들의 정원 응원. 공개(PUBLISHED) 글만 */
   private async notesBoard() {
     const dayNumber = Math.floor((Date.now() + 9 * 3_600_000) / 86_400_000);
     const question = await this.repo.questionOfDay(dayNumber);

@@ -196,7 +196,7 @@ async function missingFlyer(id: string, origin: string, brand: Brand) {
   const appearance = data.appearance ? clip(data.appearance, 140) : null;
   const tip = `${data.tip.label}`;
   const photo = data.photoUrl ? await imageDataUrl(data.photoUrl) : null;
-  const texts = [SITE_NAME, "MISSING", "이 분을 찾습니다", data.name, missingOn, place, appearance ?? "", "인상착의", "마지막으로 목격된 곳", tip, "보셨다면 공식 창구로 알려 주세요", "QR을 찍으면 실종방에서 자세히 볼 수 있습니다", `자료 출처: ${data.sourceLabel}`];
+  const texts = [SITE_NAME, "MISSING", "이 분을 찾습니다", data.name, missingOn, place, appearance ?? "", "인상착의", "마지막으로 목격된 곳", tip, "보셨다면 공식 창구로 알려 주세요", "QR을 찍으면 실종자들의 정원에서 자세히 볼 수 있습니다", `자료 출처: ${data.sourceLabel}`];
 
   return new ImageResponse(
     (
@@ -238,7 +238,7 @@ async function missingFlyer(id: string, origin: string, brand: Brand) {
           <div style={{ display: "flex", marginTop: 8, fontSize: 44, fontWeight: 700 }}>{tip}</div>
         </div>
         <div style={{ flex: 1, display: "flex" }} />
-        <Footer qr={qr} caption="QR을 찍으면 실종방에서 자세히 볼 수 있습니다" note={`자료 출처: ${data.sourceLabel}`} />
+        <Footer qr={qr} caption="QR을 찍으면 실종자들의 정원에서 자세히 볼 수 있습니다" note={`자료 출처: ${data.sourceLabel}`} />
       </Frame>
     ),
     { width: W, height: H, fonts: await koreanFonts(texts.join("")), headers: cacheHeaders },

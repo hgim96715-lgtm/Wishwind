@@ -13,7 +13,7 @@ export const metadata: Metadata = { title: "방문자 분석" };
 const ROOM_LABEL: Record<string, string> = {
   home: "홈",
   cases: "사건방",
-  missing: "실종방",
+  missing: "실종자들의 정원",
   briefing: "브리핑룸",
   contact: "문의하기",
 };
@@ -344,7 +344,7 @@ async function Report({ days }: { days: number }) {
           <Link href={`/admin/analytics/engagement?days=${days}`} className="rounded-lg border border-line/80 bg-background/50 p-4 transition-colors hover:border-foreground/30">
             <p className="text-xs text-subtle">사이트 안에서 한 참여</p>
             <p className="mt-1 text-xl font-semibold tabular-nums">{participationTotal.toLocaleString("ko-KR")}건</p>
-            <p className="mt-1 text-xs leading-5 text-muted">형량 의견·수사 노트·실종방 응원·문의·의견 합계</p>
+            <p className="mt-1 text-xs leading-5 text-muted">형량 의견·수사 노트·실종자들의 정원 응원·문의·의견 합계</p>
           </Link>
         </div>
       </Card>

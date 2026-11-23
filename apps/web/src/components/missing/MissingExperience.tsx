@@ -113,7 +113,7 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   }, [toast]);
 
   // 밤에는 화면 위 안내판(이름표·시계·날씨·버튼)을 어두운 반투명으로 바꿔 하늘과 어울리게 함 (globals.css의 garden-page 규칙)
-  // 실종방은 사이트 낮·밤 설정 대신 언덕의 시간을 따름 → 사이트를 밤으로 둬도 낮 언덕 위 안내판·창이 어둡게 겹치지 않음
+  // 실종자들의 정원은 사이트 낮·밤 설정 대신 언덕의 시간을 따름 → 사이트를 밤으로 둬도 낮 언덕 위 안내판·창이 어둡게 겹치지 않음
   useEffect(() => {
     const root = document.documentElement;
     const apply = () => {
@@ -129,7 +129,7 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
     return () => {
       window.clearInterval(id);
       delete document.documentElement.dataset.garden;
-      // 다른 방으로 나가면 사이트 낮·밤 설정으로 되돌림 (실종방으로 바로 들어왔으면 처음엔 밝게 시작했으므로 저장값을 다시 읽음)
+      // 다른 방으로 나가면 사이트 낮·밤 설정으로 되돌림 (실종자들의 정원으로 바로 들어왔으면 처음엔 밝게 시작했으므로 저장값을 다시 읽음)
       let saved: string | null = null;
       try {
         saved = localStorage.getItem(THEME_KEY);

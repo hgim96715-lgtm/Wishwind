@@ -20,7 +20,7 @@ const TABS: { kind: ActivityKind; label: string; empty: string }[] = [
   { kind: "answers", label: "수사 노트 답변", empty: "아직 남긴 답변이 없습니다. 사건 파일의 질문 탭에서 생각을 남겨 보세요." },
   { kind: "questions", label: "내가 던진 질문", empty: "아직 남긴 질문이 없습니다." },
   { kind: "votes", label: "형량 의견", empty: "아직 남긴 형량 의견이 없습니다." },
-  { kind: "clouds", label: "꽂은 바람개비", empty: "아직 꽂은 바람개비가 없습니다. 실종방 언덕에 응원 한 마디를 남겨 보세요." },
+  { kind: "clouds", label: "꽂은 바람개비", empty: "아직 꽂은 바람개비가 없습니다. 실종자들의 정원에 응원 한 마디를 남겨 보세요." },
   { kind: "inquiries", label: "문의·의견", empty: "아직 보낸 문의가 없습니다." },
 ];
 /** 처음 받은 목록 수 (API의 최근 개수와 같음). 이보다 적으면 더 불러올 것이 없음 */

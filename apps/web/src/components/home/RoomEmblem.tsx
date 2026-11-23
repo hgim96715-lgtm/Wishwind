@@ -23,7 +23,7 @@ function Books() {
   );
 }
 
-/** 실종방: 천천히 도는 바람개비. 마우스를 올리면 조금 빨라지고, 움직임 줄이기 설정이면 멈춤 */
+/** 실종자들의 정원: 천천히 도는 바람개비. 마우스를 올리면 조금 빨라지고, 움직임 줄이기 설정이면 멈춤 */
 function Pinwheel() {
   return (
     <svg viewBox="0 0 52 56" className="h-12 w-11" aria-hidden>

@@ -11,13 +11,13 @@ import { displayName } from "@/lib/og/helpers";
 const ROOM_DESCRIPTION = "지금도 집으로 돌아오지 못한 분들을 기억하고, 무사 귀가를 바라는 바람개비를 꽂습니다.";
 
 /**
- * 공유 미리보기: 실종방 링크는 찾고 있는 분들의 사진·인원 수·QR이 담긴 이미지로,
+ * 공유 미리보기: 실종자들의 정원 링크는 찾고 있는 분들의 사진·인원 수·QR이 담긴 이미지로,
  * 특정 분의 링크(?person=id, FBI 공개 자료)는 그 분의 사진·이름·제보처가 담긴 이미지로 보임
  */
 export async function generateMetadata({ searchParams }: PageProps<"/missing">): Promise<Metadata> {
   const raw = (await searchParams).person;
   const person = typeof raw === "string" ? raw : null;
-  let title = "실종방";
+  let title = "실종자들의 정원";
   let description = ROOM_DESCRIPTION;
   if (person) {
     const data = await getMissing(person).catch(() => null);
@@ -48,7 +48,7 @@ export default function MissingPage() {
         <HomeLogo onSky />
         {/* 하늘 색이 시간대마다 바뀌므로(밤엔 어두움) 글자 뒤에 반투명 바탕을 둠 */}
         <div className="mt-3 rounded-2xl bg-white/70 px-3 py-2 backdrop-blur">
-          <h1 className="text-xl font-semibold text-[#5b4d3c]">실종방</h1>
+          <h1 className="text-xl font-semibold text-[#5b4d3c]">실종자들의 정원</h1>
           <p className="hidden text-sm text-[#7a6650] sm:block">무사히 집으로 돌아오길 바라며, 함께 바람개비를 꽂습니다.</p>
           <p className="mt-1 text-xs text-[#7a6650]">
             실종 신고{" "}

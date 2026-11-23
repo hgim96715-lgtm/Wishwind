@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import { DEV_GARDEN_TIME_KEY } from "@/components/missing/dev-garden-time";
 
-/** 실종방 하늘 미리 보기용 시각 (time-of-day.ts의 시간대와 맞춤) */
+/** 실종자들의 정원 하늘 미리 보기용 시각 (time-of-day.ts의 시간대와 맞춤) */
 const GARDEN_TIMES: [string, string][] = [
   ["", "실제 시각"],
   ["5.5", "해 뜰 녘 5:30"],
@@ -20,12 +20,12 @@ const GARDEN_TIMES: [string, string][] = [
 /**
  * 개발 모드에서만 보이는 "다른 사람으로 보기" 버튼.
  * 같은 브라우저에서는 내 글이 '내 노트'로만 보여서, 남에게 어떻게 보이는지(익명 이름·공감해요·잠금 안내) 확인하기 어려움.
- * 누르면 로그인 안 한 새 익명 사용자로 바뀌고(실종방 캐릭터·닉네임도 새로), "내 화면으로"를 누르면 원래대로 돌아옴. 운영 빌드에서는 그려지지 않음
+ * 누르면 로그인 안 한 새 익명 사용자로 바뀌고(실종자들의 정원 캐릭터·닉네임도 새로), "내 화면으로"를 누르면 원래대로 돌아옴. 운영 빌드에서는 그려지지 않음
  */
 export function DevViewerSwitch() {
   const [viewing, setViewing] = useState<boolean | null>(null);
   const [gardenTime, setGardenTime] = useState("");
-  // 실종방에서는 안내판을 가리지 않게 접어 두고 'DEV'를 누르면 펼침
+  // 실종자들의 정원에서는 안내판을 가리지 않게 접어 두고 'DEV'를 누르면 펼침
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   useEffect(() => {
@@ -43,7 +43,7 @@ export function DevViewerSwitch() {
   const inGarden = pathname === "/missing";
 
   return (
-    // 실종방에서는 오른쪽 아래 '바람개비 꽂기' 버튼을 가리지 않게 위 가운데에 둠
+    // 실종자들의 정원에서는 오른쪽 아래 '바람개비 꽂기' 버튼을 가리지 않게 위 가운데에 둠
     <div
       className={`fixed z-[60] flex flex-col gap-1.5 ${
         inGarden ? "top-3 left-1/2 -translate-x-1/2 items-center" : "right-3 bottom-3 items-end"

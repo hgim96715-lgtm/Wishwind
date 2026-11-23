@@ -17,7 +17,7 @@ node_modules/
 apps/web/public/suspects/*
 !apps/web/public/suspects/.gitkeep
 
-# 실종방 캐릭터: Kenney 묶음 중 화면에 쓰는 character-*.glb만 커밋함
+# 실종자들의 정원 캐릭터: Kenney 묶음 중 화면에 쓰는 character-*.glb만 커밋함
 # (소품·무기 파일과 분위기에 맞지 않아 빼는 캐릭터는 제외)
 apps/web/public/models/characters/*.glb
 !apps/web/public/models/characters/character-*.glb

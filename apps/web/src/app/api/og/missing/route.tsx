@@ -7,8 +7,8 @@ import { BRAND, BrandHeader, loadBrand, PinwheelMark } from "@/lib/og/brand";
 import { clip, displayName, imageDataUrl, koreanFonts, qrDataUrl } from "@/lib/og/helpers";
 
 /**
- * 실종방 링크를 메신저·SNS에 붙였을 때 보이는 미리보기 이미지 (1200×630). Wishwind 로고·바람개비·로고 색으로 꾸밈
- * - 기본: 지금 찾고 있는 분들의 사진 몇 장 + 인원 수 + 실종방 QR
+ * 실종자들의 정원 링크를 메신저·SNS에 붙였을 때 보이는 미리보기 이미지 (1200×630). Wishwind 로고·바람개비·로고 색으로 꾸밈
+ * - 기본: 지금 찾고 있는 분들의 사진 몇 장 + 인원 수 + 실종자들의 정원 QR
  * - ?person=id: 그 분의 이름·실종일·장소·제보처 + QR
  *   FBI 자료는 사진도 넣고, 국내(경찰청 안전Dream) 자료는 사진 이용 조건 확인 전이라 사진 대신 '182' 신고 안내를 크게 넣음
  */
@@ -66,13 +66,13 @@ async function roomCard(origin: string, brand: Brand) {
   const headline = ["지금도 집으로", "돌아오지 못한 분들이 있습니다"];
   const count = `${people.length.toLocaleString("ko-KR")}명`;
   const texts = [
-    "실종방",
+    "실종자들의 정원",
     ...headline,
     count,
     "을 기억하며, 무사 귀가를 바라는 바람개비를 꽂습니다",
     "마지막 목격",
     "확인 중",
-    "QR을 찍으면 실종방이 열립니다",
+    "QR을 찍으면 실종자들의 정원이 열립니다",
     "실종 신고 182 · 긴급 112",
     "Wishwind",
     ...faces.flatMap((f) => [f.name, f.when, f.place]),
@@ -81,7 +81,7 @@ async function roomCard(origin: string, brand: Brand) {
   return new ImageResponse(
     (
       <Canvas brand={brand}>
-        <BrandHeader logo={brand.logo} tag="실종방" />
+        <BrandHeader logo={brand.logo} tag="실종자들의 정원" />
         <div style={{ display: "flex", flex: 1, marginTop: 18 }}>
           <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
             <div style={{ display: "flex", flexDirection: "column", fontSize: 46, fontWeight: 700, lineHeight: 1.22, color: BRAND.ink }}>
@@ -114,7 +114,7 @@ async function roomCard(origin: string, brand: Brand) {
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", width: 220, marginLeft: 24 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={qr} width={180} height={180} style={{ borderRadius: 18, background: "white", padding: 12, border: `3px solid ${BRAND.tealSoft}` }} alt="" />
-            <div style={{ display: "flex", marginTop: 12, fontSize: 16, color: BRAND.muted, whiteSpace: "nowrap" }}>QR을 찍으면 실종방이 열립니다</div>
+            <div style={{ display: "flex", marginTop: 12, fontSize: 16, color: BRAND.muted, whiteSpace: "nowrap" }}>QR을 찍으면 실종자들의 정원이 열립니다</div>
             <div style={{ display: "flex", marginTop: 14, padding: "6px 16px", borderRadius: 999, background: BRAND.teal, color: "white", fontSize: 17, fontWeight: 700 }}>
               실종 신고 182 · 긴급 112
             </div>
@@ -137,7 +137,7 @@ async function personCard(id: string, origin: string, brand: Brand) {
   const age = data.ageAtMissing != null ? ` · 실종 당시 ${data.ageAtMissing}세` : "";
   const missingOn = `${data.missingDate ? `${formatMissingDate(data.missingDate)} 실종` : "실종"}${domestic ? age : ""}`;
   const place = clip(data.lastSeenPlace ?? data.region, 40);
-  const texts = ["이 분을 찾습니다", "실종 신고", "182", "긴급할 때는 112", name, missingOn, "마지막으로 목격된 곳", place, "보셨다면 공식 창구로 알려 주세요", data.tip.label, "QR을 찍으면 실종방에서 자세히 볼 수 있습니다", `자료 출처: ${data.sourceLabel}`, "Wishwind"];
+  const texts = ["이 분을 찾습니다", "실종 신고", "182", "긴급할 때는 112", name, missingOn, "마지막으로 목격된 곳", place, "보셨다면 공식 창구로 알려 주세요", data.tip.label, "QR을 찍으면 실종자들의 정원에서 자세히 볼 수 있습니다", `자료 출처: ${data.sourceLabel}`, "Wishwind"];
 
   return new ImageResponse(
     (
@@ -174,7 +174,7 @@ async function personCard(id: string, origin: string, brand: Brand) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={qr} width={104} height={104} style={{ borderRadius: 12, background: "white", padding: 8, border: `2px solid ${BRAND.tealSoft}` }} alt="" />
               <div style={{ display: "flex", flexDirection: "column" }}>
-                <div style={{ display: "flex", fontSize: 18, color: BRAND.muted }}>QR을 찍으면 실종방에서 자세히 볼 수 있습니다</div>
+                <div style={{ display: "flex", fontSize: 18, color: BRAND.muted }}>QR을 찍으면 실종자들의 정원에서 자세히 볼 수 있습니다</div>
                 <div style={{ display: "flex", marginTop: 2, fontSize: 15, color: BRAND.subtle }}>{`자료 출처: ${data.sourceLabel}`}</div>
               </div>
             </div>

@@ -112,5 +112,5 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   );
 }
 
-/** 화면을 그리기 전에 실행 → 저장한 선택(없으면 기기 설정)을 적용. 실종방은 언덕의 시간을 따름 */
+/** 화면을 그리기 전에 실행 → 저장한 선택(없으면 기기 설정)을 적용. 실종자들의 정원은 언덕의 시간을 따름 */
 export const THEME_INIT_SCRIPT = `(function(){try{var t=location.pathname.indexOf('/missing')===0?'light':localStorage.getItem('${THEME_KEY}');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=d?'dark':'light';}catch(e){}})();`;

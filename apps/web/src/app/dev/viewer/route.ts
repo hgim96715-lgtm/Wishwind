@@ -10,7 +10,7 @@ const REAL_VOTER_COOKIE = "dev_real_voter";
 // 로그인 세션도 잠깐 빼 둠 → 다른 사람 모드에서는 로그인 안 한 방문자로 보임
 const SESSION_COOKIE = "cold_cases_session";
 const REAL_SESSION_COOKIE = "dev_real_session";
-/** 화면이 읽는 표시용 쿠키. 값은 '다른 사람'마다 새로 만드는 짧은 무작위 문자열 (실종방 캐릭터 저장 칸을 나누는 데 씀) */
+/** 화면이 읽는 표시용 쿠키. 값은 '다른 사람'마다 새로 만드는 짧은 무작위 문자열 (실종자들의 정원 캐릭터 저장 칸을 나누는 데 씀) */
 const VIEWING_FLAG = "dev_viewing_as_other";
 const HOUR = 60 * 60;
 

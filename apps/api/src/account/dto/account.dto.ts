@@ -20,7 +20,7 @@ export const loginSchema = z.object({
 });
 export type LoginInput = z.output<typeof loginSchema>;
 
-/** 연락처·링크는 닉네임에 쓸 수 없음 (실종방 캐릭터 닉네임과 같은 규칙) */
+/** 연락처·링크는 닉네임에 쓸 수 없음 (실종자들의 정원 캐릭터 닉네임과 같은 규칙) */
 const NICKNAME_BAD = /(https?:|www\.|\.com|\.kr|\d{3,}|카톡|오픈채팅|텔레|line|discord)/i;
 /** 운영자로 오해할 수 있는 이름 */
 const NICKNAME_RESERVED = /(관리자|운영자|운영진|wishwind|위시윈드|admin)/i;

@@ -24,7 +24,7 @@ export function recordFileEvent(type: FileType, key: string, kind: "VIEW" | "SHA
   }).catch(() => null);
 }
 
-/** 사건은 사건 파일 주소, 실종자는 실종방에서 카드가 바로 열리는 주소 */
+/** 사건은 사건 파일 주소, 실종자는 실종자들의 정원에서 카드가 바로 열리는 주소 */
 export function fileUrl(type: FileType, key: string, origin = window.location.origin) {
   return type === "case" ? `${origin}/cases/${key}` : `${origin}/missing?person=${encodeURIComponent(key)}`;
 }

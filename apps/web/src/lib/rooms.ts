@@ -31,7 +31,7 @@ export const ROOMS: readonly Room[] = [
   {
     slug: "missing",
     href: "/missing",
-    title: "실종방",
+    title: "실종자들의 정원",
     subtitle: "Missing Persons",
     description: "지금도 누군가 기다리고 있는 사람들의 이야기",
     icon: LuUserRoundSearch,

@@ -29,7 +29,7 @@ const TYPES = [
   { key: "all", label: "모든 글" },
   { key: "answer", label: "수사 노트 답변" },
   { key: "question", label: "사용자 질문" },
-  { key: "cloud", label: "실종방 응원" },
+  { key: "cloud", label: "실종자들의 정원 응원" },
 ] as const;
 const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? "";
 

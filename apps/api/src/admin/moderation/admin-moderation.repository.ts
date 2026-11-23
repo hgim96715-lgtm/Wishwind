@@ -71,7 +71,7 @@ function statusWhere(filter: ModerationListQuery['filter']) {
   }
 }
 
-/** 사용자 글(수사 노트 답변·질문, 실종방 구름)과 참여 제한 목록 */
+/** 사용자 글(수사 노트 답변·질문, 실종자들의 정원 구름)과 참여 제한 목록 */
 @Injectable()
 export class AdminModerationRepository {
   constructor(private readonly prisma: PrismaService) {}

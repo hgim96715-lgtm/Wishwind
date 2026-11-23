@@ -14,7 +14,7 @@ export async function GET() {
     // 폴더가 아직 없음 → 빈 목록 (화면은 임시 캐릭터로 동작)
   }
   // Kenney 묶음에는 소품 파일도 섞여 있어 character로 시작하는 파일을 우선 씀
-  // 실종방 분위기에 맞지 않는 캐릭터(좀비·무기 든 병사 등)는 뺌
+  // 실종자들의 정원 분위기에 맞지 않는 캐릭터(좀비·무기 든 병사 등)는 뺌
   const excluded = /zombie|soldier|raider|knight/i;
   const characters = (files.some((f) => f.startsWith("character")) ? files.filter((f) => f.startsWith("character")) : files)
     .filter((f) => !excluded.test(f))

@@ -1,7 +1,7 @@
 import { UserContentStatus } from '../../generated/prisma/enums.js';
 import type { AnswerRecord, CloudRecord, QuestionRecord } from './admin-moderation.repository.js';
 
-const CLOUD_CONTEXT = '실종방 응원 메시지';
+const CLOUD_CONTEXT = '실종자들의 정원 응원 메시지';
 
 /** 관리실 '부적절한 글' 목록의 한 줄. 세 종류의 글을 같은 모양으로 맞춤 */
 export function answerItem(a: AnswerRecord, blocked: Set<string>) {
