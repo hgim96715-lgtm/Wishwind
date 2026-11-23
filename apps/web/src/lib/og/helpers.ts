@@ -17,7 +17,8 @@ export function clip(text: string, max: number) {
 /** 글자 수를 넘으면 문장·쉼표 끝에서 자름 (어절 중간에서 끊기지 않게). 끊을 곳이 너무 앞이면 어절 끝에서 자름 */
 export function clipAtBoundary(text: string, max: number) {
   const t = text.replace(/\s+/g, " ").trim();
-  if (t.length <= max) return t;
+  // 다 들어가면 문장 끝에 마침표를 붙임 (사건 요약은 마침표 없이 저장돼 있음)
+  if (t.length <= max) return /[.?!…]$/.test(t) ? t : `${t}.`;
   const head = t.slice(0, max);
   const sentence = Math.max(head.lastIndexOf(". "), head.lastIndexOf("다."));
   if (sentence >= max * 0.5) return t.slice(0, head.indexOf(".", sentence) + 1);

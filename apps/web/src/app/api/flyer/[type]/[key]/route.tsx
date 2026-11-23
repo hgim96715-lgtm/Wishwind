@@ -88,7 +88,7 @@ async function caseFlyer(slug: string, origin: string, brand: Brand) {
         )}
         <div style={{ display: "flex", flexShrink: 0, marginTop: 28, fontSize: 36, lineHeight: 1.45, color: "#9a8a76", wordBreak: "keep-all" }}>{clip(meta, 60)}</div>
         <div style={{ display: "flex", flexShrink: 0, marginTop: 52, fontSize: 44, lineHeight: 1.6, color: MUTED, wordBreak: "keep-all" }}>
-          {summary}
+          <Words text={summary} />
         </div>
         {question && (
           <div
@@ -126,7 +126,7 @@ function caseMeta(data: CaseDetail) {
 
 /**
  * 인스타그램 피드 게시물용 (1080×1350, 4:5). 피드에서 가장 크게 보이는 비율.
- * 질문은 넣지 않고 글(캡션)에 씀. 대신 피해 규모 한 줄과 요약을 크게 보여 줌
+ * 질문은 넣지 않고 글(캡션)에 씀. 대신 요약을 길게 보여 줌
  */
 async function postFlyer(slug: string, origin: string, brand: Brand) {
   const data = await getCase(slug);
@@ -137,11 +137,11 @@ async function postFlyer(slug: string, origin: string, brand: Brand) {
   const titleMain = paren ? paren[1] : data.title;
   const titleNote = paren ? `(${paren[2]})` : null;
   const titleSize = titleMain.length > 22 ? 60 : titleMain.length > 14 ? 70 : 84;
-  const summary = clipAtBoundary(data.summary, 110);
+  const summary = clipAtBoundary(data.summary, 180);
   const qr = await qrDataUrl(`${origin}/cases/${slug}`);
   const caption = "QR을 찍으면 사건 파일이 열립니다";
   const note = "같은 일이 다시 일어나지 않도록, 함께 기억해 주세요";
-  const texts = [SITE_NAME, "CASE FILE", stamp.label, data.title, summary, meta, data.victimCountNote ?? "", caption, note];
+  const texts = [SITE_NAME, "CASE FILE", stamp.label, data.title, summary, meta, caption, note];
 
   return new ImageResponse(
     (
@@ -172,15 +172,8 @@ async function postFlyer(slug: string, origin: string, brand: Brand) {
           </div>
         )}
         <div style={{ display: "flex", flexShrink: 0, marginTop: 22, fontSize: 32, lineHeight: 1.45, color: "#9a8a76", wordBreak: "keep-all" }}>{clip(meta, 60)}</div>
-        {data.victimCountNote && (
-          <div style={{ display: "flex", flexShrink: 0, marginTop: 30 }}>
-            <div style={{ display: "flex", padding: "10px 24px", borderRadius: 999, background: "#efe6d8", fontSize: 32, fontWeight: 700, color: INK }}>
-              {data.victimCountNote}
-            </div>
-          </div>
-        )}
-        <div style={{ display: "flex", flexShrink: 0, marginTop: 36, fontSize: 40, lineHeight: 1.6, color: MUTED, wordBreak: "keep-all" }}>
-          {summary}
+        <div style={{ display: "flex", flexShrink: 0, marginTop: 40, fontSize: 38, lineHeight: 1.6, color: MUTED, wordBreak: "keep-all" }}>
+          <Words text={summary} />
         </div>
         <div style={{ flex: 1, display: "flex" }} />
         <Footer qr={qr} caption={caption} note={note} small />
@@ -249,6 +242,22 @@ async function missingFlyer(id: string, origin: string, brand: Brand) {
       </Frame>
     ),
     { width: W, height: H, fonts: await koreanFonts(texts.join("")), headers: cacheHeaders },
+  );
+}
+
+/**
+ * 띄어쓰기에서만 줄을 바꿈. Satori는 '502명'처럼 숫자와 한글 사이에서도 줄을 바꿔서,
+ * 어절마다 따로 그려 어절 중간에서 끊기지 않게 함 (감싸는 칸은 display:flex여야 함)
+ */
+function Words({ text }: { text: string }) {
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap" }}>
+      {text.split(" ").map((w, i) => (
+        <span key={i} style={{ marginRight: "0.28em" }}>
+          {w}
+        </span>
+      ))}
+    </div>
   );
 }
 
