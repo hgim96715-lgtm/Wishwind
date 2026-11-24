@@ -1,16 +1,15 @@
 "use client";
 
-import { useFrame } from "@react-three/fiber";
 import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { EXPO_GARDENS, MAP_SCALE, gardenRoute, mapPoint, canWalk } from "./expo-layout";
 import { gardenLanternSlots } from "./ExpoLanterns";
 
 import { snowMaterial, useSnow } from "./ExpoSnow";
-type Instance={x:number;y:number;z:number;s:[number,number,number];color:string;angle?:number;spin?:boolean};
+type Instance={x:number;y:number;z:number;s:[number,number,number];color:string;angle?:number};
 type Batch={geometry:THREE.BufferGeometry;items:Instance[]};
 /** All repeated details are batched. Decorative meshes never intercept path/lantern clicks. */
-export function ExpoLandscape({night,still}:{night:boolean;still:boolean}){
+export function ExpoLandscape(){
   const snow=useSnow();
   const snowMat=useMemo(()=>snowMaterial(new THREE.MeshStandardMaterial({roughness:1,side:THREE.DoubleSide}),snow),[snow]);
   useEffect(()=>()=>snowMat.dispose(),[snowMat]);
@@ -22,8 +21,7 @@ export function ExpoLandscape({night,still}:{night:boolean;still:boolean}){
     const foliage:Batch={geometry:new THREE.IcosahedronGeometry(1,1),items:[]};
     const pine:Batch={geometry:new THREE.ConeGeometry(1,1,7),items:[]};
     const petal:Batch={geometry:new THREE.CircleGeometry(1,5).rotateX(-Math.PI/2),items:[]};
-    const blades:Batch={geometry:new THREE.CircleGeometry(1,3).translate(.65,.65,0),items:[]};
-    const add=(batch:Batch,x:number,y:number,z:number,s:Instance['s'],color:string,angle=0,spin=false)=>batch.items.push({x,y,z,s,color,angle,spin});
+    const add=(batch:Batch,x:number,y:number,z:number,s:Instance['s'],color:string,angle=0)=>batch.items.push({x,y,z,s,color,angle});
     EXPO_GARDENS.forEach((g,gi)=>{
       const slots=gardenLanternSlots(gi),path=new Path2D(gardenRoute(gi));
       const ctx=document.createElement('canvas').getContext('2d')!;ctx.lineWidth=22;
@@ -44,9 +42,6 @@ export function ExpoLandscape({night,still}:{night:boolean;still:boolean}){
         const p=mapPoint(mx,my);
         for(let i=0;i<4;i++){const x=p.x+i*1.2;if(!safe(x,p.z))continue;add(timber,x,.32,p.z,[.1,.64,.1],'#b89a72');if(i<3&&safe(x+1.2,p.z))add(rope,x+.6,.44,p.z,[1.2,.025,.025],'#d3bf93');}
       }
-      const entrance=mapPoint(gi%2?716:296,gi<2?305:435);
-      add(timber,entrance.x,.6,entrance.z,[.035,1.2,.035],'#b59670');
-      for(let i=0;i<4;i++)add(blades,entrance.x,1.2,entrance.z,[.2,.2,.2],i%2?'#fff1d1':'#e9b076',i*Math.PI/2,true);
     });
     // Seasonal grove: pink blossom, green canopy, maple, snow-dusted evergreen.
     [[175,490],[175,535],[245,590],[350,605]].forEach(([x,y],i)=>{
@@ -66,11 +61,10 @@ export function ExpoLandscape({night,still}:{night:boolean;still:boolean}){
     for(let i=0;i<14;i++)add(timber,shore.x-1.1+i*.17,.06,shore.z,[.15,.09,2.1],'#c6ae86');
     add(foliage,shore.x-2,.01,shore.z+3,[2.1,.025,1.8],'#e8d8af');
     for(let i=0;i<15;i++){const x=shore.x-2+Math.cos(i*2.4)*(1+i*.05),z=shore.z+3+Math.sin(i*2.4)*(1+i*.05);add(pine,x,.3,z,[.035,.6,.035],'#aeb586');if(i%3===0)add(foliage,x,.04,z+.4,[.12,.045,.1],'#f4e4d4');}
-    return [stone,timber,rope,foliage,pine,petal,blades];
+    return [stone,timber,rope,foliage,pine,petal];
   },[]);
   const dummy=useMemo(()=>new THREE.Object3D(),[]);
-  useLayoutEffect(()=>{data.forEach((batch,j)=>{const mesh=refs.current[j];if(!mesh)return;batch.items.forEach((p,i)=>{dummy.position.set(p.x,p.y,p.z);dummy.rotation.set(0,j===6?0:p.angle??0,j===6?p.angle??0:0);dummy.scale.set(...p.s);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);mesh.setColorAt(i,new THREE.Color(p.color));});mesh.instanceMatrix.needsUpdate=true;if(mesh.instanceColor)mesh.instanceColor.needsUpdate=true;mesh.computeBoundingSphere();});},[data,dummy]);
-  useFrame(({clock})=>{if(still)return;const mesh=refs.current[6];if(!mesh)return;data[6].items.forEach((p,i)=>{dummy.position.set(p.x,p.y,p.z);dummy.scale.set(...p.s);dummy.rotation.set(0,0,(p.angle??0)-clock.elapsedTime*.35);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);});mesh.instanceMatrix.needsUpdate=true;});
+  useLayoutEffect(()=>{data.forEach((batch,j)=>{const mesh=refs.current[j];if(!mesh)return;batch.items.forEach((p,i)=>{dummy.position.set(p.x,p.y,p.z);dummy.rotation.set(0,p.angle??0,0);dummy.scale.set(...p.s);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);mesh.setColorAt(i,new THREE.Color(p.color));});mesh.instanceMatrix.needsUpdate=true;if(mesh.instanceColor)mesh.instanceColor.needsUpdate=true;mesh.computeBoundingSphere();});},[data,dummy]);
   useEffect(()=>()=>data.forEach(b=>b.geometry.dispose()),[data]);
   return <>{data.map((b,i)=><instancedMesh key={i} ref={m=>{refs.current[i]=m;}} args={[b.geometry,undefined,b.items.length]} raycast={()=>null}><primitive object={snowMat} attach="material"/></instancedMesh>)}</>;
 }

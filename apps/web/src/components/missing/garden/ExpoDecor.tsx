@@ -138,7 +138,7 @@ function Sign({ text,x,y }: {text:string;x:number;y:number}) {
 
 export const ExpoDecor=memo(function ExpoDecor({night,reducedMotion}:{night:boolean;reducedMotion:boolean}) {
   return <group>
-    <ExpoPlaces /><ExpoLandscape night={night} still={reducedMotion} />
+    <ExpoPlaces /><ExpoLandscape />
     <Fountain reducedMotion={reducedMotion} /><Dinosaur /><Toys /><Lighthouse night={night} reducedMotion={reducedMotion} />
     <Hanok x={657} y={175} /><Hanok x={742} y={175} />
 
