@@ -40,7 +40,9 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setTheme(document.documentElement.dataset.theme === "dark" ? "dark" : "light");
+    const preferred=savedTheme()??systemTheme();
+    document.documentElement.dataset.theme=preferred;
+    setTheme(preferred);
     const id = requestAnimationFrame(() => setAnimate(true));
 
     // 폰·컴퓨터 모두: 직접 고른 값이 있으면 그대로 지키고, 고르기 전에만 기기 설정(라이트·다크)을 따름
@@ -112,5 +114,5 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   );
 }
 
-/** 화면을 그리기 전에 실행 → 저장한 선택(없으면 기기 설정)을 적용. 실종자들의 정원은 언덕의 시간을 따름 */
-export const THEME_INIT_SCRIPT = `(function(){try{var t=location.pathname.indexOf('/missing')===0?'light':localStorage.getItem('${THEME_KEY}');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=d?'dark':'light';}catch(e){}})();`;
+/** 화면을 그리기 전에 실행 → 저장한 선택(없으면 기기 설정)을 적용. 정원 색상은 별도의 CSS 범위에서 처리 */
+export const THEME_INIT_SCRIPT = `(function(){try{var t=localStorage.getItem('${THEME_KEY}');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=d?'dark':'light';}catch(e){}})();`;

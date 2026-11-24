@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import "./garden-mobile.css";
 const styles={"root": "expo-root", "mobileOnly": "expo-mobileOnly", "toolbar": "expo-toolbar", "settingsToggle": "expo-settingsToggle", "settingsPanel": "expo-settingsPanel", "footer": "expo-footer", "wishCount": "expo-wishCount"};
-import { Component, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { Component, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Joystick } from "./garden/Joystick";
 import { canWalk, EXPO_ENTRANCES, EXPO_GARDENS, EXPO_START, MAP_SCALE, type Point } from "./garden/expo-layout";
 import type { Pinwheel, Travel } from "./garden/ExpoScene";
@@ -15,7 +15,7 @@ import { useWeather } from "./useWeather";
 import { WEATHER_LABEL } from "@/lib/weather/types";
 import { GardenChoice } from "./GardenChoice";
 import { AnimatePresence } from "motion/react";
-import { phaseAt, type GardenPhase } from "./garden/expo-environment";
+import { phaseAt } from "./garden/expo-environment";
 import { regionLabel } from "@/lib/missing/regions";
 
 const NO_PLANTED_PINWHEELS:Pinwheel[]=[];
@@ -30,12 +30,17 @@ class SceneBoundary extends Component<{children:ReactNode},{failed:boolean}> {
 }
 
 export function GardenExpo() {
+  useLayoutEffect(()=>{
+    // Next Activity retains hidden routes but tears down their effects.
+    document.documentElement.dataset.gardenActive="true";
+    return()=>{delete document.documentElement.dataset.gardenActive;};
+  },[]);
   const lights=useGardenLanterns();
   const [settingsOpen,setSettingsOpen]=useState(false);
   const [browseOpen,setBrowseOpen]=useState(false);
   const [clockLabel,setClockLabel]=useState("");
   const [listOpen,setListOpen]=useState(false),[selectedGarden,setSelectedGarden]=useState(0);
-  const [timeMode,setTimeMode]=useState<"auto"|GardenPhase>("auto"),[hour,setHour]=useState(16);
+  const [hour,setHour]=useState(16);
   const [reducedMotion,setReducedMotion]=useState(false);
   const [mode,setMode]=useState<"overview"|"walk">("walk");
   const [ready,setReady]=useState(false);
@@ -75,7 +80,7 @@ export function GardenExpo() {
     const motionChange=()=>setReducedMotion(preference.matches);preference.addEventListener("change",motionChange);
     return()=>{window.clearInterval(timer);preference.removeEventListener("change",motionChange);};
   },[]);
-  const phase=timeMode==="auto"?phaseAt(hour):timeMode;
+  const phase=phaseAt(hour);
   const night=phase==="night";
   const setupOpen=avatarLoaded&&(!avatar||editingAvatar);
   const modalOpen=listOpen||!!lights.selected||setupOpen;
@@ -98,7 +103,6 @@ export function GardenExpo() {
     <div id="garden-settings" data-open={settingsOpen} className="expo-settingsPanel" inert={modalOpen||undefined}>
       <div className="expo-settings-row"><button type="button" onClick={()=>setEditingAvatar(true)}>{avatar?.nickname||"캐릭터·닉네임"}</button><span>{weather.place} · {WEATHER_LABEL[weather.kind]}</span><button type="button" disabled={weatherLoading} onClick={()=>void (mine?clearWeather():askMyLocation())}>{weatherLoading?"날씨 확인 중":mine?"위치 날씨 끄기":"내 위치 날씨"}</button></div>
       {weatherError&&<p role="status" className="expo-weather-error">{weatherError}</p>}
-      <div className="expo-time-options" role="group" aria-label="정원 시간">{([['auto','자동'],['morning','아침'],['day','낮'],['sunset','노을'],['night','밤']] as const).map(([value,label])=><button key={value} type="button" aria-pressed={timeMode===value} onClick={()=>setTimeMode(value)}>{label}</button>)}</div>
     </div>
     <button type="button" className="expo-browse-toggle" aria-expanded={browseOpen} aria-controls="garden-browse" onClick={()=>{setBrowseOpen(v=>!v);setSettingsOpen(false);}} inert={modalOpen||undefined}>{browseOpen?"찾기 닫기":"이름 찾기"}</button>
     <section id="garden-browse" data-open={browseOpen} className="expo-browse" aria-label="오늘의 바람개비와 검색" inert={modalOpen||undefined}>
@@ -122,7 +126,7 @@ export function GardenExpo() {
         <div>{mode==="walk"&&<div aria-label="걷기 조이스틱"><Joystick onChange={(x,y)=>{stick.current={x,y};}} /></div>}</div>
         <div className="expo-status-stack">
           <p className={`${styles.wishCount} rounded-full bg-[#faf9ef]/90 px-4 py-2 text-xs`}>바람개비 날리기 · {totalSupport.toLocaleString()}회</p>
-          <p className="expo-clock" aria-label="현재 시각과 정원 시간대"><time>{clockLabel||"--:--"}</time><span> · {({morning:"아침",day:"낮",sunset:"노을",night:"밤"})[phase]}{timeMode!=="auto"?" 미리보기":""} · {WEATHER_LABEL[weather.kind]}</span></p>
+          <p className="expo-clock" aria-label="현재 시각과 정원 시간대"><time>{clockLabel||"--:--"}</time><span> · {({morning:"아침",day:"낮",sunset:"노을",night:"밤"})[phase]} · {WEATHER_LABEL[weather.kind]}</span></p>
         </div>
       </div>
       <p data-message={!!notice||lights.status!=="ready"} role="status" className="max-w-xl rounded-full bg-[#faf9ef]/90 px-4 py-1.5 text-center text-xs text-[#5d735e]">{lights.status==="loading"?"실종자들의 바람개비를 불러오는 중…":lights.status==="error"?"바람개비를 불러오지 못했음 · 바람개비 목록에서 다시 시도":notice||(mode==="overview"?`${lights.people.length}명의 기억 · 바람개비를 눌러 이야기를 만나기`:"좌우로 방향 전환 · 위아래로 걷기")}</p>

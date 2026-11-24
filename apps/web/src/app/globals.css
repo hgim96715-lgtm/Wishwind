@@ -27,6 +27,10 @@
   --dots: rgb(235 229 218 / 0.05);
 }
 
+/* Retained route styles must not override the active site's theme. */
+:root:not([data-garden-active="true"])[data-theme="light"] { color-scheme: light; }
+:root:not([data-garden-active="true"])[data-theme="dark"] { color-scheme: dark; }
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

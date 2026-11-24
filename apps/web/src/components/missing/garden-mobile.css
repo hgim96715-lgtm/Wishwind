@@ -179,3 +179,28 @@ main:has(.expo-root[data-phase=night]) .expo-header>span { background:#202e3bed;
 @media(max-width:1199px), (pointer:coarse), (max-height:520px) {
  .expo-overview-panel { display:none; }
 }
+
+/* Explicit daytime surfaces: independent of OS defaults and utility overrides. */
+.garden-theme-scope .logo-pill { background:#fffdf7; }
+.garden-theme-scope .brand-logo { background:transparent; padding:0; }
+.expo-root:not([data-phase=night]) :is(.expo-toolbar>div,.expo-settingsPanel,.expo-browse,.expo-garden-nav,.garden-choice-trigger,.garden-choice-options,.expo-settingsToggle,.expo-browse-toggle,.garden-person-label,.expo-wishCount,.expo-clock) {
+  color-scheme:only light;
+  background:#fffdf7;
+  color:#46604e;
+  border-color:#dce2d1;
+}
+.expo-root:not([data-phase=night]) .garden-person-tail { background:#fffdf7; }
+.expo-root:not([data-phase=night]) :is(.expo-toolbar button,.expo-garden-nav button,.garden-choice-options button,.expo-settingsPanel button) { color:#46604e; }
+.expo-root:not([data-phase=night]) :is(.expo-toolbar button[aria-pressed=true],.expo-time-options button[aria-pressed=true]) { background:#496954; color:#fffdf7; }
+.expo-root:not([data-phase=night]) .expo-garden-nav button[aria-current=location] { background:#e3ebdb; color:#3d6348; }
+.expo-root:not([data-phase=night]) :is(.garden-avatar-dialog,.garden-person-dialog,.garden-directory-dialog) { background:#fffdf7; color:#3d2e1e; }
+.expo-root:not([data-phase=night]) .garden-person-dialog .garden-share-button { background:#fffdf7; color:#52634e; }
+
+/* Apply the garden's color scheme at the document boundary as well as its subtree.
+   A light child alone leaves the browser's root dark-color negotiation enabled. */
+:root[data-garden-active="true"] {
+  color-scheme: only light;
+}
+:root[data-garden-active="true"] body {
+  background-color: #efe9df;
+}

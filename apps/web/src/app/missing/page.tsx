@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { HomeLogo } from "@/components/common/HomeLogo";
@@ -6,6 +6,9 @@ import { GardenExpo } from "@/components/missing/GardenExpo";
 import { getMissing } from "@/lib/missing/api";
 import { formatMissingDate } from "@/lib/missing/regions";
 import { displayName } from "@/lib/og/helpers";
+
+// The garden owns its palette. Do not advertise automatic OS dark recoloring.
+export const viewport: Viewport = { colorScheme: "only light", themeColor: "#efe9df" };
 
 const ROOM_DESCRIPTION = "사정에 따라 이어진 정원별 길을 걸으며, 지금도 집으로 돌아오지 못한 분들을 기억하고 바람개비에 응원의 바람을 보냅니다.";
 
