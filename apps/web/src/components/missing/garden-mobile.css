@@ -1,6 +1,6 @@
 .expo-root { height:100dvh; min-height:0; }
 .expo-mobileOnly { display:none; }
-@media(max-width:767px), (max-height:520px) {
+@media(max-width:1199px), (pointer:coarse), (max-height:520px) {
  .expo-header { padding:calc(env(safe-area-inset-top, 0px) + 10px) 12px 8px; height:58px; }
  .expo-header > span { display:none; }
  .expo-root > aside { display:none; }
@@ -33,7 +33,7 @@
 .expo-browse > div { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:8px; font-size:10px; }
 .expo-browse button { min-height:32px; color:#84622e; }
 .expo-browse button:disabled { opacity:.4; }
-@media(max-width:767px), (max-height:520px) {
+@media(max-width:1199px), (pointer:coarse), (max-height:520px) {
  .expo-browse { top:calc(env(safe-area-inset-top,0px) + 124px); left:10px; right:10px; width:auto; display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:8px; }
  .expo-browse select { margin:0; min-width:0; }
  .expo-browse input { min-width:0; }
@@ -48,14 +48,14 @@
 .expo-garden-nav { display:flex; max-width:100%; gap:6px; padding:6px; border:1px solid #e4e8dc; border-radius:18px; background:#faf9eff5; box-shadow:0 2px 12px #344c4010; }
 .expo-garden-nav button { flex-shrink:0; border-radius:12px; min-height:40px; }
 .expo-garden-nav button:hover { background:#e0e8d7; }
-@media(max-width:767px), (max-height:520px) {
+@media(max-width:1199px), (pointer:coarse), (max-height:520px) {
  .expo-footer .expo-wishCount { display:block; font-size:11px; }
  .expo-footer .expo-garden-nav { display:flex; width:100%; flex-wrap:nowrap; justify-content:flex-start; overflow-x:auto; scrollbar-width:none; }
  .expo-garden-nav button { white-space:nowrap; font-size:11px; padding:8px 12px; }
  .expo-browse { grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
  .expo-settingsPanel { max-height:calc(100dvh - 160px); overflow-y:auto; justify-content:flex-start; }
 }
-@media(max-width:767px), (max-height:520px) {
+@media(max-width:1199px), (pointer:coarse), (max-height:520px) {
  .expo-root:has(.expo-settingsPanel[data-open=true]) .expo-browse { display:none; }
  .expo-settingsPanel { background:#fffdf7; }
 }
@@ -83,7 +83,7 @@
 .expo-garden-nav { width:100%; max-width:640px; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); align-items:stretch; gap:4px; }
 .expo-garden-nav button { text-align:center; padding:10px 6px; white-space:normal; line-height:1.5; }
 .expo-garden-nav button[aria-current=location] { background:#e3ebdb; color:#3d6348; font-weight:600; }
-@media(max-width:767px), (max-height:520px) {
+@media(max-width:1199px), (pointer:coarse), (max-height:520px) {
  .expo-settingsPanel { display:none; top:calc(env(safe-area-inset-top,0px) + 120px); left:10px; right:10px; width:auto; max-width:none; padding:14px; }
  .expo-settingsPanel[data-open=true] { display:flex; }
  .expo-settings-row { justify-content:center; }
@@ -130,3 +130,52 @@ main:has(.expo-root[data-phase=night]) .expo-header>span { background:#202e3bed;
 .expo-root[data-phase=night] .garden-person-dialog a { color:#e7c991; }
 .expo-root[data-phase=night] .garden-person-dialog a.flex { background:#cda568; color:#172630; }
 .expo-root[data-phase=night] .garden-directory-dialog article :is(button,span) { color:#c9d5cf; }
+
+/* Garden time owns this subtree, independently of the site's saved/system theme.
+   Include the sibling header so its logo pill never inherits global dark overrides. */
+.garden-theme-scope {
+ color-scheme:only light;
+ --background:#efe9df;
+ --foreground:#2f2c28;
+ --surface:#fbf7ef;
+ --line:#e0d7c8;
+ --muted:#6b655d;
+ --subtle:#9a9389;
+ --dots:rgb(47 44 40 / .07);
+}
+.garden-theme-scope:has(.expo-root[data-phase=night]) {
+ color-scheme:dark;
+ --background:#202e3b;
+ --foreground:#e8e6dc;
+ --surface:#2b3c48;
+ --line:#52616a;
+ --muted:#bdc9c9;
+ --subtle:#a1b1b5;
+}
+
+.garden-sign-label { display:block; width:max-content; white-space:nowrap; padding:7px 12px; border-radius:10px; background:#fffdf7f2; color:#344c40; font-size:13px; font-weight:600; box-shadow:0 2px 10px #20382820; }
+.expo-root[data-phase=night] .garden-sign-label { background:#202e3bf2; color:#f0e9d6; }
+.expo-browse-toggle,.expo-short-label { display:none; }
+.expo-footer .expo-clock { margin:0; padding:4px 12px; font-size:11px; font-variant-numeric:tabular-nums; background:var(--garden-panel); color:var(--garden-ink); border-radius:20px; }
+@media(max-width:1199px), (pointer:coarse), (max-height:520px) {
+ .expo-toolbar { justify-content:flex-start; padding:0 12px; }
+ .expo-toolbar > div { width:calc(100% - 100px); max-width:300px; padding:3px; border-radius:16px; }
+ .expo-toolbar button { min-height:40px; padding:7px 12px; font-size:12px; }
+ .expo-desktop-label { display:none; }
+ .expo-short-label { display:inline; }
+ .expo-browse-toggle { display:block; position:absolute; z-index:16; right:12px; top:calc(env(safe-area-inset-top,0px) + 62px); min-height:46px; padding:8px 14px; border-radius:16px; background:var(--garden-panel); color:var(--garden-ink); border:1px solid var(--garden-line); font-size:12px; }
+ .expo-browse { display:none; top:calc(env(safe-area-inset-top,0px) + 118px); }
+ .expo-browse[data-open=true] { display:grid; }
+ .expo-footer > p[role=status] { max-width:100%; }
+}
+@media(max-width:1199px), (pointer:coarse), (max-height:520px) {
+ .expo-footer > p[role=status][data-message=false] { display:none; }
+ .expo-footer .expo-garden-nav { padding:4px; border-radius:16px; gap:2px; }
+ .expo-footer .expo-garden-nav button { min-height:44px; white-space:nowrap; padding:6px 2px; font-size:11px; }
+}
+.expo-status-stack { display:flex; flex-direction:column; align-items:flex-end; gap:4px; pointer-events:none; }
+.expo-status-stack .expo-clock { padding:3px 10px; font-size:10px; }
+
+@media(max-width:1199px), (pointer:coarse), (max-height:520px) {
+ .expo-overview-panel { display:none; }
+}

@@ -1,7 +1,8 @@
 "use client";
 
 import { useFrame } from "@react-three/fiber";
-import { Suspense, useEffect, useMemo, useRef } from "react";
+import { Suspense, memo, useEffect, useMemo, useRef, useState } from "react";
+import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { mapPoint } from "./expo-layout";
 import { ExpoLandscape } from "./ExpoLandscape";
@@ -112,34 +113,43 @@ function Bench({ x,y,turn=0 }: {x:number;y:number;turn?:number}) {
 
 function Sign({ text,x,y }: {text:string;x:number;y:number}) {
   const p=mapPoint(x,y);
+  const [near,setNear]=useState(false);
+  const visibility=useRef({elapsed:0,near:false});
+  useFrame(({camera},dt)=>{
+    visibility.current.elapsed+=dt;if(visibility.current.elapsed<.25)return;
+    visibility.current.elapsed=0;
+    const visible=Math.hypot(camera.position.x-p.x,camera.position.z-p.z)<18&&camera.position.y<15;
+    if(visible!==visibility.current.near){visibility.current.near=visible;setNear(visible);}
+  });
   const texture=useMemo(()=>{
     const canvas=document.createElement("canvas");canvas.width=768;canvas.height=160;
     const ctx=canvas.getContext("2d")!;ctx.fillStyle="#f8edcf";ctx.fillRect(0,0,768,160);
-    ctx.strokeStyle="#bca277";ctx.lineWidth=8;ctx.strokeRect(8,8,752,144);ctx.fillStyle="#405b4a";ctx.font="600 46px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(text,384,82);
-    const t=new THREE.CanvasTexture(canvas);t.colorSpace=THREE.SRGBColorSpace;return t;
+    ctx.strokeStyle="#bca277";ctx.lineWidth=8;ctx.strokeRect(8,8,752,144);ctx.fillStyle="#405b4a";ctx.font="700 58px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(text,384,82,700);
+    const t=new THREE.CanvasTexture(canvas);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;return t;
   },[text]);
   useEffect(()=>()=>texture.dispose(),[texture]);
   return <group position={[p.x,0,p.z]}>
+    {near&&<Html center position={[0,2.05,0]} zIndexRange={[8,0]} style={{pointerEvents:"none"}}><span className="garden-sign-label">{text}</span></Html>}
     {[-0.95,0.95].map(x=><Cylinder key={x} p={[x,0.7,0]} r={0.06} h={1.4} color="#a08a67" />)}
     <Box p={[0,1.35,0]} s={[2.7,0.65,0.12]} color="#b59b72" />
     {[0,Math.PI].map(turn=><mesh key={turn} position={[0,1.35,turn===0?0.065:-0.065]} rotation={[0,turn,0]}><planeGeometry args={[2.7,0.6]} /><meshBasicMaterial map={texture} /></mesh>)}
   </group>;
 }
 
-export function ExpoDecor({night,reducedMotion}:{night:boolean;reducedMotion:boolean}) {
+export const ExpoDecor=memo(function ExpoDecor({night,reducedMotion}:{night:boolean;reducedMotion:boolean}) {
   return <group>
     <ExpoPlaces /><ExpoLandscape night={night} still={reducedMotion} />
     <Fountain reducedMotion={reducedMotion} /><Dinosaur /><Toys /><Lighthouse night={night} reducedMotion={reducedMotion} />
     <Hanok x={657} y={175} /><Hanok x={742} y={175} />
 
     <Bench x={455} y={347} turn={-.7} /><Bench x={505} y={347} turn={.7} /><Bench x={455} y={403} turn={-2.4} /><Bench x={505} y={403} turn={2.4} />
-    <Sign x={535} y={350} text="← 아이들 · 계절  |  어른들 · 바다 →" />
+    <Sign x={535} y={350} text="← 아이들·계절 / 어른들·바다 →" />
     <Bench x={380} y={235} /><Bench x={810} y={255} /><Bench x={340} y={550} /><Bench x={565} y={590} turn={Math.PI/2} />
     <Sign x={235} y={318} text="아이들의 길" /><Sign x={745} y={318} text="어른들의 길" />
     <Sign x={235} y={429} text="오래 기다리는 길" /><Sign x={745} y={429} text="바다 건너 길" />
     <Suspense fallback={null}><ExpoVegetation reducedMotion={reducedMotion} /></Suspense>
   </group>;
-}
+});
 
 export function PlantedPinwheel({ x,z,color,reducedMotion=false }: {x:number;z:number;color:string;reducedMotion?:boolean}) {
   const blades=useRef<THREE.Group>(null);

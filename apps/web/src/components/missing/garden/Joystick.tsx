@@ -1,17 +1,20 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
-/** 모바일 가상 조이스틱: 값은 ref로만 넘겨 매 프레임 리렌더를 만들지 않음 (손잡이 위치만 state) */
+/** 모바일 가상 조이스틱: 값과 손잡이를 직접 갱신하여 포인터 이동 중 React 리렌더를 만들지 않음 */
 export function Joystick({ onChange }: { onChange: (x: number, y: number) => void }) {
   const base = useRef<HTMLDivElement>(null);
-  const [knob, setKnob] = useState({ x: 0, y: 0 });
-  const R = (base.current?.getBoundingClientRect().width??112)*.39;
+  const knob=useRef<HTMLDivElement>(null);
+  const moveKnob=(x:number,y:number)=>{
+    if(knob.current)knob.current.style.transform=`translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+  };
 
   const update = (clientX: number, clientY: number) => {
     const el = base.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
+    const R=r.width*.39;
     let dx = clientX - (r.left + r.width / 2);
     let dy = clientY - (r.top + r.height / 2);
     const l = Math.hypot(dx, dy);
@@ -19,11 +22,11 @@ export function Joystick({ onChange }: { onChange: (x: number, y: number) => voi
       dx = (dx / l) * R;
       dy = (dy / l) * R;
     }
-    setKnob({ x: dx, y: dy });
+    moveKnob(dx,dy);
     onChange(dx / R, -dy / R);
   };
   const end = () => {
-    setKnob({ x: 0, y: 0 });
+    moveKnob(0,0);
     onChange(0, 0);
   };
 
@@ -42,8 +45,9 @@ export function Joystick({ onChange }: { onChange: (x: number, y: number) => voi
       onLostPointerCapture={end}
     >
       <div
+        ref={knob}
         className="absolute top-1/2 left-1/2 size-9 sm:size-12 rounded-full bg-white/90 shadow"
-        style={{ transform: `translate(calc(-50% + ${knob.x}px), calc(-50% + ${knob.y}px))` }}
+        style={{ transform: "translate(-50%, -50%)",willChange:"transform" }}
       />
     </div>
   );

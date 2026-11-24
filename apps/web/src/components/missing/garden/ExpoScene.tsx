@@ -40,6 +40,24 @@ export interface ExpoSceneProps {
   onReady: () => void;
 }
 
+// Keep retina detail without rendering an unbounded number of mobile pixels.
+function RenderQuality() {
+  const {gl,setDpr}=useThree();
+  const sample=useRef({time:0,frames:0,warmup:0});
+  useFrame((_,dt)=>{
+    const s=sample.current;
+    if(document.hidden||dt>.25){s.time=0;s.frames=0;return;}
+    s.warmup+=dt;if(s.warmup<4)return;
+    s.time+=dt;s.frames++;
+    if(s.time<3)return;
+    const fps=s.frames/s.time,current=gl.getPixelRatio(),max=Math.min(window.devicePixelRatio||1,window.matchMedia("(pointer:coarse)").matches?1.5:2),min=Math.min(max,1);
+    const next=fps<42?Math.max(min,current-.25):fps>57?Math.min(max,current+.25):current;
+    if(next!==current)setDpr(next);
+    s.time=0;s.frames=0;
+  });
+  return null;
+}
+
 function Ground({ onChoose,wet }: { onChoose: (p:Point)=>void;wet:boolean }) {
   const snow=useSnow();
   const groundMaterial=useMemo(()=>snowMaterial(new THREE.MeshStandardMaterial({roughness:.85}),snow,true,"#E3E9F0"),[snow]);
@@ -86,6 +104,7 @@ function World(props: ExpoSceneProps) {
   const speed=useRef(0),keys=useRef(new Set<string>()),route=useRef<Point[]>([]);
   const lastTarget=useRef(new THREE.Vector3()),forward=useRef(new THREE.Vector3()),right=useRef(new THREE.Vector3()),targetTemp=useRef(new THREE.Vector3());
   const initialized=useRef(false),reportTime=useRef(0);
+  const reportedPosition=useRef<Point>({...EXPO_START});
   const followActive=useRef(false);
   const heading=useRef(Math.PI),orbitActive=useRef(false),orbitUntil=useRef(0);
   const metrics=useRef({seconds:0,frames:0});
@@ -130,6 +149,7 @@ function World(props: ExpoSceneProps) {
         gl.domElement.dataset.gardenHeading=String(heading.current);
         gl.domElement.dataset.gardenPlayer=JSON.stringify(player.current);
         gl.domElement.dataset.gardenFps=String(Math.round(metrics.current.frames/metrics.current.seconds));
+        gl.domElement.dataset.gardenDpr=String(gl.getPixelRatio());
         gl.domElement.dataset.gardenDrawCalls=String(gl.info.render.calls);
         gl.domElement.dataset.gardenLanterns=String(props.lanterns.length);
         gl.domElement.dataset.gardenCounts=JSON.stringify([0,1,2,3].map(g=>props.lanterns.filter(l=>l.garden===g).length));
@@ -194,9 +214,11 @@ function World(props: ExpoSceneProps) {
         camera.position.set(c.target.x+Math.sin(nextYaw)*radius,c.target.y+offset.y,c.target.z+Math.cos(nextYaw)*radius);
       }
     } else speed.current=0;
+    // OrbitControls updates before this callback; aim again after follow translation.
+    if(mode==="walk"&&!orbitActive.current)camera.lookAt(c.target);
     body.position.set(p.x,0.08,p.z);
     if(cursor.current) {cursor.current.visible=!!destination.current;if(destination.current)cursor.current.position.set(destination.current.x,0.06,destination.current.z);}
-    reportTime.current+=dt;if(reportTime.current>0.2){reportTime.current=0;onPosition({...p});}
+    reportTime.current+=dt;if(reportTime.current>0.2){reportTime.current=0;if(Math.hypot(p.x-reportedPosition.current.x,p.z-reportedPosition.current.z)>.03){reportedPosition.current={...p};onPosition({...p});}}
   });
 
   return <SnowContext.Provider value={snow}>
@@ -215,7 +237,7 @@ function World(props: ExpoSceneProps) {
 }
 
 function ExpoScene(props:ExpoSceneProps) {
-  return <Canvas shadows={{type:THREE.PCFShadowMap}} dpr={1} camera={{position:[0,75,82],fov:50,near:0.5,far:1200}} gl={{antialias:false,powerPreference:"high-performance"}} fallback={<div className="p-8 text-center">이 브라우저에서 3D 화면을 열 수 없음. 다른 브라우저에서 다시 열 수 있음.</div>}><World {...props} /></Canvas>;
+  return <Canvas shadows={{type:THREE.PCFShadowMap}} dpr={[1,1.5]} camera={{position:[0,75,82],fov:50,near:0.5,far:1200}} gl={{antialias:true,powerPreference:"high-performance"}} fallback={<div className="p-8 text-center">이 브라우저에서 3D 화면을 열 수 없음. 다른 브라우저에서 다시 열 수 있음.</div>}><RenderQuality /><World {...props} /></Canvas>;
 }
 
 export default memo(ExpoScene);

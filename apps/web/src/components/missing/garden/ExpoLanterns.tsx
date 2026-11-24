@@ -59,12 +59,29 @@ export function ExpoLanterns({items,visited,strength,reducedMotion,onSelect,play
   },[]);
   useEffect(()=>()=>{new Set(resources.geometries).forEach(g=>g.dispose());resources.materials.forEach(m=>m.dispose());},[resources]);
   useEffect(()=>{gl.domElement.style.cursor=hover?"pointer":"";return()=>{gl.domElement.style.cursor="";};},[hover,gl]);
-  useLayoutEffect(()=>{setHover(null);setNear(null);refs.current.forEach(m=>{if(m)m.instanceMatrix.setUsage(THREE.DynamicDrawUsage);});},[items]);
-  useFrame((_,delta)=>{
-    const dt=Math.min(delta,.05),{dummy,color}=resources;let closest:string|null=null,dist=12;
+  useLayoutEffect(()=>{
+    setHover(null);setNear(null);
+    const {dummy,color}=resources;
     const palettes=[["#F2AA91","#F5D47C","#A3C8B0","#A9BDDE"],["#D8B3A8","#E6CE9E","#9FB9A0","#BDB3D5"],["#E3A595","#DABD7F","#A9BC91","#D4BEDB"],["#94BDD6","#F2D898","#A4D3CB","#F0B6A1"]];
+    refs.current.forEach((mesh,j)=>{
+      if(!mesh)return;
+      mesh.instanceMatrix.setUsage(j>=1&&j<=4?THREE.DynamicDrawUsage:THREE.StaticDrawUsage);
+      items.forEach((p,i)=>{
+        const size=p.low?.78:1;
+        dummy.position.set(p.x,j===0?0:1.25*size,p.z+(j===0?0:j===6?.095:.055));
+        dummy.rotation.set(0,0,j>=1&&j<=4?(j-1)*Math.PI/2:0);
+        dummy.scale.setScalar(j===6&&!visited.has(p.person.id)?0:size);
+        dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);
+        if(j>=1&&j<=4)mesh.setColorAt(i,color.set(palettes[p.garden][(j-1+i)%4]));
+      });
+      mesh.instanceMatrix.needsUpdate=true;if(mesh.instanceColor)mesh.instanceColor.needsUpdate=true;
+    });
+  },[items,visited,resources]);
+  useEffect(()=>{resources.materials.slice(1,6).forEach(m=>{m.emissive.set("#FFE7B0");m.emissiveIntensity=Math.min(.22,strength*.12);});},[strength,resources]);
+  useFrame((_,delta)=>{
+    const dt=Math.min(delta,.05),{dummy}=resources;let closest:string|null=null,dist=12;
     items.forEach((p,i)=>{
-      const distance=Math.hypot(p.x-player.current.x,p.z-player.current.z),active=p.person.id===hover||distance<3;
+      const distance=Math.hypot(p.x-player.current.x,p.z-player.current.z);
       if(distance<dist){dist=distance;closest=p.person.id;}
       const count=p.person.lightCount??0;
       let state=motion.current.get(p.person.id);
@@ -76,18 +93,14 @@ export function ExpoLanterns({items,visited,strength,reducedMotion,onSelect,play
       if(!reducedMotion)state.angle=(state.angle+state.speed*dt)%(Math.PI*2);
       const size=p.low?.78:1,hub=1.25*size;
       refs.current.forEach((mesh,j)=>{
-        if(!mesh)return;
-        dummy.position.set(p.x,j===0?0:hub,p.z+(j===0?0:.055));dummy.rotation.set(0,0,0);dummy.scale.setScalar(size);
-        if(j>=1&&j<=4)dummy.rotation.z=state.angle+(j-1)*Math.PI/2;
-        if(j===6){dummy.position.z+=.04;dummy.scale.setScalar(visited.has(p.person.id)?size:0);}
+        if(!mesh||j<1||j>4||reducedMotion)return;
+        dummy.position.set(p.x,hub,p.z+.055);dummy.rotation.set(0,0,state.angle+(j-1)*Math.PI/2);dummy.scale.setScalar(size);
         dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);
-        if(j>=1&&j<=4)mesh.setColorAt(i,color.set(palettes[p.garden][(j-1+i)%4]));
       });
     });
     // Keep removed groups from accumulating animation state indefinitely.
     if(motion.current.size>160){const ids=new Set(items.map(p=>p.person.id));for(const id of motion.current.keys())if(!ids.has(id))motion.current.delete(id);}
-    refs.current.forEach(m=>{if(m){m.instanceMatrix.needsUpdate=true;if(m.instanceColor)m.instanceColor.needsUpdate=true;}});
-    resources.materials.slice(1,6).forEach(m=>{m.emissive.set("#FFE7B0");m.emissiveIntensity=Math.min(.22,strength*.12);});
+    refs.current.forEach((m,j)=>{if(m&&j>=1&&j<=4&&!reducedMotion)m.instanceMatrix.needsUpdate=true;});
     elapsed.current+=delta;if(elapsed.current>.2){elapsed.current=0;setNear(closest);}
   });
   const events={onPointerMove:(e:ThreeEvent<PointerEvent>)=>{e.stopPropagation();setHover(items[e.instanceId??-1]?.person.id??null);},onPointerOut:()=>setHover(null),onClick:(e:ThreeEvent<MouseEvent>)=>{e.stopPropagation();const p=items[e.instanceId??-1];if(e.delta<5&&p)onSelect(p.person.id);}};

@@ -42,7 +42,7 @@ export async function generateMetadata({ searchParams }: PageProps<"/missing">):
 
 export default function MissingPage() {
   return (
-    <main className="relative bg-[#dce7df] text-[#34483e]">
+    <main className="garden-theme-scope relative bg-[#dce7df] text-[#34483e]">
       <header className="expo-header pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between gap-4 px-3 py-3 sm:px-5 sm:py-5 [&_a]:pointer-events-auto">
         <HomeLogo onSky />
         <span className="hidden sm:block rounded-full border border-white/70 bg-[#fbfaf1]/90 px-4 py-2 text-xs">함께 기다리는 바람개비 정원</span>
