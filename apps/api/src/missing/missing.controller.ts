@@ -1,4 +1,5 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Param, Query } from '@nestjs/common';
+import { OptionalVoterId, VoterId } from '../common/decorators/voter-id.decorator.js';
 import { ZodPipe } from '../common/pipes/zod-validation.pipe.js';
 import { listMissingSchema, missingIdSchema, type ListMissingQuery } from './dto/missing.dto.js';
 import { MissingService } from './missing.service.js';
@@ -15,6 +16,16 @@ export class MissingController {
   @Get('regions')
   regions() {
     return this.missing.regions();
+  }
+
+  @Get(':id/light')
+  lighting(@Param('id', new ZodPipe(missingIdSchema)) id: string, @OptionalVoterId() voterId?: string) {
+    return this.missing.lighting(id,voterId);
+  }
+
+  @Post(':id/light')
+  light(@Param('id', new ZodPipe(missingIdSchema)) id: string, @VoterId() voterId: string) {
+    return this.missing.light(id,voterId);
   }
 
   @Get(':id/translation')

@@ -4,6 +4,7 @@ import { AnimatePresence } from "motion/react";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LuClock, LuCloud, LuCloudFog, LuCloudRain, LuCloudSnow, LuList, LuMap, LuMapPin, LuSun, LuUserRound, LuVolume2, LuVolumeX, LuWind } from "react-icons/lu";
+import { GARDEN_PATHS, type GardenPathKey } from "@/lib/missing/garden-paths";
 import { WEATHER_LABEL, type Weather, type WeatherKind } from "@/lib/weather/types";
 import type { RegionGroup } from "@/lib/missing/regions";
 import type { CloudMessage } from "@/lib/missing/types";
@@ -11,7 +12,7 @@ import { THEME_KEY } from "@/components/common/ThemeToggle";
 import { AvatarSetup, loadAvatar, type AvatarChoice } from "./garden/AvatarSetup";
 import type { BlockedAt, PlayerStatus, Wish, WorldControls } from "./garden/GardenScene";
 import { Joystick } from "./garden/Joystick";
-import { GARDEN_CENTER, lanternPoint, LIGHTHOUSE, pinwheelSpeed, pinwheelSpot, START_POND_VIEW, trailPoint } from "./garden/world";
+import { GARDEN_CENTER, gardenPathDirection, gardenPathPoint, lanternPoint, LIGHTHOUSE, pinwheelSpeed, pinwheelSpot, START_POND_VIEW, trailPoint } from "./garden/world";
 import { MissingCard } from "./MissingCard";
 import { MissingList } from "./MissingList";
 import { buildSlots } from "./path-layout";
@@ -82,6 +83,7 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   // 다른 사람이 새로 꽂으면 "○○님이 바람개비를 꽂았습니다"를 잠깐 띄움
   const [wishData, setWishData] = useWishes(useCallback((clouds: CloudMessage[]) => setToast(arrivalMessage(clouds)), []));
   const [wishOpen, setWishOpen] = useState(false);
+  const [mapOpen, setMapOpen] = useState(false);
   const [freshId, setFreshId] = useState<string | null>(null);
   const closeWish = useCallback(() => setWishOpen(false), []);
 
@@ -207,10 +209,22 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
   }, [myLatest, wishCount]);
 
   const jumpTo = (slot: number) => {
-    const s = slots[slot + 1];
+    const lanternIndex = slots.reduce<number[]>((indices, current, index) => {
+      if (current.kind === "lantern") indices.push(index);
+      return indices;
+    }, [])[Math.min(slot, total - 1)];
+    const s = slots[lanternIndex];
     // 첫 등불 바로 옆 길 위에 세움 → 도착하자마자 "등불 보기"·Enter가 됨
-    const [x, , z] = s?.kind === "lantern" ? lanternPoint(slot + 1, s.side, 0) : trailPoint(slot);
+    const [x, , z] = s?.kind === "lantern" ? lanternPoint(lanternIndex, s.side, 0, s.pathKey) : trailPoint(slot);
     controls.current.teleport?.(x, z + 0.5);
+  };
+
+  const jumpToPath = (pathKey: GardenPathKey) => {
+    const index = slots.findIndex((slot) => slot.kind === "sign" && slot.pathKey === pathKey);
+    if (index < 0) return;
+    const [x, , z] = gardenPathPoint(0, pathKey);
+    const direction = gardenPathDirection(pathKey);
+    controls.current.teleport?.(x, z - direction * 4, [x, z + direction * 10]);
   };
 
   const total = groups.reduce((n, g) => n + g.people.length, 0);
@@ -218,7 +232,7 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
     return <Veil text="아직 길에 놓인 등불이 없습니다. 실종자 정보를 불러오는 중이니 잠시 후 다시 와 주세요." />;
   }
 
-  const overlay = !!selected || wishOpen || !avatar || editingAvatar || namingForWish;
+  const overlay = !!selected || wishOpen || mapOpen || !avatar || editingAvatar || namingForWish;
 
   return (
     <div className="relative h-full w-full">
@@ -249,9 +263,18 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
               else if (where === "pond") controls.current.teleport?.(START_POND_VIEW[0], START_POND_VIEW[1]);
               else if (where === "lighthouse") controls.current.teleport?.(LIGHTHOUSE[0] + 4, LIGHTHOUSE[1] + 4);
               else if (where === "newest") jumpTo(0);
-              else jumpTo(Math.max(0, total - 1));
+              else if (where === "oldest") jumpTo(Math.max(0, total - 1));
+              else if (where.startsWith("path:")) jumpToPath(where.slice(5) as GardenPathKey);
             }}
           />
+          <button
+            type="button"
+            onClick={() => setMapOpen(true)}
+            className="absolute top-[4.25rem] right-[11.5rem] z-20 flex h-9 items-center gap-1.5 rounded-full bg-white/80 px-3 text-sm text-[#5b4d3c] shadow-sm backdrop-blur transition hover:bg-white md:top-16 md:right-56"
+          >
+            <LuMap aria-hidden className="size-4" />
+            정원 지도
+          </button>
 
           {/* 터치 기기는 늘, 그 밖에는 좁은 화면(모바일 크기)에서 조이스틱을 보여 줌. 마우스로 끌어도 동작 */}
           {!overlay && (
@@ -362,6 +385,18 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
         {wishOpen && <WishPanel key="wishes" data={wishData} setData={setWishData} onClose={closeWish} onPlaced={onPlaced} onFindMine={myLatest ? findMine : undefined} nickname={avatar?.nickname} getPosition={() => (mode === "scene" ? controls.current.plantSpot?.() : undefined)} />}
       </AnimatePresence>
       <AnimatePresence>
+        {mapOpen && (
+          <GardenMapPanel
+            key="garden-map"
+            onClose={() => setMapOpen(false)}
+            onOpenPath={(pathKey) => {
+              setMapOpen(false);
+              jumpToPath(pathKey);
+            }}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
         {selected && <MissingCard key={selected.id} id={selected.id} regionLabel={selected.regionLabel} onClose={close} />}
       </AnimatePresence>
     </div>
@@ -369,7 +404,7 @@ export function MissingExperience({ groups }: { groups: RegionGroup[] }) {
 }
 
 /** 지역 구간으로 바로 이동: 나라별로 묶어 보여 줌 */
-type Place = "garden" | "pond" | "lighthouse" | "newest" | "oldest";
+type Place = "garden" | "pond" | "lighthouse" | "newest" | "oldest" | `path:${GardenPathKey}`;
 
 /** 바로 가기: 지역으로 나누지 않으므로 언덕의 장소와 등불 길 처음·끝만 고름 */
 function PlaceMenu({ lanterns, onGo }: { lanterns: number; onGo: (where: Place) => void }) {
@@ -397,8 +432,66 @@ function PlaceMenu({ lanterns, onGo }: { lanterns: number; onGo: (where: Place) 
         <option value="lighthouse">등대</option>
         <option value="newest">가장 최근 등불</option>
         <option value="oldest">가장 오래된 등불 ({lanterns}번째)</option>
+        <optgroup label="정원별 길">
+          {GARDEN_PATHS.map((path) => (
+            <option key={path.key} value={`path:${path.key}`}>
+              {path.name}
+            </option>
+          ))}
+        </optgroup>
       </select>
     </label>
+  );
+}
+
+const MAP_POSITIONS: Record<GardenPathKey, { left: string; top: string }> = {
+  children: { left: "18%", top: "23%" },
+  village: { left: "82%", top: "23%" },
+  waiting: { left: "18%", top: "78%" },
+  abroad: { left: "82%", top: "78%" },
+};
+
+function GardenMapPanel({ onClose, onOpenPath }: { onClose: () => void; onOpenPath: (pathKey: GardenPathKey) => void }) {
+  return (
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-[#354b4b]/30 px-4 backdrop-blur-sm">
+      <section role="dialog" aria-modal="true" aria-labelledby="garden-map-title" className="relative w-full max-w-xl rounded-[2rem] border border-[#dbc49e] bg-[#fffaf0] p-5 text-[#5b4d3c] shadow-2xl">
+        <button type="button" onClick={onClose} aria-label="정원 지도 닫기" className="absolute top-4 right-4 rounded-full bg-[#f3e6cf] px-3 py-1 text-sm hover:bg-[#ead8b8]">
+          닫기
+        </button>
+        <p className="text-xs font-semibold tracking-[0.18em] text-[#b5794f]">WISHWIND GARDENS</p>
+        <h2 id="garden-map-title" className="mt-1 text-2xl font-semibold">분수 광장과 네 정원</h2>
+        <p className="mt-2 max-w-md text-sm leading-6 text-[#7a6650]">중앙 광장에서 길이 여러 방향으로 갈라짐. 정원을 고른 뒤 직접 걸어 들어가고, 다른 길로도 돌아다닐 수 있음.</p>
+        <div className="relative mt-5 aspect-[1.3] overflow-hidden rounded-[1.5rem] border border-[#e4d4b8] bg-[#d9e7c5]">
+          <div className="absolute inset-0 opacity-40" style={{ backgroundImage: "linear-gradient(90deg, transparent 49%, #b1c897 50%, transparent 51%), linear-gradient(0deg, transparent 49%, #b1c897 50%, transparent 51%)", backgroundSize: "28% 28%" }} />
+          <svg viewBox="0 0 100 100" className="absolute inset-0 size-full" aria-hidden>
+            {GARDEN_PATHS.map((path) => {
+              const position = MAP_POSITIONS[path.key];
+              const x = Number.parseFloat(position.left);
+              const y = Number.parseFloat(position.top);
+              return <path key={path.key} d={`M50 52 Q ${(50 + x) / 2} ${(52 + y) / 2 - 4} ${x} ${y}`} fill="none" stroke="#d2ad78" strokeWidth="2.4" strokeLinecap="round" />;
+            })}
+            <circle cx="50" cy="52" r="11" fill="#f4ead6" stroke="#aa805d" strokeWidth="1.5" />
+            <circle cx="50" cy="52" r="5" fill="#83b7bd" />
+            <text x="50" y="68" textAnchor="middle" fontSize="4" fill="#5b4d3c">분수 광장</text>
+          </svg>
+          {GARDEN_PATHS.map((path) => {
+            const position = MAP_POSITIONS[path.key];
+            return (
+              <button
+                key={path.key}
+                type="button"
+                onClick={() => onOpenPath(path.key)}
+                className="absolute -translate-x-1/2 -translate-y-1/2 rounded-2xl border-2 border-white/80 px-3 py-2 text-center text-xs font-semibold text-[#5b4d3c] shadow-md transition hover:scale-105"
+                style={{ left: position.left, top: position.top, backgroundColor: path.signTone }}
+              >
+                {path.name}
+                <span className="mt-0.5 block text-[10px] font-normal opacity-75">길로 걷기</span>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+    </div>
   );
 }
 

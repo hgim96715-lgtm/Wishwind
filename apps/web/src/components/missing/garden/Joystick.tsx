@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 export function Joystick({ onChange }: { onChange: (x: number, y: number) => void }) {
   const base = useRef<HTMLDivElement>(null);
   const [knob, setKnob] = useState({ x: 0, y: 0 });
-  const R = 44;
+  const R = (base.current?.getBoundingClientRect().width??112)*.39;
 
   const update = (clientX: number, clientY: number) => {
     const el = base.current;
@@ -31,7 +31,7 @@ export function Joystick({ onChange }: { onChange: (x: number, y: number) => voi
     <div
       ref={base}
       role="presentation"
-      className="relative size-28 touch-none rounded-full bg-white/40 shadow-inner backdrop-blur"
+      className="relative size-20 sm:size-28 touch-none rounded-full bg-white/40 shadow-inner backdrop-blur"
       onPointerDown={(e) => {
         e.currentTarget.setPointerCapture(e.pointerId);
         update(e.clientX, e.clientY);
@@ -39,9 +39,10 @@ export function Joystick({ onChange }: { onChange: (x: number, y: number) => voi
       onPointerMove={(e) => e.buttons > 0 && update(e.clientX, e.clientY)}
       onPointerUp={end}
       onPointerCancel={end}
+      onLostPointerCapture={end}
     >
       <div
-        className="absolute top-1/2 left-1/2 size-12 rounded-full bg-white/90 shadow"
+        className="absolute top-1/2 left-1/2 size-9 sm:size-12 rounded-full bg-white/90 shadow"
         style={{ transform: `translate(calc(-50% + ${knob.x}px), calc(-50% + ${knob.y}px))` }}
       />
     </div>

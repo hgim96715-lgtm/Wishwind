@@ -575,7 +575,18 @@ enum MissingStatus {
   INACTIVE
 }
 
+model MissingLanternLighting {
+  personId String @map("person_id") @db.Uuid
+  voterId String @map("voter_id") @db.Uuid
+  person MissingPerson @relation(fields: [personId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@id([personId, voterId])
+  @@map("missing_lantern_lightings")
+}
+
 model MissingPerson {
+  lightings MissingLanternLighting[]
   id         String        @id @default(uuid(7)) @db.Uuid
   source     MissingSource
   externalId String        @map("external_id") @db.VarChar(100)

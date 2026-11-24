@@ -1,7 +1,6 @@
 import { fromWmo, type Weather } from "@/lib/weather/types";
 
-/** 위치를 주지 않으면 서울 날씨 */
-const SEOUL = { lat: 37.57, lon: 126.98 };
+/** 위치를 주지 않으면 외부 날씨를 조회하지 않고 기본 맑음으로 유지. */
 
 // 좌표는 소수 첫째 자리(약 10km)로 뭉뚱그려서만 씀. 저장하지 않음
 function coord(raw: string | null, limit: number) {
@@ -25,13 +24,14 @@ export async function GET(request: Request) {
   const la = coord(sp.get("lat"), 90);
   const lo = coord(sp.get("lon"), 180);
   const mine = la !== null && lo !== null;
-  const { lat, lon } = mine ? { lat: la, lon: lo } : SEOUL;
+  if (!mine) return Response.json({kind:"clear",intensity:0,place:"정원"} satisfies Weather);
+  const lat=la,lon=lo;
   try {
     const q = new URLSearchParams({ latitude: String(lat), longitude: String(lon), current: "weather_code,precipitation" });
-    const res = await fetch(`https://api.open-meteo.com/v1/forecast?${q}`, { next: { revalidate: 300 } });
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?${q}`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
     const current = parseCurrent(await res.json());
     if (!res.ok || !current) throw new Error("weather");
-    const weather: Weather = { ...fromWmo(current.code, current.precipitation), place: mine ? "내 위치" : "서울" };
+    const weather: Weather = { ...fromWmo(current.code, current.precipitation), place: "내 위치" };
     return Response.json(weather, { headers: { "cache-control": "private, max-age=300" } });
   } catch {
     // 날씨를 못 받으면 '맑음'이라고 잘못 알리지 않음. 화면은 날씨 표시 없이 기본 하늘로 보여 줌 (캐시하지 않음)

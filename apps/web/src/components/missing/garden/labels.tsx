@@ -55,7 +55,7 @@ export function createLabelStore(): LabelStore {
 }
 
 const STYLE: Record<LabelVariant, { className: string; size: number }> = {
-  sign: { className: "rounded-full bg-white/85 px-4 py-1.5 text-sm font-medium whitespace-nowrap text-[#5b4d3c] shadow-sm", size: 14 },
+  sign: { className: "rounded-md border border-[#8a6547]/70 bg-[#fff6e8]/88 px-2.5 py-1 text-xs font-medium whitespace-nowrap text-[#5b4d3c] shadow-sm", size: 10 },
   bubble: { className: "max-w-44 rounded-2xl bg-white/90 px-3 py-1.5 text-xs leading-snug text-[#5b4d3c] shadow-sm", size: 9 },
   "bubble-fresh": {
     className: "max-w-44 rounded-2xl bg-[#fff4d6] px-3 py-1.5 text-xs leading-snug text-[#6b4f2a] shadow-sm ring-2 ring-[#ffd166]",

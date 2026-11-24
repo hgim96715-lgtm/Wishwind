@@ -3,6 +3,7 @@ export type Gender = "MALE" | "FEMALE" | "UNKNOWN";
 
 /** 길가 등불 하나 = 실종자 한 명 (목록 API) */
 export interface MissingSummary {
+  lightCount?: number;
   id: string;
   source: MissingSource;
   name: string;
@@ -11,11 +12,12 @@ export interface MissingSummary {
   lastSeenPlace: string | null;
   region: string;
   thumbUrl: string | null;
+  /** 실종 당시 나이. FBI 자료는 대부분 비어 있음 */
+  ageAtMissing: number | null;
 }
 
 /** 등불을 눌렀을 때 펼쳐지는 카드 (상세 API) */
 export interface MissingDetail extends MissingSummary {
-  ageAtMissing: number | null;
   ageNow: number | null;
   appearance: string | null;
   description: string | null;

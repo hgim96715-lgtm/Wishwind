@@ -8,15 +8,21 @@
 import { Canvas, useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import { gardenPathMeta, type GardenPathKey } from "@/lib/missing/garden-paths";
 import type { Slot } from "../path-layout";
 import type { Weather } from "@/lib/weather/types";
 import { currentHour, paletteAt, withWeather, type SkyPalette } from "../time-of-day";
 import { Avatar } from "./Avatar";
 import { Flowers } from "./Flowers";
+import { GardenTrees } from "./GardenTrees";
 import { createLabelStore, LabelOverlay, LabelProjector, type Label, type LabelStore } from "./labels";
 import {
   clampToLand,
   coastX,
+  gardenPathNear,
+  gardenPathPoint,
+  gardenPathDirection,
+  GARDEN_ORIGINS,
   GARDEN_CENTER,
   grassAmount,
   heightAt,
@@ -151,6 +157,9 @@ function World({ slots, wishes, wishCount, freshId, nearNotice, paused, avatar, 
     <>
       <Terrain palette={palette} player={player} ground={ground} />
       <Sea palette={palette} player={player} />
+      <GardenPlaza />
+      <GardenPaths slots={slots} labels={labels} />
+      <GardenWorldDecor />
       <Lanterns slots={slots} lamp={palette.lamp} onSelect={onSelect} />
       <LanternPrompt id={nearNotice} slots={slots} labels={labels} onSelect={onSelect} />
       {/* 해 질 녘(등불 밝기가 오르기 시작할 때)부터 등대에 불이 들어옴 */}
@@ -159,6 +168,7 @@ function World({ slots, wishes, wishCount, freshId, nearNotice, paused, avatar, 
       <Butterflies />
       <RoamingButterflies player={player} />
       <Flowers player={player} ground={ground} />
+      <GardenTrees player={player} />
       <FootGlow player={player} amount={night ? 1 : Math.max(0, (palette.lamp - 1.2) / 1.6)} />
       <Ponds nearSlot={nearSlot} />
       {wishCount >= SUNLIGHT_AT && <GardenSunlight golden={home} />}
@@ -520,6 +530,345 @@ function Sea({ palette, player }: { palette: SkyPalette; player: React.RefObject
   );
 }
 
+/* ───────────────────────── 사정별 정원 길 ───────────────────────── */
+
+type GardenPathSegment = { key: GardenPathKey; points: [number, number, number][]; width: number };
+
+/** 슬롯 구간마다 길의 폭·곡선·색을 달리해, 한 줄짜리 랜덤 들판이 아닌 박람회형 정원으로 보이게 함 */
+function GardenPaths({ slots, labels }: { slots: Slot[]; labels: LabelStore }) {
+  const signs = useMemo(
+    () => slots.flatMap((slot, index) => (slot.kind === "sign" ? [{ ...slot, index }] : [])),
+    [slots],
+  );
+  const signTextures = useMemo(
+    () => new Map(signs.map((sign) => [sign.pathKey, gardenSignTexture(sign.label, gardenPathMeta(sign.pathKey).signTone)])),
+    [signs],
+  );
+  const segments = useMemo<GardenPathSegment[]>(
+    () =>
+      signs.map((sign, pathIndex) => {
+        const next = signs[pathIndex + 1]?.index ?? slots.length - 1;
+        const lastLantern = slots.slice(sign.index + 1, next).reduce((last, slot) => (slot.kind === "lantern" ? Math.max(last, slot.pathIndex) : last), 0);
+        // 등불이 적은 구간도 고유한 길과 정원 풍경을 유지함
+        const end = Math.max(lastLantern + 1, lastLantern === 0 ? 12 : lastLantern + 1);
+        const points = Array.from({ length: end + 1 }, (_, offset) => gardenPathPoint(offset, sign.pathKey));
+        const width = sign.pathKey === "waiting" ? 1.5 : sign.pathKey === "village" ? 1.9 : 2.15;
+        return { key: sign.pathKey, points, width };
+      }),
+    [signs, slots],
+  );
+
+  useEffect(() => {
+    labels.set(
+      "garden-signs",
+      signs.map((sign) => {
+        const [x, y, z] = gardenSignPoint(sign.pathKey);
+        return {
+          id: `garden-sign-${sign.pathKey}`,
+          text: `여기는 ${sign.label}입니다`,
+          variant: "sign" as const,
+          pos: [x, y + 2.5, z],
+        };
+      }),
+    );
+    return () => labels.set("garden-signs", []);
+  }, [labels, signs]);
+
+  return (
+    <group>
+      {signs.map((sign) => {
+        const [x, y, z] = gardenPathPoint(0, sign.pathKey);
+        const start: [number, number, number] = [GARDEN_CENTER[0], heightAt(GARDEN_CENTER[0], GARDEN_CENTER[1]) + 0.12, GARDEN_CENTER[1]];
+        const bend: [number, number, number] = [(start[0] + x) / 2, heightAt((start[0] + x) / 2, (start[2] + z) / 2) + 0.08, (start[2] + z) / 2 + 4];
+        return (
+          <mesh key={`connection-${sign.pathKey}`} geometry={ribbonGeometry([start, bend, [x, y, z]], 1.35)} renderOrder={1}>
+            <meshStandardMaterial color="#d4bd96" roughness={0.96} />
+          </mesh>
+        );
+      })}
+      {segments.map((segment) => (
+        <mesh key={segment.key} geometry={ribbonGeometry(segment.points, segment.width)} renderOrder={1}>
+          <meshStandardMaterial color={pathColor(segment.key)} roughness={0.92} />
+        </mesh>
+      ))}
+      {signs.map((sign) => {
+        const [x, y, z] = gardenSignPoint(sign.pathKey);
+        const meta = gardenPathMeta(sign.pathKey);
+        return (
+          <group key={`sign-post-${sign.pathKey}`} position={[x, y, z]} rotation-y={Math.atan2(GARDEN_CENTER[0] - gardenPathPoint(0, sign.pathKey)[0], GARDEN_CENTER[1] - gardenPathPoint(0, sign.pathKey)[2])}>
+            <mesh position={[0, 0.72, 0]}>
+              <cylinderGeometry args={[0.07, 0.1, 1.45, 8]} />
+              <meshStandardMaterial color="#8a6547" roughness={0.95} />
+            </mesh>
+            <mesh position={[0, 1.42, 0]}>
+              <boxGeometry args={[2.35, 0.68, 0.12]} />
+              <meshStandardMaterial color={meta.signTone} roughness={0.86} />
+            </mesh>
+            <mesh position={[0, 1.42, 0.08]}>
+              <planeGeometry args={[2.02, 0.43]} />
+              <meshBasicMaterial map={signTextures.get(sign.pathKey)} toneMapped={false} />
+            </mesh>
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
+function gardenSignPoint(pathKey: GardenPathKey): [number, number, number] {
+  const [x, y, z] = gardenPathPoint(0, pathKey);
+  return [x + 2.5, y, z + 1.2];
+}
+
+/** 모든 정원의 기준점. 길이 한 줄로 보이지 않도록 분수와 원형 광장을 먼저 배치함 */
+function GardenPlaza() {
+  const [x, z] = GARDEN_CENTER;
+  const y = heightAt(x, z);
+  return (
+    <group position={[x, y, z]}>
+      <mesh rotation-x={-Math.PI / 2} position-y={0.06}>
+        <circleGeometry args={[8.5, 48]} />
+        <meshStandardMaterial color="#d9c29a" roughness={0.92} />
+      </mesh>
+      <mesh position-y={0.18}>
+        <cylinderGeometry args={[3.15, 3.5, 0.28, 32]} />
+        <meshStandardMaterial color="#f4ead6" roughness={0.86} />
+      </mesh>
+      <mesh rotation-x={-Math.PI / 2} position-y={0.34}>
+        <circleGeometry args={[2.7, 32]} />
+        <meshStandardMaterial color="#83b7bd" roughness={0.18} metalness={0.08} />
+      </mesh>
+      <mesh position-y={0.72}>
+        <cylinderGeometry args={[0.75, 1.05, 0.65, 20]} />
+        <meshStandardMaterial color="#f4ead6" roughness={0.86} />
+      </mesh>
+      <mesh position-y={1.2}>
+        <cylinderGeometry args={[0.32, 0.55, 0.32, 20]} />
+        <meshStandardMaterial color="#f4ead6" roughness={0.86} />
+      </mesh>
+      <mesh position-y={1.52}>
+        <sphereGeometry args={[0.16, 12, 8]} />
+        <meshStandardMaterial color="#b9e4e1" emissive="#86c8c8" emissiveIntensity={0.35} roughness={0.2} />
+      </mesh>
+      <pointLight position={[0, 1.6, 0]} color="#b9e4e1" intensity={2.2} distance={8} />
+      {[-5.6, 5.6].map((benchX) => (
+        <group key={benchX} position={[benchX, 0.42, 0]} rotation-y={benchX < 0 ? -Math.PI / 2 : Math.PI / 2}>
+          <mesh>
+            <boxGeometry args={[2.2, 0.18, 0.55]} />
+            <meshStandardMaterial color="#9f704e" roughness={0.9} />
+          </mesh>
+          {[-0.75, 0.75].map((leg) => (
+            <mesh key={leg} position={[leg, -0.35, 0]}>
+              <boxGeometry args={[0.12, 0.7, 0.12]} />
+              <meshStandardMaterial color="#79523c" roughness={0.95} />
+            </mesh>
+          ))}
+        </group>
+      ))}
+    </group>
+  );
+}
+
+/** 각 입구 뒤에 실제 정원 구역을 둠. 구역 안에는 메인 길 하나가 아니라 고리·샛길·쉼터가 있음 */
+function GardenWorldDecor() {
+  return (
+    <group>
+      {(Object.keys(GARDEN_ORIGINS) as GardenPathKey[]).map((pathKey) => (
+        <GardenPatch key={pathKey} pathKey={pathKey} />
+      ))}
+    </group>
+  );
+}
+
+function GardenPatch({ pathKey }: { pathKey: GardenPathKey }) {
+  const [x, z] = GARDEN_ORIGINS[pathKey];
+  const y = heightAt(x, z);
+  const routes = useMemo(() => gardenNetwork(pathKey), [pathKey]);
+  return (
+    <group>
+      <mesh position={[x, y + 0.02, z]} rotation-x={-Math.PI / 2}>
+        <circleGeometry args={[11.5, 40]} />
+        <meshStandardMaterial color={gardenGroundColor(pathKey)} roughness={0.96} />
+      </mesh>
+      {routes.map((route, index) => (
+        <mesh key={index} geometry={ribbonGeometry(route, pathKey === "waiting" ? 1.1 : 1.35)} renderOrder={1}>
+          <meshStandardMaterial color={pathColor(pathKey)} roughness={0.94} />
+        </mesh>
+      ))}
+      <ThemedGardenProps pathKey={pathKey} origin={[x, y, z]} />
+    </group>
+  );
+}
+
+function gardenNetwork(pathKey: GardenPathKey): [number, number, number][][] {
+  const main = [0, 2, 4, 6, 8, 10].map((i) => gardenPathPoint(i, pathKey));
+  const point = (i: number, dx: number, dz: number): [number, number, number] => {
+    const [, , baseZ] = gardenPathPoint(i, pathKey);
+    const baseX = gardenPathPoint(i, pathKey)[0] + dx;
+    const nextZ = baseZ + dz * gardenPathDirection(pathKey);
+    return [baseX, heightAt(baseX, nextZ), nextZ];
+  };
+  const leftLoop = [point(2, 0, 0), point(2, -5, -3), point(6, -5, -15), point(8, 0, 0)];
+  const rightLoop = [point(3, 0, 0), point(3, 5, -3), point(7, 5, -14), point(9, 0, 0)];
+  return [main, leftLoop, rightLoop];
+}
+
+function gardenGroundColor(pathKey: GardenPathKey) {
+  switch (pathKey) {
+    case "children":
+      return "#b9d88e";
+    case "village":
+      return "#c7aa7a";
+    case "waiting":
+      return "#a5b798";
+    case "abroad":
+      return "#a8d1c6";
+  }
+}
+
+function ThemedGardenProps({ pathKey, origin }: { pathKey: GardenPathKey; origin: [number, number, number] }) {
+  switch (pathKey) {
+    case "children":
+      return <ChildrenGardenProps origin={origin} />;
+    case "village":
+      return <VillageGardenProps origin={origin} />;
+    case "waiting":
+      return <WaitingGardenProps origin={origin} />;
+    case "abroad":
+      return <AbroadGardenProps origin={origin} />;
+  }
+}
+
+function ChildrenGardenProps({ origin: [x, y, z] }: { origin: [number, number, number] }) {
+  return (
+    <group>
+      {[[-6, -7, "#f6cf5f"], [-3, -12, "#ff9f8a"], [4, -8, "#bfe0ff"], [6, -14, "#ffd4de"], [0, -18, "#f6b4c6"]].map(([dx, dz, color], i) => (
+        <group key={i} position={[x + Number(dx), y + 0.15, z + Number(dz)]}>
+          <mesh position-y={0.22}><cylinderGeometry args={[0.025, 0.035, 0.45, 5]} /><meshStandardMaterial color="#5f9c57" /></mesh>
+          <mesh position-y={0.5}><sphereGeometry args={[0.22, 10, 6]} /><meshStandardMaterial color={String(color)} roughness={0.8} /></mesh>
+        </group>
+      ))}
+      <mesh position={[x - 4.8, y + 0.8, z - 8]} rotation-y={0.1}>
+        <boxGeometry args={[3.6, 0.16, 1.1]} />
+        <meshStandardMaterial color="#e4b36e" roughness={0.9} />
+      </mesh>
+      <mesh position={[x - 4.8, y + 1.35, z - 8]}>
+        <boxGeometry args={[3.2, 0.9, 0.12]} />
+        <meshStandardMaterial color="#fff2c8" roughness={0.92} />
+      </mesh>
+    </group>
+  );
+}
+
+function VillageGardenProps({ origin: [x, y, z] }: { origin: [number, number, number] }) {
+  return (
+    <group>
+      {[-5, 5].map((dx) => (
+        <group key={dx} position={[x + dx, y, z - 8]}>
+          <mesh position-y={1.1}><boxGeometry args={[3.4, 1.9, 2.4]} /><meshStandardMaterial color="#f3e5c9" roughness={0.95} /></mesh>
+          <mesh position-y={2.25} rotation-y={Math.PI / 4}><coneGeometry args={[2.6, 0.85, 4]} /><meshStandardMaterial color="#b8654f" roughness={0.9} /></mesh>
+          <mesh position={[0, 1.0, 1.25]}><boxGeometry args={[2.3, 0.1, 0.55]} /><meshStandardMaterial color="#9e6d4c" /></mesh>
+          <pointLight position={[0, 1.3, 1.2]} color="#ffd68a" intensity={2} distance={5} />
+        </group>
+      ))}
+      <mesh position={[x, y + 0.5, z - 17]}><boxGeometry args={[6, 0.12, 0.12]} /><meshStandardMaterial color="#8a6547" /></mesh>
+    </group>
+  );
+}
+
+function WaitingGardenProps({ origin: [x, y, z] }: { origin: [number, number, number] }) {
+  return (
+    <group>
+      {[-6, -2, 4, 8].map((dx, i) => (
+        <group key={dx} position={[x + dx, y, z - 8 - (i % 2) * 7]}>
+          <mesh position-y={1.2}><cylinderGeometry args={[0.22, 0.32, 2.4, 8]} /><meshStandardMaterial color="#76523d" /></mesh>
+          <mesh position-y={2.65} scale={[1.4, 1.0, 1.4]}><icosahedronGeometry args={[1, 1]} /><meshStandardMaterial color={i % 2 ? "#728e70" : "#829e78" } roughness={1} /></mesh>
+        </group>
+      ))}
+      <mesh position={[x, y + 0.45, z - 14]}><boxGeometry args={[4.2, 0.18, 0.65]} /><meshStandardMaterial color="#806049" /></mesh>
+      <mesh position={[x - 1.5, y + 0.05, z - 14]}><boxGeometry args={[0.14, 0.7, 0.14]} /><meshStandardMaterial color="#654735" /></mesh>
+      <mesh position={[x + 1.5, y + 0.05, z - 14]}><boxGeometry args={[0.14, 0.7, 0.14]} /><meshStandardMaterial color="#654735" /></mesh>
+    </group>
+  );
+}
+
+function AbroadGardenProps({ origin: [x, y, z] }: { origin: [number, number, number] }) {
+  return (
+    <group>
+      <mesh position={[x + 5.5, y + 0.06, z - 10]} rotation-x={-Math.PI / 2} scale={[1.8, 1, 1]}>
+        <circleGeometry args={[3.2, 24]} />
+        <meshStandardMaterial color="#79b9c7" roughness={0.18} metalness={0.08} />
+      </mesh>
+      {[-5, 0, 5].map((dx, i) => (
+        <group key={dx} position={[x + dx, y, z - 8]}>
+          <mesh position-y={1.0}><cylinderGeometry args={[0.04, 0.06, 2, 6]} /><meshStandardMaterial color="#8a6547" /></mesh>
+          <mesh position={[0.55, 1.45, 0]} rotation-z={i % 2 ? -0.25 : 0.25}><planeGeometry args={[1.1, 0.7]} /><meshStandardMaterial color={i % 2 ? "#f2c35f" : "#86c7d5"} side={THREE.DoubleSide} /></mesh>
+        </group>
+      ))}
+    </group>
+  );
+}
+
+function gardenSignTexture(label: string, tone: string) {
+  if (typeof document === "undefined") return new THREE.Texture();
+  const canvas = document.createElement("canvas");
+  canvas.width = 640;
+  canvas.height = 150;
+  const context = canvas.getContext("2d");
+  if (!context) return new THREE.Texture();
+  context.fillStyle = "#fff6e8";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.strokeStyle = tone;
+  context.lineWidth = 12;
+  context.strokeRect(6, 6, canvas.width - 12, canvas.height - 12);
+  context.fillStyle = "#5b4d3c";
+  context.font = "bold 42px system-ui, sans-serif";
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.fillText(label, canvas.width / 2, canvas.height / 2 + 2);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
+function ribbonGeometry(points: [number, number, number][], width: number) {
+  const positions: number[] = [];
+  const indices: number[] = [];
+  for (let i = 0; i < points.length; i++) {
+    const [x, y, z] = points[i];
+    const previous = points[Math.max(0, i - 1)];
+    const next = points[Math.min(points.length - 1, i + 1)];
+    const dx = next[0] - previous[0];
+    const dz = next[2] - previous[2];
+    const length = Math.hypot(dx, dz) || 1;
+    const nx = -dz / length;
+    const nz = dx / length;
+    positions.push(x + nx * width, y + 0.08, z + nz * width, x - nx * width, y + 0.08, z - nz * width);
+    if (i > 0) {
+      const k = (i - 1) * 2;
+      indices.push(k, k + 1, k + 2, k + 1, k + 3, k + 2);
+    }
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
+function pathColor(key: GardenPathKey) {
+  switch (key) {
+    case "children":
+      return "#ead39d";
+    case "village":
+      return "#c79267";
+    case "waiting":
+      return "#a9aa91";
+    case "abroad":
+      return "#a9c9cf";
+  }
+}
+
 /* ───────────────────────── 등불 (실종자) ───────────────────────── */
 
 /** 눈송이: 기본 Points는 네모로 그려져서 둥글고 가장자리가 흐린 점 텍스처를 씌움 */
@@ -601,7 +950,7 @@ function Lanterns({ slots, lamp, onSelect }: { slots: Slot[]; lamp: number; onSe
   }, [bufferHeight]);
   const items = useMemo(
     () =>
-      slots.flatMap((s, i) => (s.kind === "lantern" ? [{ id: s.person.id, pos: lanternPoint(i, s.side) }] : [])),
+      slots.flatMap((s) => (s.kind === "lantern" ? [{ id: s.person.id, pos: lanternPoint(s.pathIndex, s.side, 1.8, s.pathKey) }] : [])),
     [slots],
   );
   const posts = useRef<THREE.InstancedMesh>(null);
@@ -679,7 +1028,7 @@ function LanternPrompt({
       labels.set("lantern-prompt", []);
       return;
     }
-    const [x, y, z] = lanternPoint(index, slot.side);
+    const [x, y, z] = lanternPoint(slot.pathIndex, slot.side, 1.8, slot.pathKey);
     labels.set("lantern-prompt", [
       {
         id: `lantern-prompt-${id}`,
@@ -1382,7 +1731,8 @@ function Player({
     const nearId = ls?.kind === "lantern" ? ls.person.id : null;
     const slot = Math.max(0, Math.round(slotAtZ(p.z)));
     const inGarden = Math.hypot(p.x - GARDEN_CENTER[0], p.z - GARDEN_CENTER[1]) < 14;
-    const place = placeName(p.x, p.z, inGarden);
+    const pathKey = gardenPathNear(p.x, p.z);
+    const place = placeName(p.x, p.z, inGarden, pathKey);
     const key = `${place}|${nearId}|${inGarden}`;
     if (key !== lastStatus.current) {
       lastStatus.current = key;
@@ -1412,8 +1762,9 @@ function blockedReason(x: number, z: number): BlockedAt | null {
 }
 
 /** 화면 위에 보여 줄 지금 있는 곳 이름 */
-function placeName(x: number, z: number, inGarden: boolean) {
+function placeName(x: number, z: number, inGarden: boolean, pathKey: GardenPathKey | null) {
   if (inGarden) return "바람개비 정원";
+  if (pathKey) return gardenPathMeta(pathKey).name;
   if (pondsNear(z, 4).some((p) => pondDistance(p, x, z) < 1.8)) return "연못가";
   if (Math.hypot(x - LIGHTHOUSE[0], z - LIGHTHOUSE[1]) < 10) return "등대 아래";
   if (z > -2) return "등대 언덕";

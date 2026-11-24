@@ -15,7 +15,7 @@ export const SOURCE_LABEL: Record<MissingSource, string> = {
 export function toMissingPage(rows: MissingListRow[], take: number) {
   const hasMore = rows.length > take;
   const items = hasMore ? rows.slice(0, take) : rows;
-  return { items, nextCursor: hasMore ? items[items.length - 1].id : null };
+  return { items: items.map(({_count,...person})=>({...person,lightCount:_count.lightings})), nextCursor: hasMore ? items[items.length - 1].id : null };
 }
 
 export function toRegionCounts(rows: { region: string; _count: { _all: number } }[]) {
@@ -24,5 +24,6 @@ export function toRegionCounts(rows: { region: string; _count: { _all: number } 
 
 /** 등불 클릭 시 펼쳐지는 카드: 출처 기관 이름과 제보 링크를 함께 내보냄 */
 export function toMissingDetail(p: MissingDetailRow) {
-  return { ...p, sourceLabel: SOURCE_LABEL[p.source], tip: TIP_LINKS[p.source] };
+  const {_count,...person}=p;
+  return { ...person, lightCount:_count.lightings, sourceLabel: SOURCE_LABEL[p.source], tip: TIP_LINKS[p.source] };
 }

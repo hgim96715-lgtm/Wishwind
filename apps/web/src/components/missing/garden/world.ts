@@ -1,4 +1,5 @@
 import type { Slot } from "../path-layout";
+import type { GardenPathKey } from "@/lib/missing/garden-paths";
 
 /**
  * 바닷가 언덕 세계의 지형·배치 계산 (3D 라이브러리와 무관한 순수 함수)
@@ -8,6 +9,14 @@ import type { Slot } from "../path-layout";
 
 export const SLOT_SPACING = 4;
 export const SEA_LEVEL = 0;
+
+/** 중앙 광장에서 갈라지는 정원들의 독립된 입구 위치 */
+export const GARDEN_ORIGINS: Record<GardenPathKey, [number, number]> = {
+  children: [2, 40],
+  village: [26, 40],
+  waiting: [2, -12],
+  abroad: [26, -12],
+};
 
 /** z 위치의 해안선 x 좌표: 완만하게 들쭉날쭉 */
 export function coastX(z: number): number {
@@ -62,43 +71,66 @@ export function trailDir(i: number): [number, number] {
   return [(x1 - x0) / l, (z1 - z0) / l];
 }
 
-/**
- * 등불 위치. 순서(실종일이 최근일수록 앞)는 z로 지키고, 옆 자리는 등불마다 정해진 난수로 고름
- * - 약 35%: 큰길 옆, 약 20%: 갈래 길 바깥 옆 (갈래 길 구간일 때)
- * - 나머지: 언덕 안쪽 들판(최대 길에서 45) 또는 바닷가 쪽 풀밭에 흩어짐 → 어디를 걸어도 등불을 만남
- * offset 0이면 등불 바로 앞 (등불 앞으로 순간 이동할 때 설 자리)
- */
-export function lanternPoint(i: number, side: 1 | -1, offset = 1.8): [number, number, number] {
-  const r = hash2(i * 0.731, 17.3);
-  const baseZ = -i * SLOT_SPACING;
-
-  const bx = branchX(i);
-  if (r >= 0.35 && r < 0.55 && bx !== null && bx - trailX(i) > 3) {
-    let px = bx + offset;
-    // 연못 옆이면 물가 바깥에 세움 (offset 0일 때는 다리 위 길 한가운데)
-    if (offset > 0) for (const p of pondsNear(baseZ, 2)) if (Math.abs(baseZ - p.z) < p.rz + 1) px = Math.max(px, p.x + p.rx + 1.2);
-    return [px, heightAt(px, baseZ), baseZ];
+/** 길마다 고유한 중심선을 둠. 같은 숫자의 슬롯이라도 바다·마을·들판의 결이 달라짐 */
+export function gardenPathX(i: number, pathKey: GardenPathKey): number {
+  const [originX] = GARDEN_ORIGINS[pathKey];
+  switch (pathKey) {
+    case "children":
+      return originX + Math.sin(i * 0.24) * 2.2;
+    case "village":
+      return originX + Math.sin(i * 0.18) * 2.8;
+    case "waiting":
+      return originX + Math.sin(i * 0.12) * 4.5;
+    case "abroad":
+      return originX + Math.sin(i * 0.21) * 2.8;
   }
+}
 
-  if (r >= 0.35) {
-    // 들판: 안쪽이 넓으니 대부분 안쪽, 일부는 바닷가 풀밭
-    const u = hash2(i * 1.913, 5.1);
-    const seaside = hash2(i * 0.377, 2.9) < 0.2;
-    const tx = trailX(i);
-    let px = seaside ? coastX(baseZ) + 5 + u * Math.max(0, tx - coastX(baseZ) - 9) : tx + 5 + u * 40;
-    let pz = baseZ + (hash2(i * 2.71, 8.8) - 0.5) * 2.4;
-    // 연못·길 한가운데는 피함
-    for (const p of pondsNear(pz, 4)) if (pondDistance(p, px, pz) < 1.4) px = p.x + p.rx * 1.5;
-    if (pathAmount(px, pz) > 0.3) px += 2.5;
-    if (offset === 0) pz += 1.6; // 등불 바로 앞(시작 쪽)
-    return [px, heightAt(px, pz), pz];
+/** 광장에서 멀어지는 방향으로만 길을 늘려, 위·아래 정원이 서로 관통하지 않게 함 */
+export function gardenPathDirection(pathKey: GardenPathKey): 1 | -1 {
+  return pathKey === "children" || pathKey === "village" ? 1 : -1;
+}
+
+export function gardenPathPoint(i: number, pathKey: GardenPathKey): [number, number, number] {
+  const [, originZ] = GARDEN_ORIGINS[pathKey];
+  const z = originZ + gardenPathDirection(pathKey) * i * SLOT_SPACING;
+  const x = gardenPathX(i, pathKey);
+  return [x, heightAt(x, z), z];
+}
+
+export function gardenPathDir(i: number, pathKey: GardenPathKey): [number, number] {
+  const [x0, , z0] = gardenPathPoint(i - 0.5, pathKey);
+  const [x1, , z1] = gardenPathPoint(i + 0.5, pathKey);
+  const length = Math.hypot(x1 - x0, z1 - z0) || 1;
+  return [(x1 - x0) / length, (z1 - z0) / length];
+}
+
+/** 중앙 광장 주변에서 실제로 서 있는 정원을 찾음. 정원들이 좌우·앞뒤로 분리돼도 HUD가 맞는 이름을 보여 줌 */
+export function gardenPathNear(x: number, z: number, range = 7): GardenPathKey | null {
+  let nearest: GardenPathKey | null = null;
+  let best = range;
+  for (const key of Object.keys(GARDEN_ORIGINS) as GardenPathKey[]) {
+    const [, originZ] = GARDEN_ORIGINS[key];
+    const center = Math.max(0, Math.round((z - originZ) / (gardenPathDirection(key) * SLOT_SPACING)));
+    for (let i = Math.max(0, center - 2); i <= center + 2; i++) {
+      const [px, , pz] = gardenPathPoint(i, key);
+      const distance = Math.hypot(px - x, pz - z);
+      if (distance < best) {
+        best = distance;
+        nearest = key;
+      }
+    }
   }
+  return nearest;
+}
 
-  const [x, , z] = trailPoint(i);
-  const [dx, dz] = trailDir(i);
-  // 오른쪽 법선 = (-dz, dx)
-  const px = x - dz * side * offset;
-  const pz = z + dx * side * offset;
+/** 길 양옆에 놓는 등불. 더 이상 넓은 들판에 랜덤으로 흩어지지 않음 */
+export function lanternPoint(i: number, side: 1 | -1, offset = 1.8, pathKey: GardenPathKey = "village"): [number, number, number] {
+  const [x, , z] = gardenPathPoint(i, pathKey);
+  const [dx, dz] = gardenPathDir(i, pathKey);
+  const along = offset === 0 ? 1.6 : 0;
+  const px = x - dz * side * offset + dx * along;
+  const pz = z + dx * side * offset + dz * along;
   return [px, heightAt(px, pz), pz];
 }
 
@@ -138,13 +170,12 @@ export function clampToLand(x: number, z: number, slotCount: number): [number, n
 
 /** 가장 가까운 등불 (거리 range 이내). 없으면 -1 */
 export function nearestLanternAt(slots: Slot[], x: number, z: number, range = 4.5): number {
-  const c = Math.round(slotAtZ(z));
   let best = -1;
   let bestD = range;
-  for (let i = Math.max(0, c - 2); i <= Math.min(slots.length - 1, c + 2); i++) {
+  for (let i = 0; i < slots.length; i++) {
     const s = slots[i];
     if (s.kind !== "lantern") continue;
-    const [lx, , lz] = lanternPoint(i, s.side);
+    const [lx, , lz] = lanternPoint(s.pathIndex, s.side, 1.8, s.pathKey);
     const d = Math.hypot(lx - x, lz - z);
     if (d < bestD) {
       best = i;

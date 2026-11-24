@@ -48,6 +48,16 @@ export class MissingService {
     return toMissingPage(await this.repo.findPage(q, after), q.take);
   }
 
+  async lighting(id: string, voterId?: string) {
+    if (!(await this.repo.findActive(id))) throw new NotFoundException('실종자 정보를 찾을 수 없습니다');
+    return this.repo.lightingStats(id,voterId);
+  }
+
+  async light(id: string, voterId: string) {
+    if (!(await this.repo.findActive(id))) throw new NotFoundException('실종자 정보를 찾을 수 없습니다');
+    return this.repo.light(id,voterId);
+  }
+
   async findOne(id: string) {
     const p = await this.repo.findActive(id);
     if (!p) throw new NotFoundException('실종자 정보를 찾을 수 없습니다');

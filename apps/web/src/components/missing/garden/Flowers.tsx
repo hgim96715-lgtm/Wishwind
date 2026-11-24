@@ -8,17 +8,18 @@ import { useFrame } from "@react-three/fiber";
 import { useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { grassAmount, hash2, heightAt, pathAmount, pondDistance, pondsNear } from "./world";
+import { grassAmount, hash2, heightAt, inWater, pathAmount, pondDistance, pondsNear } from "./world";
 
 /**
- * 언덕의 들꽃: 꽃잎 다섯 장이 보이는 작은 꽃이 군데군데 무리 지어 핌 (사용자 요청 2026-11-21: 점 같은 꽃 → 꽃잎이 보이는 꽃)
- * - 넓은 격자 칸마다 일정한 확률로 꽃 무리가 하나 생기고, 무리마다 한두 가지 색으로 모여 핌
+ * 언덕의 들꽃: 꽃잎 다섯 장이 보이는 작은 꽃이 여러 위치에 흩어져 핌
+ * - 작은 격자 칸마다 낮은 확률로 작은 군락 하나가 생겨, 큰 한 무리처럼 뭉치지 않음
+ * - 연못 표면·물가 여유 영역·길에는 꽃을 만들지 않음
  * - 바람에 다 같이 살랑 흔들림 (셰이더에서 시간으로만 계산 → 매 프레임 행렬을 바꾸지 않음)
  * - 플레이어 주변만 그리고, 멀리 걸어가면 그 자리 기준으로 다시 깜. 같은 칸은 늘 같은 꽃이 핌
  */
 const RANGE = 64;
-const CELL = 7;
-const MAX = 3600;
+const CELL = 6.5;
+const MAX = 2600;
 /** 무리마다 고르는 꽃잎 색 (부드러운 파스텔 + 흰색) */
 const PETALS = ["#fff6e8", "#ffd4de", "#f6b4c6", "#d9c8f5", "#ffe7a3", "#ffc9a1", "#bfe0ff"];
 
@@ -110,23 +111,22 @@ export function Flowers({ player, ground }: { player: React.RefObject<THREE.Vect
       for (let b = 0; b <= cells && n < MAX; b++) {
         const gx = gx0 + a;
         const gz = gz0 + b;
-        // 칸마다 40% 확률로 꽃 무리 하나
-        if (hash2(gx * 1.3, gz * 0.7) > 0.45) continue;
-        const mx = (gx + 0.15 + hash2(gz, gx) * 0.7) * CELL;
-        const mz = (gz + 0.15 + hash2(gx + 3, gz - 5) * 0.7) * CELL;
-        const radius = 0.8 + hash2(gx - 2, gz + 9) * 1.4;
-        const count = 12 + Math.floor(hash2(gx + 11, gz) * 16);
-        const c1 = PETALS[Math.floor(hash2(gz + 4, gx) * PETALS.length)];
-        const c2 = PETALS[Math.floor(hash2(gz, gx + 8) * PETALS.length)];
+        // 작은 군락을 여러 곳에 분산시킴. 한 화면에 큰 색 덩어리가 생기지 않도록 밀도를 낮춤
+        if (hash2(gx * 1.3, gz * 0.7) > 0.28) continue;
+        const mx = (gx + 0.18 + hash2(gz, gx) * 0.64) * CELL;
+        const mz = (gz + 0.18 + hash2(gx + 3, gz - 5) * 0.64) * CELL;
+        const radius = 0.7 + hash2(gx - 2, gz + 9) * 1.8;
+        const count = 4 + Math.floor(hash2(gx + 11, gz) * 8);
         for (let k = 0; k < count && n < MAX; k++) {
-          // 무리 가운데일수록 촘촘하게
+          // 군락 안에서도 중심을 약하게 유지해, 꽃이 한 점에 겹치지 않게 함
           const r = radius * Math.sqrt(hash2(gx * 7 + k, gz * 3 - k));
           const t = hash2(gx + k * 13, gz - k * 7) * Math.PI * 2;
           const x = mx + Math.cos(t) * r;
           const z = mz + Math.sin(t) * r;
           if (grassAmount(x, z) < 0.85 || pathAmount(x, z) > 0.05) continue;
-          if (pondsNear(z, 7).some((pd) => pondDistance(pd, x, z) < 1.2)) continue;
-          const size = 1.25 + hash2(k * 5 + gx, gz) * 0.6;
+          // 실제 물 표면보다 넓게 제외해 연못 가장자리에서 꽃이 떠 보이지 않게 함
+          if (inWater(x, z) || pondsNear(z, 8).some((pd) => pondDistance(pd, x, z) < 1.24)) continue;
+          const size = 0.85 + hash2(k * 5 + gx, gz) * 0.55;
           q.setFromAxisAngle(up, hash2(k + gz, gx - k) * Math.PI * 2);
           s.set(size, size * (0.85 + hash2(gx, k + gz) * 0.4), size);
           pos.set(x, heightAt(x, z) - 0.01, z);
@@ -134,7 +134,8 @@ export function Flowers({ player, ground }: { player: React.RefObject<THREE.Vect
           g.setMatrixAt(n, m);
           p.setMatrixAt(n, m);
           c.setMatrixAt(n, m);
-          color.set(hash2(k, gx + gz) < 0.7 ? c1 : c2);
+          // 군락의 색을 고정하지 않고 꽃마다 부드러운 파스텔 색을 섞음
+          color.set(PETALS[Math.floor(hash2(gx * 5 + k, gz * 3 - k) * PETALS.length)]);
           p.setColorAt(n, color);
           n++;
         }

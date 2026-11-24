@@ -1,5 +1,6 @@
 import type { RegionGroup } from "@/lib/missing/regions";
 import type { MissingSummary } from "@/lib/missing/types";
+import { GARDEN_PATHS, groupByGarden, type GardenPathKey } from "@/lib/missing/garden-paths";
 
 /**
  * 구름 길의 칸(slot) 배치. 3D 라이브러리와 무관한 순수 계산이라 테스트·재사용이 쉬움.
@@ -8,22 +9,30 @@ import type { MissingSummary } from "@/lib/missing/types";
  */
 export type Slot =
   | { kind: "start" }
-  | { kind: "sign"; region: string; label: string; count: number }
-  | { kind: "lantern"; person: MissingSummary; side: 1 | -1; regionLabel: string }
+  | { kind: "sign"; pathKey: GardenPathKey; label: string; mood: string; count: number; pathIndex: 0 }
+  | { kind: "lantern"; person: MissingSummary; side: 1 | -1; regionLabel: string; pathKey: GardenPathKey; pathIndex: number }
   | { kind: "end" };
 
 export const SLOT_SPACING = 4;
 
 export function buildSlots(groups: RegionGroup[]): Slot[] {
-  // 지역으로 나누지 않음 (사용자 결정 2026-11-19): 모든 실종자를 최근에 실종된 순서로 한 줄로 세움.
-  // 갈래 길 구간에서는 바깥쪽(side 1) 등불이 갈래 길 옆에 서므로 여러 길에 고르게 흩어짐 (world.ts lanternPoint)
-  const people = groups
-    .flatMap((g) => g.people.map((person) => ({ person, regionLabel: g.label })))
-    .sort((a, b) => (b.person.missingDate ?? "").localeCompare(a.person.missingDate ?? ""));
+  const people = groups.flatMap((g) => g.people.map((person) => ({ person, regionLabel: g.label })));
+  const byId = new Map(people.map((entry) => [entry.person.id, entry]));
+  const grouped = groupByGarden(people.map((entry) => entry.person));
   const slots: Slot[] = [{ kind: "start" }];
-  people.forEach(({ person, regionLabel }, i) => {
-    slots.push({ kind: "lantern", person, side: i % 2 === 0 ? 1 : -1, regionLabel });
-  });
+
+  // 길 입구 표지판을 실제 등불 구간 앞에 넣음. 자료가 적은 길도 고유한 공간으로 남김.
+  for (const path of GARDEN_PATHS) {
+    const pathPeople = grouped[path.key]
+      .map((person) => byId.get(person.id))
+      .filter((entry): entry is { person: MissingSummary; regionLabel: string } => !!entry)
+      .sort((a, b) => (b.person.missingDate ?? "").localeCompare(a.person.missingDate ?? ""));
+
+    slots.push({ kind: "sign", pathKey: path.key, label: path.name, mood: path.mood, count: pathPeople.length, pathIndex: 0 });
+    pathPeople.forEach(({ person, regionLabel }, i) => {
+      slots.push({ kind: "lantern", person, side: i % 2 === 0 ? 1 : -1, regionLabel, pathKey: path.key, pathIndex: i + 1 });
+    });
+  }
   slots.push({ kind: "end" });
   return slots;
 }
@@ -56,6 +65,15 @@ export function regionAt(slots: Slot[], at: number): string | null {
   for (let i = Math.min(slots.length - 1, Math.round(at)); i >= 0; i--) {
     const s = slots[i];
     if (s.kind === "sign") return s.label;
+  }
+  return null;
+}
+
+/** 현재 슬롯이 어느 정원 구간인지. HUD의 장소명과 표지판 이동에 사용 */
+export function gardenPathAt(slots: Slot[], at: number): GardenPathKey | null {
+  for (let i = Math.min(slots.length - 1, Math.round(at)); i >= 0; i--) {
+    const slot = slots[i];
+    if (slot.kind === "sign") return slot.pathKey;
   }
   return null;
 }

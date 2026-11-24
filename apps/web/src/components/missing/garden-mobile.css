@@ -1,0 +1,132 @@
+.expo-root { height:100dvh; min-height:0; }
+.expo-mobileOnly { display:none; }
+@media(max-width:767px), (max-height:520px) {
+ .expo-header { padding:calc(env(safe-area-inset-top, 0px) + 10px) 12px 8px; height:58px; }
+ .expo-header > span { display:none; }
+ .expo-root > aside { display:none; }
+ .expo-toolbar { top:calc(env(safe-area-inset-top, 0px) + 62px); padding:0 10px; }
+ .expo-toolbar > div { width:100%; flex-wrap:nowrap; gap:0; }
+ .expo-toolbar button { flex:1; padding:10px 3px; font-size:11px; white-space:nowrap; min-height:42px; }
+ .expo-settingsToggle { position:absolute; right:12px; top:calc(env(safe-area-inset-top, 0px) + 12px); z-index:25; display:block; border-radius:20px; background:#fbfaf1ed; padding:10px 14px; font-size:12px; }
+ .expo-settingsPanel { display:none; top:calc(env(safe-area-inset-top, 0px) + 112px); right:10px; left:10px; max-width:none; padding:12px; box-shadow:0 8px 24px #20382820; }
+ .expo-settingsPanel[data-open=true] { display:flex; }
+ .expo-settingsPanel button,.expo-settingsPanel select { min-height:42px; }
+ .expo-footer { bottom:calc(env(safe-area-inset-bottom, 0px) + 10px); padding:0 12px; gap:6px; }
+ .expo-footer > div { max-width:none; }
+ .expo-footer p { font-size:10px; max-width:100%; }
+ .expo-footer nav { display:none; }
+ .expo-mobileOnly { display:block; }
+ .expo-destination { pointer-events:auto; width:100%; border:1px solid #d5ddc7; border-radius:14px; padding:11px 12px; min-height:44px; background:#faf9eff5; color:#405d49; font-size:14px; }
+ .expo-wishCount { display:none; }
+ .expo-footer button { font-size:12px; }
+}
+@media(max-height:520px) and (orientation:landscape) {
+ .expo-toolbar { top:58px; left:0; right:0; }
+ .expo-footer { padding:0 14px; }
+ .expo-footer > p,.expo-destination { display:none; }
+ .expo-settingsPanel { top:112px; max-height:calc(100dvh - 80px); overflow:auto; }
+}
+
+.expo-browse { position:absolute; left:20px; top:144px; z-index:15; width:270px; padding:12px; border:1px solid #e8ddc6; border-radius:18px; background:#fff9edee; color:#65583e; box-shadow:0 4px 20px #43371912; font-size:12px; }
+.expo-browse input,.expo-browse select { width:100%; min-height:36px; border:1px solid #e5d9c0; border-radius:10px; padding:6px 10px; background:#fffdf8; }
+.expo-browse select { margin-top:6px; }
+.expo-browse > div { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:8px; font-size:10px; }
+.expo-browse button { min-height:32px; color:#84622e; }
+.expo-browse button:disabled { opacity:.4; }
+@media(max-width:767px), (max-height:520px) {
+ .expo-browse { top:calc(env(safe-area-inset-top,0px) + 124px); left:10px; right:10px; width:auto; display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:8px; }
+ .expo-browse select { margin:0; min-width:0; }
+ .expo-browse input { min-width:0; }
+ .expo-browse > div { grid-column:1 / -1; margin:0; }
+ .expo-settingsPanel { z-index:26; }
+}
+
+/* Compact, consistent controls without browser-native oversized menus. */
+.expo-time-select { appearance:none; border:1px solid #d6decc; border-radius:12px; background:#fffdf7; padding:8px 12px; color:#405d49; min-height:38px; cursor:pointer; }
+.expo-settingsPanel { align-items:center; border:1px solid #e2e7d8; border-radius:18px; gap:8px; }
+.expo-settingsPanel button { background:#fffdf7; border-radius:12px; padding:8px 12px; }
+.expo-garden-nav { display:flex; max-width:100%; gap:6px; padding:6px; border:1px solid #e4e8dc; border-radius:18px; background:#faf9eff5; box-shadow:0 2px 12px #344c4010; }
+.expo-garden-nav button { flex-shrink:0; border-radius:12px; min-height:40px; }
+.expo-garden-nav button:hover { background:#e0e8d7; }
+@media(max-width:767px), (max-height:520px) {
+ .expo-footer .expo-wishCount { display:block; font-size:11px; }
+ .expo-footer .expo-garden-nav { display:flex; width:100%; flex-wrap:nowrap; justify-content:flex-start; overflow-x:auto; scrollbar-width:none; }
+ .expo-garden-nav button { white-space:nowrap; font-size:11px; padding:8px 12px; }
+ .expo-browse { grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+ .expo-settingsPanel { max-height:calc(100dvh - 160px); overflow-y:auto; justify-content:flex-start; }
+}
+@media(max-width:767px), (max-height:520px) {
+ .expo-root:has(.expo-settingsPanel[data-open=true]) .expo-browse { display:none; }
+ .expo-settingsPanel { background:#fffdf7; }
+}
+
+/* Shared cream-and-sage chooser, independent of native select appearance. */
+.garden-choice { position:relative; min-width:0; width:100%; }
+.garden-choice-trigger { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; min-height:44px; padding:10px 14px; border:1px solid #dce2d1; border-radius:14px; background:#fffdf7; color:#46604e; font-size:12px; text-align:left; }
+.garden-choice-trigger svg { flex-shrink:0; width:15px; height:15px; transition:transform .15s; }
+.garden-choice-trigger svg.is-open { transform:rotate(180deg); }
+.garden-choice-options { position:absolute; top:calc(100% + 7px); left:0; right:0; z-index:35; padding:6px; background:#fffdf7; border:1px solid #dce2d1; border-radius:16px; box-shadow:0 10px 30px #344c4024; }
+.garden-choice-options button { display:flex; align-items:center; justify-content:space-between; gap:6px; width:100%; min-height:44px; padding:10px 12px; border-radius:10px; color:#52634e; text-align:left; font-size:12px; }
+.garden-choice-options button:hover { background:#f0f2e7; }
+.garden-choice-options button[aria-pressed=true] { background:#e7eddf; color:#365740; font-weight:600; }
+.garden-choice button:focus-visible,.expo-time-options button:focus-visible,.expo-garden-nav button:focus-visible { outline:2px solid #91a17f; outline-offset:2px; }
+.expo-browse > .garden-choice { display:block; margin:6px 0 0; font-size:12px; }
+.expo-browse .garden-choice button { color:#46604e; min-height:44px; }
+.expo-settingsPanel { position:absolute; top:144px; right:16px; z-index:26; width:340px; max-width:calc(100% - 32px); display:flex; flex-direction:column; align-items:stretch; gap:12px; padding:14px; background:#fffdf7f5; border:1px solid #e2e7d8; border-radius:20px; box-shadow:0 4px 20px #344c4010; font-size:12px; }
+.expo-settings-row { display:flex; justify-content:center; align-items:center; gap:10px; flex-wrap:wrap; text-align:center; }
+.expo-settings-row > span { flex:1; white-space:nowrap; color:#74816a; }
+.expo-settingsPanel .expo-settings-row button { min-height:40px; padding:8px 12px; border:1px solid #dce2d1; background:#fffdf7; border-radius:12px; }
+.expo-time-options { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:3px; background:#f0f1e7; border-radius:14px; padding:4px; }
+.expo-settingsPanel .expo-time-options button { min-height:36px; padding:6px 0; border:0; background:transparent; border-radius:10px; text-align:center; color:#6c7a61; }
+.expo-settingsPanel .expo-time-options button[aria-pressed=true] { background:#526e58; color:white; box-shadow:0 2px 5px #344c4014; }
+.expo-weather-error { text-align:center; color:#976e53; font-size:11px; }
+.expo-garden-nav { width:100%; max-width:640px; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); align-items:stretch; gap:4px; }
+.expo-garden-nav button { text-align:center; padding:10px 6px; white-space:normal; line-height:1.5; }
+.expo-garden-nav button[aria-current=location] { background:#e3ebdb; color:#3d6348; font-weight:600; }
+@media(max-width:767px), (max-height:520px) {
+ .expo-settingsPanel { display:none; top:calc(env(safe-area-inset-top,0px) + 120px); left:10px; right:10px; width:auto; max-width:none; padding:14px; }
+ .expo-settingsPanel[data-open=true] { display:flex; }
+ .expo-settings-row { justify-content:center; }
+ .expo-browse > .garden-choice { grid-column:auto; margin:0; }
+ .expo-browse > div:not(.garden-choice) { grid-column:1 / -1; }
+ .expo-footer .expo-garden-nav { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); overflow:visible; width:100%; }
+ .expo-footer .expo-garden-nav button { padding:8px 3px; font-size:11px; white-space:normal; overflow-wrap:normal; word-break:keep-all; }
+}
+
+/* The UI follows the same phase as the 3D sky, including automatic local time. */
+.expo-root { --garden-panel:#fffdf7f5; --garden-ink:#46604e; --garden-line:#dce2d1; --garden-soft:#e7eddf; }
+.expo-root[data-phase=night] { --garden-panel:#202e3bed; --garden-ink:#e4e4d7; --garden-line:#52616a; --garden-soft:#3c5054; color:var(--garden-ink); }
+.expo-toolbar>div,.expo-settingsPanel,.expo-browse,.expo-garden-nav,.garden-choice-trigger,.garden-choice-options,.expo-settingsToggle,.garden-person-label,.expo-footer>p,.expo-wishCount { transition:background-color 1s,color 1s,border-color 1s; }
+.expo-root[data-phase=night] :is(.expo-toolbar>div,.expo-settingsPanel,.expo-browse,.expo-garden-nav,.garden-choice-trigger,.garden-choice-options,.expo-settingsToggle,.garden-person-label,.expo-footer>p,.expo-wishCount) { background:var(--garden-panel); color:var(--garden-ink); border-color:var(--garden-line); box-shadow:0 4px 20px #0002; }
+.expo-root[data-phase=night] :is(.expo-toolbar button,.expo-browse button,.garden-choice-options button,.expo-garden-nav button,.expo-settingsPanel button) { color:var(--garden-ink); }
+.expo-root[data-phase=night] :is(.expo-browse input,.expo-settingsPanel .expo-settings-row button) { background:#283844; color:var(--garden-ink); border-color:var(--garden-line); }
+.expo-root[data-phase=night] .expo-browse input::placeholder { color:#a5b4b7; }
+.expo-root[data-phase=night] :is(.expo-settings-row>span,.expo-weather-error) { color:#bbc8c7; }
+.expo-root[data-phase=night] .expo-time-options { background:#172630; }
+.expo-root[data-phase=night] :is(.expo-toolbar button[aria-pressed=true],.expo-time-options button[aria-pressed=true],.garden-choice-options button[aria-pressed=true],.expo-garden-nav button[aria-current=location]) { background:#53696a; color:#fff2ce; }
+.expo-root[data-phase=night] :is(.expo-toolbar button,.expo-garden-nav button,.garden-choice-options button):hover { background:var(--garden-soft); }
+.expo-root[data-phase=night] .garden-person-tail { background:#202e3bf2; }
+.expo-root[data-phase=night] > div:has(>h1) { background:var(--garden-panel); border-color:var(--garden-line); color:var(--garden-ink); }
+.expo-root[data-phase=night] > div:has(>h1) :is(p,label,button) { color:#bbc8c7; }
+main:has(.expo-root[data-phase=night]) .expo-header>span { background:#202e3bed; border-color:#52616a; color:#e4e4d7; }
+@media(prefers-reduced-motion:reduce) { .expo-root * { transition-duration:0s!important; } }
+
+/* Modal colors must change together; inherited pale text on cream is unreadable. */
+.garden-avatar-dialog { color:#3d4b3d; }
+.garden-avatar-dialog #nickname { color:#3d4b3d; }
+.garden-avatar-dialog :is(h2,label) { color:#3d4b3d; }
+.garden-avatar-dialog,.garden-person-dialog,.garden-directory-dialog { transition:background-color 1s,border-color 1s,color 1s; }
+.expo-root[data-phase=night] :is(.garden-avatar-dialog,.garden-person-dialog,.garden-directory-dialog) { background:#202e3bfa; color:#e8e6dc; border-color:#52616a; box-shadow:0 16px 60px #0005; }
+.expo-root[data-phase=night] :is(.garden-avatar-dialog,.garden-person-dialog,.garden-directory-dialog) :is(h2,h3,label,strong) { color:#f0e9d6; }
+.expo-root[data-phase=night] :is(.garden-avatar-dialog,.garden-person-dialog,.garden-directory-dialog) :is(p,summary) { color:#bdc9c9; border-color:#4b5b64; }
+.expo-root[data-phase=night] :is(.garden-avatar-dialog,.garden-directory-dialog) input,.expo-root[data-phase=night] .garden-avatar-dialog #nickname { background:#2b3c48; border-color:#596b73; color:#f0ece0; }
+.expo-root[data-phase=night] :is(.garden-avatar-dialog,.garden-directory-dialog) input::placeholder { color:#a1b1b5; }
+.expo-root[data-phase=night] .garden-avatar-dialog .garden-avatar-preview { background:linear-gradient(#263d54,#3d544e); }
+.expo-root[data-phase=night] .garden-avatar-dialog button:not(.garden-primary-action) { background:#344652; color:#e2e7db; }
+.expo-root[data-phase=night] .garden-avatar-dialog .garden-primary-action { background:#cda568; color:#172630; }
+.expo-root[data-phase=night] .garden-avatar-dialog a { background:#2b3c48; color:#e7c991; border-color:#6b736d; }
+.expo-root[data-phase=night] .garden-person-dialog :is(section,details),.expo-root[data-phase=night] .garden-directory-dialog article { background:#2b3c48; border-color:#4b5b64; }
+.expo-root[data-phase=night] .garden-person-dialog button { background:#536b62; color:#fff0d3; border-color:#71837b; }
+.expo-root[data-phase=night] .garden-person-dialog a { color:#e7c991; }
+.expo-root[data-phase=night] .garden-person-dialog a.flex { background:#cda568; color:#172630; }
+.expo-root[data-phase=night] .garden-directory-dialog article :is(button,span) { color:#c9d5cf; }

@@ -107,7 +107,7 @@ function World({ slots, cloudCount, paused, onSelect, onWalk, stepRef, jumpRef, 
         if (slot.kind === "sign") {
           const p = pointAt(i);
           return (
-            <group key={slot.region}>
+            <group key={slot.pathKey}>
               {cloudCount >= SUNLIGHT_AT && (
                 <group position={[p.x, p.y, p.z]}>
                   <SunShaft golden={cloudCount >= HOME_PATH_AT} />

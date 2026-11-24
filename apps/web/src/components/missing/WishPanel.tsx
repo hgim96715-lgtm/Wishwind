@@ -104,21 +104,24 @@ export function WishPanel({
   const [sending, setSending] = useState(false);
   const [notice, setNotice] = useState<Notice>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const dialog=useRef<HTMLElement>(null);
 
   useEffect(() => {
+    const previous=document.activeElement as HTMLElement|null;
     closeRef.current?.focus();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {window.removeEventListener("keydown", onKey);previous?.focus();};
   }, [onClose]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const body = text.trim();
-    if (body.length < 2 || sending) return;
+    if (body.length < 2 || sending || !data) return;
     setSending(true);
     setNotice(null);
     const spot = getPosition?.();
+    if(getPosition&&!spot){setSending(false);setNotice({tone:"wait",text:"조금 더 여유 있는 곳으로 이동한 뒤 바람개비를 꽂아 주세요."});return;}
     const position = spot ? { x: Math.round(spot[0] * 100) / 100, z: Math.round(spot[1] * 100) / 100 } : undefined;
     try {
       const res = await fetch(ENDPOINT, {
@@ -168,14 +171,16 @@ export function WishPanel({
 
   return (
     <motion.section
+      ref={dialog}
+      onKeyDown={e=>{if(e.key!=="Tab")return;const nodes=dialog.current?.querySelectorAll<HTMLElement>('button:not([disabled]),textarea,a[href]');if(!nodes?.length)return;const first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}}
       role="dialog"
       aria-modal="true"
       aria-label="바람개비 꽂기"
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 16 }}
-      transition={{ type: "spring", stiffness: 260, damping: 28 }}
-      className="absolute inset-x-4 bottom-4 z-30 mx-auto max-h-[78dvh] max-w-md overflow-y-auto rounded-3xl border border-[#f1dfc4] bg-[#fffaf2]/95 p-6 shadow-[0_20px_60px_rgb(120_90_50/0.25)] backdrop-blur md:bottom-8"
+      transition={{ duration: .2 }}
+      className="absolute inset-x-0 bottom-0 z-50 mx-auto max-h-[75dvh] max-w-lg overflow-y-auto rounded-t-3xl border border-[#f1dfc4] bg-[#fffaf2]/95 p-6 shadow-[0_20px_60px_rgb(120_90_50/0.25)] backdrop-blur"
     >
       <button
         ref={closeRef}
@@ -190,7 +195,7 @@ export function WishPanel({
       <p className="mt-1 text-sm text-muted">
         길 위의 모든 분에게 응원 한 마디를 건네 주세요. 지금 서 있는 자리에 바람개비가 꽂히고, 바람이 모일수록 언덕의 바람개비가 다 같이 힘차게 돕니다.
       </p>
-      <p className="mt-3 text-xs text-subtle">정원의 바람개비 {count}개</p>
+      <p className="mt-3 text-xs text-subtle">{data?`정원의 바람개비 ${count}개`:"바람개비 기록을 불러오는 중…"}</p>
       <Progress count={count} ms={ms} />
 
       {data?.placedToday ? (
@@ -244,7 +249,7 @@ export function WishPanel({
           </span>
           <button
             type="submit"
-            disabled={sending || text.trim().length < 2}
+            disabled={!data || sending || text.trim().length < 2}
             className="shrink-0 rounded-full bg-[#e9a94f] px-4 py-1.5 whitespace-nowrap text-sm font-medium text-white shadow-sm transition-opacity disabled:opacity-50"
           >
             {sending ? "꽂는 중…" : "꽂기"}

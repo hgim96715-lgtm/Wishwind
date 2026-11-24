@@ -6,6 +6,7 @@ import type { ListMissingQuery } from './dto/missing.dto.js';
 
 const listSelect = {
   id: true,
+  _count: { select: { lightings: true } },
   source: true,
   name: true,
   gender: true,
@@ -13,11 +14,12 @@ const listSelect = {
   lastSeenPlace: true,
   region: true,
   thumbUrl: true,
+  // 실종자들의 정원 '사정별 길'에서 아이·어르신을 나누는 데 씀
+  ageAtMissing: true,
 } as const satisfies Prisma.MissingPersonSelect;
 
 const detailSelect = {
   ...listSelect,
-  ageAtMissing: true,
   ageNow: true,
   appearance: true,
   description: true,
@@ -31,6 +33,21 @@ const ACTIVE = { status: MissingStatus.ACTIVE } as const;
 @Injectable()
 export class MissingRepository {
   constructor(private readonly prisma: PrismaService) {}
+
+  lightingStats(id: string, voterId?: string) {
+    return this.prisma.$transaction(async tx => ({
+      count: await tx.missingLanternLighting.count({ where: { personId: id } }),
+      lit: voterId ? !!(await tx.missingLanternLighting.findUnique({ where: { personId_voterId: { personId: id, voterId } } })) : false,
+    }));
+  }
+
+  light(id: string, voterId: string) {
+    return this.prisma.$transaction(async tx => {
+      const result = await tx.missingLanternLighting.createMany({ data: [{ personId: id, voterId }], skipDuplicates: true });
+      const count = await tx.missingLanternLighting.count({ where: { personId: id } });
+      return { count, lit: true, added: result.count > 0 };
+    });
+  }
 
   findCursor(id: string) {
     return this.prisma.missingPerson.findUnique({
