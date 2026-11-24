@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import {
   CATEGORY_COLOR,
   CATEGORY_LABEL,
@@ -44,10 +47,13 @@ function spineLayout(text: string, available: number) {
 
 /**
  * 책장에 꽂힌 서류철 하나 (책등만 보이는 상태).
- * 클릭 시 /cases/[slug]로 이동하지만, @modal 슬롯의 인터셉팅 라우트가 가로채서 바텀 시트로 열림.
+ * 사건방의 file 쿼리로 시트를 열어 첫 클릭도 가로채기 라우트 캐시에 의존하지 않음.
  * scroll={false}: 시트가 열려도 책장 스크롤 위치를 유지함.
  */
 export function FileSpine({ item, fileNo }: { item: CaseListItem; fileNo: number }) {
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
+  params.set("file", item.slug);
   const color = CATEGORY_COLOR[item.category];
   const stamp = caseStamp(item);
   // 제목 길이에 따라 책등 높이를 살짝 다르게 → 실제 책장처럼 들쭉날쭉한 느낌
@@ -60,7 +66,7 @@ export function FileSpine({ item, fileNo }: { item: CaseListItem; fileNo: number
 
   return (
     <Link
-      href={`/cases/${item.slug}`}
+      href={`/cases?${params.toString()}`}
       scroll={false}
       aria-label={`${item.title} (${CATEGORY_LABEL[item.category]}, ${stamp.label})`}
       title={item.summary}

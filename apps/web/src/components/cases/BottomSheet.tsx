@@ -46,8 +46,10 @@ function trapTab(e: KeyboardEvent, sheet: HTMLElement) {
 export function BottomSheet({
   label,
   children,
+  closeHref,
 }: {
   label: string;
+  closeHref?: string;
   children: React.ReactNode;
 }) {
   const router = useRouter();
@@ -89,7 +91,7 @@ export function BottomSheet({
   };
 
   return (
-    <AnimatePresence onExitComplete={() => router.back()}>
+    <AnimatePresence onExitComplete={() => closeHref ? router.replace(closeHref, { scroll: false }) : router.back()}>
       {open && (
         <div className="fixed inset-0 z-50">
           <motion.div

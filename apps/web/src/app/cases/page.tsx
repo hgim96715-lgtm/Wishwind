@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { BottomSheet } from "@/components/cases/BottomSheet";
+import { CaseDetailView, CaseDetailSkeleton } from "@/components/cases/CaseDetailView";
 import { CaseFiltersForm } from "@/components/cases/CaseFilters";
 import { CaseList, CaseListSkeleton } from "@/components/cases/CaseList";
 import { RoomHeader } from "@/components/room/RoomHeader";
@@ -20,8 +22,18 @@ export default function CasesPage({ searchParams }: PageProps<"/cases">) {
       <Suspense fallback={<CaseListSkeleton />}>
         {searchParams.then((sp) => {
           const filters = parseCaseFilters(sp);
+          const file = Array.isArray(sp.file) ? sp.file[0] : sp.file;
+          const closeParams = new URLSearchParams();
+          for (const [key, value] of Object.entries(sp)) {
+            if (key === "file" || value === undefined) continue;
+            for (const item of Array.isArray(value) ? value : [value]) closeParams.append(key, item);
+          }
+          const closeHref = `/cases${closeParams.size ? `?${closeParams}` : ""}`;
           return (
             <>
+              {file && <BottomSheet key={file} label="사건 파일" closeHref={closeHref}>
+                <Suspense fallback={<CaseDetailSkeleton />}><CaseDetailView slug={file} /></Suspense>
+              </BottomSheet>}
               <section className="mt-8">
                 <CaseFiltersForm filters={filters} />
               </section>
