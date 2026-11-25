@@ -1,0 +1,383 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "chicago-tylenol-murders",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "연방 소비자 제품 변조 금지법 (Federal Anti-Tampering Act)",
+          "year": 1983,
+          "country": "US",
+          "description": "판매되는 식품·의약품 등 소비자 제품에 손을 대 독극물을 넣거나 변조하는 행위를 연방 범죄로 정했습니다. 타이레놀 독극물 사건 뒤 1983년 레이건 대통령이 서명했습니다.",
+          "sourceUrl": "https://home.heinonline.org/blog/2020/11/poison-on-the-shelves-federal-product-tampering-laws-and-the-chicago-tylenol-murders/",
+          "sourceTitle": "Poison on the Shelves: Federal Product Tampering Laws and the Chicago Tylenol Murders (HeinOnline)"
+        },
+        {
+          "kind": "SYSTEM",
+          "name": "일반의약품 변조 방지 포장 의무화",
+          "year": 1982,
+          "country": "US",
+          "description": "미국 식품의약국(FDA)이 약국에서 바로 사는 일반의약품에 뜯으면 표가 나는 포장을 하도록 처음 규정을 만들었습니다. 오늘날 약병 입구의 밀봉 실링이 여기서 시작됐습니다.",
+          "sourceUrl": "https://www.npr.org/2012/09/29/161995443/why-tylenol-bottles-are-hard-to-open",
+          "sourceTitle": "Why Tylenol Bottles Are Hard To Open (NPR)"
+        }
+      ]
+    },
+    {
+      "slug": "polly-klaas-kidnapping",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "캘리포니아 삼진 아웃법 (Three Strikes Law)",
+          "year": 1994,
+          "country": "US",
+          "description": "강력 범죄 전과가 있는 사람이 다시 중범죄를 저지르면 형을 크게 늘리고, 세 번째에는 최소 25년에서 종신형까지 선고하게 했습니다. 폴리 클라스의 아버지 등이 법 제정 운동에 나섰습니다.",
+          "sourceUrl": "https://law.stanford.edu/three-strikes-project/three-strikes-basics",
+          "sourceTitle": "Three Strikes Basics (스탠퍼드 로스쿨)"
+        }
+      ]
+    },
+    {
+      "slug": "jacob-wetterling-abduction",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "제이컵 웨털링법 (Jacob Wetterling Act)",
+          "year": 1994,
+          "country": "US",
+          "description": "아동 대상 범죄와 성폭력 범죄로 유죄 판결을 받은 사람이 주소를 등록하도록, 모든 주가 성범죄자 등록 제도를 갖추게 한 첫 연방법입니다. 1996년 메건법으로 지역 사회 통지가 더해졌습니다.",
+          "sourceUrl": "https://ojp.gov/ncjrs/virtual-library/abstracts/sex-offender-registry-laws-jacob-wetterling-adam-walsh",
+          "sourceTitle": "Sex Offender Registry Laws: From Jacob Wetterling to Adam Walsh (미국 법무부 NCJRS)"
+        }
+      ]
+    },
+    {
+      "slug": "son-of-sam",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "'샘의 아들' 법 (Son of Sam Law, 뉴욕주)",
+          "year": 1977,
+          "country": "US",
+          "description": "범죄자가 자기 범죄 이야기를 책·영화로 팔아 번 돈을 피해자 보상에 먼저 쓰도록 묶어 두게 했습니다. 범인이 체포된 직후 뉴욕주에서 만들어졌고, 비슷한 법이 다른 주로 퍼졌습니다.",
+          "sourceUrl": "https://firstamendment.mtsu.edu/article/son-of-sam-laws/",
+          "sourceTitle": "Son of Sam Laws (Free Speech Center, 미들테네시주립대)"
+        }
+      ]
+    },
+    {
+      "slug": "sandy-hook",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "코네티컷주 총기 폭력 방지·아동 안전법",
+          "year": 2013,
+          "country": "US",
+          "description": "공격용 소총 금지 목록에 100종 넘는 총기를 더하고, 10발 넘게 들어가는 탄창 판매를 막았으며, 모든 총기 구매에 신원 조회를 하게 했습니다. 사건 넉 달 뒤인 2013년 4월 서명됐습니다.",
+          "sourceUrl": "https://ctmirror.org/2013/04/04/malloy-signs-newtown-gun-bill-calls-healing/",
+          "sourceTitle": "Malloy signs Newtown gun bill, calls for healing (CT Mirror)"
+        }
+      ]
+    },
+    {
+      "slug": "parkland-school-shooting",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "마저리 스톤맨 더글러스 고등학교 공공안전법 (플로리다주)",
+          "year": 2018,
+          "country": "US",
+          "description": "총기를 살 수 있는 나이를 18세에서 21세로 올리고, 위험한 사람에게서 법원 명령으로 총기를 잠시 거둘 수 있게 했으며, 학교 안전 대책을 강화했습니다. 사건 3주 뒤인 2018년 3월 9일 서명됐습니다.",
+          "sourceUrl": "https://www.npr.org/sections/thetwo-way/2018/03/09/592393010/florida-gov-rick-scott-signs-gun-package",
+          "sourceTitle": "Florida Governor Signs Package Of New Gun Restrictions (NPR)"
+        }
+      ]
+    },
+    {
+      "slug": "hungerford-massacre",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "총기 개정법 1988 (Firearms (Amendment) Act 1988)",
+          "year": 1988,
+          "country": "GB",
+          "description": "반자동·펌프식 소총(.22 구경 제외)을 개인이 가질 수 없는 금지 무기로 정하고, 산탄총 관리와 철갑탄을 규제했습니다. 사건에 쓰인 총이 합법적으로 가진 것이었다는 점이 계기가 됐습니다.",
+          "sourceUrl": "https://api.parliament.uk/historic-hansard/commons/1987/oct/26/firearms",
+          "sourceTitle": "Firearms (영국 하원 의사록, 1987년 10월 26일)"
+        }
+      ]
+    },
+    {
+      "slug": "manchester-arena-bombing",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "마틴법 (Terrorism (Protection of Premises) Act 2025)",
+          "year": 2025,
+          "country": "GB",
+          "description": "200명 이상이 모일 수 있는 공연장·경기장 등에 테러에 대비한 계획과 대응 절차를 갖추게 했습니다. 이 사건으로 숨진 마틴 헷의 어머니 피건 머리가 오랜 운동 끝에 2025년 4월 법을 이끌어 냈습니다.",
+          "sourceUrl": "https://www.gov.uk/government/news/landmark-anti-terror-legislation-gains-royal-assent",
+          "sourceTitle": "Landmark anti-terror legislation gains Royal Assent (영국 내무부)"
+        }
+      ]
+    },
+    {
+      "slug": "london-7-7-bombings",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "테러법 2006 (Terrorism Act 2006)",
+          "year": 2006,
+          "country": "GB",
+          "description": "테러를 부추기거나 미화하는 발언, 테러 준비 행위를 처벌하고, 테러 용의자를 판사 승인 아래 최대 28일까지 구금할 수 있게 했습니다. 일부 조항은 7·7 테러 뒤 더해졌습니다.",
+          "sourceUrl": "https://www.legislation.gov.uk/ukpga/2006/11/notes",
+          "sourceTitle": "Terrorism Act 2006 Explanatory Notes (영국 법령 사이트)"
+        }
+      ]
+    },
+    {
+      "slug": "harold-shipman-murders",
+      "changes": [
+        {
+          "kind": "SYSTEM",
+          "name": "의료 검시관 제도 (Medical Examiner System)",
+          "year": 2024,
+          "country": "GB",
+          "description": "검시관이 따로 조사하지 않는 모든 사망을 경험 많은 의사인 의료 검시관이 한 번 더 살펴본 뒤에야 사망 신고를 할 수 있게 했습니다. 시프먼 조사 보고서 등이 사망 진단 제도 개혁을 요구한 끝에 2024년 9월 9일 법정 제도가 됐습니다.",
+          "sourceUrl": "https://www.gov.uk/government/publications/changes-to-the-death-certification-process/an-overview-of-the-death-certification-reforms",
+          "sourceTitle": "An overview of the death certification reforms (영국 보건사회복지부)"
+        }
+      ]
+    },
+    {
+      "slug": "claudia-lawrence-disappearance",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "클라우디아법 (Guardianship (Missing Persons) Act 2017)",
+          "year": 2017,
+          "country": "GB",
+          "description": "실종된 가족의 재산·금융 업무를 법원이 정한 후견인이 대신 처리할 수 있게 했습니다. 클라우디아의 아버지 피터 로런스의 운동으로 만들어져 2019년 7월 31일부터 시행됐습니다.",
+          "sourceUrl": "https://www.gov.uk/government/news/claudia-s-law-to-lift-families-of-missing-people-out-of-legal-limbo",
+          "sourceTitle": "Claudia's Law to lift families of missing people out of legal limbo (영국 법무부)"
+        }
+      ]
+    },
+    {
+      "slug": "air-india-flight-182-bombing",
+      "changes": [
+        {
+          "kind": "DAY",
+          "name": "테러 희생자 추모의 날 (캐나다)",
+          "year": 2005,
+          "country": "OTHER",
+          "description": "캐나다 역사상 가장 많은 사람이 숨진 테러인 에어인디아 182편 폭파가 일어난 6월 23일을 국내외 테러 희생자를 기리는 날로 정했습니다.",
+          "sourceUrl": "https://www.pm.gc.ca/en/news/statements/2023/06/23/statement-prime-minister-national-day-remembrance-victims-terrorism",
+          "sourceTitle": "Statement by the Prime Minister on the National Day of Remembrance for Victims of Terrorism (캐나다 총리실)",
+          "observedOn": "06-23"
+        }
+      ]
+    },
+    {
+      "slug": "tokyo-subway-sarin-attack",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "사린 등에 의한 인신 피해 방지법 (サリン等による人身被害の防止に関する法律)",
+          "year": 1995,
+          "country": "JP",
+          "description": "사린 같은 신경 독가스를 만들거나 가지고 있거나 주고받는 것을 원칙적으로 금지하고, 뿌리는 행위를 무겁게 처벌하게 했습니다. 사건 한 달 뒤인 1995년 4월 만들어졌습니다.",
+          "sourceUrl": "https://www.japaneselawtranslation.go.jp/en/laws/view/1275",
+          "sourceTitle": "Act on Prevention of Bodily Harm by Sarin and Similar Substances (일본 법무성 법령 번역)"
+        }
+      ]
+    },
+    {
+      "slug": "megumi-yokota-abduction",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "북한 납치 피해자 지원법 (北朝鮮当局によって拉致された被害者等の支援に関する法律)",
+          "year": 2002,
+          "country": "JP",
+          "description": "북한에 납치됐다가 돌아온 사람과 가족이 일본에서 다시 생활할 수 있도록 국가와 지방자치단체가 급여금, 연금 특례 등으로 돕게 했습니다. 2002년 12월 공포됐습니다.",
+          "sourceUrl": "https://www.shugiin.go.jp/internet/itdb_housei.nsf/html/housei/15520021211143.htm",
+          "sourceTitle": "北朝鮮当局によって拉致された被害者等の支援に関する法律 (일본 중의원)"
+        }
+      ]
+    },
+    {
+      "slug": "akihabara-massacre",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "총포도검류 소지 단속법 개정 (양날 칼 소지 금지)",
+          "year": 2008,
+          "country": "JP",
+          "description": "칼날 길이 5.5cm 이상인 양날 칼(대거 등)을 원칙적으로 가질 수 없게 했습니다. 사건에 쓰인 대거가 합법적으로 산 것이었다는 점이 계기가 됐고, 2009년 1월부터 시행됐습니다.",
+          "sourceUrl": "https://japantimes.co.jp/news/2016/07/26/national/crime-legal/sagamihara-killings-reveal-shortcomings-in-law-to-control-knives",
+          "sourceTitle": "Sagamihara killings reveal shortcomings in law to control knives (The Japan Times)"
+        }
+      ]
+    },
+    {
+      "slug": "shinzo-abe-assassination",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "부당 기부 권유 방지법 (法人等による寄附の不当な勧誘の防止等に関する法律)",
+          "year": 2022,
+          "country": "JP",
+          "description": "종교 단체 등 법인이 불안을 부추기거나 영감 등을 내세워 기부를 강요하는 것을 금지하고, 빚을 내서 기부하게 하는 것도 막았습니다. 사건 뒤 드러난 옛 통일교회의 고액 헌금 피해를 계기로 2022년 12월 만들어졌습니다.",
+          "sourceUrl": "https://www.caa.go.jp/policies/policy/consumer_research/white_paper/2023/white_paper_204.html",
+          "sourceTitle": "消費者白書 2023: 不当寄附勧誘防止法の成立及び施行 (일본 소비자청)"
+        }
+      ]
+    },
+    {
+      "slug": "kang-ho-sun-serial-murders",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "특정강력범죄법 개정 (피의자 얼굴 공개)",
+          "year": 2010,
+          "country": "KR",
+          "description": "연쇄살인 같은 특정강력범죄 피의자의 얼굴, 이름, 나이를 수사 단계에서 공개할 수 있는 근거를 만들었습니다. 강호순 사건으로 얼굴 공개 논의가 시작돼 2010년 4월 국회를 통과했습니다.",
+          "sourceUrl": "https://www.mt.co.kr/society/2023/08/10/2023080915554111753",
+          "sourceTitle": "'지존파' 얼굴 즉시 공개했던 경찰, 지금은 못하는 이유가 (머니투데이)"
+        }
+      ]
+    },
+    {
+      "slug": "busan-schoolgirl-kim-gil-tae",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "성충동 약물치료법 (이른바 '화학적 거세법')",
+          "year": 2010,
+          "country": "KR",
+          "description": "16세 미만을 상대로 성폭력을 저지르고 재범 위험이 있는 성도착증 환자에게 법원이 최대 15년까지 약물치료를 명령할 수 있게 했습니다. 조두순·김길태 사건 뒤 2010년 6월 국회를 통과했습니다.",
+          "sourceUrl": "https://www.khan.co.kr/article/20100630041200A/",
+          "sourceTitle": "나영이 父 \"화학적 거세법 늦었지만 환영\" (경향신문)"
+        }
+      ]
+    },
+    {
+      "slug": "jo-du-sun",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "전자장치부착법 개정 (이른바 '조두순법')",
+          "year": 2019,
+          "country": "KR",
+          "description": "미성년자를 상대로 성폭력을 저지른 사람에게 전담 보호관찰관을 붙이고, 피해자 접근 금지 같은 준수사항을 두며, 전자발찌 부착 기간을 늘릴 근거를 만들었습니다. 2019년 3월 국회를 통과했습니다.",
+          "sourceUrl": "https://news.tf.co.kr/read/ogmeta/1749228.htm",
+          "sourceTitle": "'조두순 법' 국회 통과…미성년자 성폭행범 '감시 강화' (더팩트)"
+        }
+      ]
+    },
+    {
+      "slug": "gangseo-pc-bang-murder",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "형법 개정 (심신미약 임의적 감경, 이른바 '김성수법')",
+          "year": 2018,
+          "country": "KR",
+          "description": "심신미약인 사람의 형을 반드시 줄이던 규정을 '줄일 수 있다'로 바꿔 판사가 사정을 따져 정하게 했습니다. 이 사건 뒤 국민청원에 115만 명 넘게 참여했고, 2018년 11월 국회를 통과했습니다.",
+          "sourceUrl": "https://www.lawtimes.co.kr/news/148835",
+          "sourceTitle": "심신미약 상태 범죄, 무조건 감경 → '임의적 감경'으로 (법률신문)"
+        }
+      ]
+    },
+    {
+      "slug": "yoon-private-army-abuse-death",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "군인의 지위 및 복무에 관한 기본법",
+          "year": 2015,
+          "country": "KR",
+          "description": "군인의 기본권과 의무, 병영 내 폭행·가혹행위 금지, 고충 처리 절차를 법으로 정했습니다. 윤 일병 사건 뒤 2015년 만들어졌습니다.",
+          "sourceUrl": "https://weekly.khan.co.kr/article/202207081424071",
+          "sourceTitle": "군인권보호관의 권한이 이상하다 (주간경향)"
+        },
+        {
+          "kind": "SYSTEM",
+          "name": "군인권보호관 (국가인권위원회)",
+          "year": 2022,
+          "country": "KR",
+          "description": "국가인권위원회에 군 인권 침해를 독립적으로 조사하는 군인권보호관을 두었습니다. 윤 일병 사건 뒤 요구가 이어졌고, 2022년 7월 출범했습니다.",
+          "sourceUrl": "https://weekly.khan.co.kr/article/202207081424071",
+          "sourceTitle": "군인권보호관의 권한이 이상하다 (주간경향)"
+        }
+      ]
+    },
+    {
+      "slug": "cheonan-suitcase-child-abuse-death",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "민법 개정 (부모 징계권 조항 삭제)",
+          "year": 2021,
+          "country": "KR",
+          "description": "부모가 자녀를 '징계할 수 있다'고 정한 민법 제915조를 63년 만에 없애 체벌이 허용되지 않는다는 뜻을 분명히 했습니다. 천안·창녕 아동학대 사건에서 가해자들이 '훈육'을 내세운 것이 계기가 됐고, 2021년 1월 국회를 통과했습니다.",
+          "sourceUrl": "https://www.segye.com/newsView/20210108514099",
+          "sourceTitle": "'사랑의 회초리' 없앤다… '자녀 징계권 삭제' 개정안 국회 통과 (세계일보)"
+        }
+      ]
+    },
+    {
+      "slug": "delhi-bus-gang-rape-2012",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "형법 개정법 2013 (Criminal Law (Amendment) Act 2013, 이른바 '니르바야법')",
+          "year": 2013,
+          "country": "OTHER",
+          "description": "강간의 정의를 넓히고 처벌을 무겁게 했으며, 스토킹·관음·산성 공격 등을 새 범죄로 정했습니다. 사건 뒤 꾸려진 베르마 위원회의 권고를 바탕으로 2013년 4월 만들어졌습니다.",
+          "sourceUrl": "https://data.unwomen.org/global-database-on-violence-against-women/country-profile/India/measures/Criminal%20Law%20(Amendment),%20Act%202013",
+          "sourceTitle": "Criminal Law (Amendment) Act 2013 (UN Women 여성폭력 데이터베이스)"
+        }
+      ]
+    },
+    {
+      "slug": "mazan-pelicot-rape-case",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "강간죄 정의에 '동의 없음' 도입 (프랑스 형법 개정)",
+          "year": 2025,
+          "country": "OTHER",
+          "description": "폭행·협박·강제·기습이 있어야 강간으로 보던 정의를 넓혀, 자유롭고 분명한 동의 없이 한 모든 성적 행위를 강간으로 보게 했습니다. 침묵이나 반응 없음은 동의로 볼 수 없습니다. 펠리코 사건 재판 뒤 2025년 11월 공포됐습니다.",
+          "sourceUrl": "https://www.info.gouv.fr/actualite/le-non-consentement-entre-dans-la-definition-penale-du-viol",
+          "sourceTitle": "Le non-consentement entre dans la définition pénale du viol (프랑스 정부)"
+        }
+      ]
+    },
+    {
+      "slug": "marc-dutroux-case",
+      "changes": [
+        {
+          "kind": "SYSTEM",
+          "name": "벨기에 경찰 통합 개혁 (옥토퍼스 합의)",
+          "year": 1998,
+          "country": "OTHER",
+          "description": "따로 움직이던 헌병대, 사법경찰, 지방경찰을 지역·연방 두 단계의 통합 경찰로 합쳤습니다. 수사 기관 사이의 정보 단절이 뒤트루를 놓친 원인으로 지목되면서 1998년 정당들이 합의했습니다.",
+          "sourceUrl": "https://www.brusselstimes.com/belgium/181344/the-dutroux-case-and-how-it-changed-belgium",
+          "sourceTitle": "The Dutroux case, and how it changed Belgium (The Brussels Times)"
+        },
+        {
+          "kind": "SYSTEM",
+          "name": "차일드 포커스 (실종·성착취 아동 센터)",
+          "year": 1998,
+          "country": "OTHER",
+          "description": "실종 아동과 성착취 피해 아동을 찾고 돕는 벨기에 전국 센터입니다. 1996년 '하얀 행진' 뒤 피해자 가족의 요구로 1998년 문을 열었습니다.",
+          "sourceUrl": "https://www.vrt.be/vrtnws/en/2026/08/14/from-police-reform-to-victim-support-the-legacy-of-the-dutroux/",
+          "sourceTitle": "From police reform to victim support: the legacy of the Dutroux case (VRT)"
+        }
+      ]
+    }
+  ]
+}
