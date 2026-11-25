@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "victoria-climbie-death",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "아동법 2004 (Children Act 2004)",
+          "year": 2004,
+          "country": "GB",
+          "description": "학교, 의료, 경찰, 사회복지 기관이 아동 보호를 위해 정보를 나누고 함께 일하도록 의무를 지웠고, 잉글랜드 아동위원과 지역 아동보호위원회 등을 두었습니다. 빅토리아 클림비 조사 보고서(래밍 보고서)에 대한 정부의 대응인 '모든 아이가 소중하다(Every Child Matters)' 정책을 바탕으로 만들어졌습니다.",
+          "sourceUrl": "https://www.legislation.gov.uk/ukpga/2004/31/notes",
+          "sourceTitle": "Children Act 2004 Explanatory Notes (영국 법령 사이트)"
+        }
+      ]
+    }
+  ]
+}
