@@ -9,7 +9,7 @@ import type { MissingSummary } from "@/lib/missing/types";
 
 import { gardenRoute, canWalk, mapPoint, MAP_SCALE, type Point } from "./expo-layout";
 
-export const LANTERN_GROUP_SIZE=20;
+export const LANTERN_GROUP_SIZE=28;
 export type GardenLantern = Point & {person:MissingSummary;garden:number;low:boolean};
 
 /** Sample both verges of the actual paths, excluding junctions and obstacles. */

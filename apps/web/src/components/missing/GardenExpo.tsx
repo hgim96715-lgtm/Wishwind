@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { LuScan, LuFootprints, LuList, LuSearch, LuSettings2, LuWind, LuFlower2, LuTreePine, LuLeaf, LuWaves, LuCompass } from "react-icons/lu";
 import "./garden-mobile.css";
 const styles={"root": "expo-root", "mobileOnly": "expo-mobileOnly", "toolbar": "expo-toolbar", "settingsToggle": "expo-settingsToggle", "settingsPanel": "expo-settingsPanel", "footer": "expo-footer", "wishCount": "expo-wishCount"};
 import { Component, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
@@ -18,6 +19,7 @@ import { AnimatePresence } from "motion/react";
 import { phaseAt } from "./garden/expo-environment";
 import { regionLabel } from "@/lib/missing/regions";
 
+const GARDEN_ICONS=[LuFlower2,LuTreePine,LuLeaf,LuWaves];
 const NO_PLANTED_PINWHEELS:Pinwheel[]=[];
 const GARDEN_OPTIONS=EXPO_GARDENS.map((g,i)=>({value:String(i),label:g.name}));
 const Scene=dynamic(()=>import("./garden/ExpoScene"),{ssr:false,loading:()=> <div className="grid h-full place-items-center text-[#526e5b]">정원으로 들어가는 중…</div>});
@@ -94,17 +96,17 @@ export function GardenExpo() {
     </div>
     <div className={`${styles.toolbar} pointer-events-none absolute inset-x-0 top-20 z-10 flex justify-center px-4`} inert={modalOpen||undefined}>
       <div className="pointer-events-auto flex max-w-full flex-wrap justify-center gap-1 rounded-2xl border border-white/70 bg-[#fbfaf1]/90 p-1.5 shadow-sm backdrop-blur">
-        <button type="button" onClick={()=>setMode("overview")} aria-pressed={mode==="overview"} className={`rounded-xl px-3 py-2 text-sm ${mode==="overview"?"bg-[#496954] text-white":"hover:bg-[#e9eddf]"}`}><span className="expo-desktop-label">전체 보기 · 축소</span><span className="expo-short-label">전체</span></button>
-        <button type="button" onClick={onWalk} disabled={!ready} aria-pressed={mode==="walk"} className={`rounded-xl px-3 py-2 text-sm disabled:opacity-40 ${mode==="walk"?"bg-[#496954] text-white":"hover:bg-[#e9eddf]"}`}><span className="expo-desktop-label">직접 걷기</span><span className="expo-short-label">걷기</span></button>
-        <button type="button" onClick={()=>setListOpen(true)} className="rounded-xl px-3 py-2 text-sm hover:bg-[#e9eddf]"><span className="expo-desktop-label">바람개비 목록</span><span className="expo-short-label">목록</span></button>
+        <button type="button" onClick={()=>setMode("overview")} aria-pressed={mode==="overview"} className={`rounded-xl px-3 py-2 text-sm ${mode==="overview"?"bg-[#496954] text-white":"hover:bg-[#e9eddf]"}`}><LuScan aria-hidden="true"/><span className="expo-desktop-label">전체 보기 · 축소</span><span className="expo-short-label">전체</span></button>
+        <button type="button" onClick={onWalk} disabled={!ready} aria-pressed={mode==="walk"} className={`rounded-xl px-3 py-2 text-sm disabled:opacity-40 ${mode==="walk"?"bg-[#496954] text-white":"hover:bg-[#e9eddf]"}`}><LuFootprints aria-hidden="true"/><span className="expo-desktop-label">직접 걷기</span><span className="expo-short-label">걷기</span></button>
+        <button type="button" onClick={()=>setListOpen(true)} className="rounded-xl px-3 py-2 text-sm hover:bg-[#e9eddf]"><LuList aria-hidden="true"/><span className="expo-desktop-label">바람개비 목록</span><span className="expo-short-label">목록</span></button>
       </div>
     </div>
-    <button type="button" className={`${styles.mobileOnly} ${styles.settingsToggle}`} aria-expanded={settingsOpen} aria-controls="garden-settings" onClick={()=>{setSettingsOpen(v=>!v);setBrowseOpen(false);}} inert={modalOpen||undefined}>{settingsOpen?"설정 닫기":"정원 설정"}</button>
+    <button type="button" className={`${styles.mobileOnly} ${styles.settingsToggle}`} aria-expanded={settingsOpen} aria-controls="garden-settings" onClick={()=>{setSettingsOpen(v=>!v);setBrowseOpen(false);}} inert={modalOpen||undefined}><LuSettings2 aria-hidden="true"/><span>{settingsOpen?"닫기":"설정"}</span></button>
     <div id="garden-settings" data-open={settingsOpen} className="expo-settingsPanel" inert={modalOpen||undefined}>
       <div className="expo-settings-row"><button type="button" onClick={()=>setEditingAvatar(true)}>{avatar?.nickname||"캐릭터·닉네임"}</button><span>{weather.place} · {WEATHER_LABEL[weather.kind]}</span><button type="button" disabled={weatherLoading} onClick={()=>void (mine?clearWeather():askMyLocation())}>{weatherLoading?"날씨 확인 중":mine?"위치 날씨 끄기":"내 위치 날씨"}</button></div>
       {weatherError&&<p role="status" className="expo-weather-error">{weatherError}</p>}
     </div>
-    <button type="button" className="expo-browse-toggle" aria-expanded={browseOpen} aria-controls="garden-browse" onClick={()=>{setBrowseOpen(v=>!v);setSettingsOpen(false);}} inert={modalOpen||undefined}>{browseOpen?"찾기 닫기":"이름 찾기"}</button>
+    <button type="button" className="expo-browse-toggle" aria-expanded={browseOpen} aria-controls="garden-browse" onClick={()=>{setBrowseOpen(v=>!v);setSettingsOpen(false);}} inert={modalOpen||undefined}><LuSearch aria-hidden="true"/><span>{browseOpen?"닫기":"이름 찾기"}</span></button>
     <section id="garden-browse" data-open={browseOpen} className="expo-browse" aria-label="오늘의 바람개비와 검색" inert={modalOpen||undefined}>
       <label><span className="sr-only">이름·지역 검색</span><input aria-label="이름·지역 검색" value={lights.query} onChange={e=>lights.search(e.target.value)} placeholder="이름·지역 검색" /></label>
       <GardenChoice label="둘러볼 정원" value={String(selectedGarden)} options={GARDEN_OPTIONS} onChange={value=>enterGarden(Number(value))}/>
@@ -125,14 +127,14 @@ export function GardenExpo() {
       <div className="pointer-events-auto mb-1 flex w-full max-w-lg items-end justify-between gap-3">
         <div>{mode==="walk"&&<div aria-label="걷기 조이스틱"><Joystick onChange={(x,y)=>{stick.current={x,y};}} /></div>}</div>
         <div className="expo-status-stack">
-          <p className={`${styles.wishCount} rounded-full bg-[#faf9ef]/90 px-4 py-2 text-xs`}>바람개비 날리기 · {totalSupport.toLocaleString()}회</p>
+          <p className={`${styles.wishCount} rounded-full bg-[#faf9ef]/90 px-4 py-2 text-xs`}><LuWind aria-hidden="true"/><span>보낸 바람 <strong>{totalSupport.toLocaleString()}</strong>회</span></p>
           <p className="expo-clock" aria-label="현재 시각과 정원 시간대"><time>{clockLabel||"--:--"}</time><span> · {({morning:"아침",day:"낮",sunset:"노을",night:"밤"})[phase]} · {WEATHER_LABEL[weather.kind]}</span></p>
         </div>
       </div>
       <p data-message={!!notice||lights.status!=="ready"} role="status" className="max-w-xl rounded-full bg-[#faf9ef]/90 px-4 py-1.5 text-center text-xs text-[#5d735e]">{lights.status==="loading"?"실종자들의 바람개비를 불러오는 중…":lights.status==="error"?"바람개비를 불러오지 못했음 · 바람개비 목록에서 다시 시도":notice||(mode==="overview"?`${lights.people.length}명의 기억 · 바람개비를 눌러 이야기를 만나기`:"좌우로 방향 전환 · 위아래로 걷기")}</p>
       <nav aria-label="정원 입구로 이동" className="expo-garden-nav pointer-events-auto">
-        {EXPO_GARDENS.map((g,i)=><button key={g.name} type="button" disabled={!ready} onClick={()=>enterGarden(i)} aria-current={current?.name===g.name?"location":undefined} className="rounded-xl px-3 py-2 text-xs hover:bg-[#e0e8d7] disabled:opacity-40" aria-label={g.path}><span className="expo-desktop-label">{g.path}</span><span className="expo-short-label">{["아이들","어른들","오랜 기다림","바다 건너"][i]}</span></button>)}
-        <button type="button" disabled={!ready} onClick={()=>moveTo(EXPO_START)} aria-current={!current?"location":undefined} className="rounded-xl px-3 py-2 text-xs hover:bg-[#e0e8d7] disabled:opacity-40" aria-label="분수 광장"><span className="expo-desktop-label">분수 광장</span><span className="expo-short-label">광장</span></button>
+        {EXPO_GARDENS.map((g,i)=>{const Icon=GARDEN_ICONS[i];return <button key={g.name} type="button" disabled={!ready} onClick={()=>enterGarden(i)} aria-current={current?.name===g.name?"location":undefined} className="rounded-xl px-3 py-2 text-xs hover:bg-[#e0e8d7] disabled:opacity-40" aria-label={g.path}><Icon aria-hidden="true"/><span className="expo-desktop-label">{g.path}</span><span className="expo-short-label">{["아이들","어른들","오랜 기다림","바다 건너"][i]}</span></button>;})}
+        <button type="button" disabled={!ready} onClick={()=>moveTo(EXPO_START)} aria-current={!current?"location":undefined} className="rounded-xl px-3 py-2 text-xs hover:bg-[#e0e8d7] disabled:opacity-40" aria-label="분수 광장"><LuCompass aria-hidden="true"/><span className="expo-desktop-label">분수 광장</span><span className="expo-short-label">광장</span></button>
       </nav>
     </div>
     {listOpen&&<LanternDirectory lights={lights} garden={selectedGarden} onGarden={setSelectedGarden} onClose={closeList} onReveal={revealPerson} onSelect={selectPerson} />}
