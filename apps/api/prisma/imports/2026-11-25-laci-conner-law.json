@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "laci-peterson-murder",
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "태아 폭력 피해자법 (Unborn Victims of Violence Act, '레이시와 코너법')",
+          "year": 2004,
+          "country": "US",
+          "description": "연방 범죄 과정에서 임신한 여성을 해쳐 배 속 아이까지 다치거나 숨지게 하면, 아이에 대한 범죄도 따로 처벌할 수 있게 했습니다. 레이시 피터슨과 배 속 아들 코너의 이름을 따 '레이시와 코너법'으로 불리며, 2004년 4월 1일 부시 대통령이 서명했습니다.",
+          "sourceUrl": "https://georgewbush-whitehouse.archives.gov/news/releases/2004/04/text/20040401-3.html",
+          "sourceTitle": "President Bush Signs Unborn Victims of Violence Act of 2004 (백악관 기록)"
+        }
+      ]
+    }
+  ]
+}
