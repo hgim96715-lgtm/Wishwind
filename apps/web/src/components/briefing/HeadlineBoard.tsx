@@ -102,12 +102,14 @@ export function HeadlineBoard({ items, footer }: { items: BoardItem[]; footer?: 
   }, [running, count, index]);
 
   if (count === 0) return null;
-  const item = items[index];
+  // 새로고침으로 소식 개수가 줄어도 범위를 벗어나지 않게 함
+  const at = index % count;
+  const item = items[at];
   const go = (delta: number) => {
     setManual(true);
     setIndex((i) => (i + delta + count) % count);
   };
-  const rest = [...items.slice(index + 1), ...items.slice(0, index)];
+  const rest = [...items.slice(at + 1), ...items.slice(0, at)];
 
   return (
     <section
@@ -192,21 +194,21 @@ export function HeadlineBoard({ items, footer }: { items: BoardItem[]; footer?: 
           <div aria-hidden className="ml-2 flex flex-1 gap-1">
             {items.map((it, i) => (
               <span key={it.id} className="h-0.5 flex-1 overflow-hidden rounded-full bg-line">
-                {i === index && (
+                {i === at && (
                   <motion.span
-                    key={`${index}-${running}`}
+                    key={`${at}-${running}`}
                     className="block h-full bg-foreground/50"
                     initial={{ width: running && !reduced ? "0%" : "100%" }}
                     animate={{ width: "100%" }}
                     transition={{ duration: running && !reduced ? INTERVAL_MS / 1000 : 0, ease: "linear" }}
                   />
                 )}
-                {i < index && <span className="block h-full bg-foreground/25" />}
+                {i < at && <span className="block h-full bg-foreground/25" />}
               </span>
             ))}
           </div>
           <span className="ml-2 font-mono text-[11px] tabular-nums">
-            {index + 1}/{count}
+            {at + 1}/{count}
           </span>
         </div>
       </div>

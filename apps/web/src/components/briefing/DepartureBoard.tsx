@@ -153,7 +153,7 @@ export function DepartureBoard({ items }: { items: BoardItem[] }) {
   );
 
   if (items.length === 0) return null;
-  const visible = Array.from({ length: ROWS }, (_, i) => items[page * ROWS + i] ?? null);
+  const visible = Array.from({ length: ROWS }, (_, i) => items[(page % pages) * ROWS + i] ?? null);
 
   return (
     <section
@@ -235,7 +235,7 @@ export function DepartureBoard({ items }: { items: BoardItem[] }) {
             <LuChevronLeft className="size-3.5" />
           </button>
           <span className="tabular-nums">
-            {page + 1} / {pages}
+            {(page % pages) + 1} / {pages}
           </span>
           <button type="button" onClick={() => go(1)} aria-label="다음 소식" className="rounded-md p-1 hover:bg-white/10">
             <LuChevronRight className="size-3.5" />

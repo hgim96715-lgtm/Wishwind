@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { LuMegaphone, LuSend } from "react-icons/lu";
+import { BriefingAutoRefresh } from "@/components/briefing/BriefingAutoRefresh";
 import { BriefingFeed, BriefingSkeleton } from "@/components/briefing/BriefingFeed";
 import { RoomHeader } from "@/components/room/RoomHeader";
 
@@ -15,6 +16,7 @@ export default function BriefingPage() {
   return (
     <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-16">
       <RoomHeader slug="briefing" />
+      <BriefingAutoRefresh />
       <Suspense fallback={<BriefingSkeleton />}>
         <BriefingFeed />
       </Suspense>
