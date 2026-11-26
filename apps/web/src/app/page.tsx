@@ -6,10 +6,11 @@ import { LuHeartHandshake } from "react-icons/lu";
 import { AccountLink } from "@/components/home/AccountLink";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
 import { DidYouKnow } from "@/components/home/DidYouKnow";
+import { ReelCases } from "@/components/home/ReelCases";
 import { RoomGrid } from "@/components/home/RoomGrid";
 import { FeaturedCases } from "@/components/home/FeaturedCases";
 import { TodayTechCard } from "@/components/home/TodayTechCard";
-import { AccountLinkSkeleton, DidYouKnowSkeleton, FeaturedCasesSkeleton, TodayTechCardSkeleton } from "@/components/home/HomeSkeletons";
+import { AccountLinkSkeleton, DidYouKnowSkeleton, FeaturedCasesSkeleton, ReelCasesSkeleton, TodayTechCardSkeleton } from "@/components/home/HomeSkeletons";
 import { getCases } from "@/lib/cases/api";
 import { INSTAGRAM_URL } from "@/lib/site";
 
@@ -51,6 +52,11 @@ export default function Home() {
           Wishwind는 바람(wind)과 바람(wish)을 함께 담은 이름입니다.
         </p>
       </section>
+
+      {/* 릴스를 보고 온 사람이 방금 본 사건을 바로 찾는 곳 */}
+      <Suspense fallback={<ReelCasesSkeleton />}>
+        <ReelCases />
+      </Suspense>
 
       {/* 오늘의 기념일 or 대표 사건 카드 */}
       <Suspense fallback={<DidYouKnowSkeleton />}>

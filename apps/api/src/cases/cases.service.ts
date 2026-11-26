@@ -27,6 +27,13 @@ export class CasesService {
     return { items: rows.map((row) => toCaseListItem(row, preview)) };
   }
 
+  /** 인스타 릴스에서 최근 다룬 사건: 릴스를 보고 프로필 링크로 들어온 사람이 홈에서 바로 찾도록 */
+  async reelCases() {
+    const preview = draftsVisible();
+    const rows = await this.repo.findReelCases(preview);
+    return { items: rows.map((row) => toCaseListItem(row, preview)) };
+  }
+
   /** 사건이 바꾼 것(법·기념일·제도) 모아 보기 */
   async changes() {
     const rows = await this.repo.findChanges(draftsVisible());

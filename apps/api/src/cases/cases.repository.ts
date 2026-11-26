@@ -136,6 +136,23 @@ export class CasesRepository {
     });
   }
 
+  /** 최근 인스타 릴스에서 다룬 공개 사건 (관리실 '인스타 성과'에 사건 주소를 적어 둔 것). 최근 올린 순 */
+  async findReelCases(preview: boolean, take = 3) {
+    const posts = await this.prisma.instagramPost.findMany({
+      where: { kind: 'REEL', caseSlug: { not: null } },
+      orderBy: { postedOn: 'desc' },
+      take: 20,
+      select: { caseSlug: true },
+    });
+    const slugs = [...new Set(posts.flatMap((p) => p.caseSlug ?? []))];
+    if (slugs.length === 0) return [];
+    const rows = await this.prisma.case.findMany({
+      where: { ...visibilityWhere(preview), slug: { in: slugs } },
+      select: caseListSelect,
+    });
+    return slugs.flatMap((slug) => rows.find((r) => r.slug === slug) ?? []).slice(0, take);
+  }
+
   /** 공개 사건의 '바뀐 것' 전체 (홈 '알고 계셨나요?'·/changes). 많아야 수백 개라 한 번에 보냄 */
   findChanges(preview: boolean) {
     return this.prisma.caseChange.findMany({

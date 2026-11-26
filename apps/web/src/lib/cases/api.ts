@@ -45,6 +45,11 @@ export async function getFilePicks(): Promise<CaseListResponse["items"]> {
   return (await request<{ items: CaseListResponse["items"] }>("/cases/picks"))?.items ?? [];
 }
 
+/** 최근 인스타 릴스에서 다룬 사건 (없으면 빈 목록) */
+export async function getReelCases(): Promise<CaseListResponse["items"]> {
+  return (await request<{ items: CaseListResponse["items"] }>("/cases/reels"))?.items ?? [];
+}
+
 /** 관리실에서 홈 대표로 지정한 사건 (없으면 빈 목록) */
 export async function getHomeFeatured(): Promise<CaseListResponse["items"]> {
   return (await request<{ items: CaseListResponse["items"] }>("/cases/featured"))?.items ?? [];

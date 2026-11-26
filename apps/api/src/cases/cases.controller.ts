@@ -23,6 +23,11 @@ export class CasesController {
     return this.cases.filePicks();
   }
 
+  @Get('reels')
+  reels() {
+    return this.cases.reelCases();
+  }
+
   @Get('featured')
   featured() {
     return this.cases.homeFeatured();
