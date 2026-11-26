@@ -17,6 +17,7 @@ import { WEATHER_LABEL } from "@/lib/weather/types";
 import { GardenChoice } from "./GardenChoice";
 import { AnimatePresence } from "motion/react";
 import { phaseAt } from "./garden/expo-environment";
+import { currentHour } from "./time-of-day";
 import { regionLabel } from "@/lib/missing/regions";
 
 const GARDEN_ICONS=[LuFlower2,LuTreePine,LuLeaf,LuWaves];
@@ -77,13 +78,15 @@ export function GardenExpo() {
     moveTo(canWalk(approach.x,approach.z)?approach:EXPO_ENTRANCES[item.garden]);
   };
   useEffect(()=>{
-    const update=()=>{const now=new Date();setHour(now.getHours()+now.getMinutes()/60);setClockLabel(now.toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit",hour12:false}));};update();const timer=window.setInterval(update,60000);
+    const update=()=>{const h=currentHour(),total=Math.round(((h%24)+24)%24*60);setHour(h);setClockLabel(`${String(Math.floor(total/60)%24).padStart(2,"0")}:${String(total%60).padStart(2,"0")}`);};update();const timer=window.setInterval(update,60000);
     const preference=window.matchMedia("(prefers-reduced-motion: reduce)");setReducedMotion(preference.matches);
     const motionChange=()=>setReducedMotion(preference.matches);preference.addEventListener("change",motionChange);
     return()=>{window.clearInterval(timer);preference.removeEventListener("change",motionChange);};
   },[]);
   const phase=phaseAt(hour);
   const night=phase==="night";
+  // 화면 위 로고(정원 바깥 머리글)도 정원의 시간대를 알도록 html에 표시 (globals.css의 로고 규칙)
+  useEffect(()=>{const root=document.documentElement;root.dataset.expoPhase=phase;return()=>{delete root.dataset.expoPhase;};},[phase]);
   const setupOpen=avatarLoaded&&(!avatar||editingAvatar);
   const modalOpen=listOpen||!!lights.selected||setupOpen;
   const gardenCount=lights.groups[selectedGarden].length;

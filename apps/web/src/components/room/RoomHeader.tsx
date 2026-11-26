@@ -11,7 +11,7 @@ export function RoomHeader({ slug }: RoomHeaderProps) {
 
   return (
     <header className="border-b border-line pb-8">
-      <HomeLogo />
+      <HomeLogo large />
 
       <div className="mt-10 flex items-center gap-4">
         <Icon aria-hidden className="size-8" style={{ color: room.accent }} />

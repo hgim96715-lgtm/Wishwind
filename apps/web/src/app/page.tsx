@@ -16,7 +16,7 @@ export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default function Home() {
   return (
-    <main className="relative mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-6 py-16">
+    <main className="relative mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-6 pb-16 pt-24">
       <div className="absolute top-6 right-6 flex items-center gap-2">
         <ThemeToggle />
         <Suspense fallback={<AccountLinkSkeleton />}>
@@ -27,7 +27,7 @@ export default function Home() {
       {/* 히어로: 모바일 첫 화면에서 대표 사건 카드가 바로 보이도록 여백 컴팩트 */}
       <section className="mb-10">
         <Image src="/wishwind-logo.png" alt="Wishwind" width={720} height={240} priority className="brand-logo h-12 w-auto md:h-14" />
-        <h1 className="mt-4 text-4xl font-bold leading-snug tracking-tight md:text-5xl md:leading-tight">
+        <h1 className="mt-4 text-3xl font-bold leading-snug tracking-tight md:text-4xl md:leading-tight">
           작은 바람이 모이면,
           <br />
           바람개비가 돕니다.
