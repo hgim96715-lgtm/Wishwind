@@ -44,6 +44,21 @@ function retentionAt(points: { t: number; p: number }[], t: number) {
   return sorted[sorted.length - 1].p;
 }
 
+/** 올린 영상 파일에서 직접 측정한 구성 (길이·소리·첫 화면 변화 시점). 새 릴스를 올리면 여기에 한 줄 추가 */
+const VIDEO_FACTS = [
+  { date: "11/24", title: "D.B. 쿠퍼", length: "17.6초", sound: "소리 없음", firstChange: "2초", note: "첫 프레임에 제목이 흐리게 페이드인(0초에는 글씨가 거의 안 보임). 이후 장면 전환은 약 2초 간격의 미세한 움직임. 두 번째 문구(미제 항공 납치 사건)는 약 4초" },
+  { date: "11/25", title: "미라발 자매 (기념일)", length: "32.3초", sound: "있음", firstChange: "4.2초", note: "4초까지 화면 변화 없음. 첫 문구가 '이유'를 설명하는 주제형이라 긴장감이 약함. 인물 얼굴 없이 실루엣 사진" },
+  { date: "11/26", title: "이윤희 실종", length: "26.7초", sound: "있음", firstChange: "5.4초", note: "0.3초에 사진 등장 후 5초 넘게 정지. 5장 슬라이드(01/05) 구조, 상단 진행바와 작은 장식 글씨" },
+  { date: "11/27 예정", title: "재클린 던리비", length: "40.2초", sound: "있음", firstChange: "2초", note: "6장 슬라이드. '58년 만에 풀린 미제 사건'이 첫 장면(숫자 카운트 연출). 핵심 반전(전직 소방대장)은 약 3~4초 뒤 두 번째 슬라이드" },
+] as const;
+
+const EXPERIMENTS = [
+  { when: "11/27 던리비", change: "반전을 첫 장면으로: 0초부터 글씨가 보이게(페이드인 없이), 40초 → 20초 안팎으로 줄임", pass: "건너뛰기 70% 미만, 3초 유지율 45% 이상" },
+  { when: "다음 3개", change: "처음 3초 안에 화면 전환 또는 움직임 2회 이상, 소리는 0.5초 안에 시작. 나머지는 그대로 둠", pass: "건너뛰기 평균 60% 근처, 평균 시청 6초 이상" },
+  { when: "그다음 3개", change: "길이만 바꿔 비교: 12~15초 vs 25초 이상 (같은 형식)", pass: "평균 시청 ÷ 길이 비율이 올라가는 쪽을 채택" },
+  { when: "그다음 3개", change: "형식 비교: 사진 카드형 vs 영상 클립형 vs 글자만. 한 번에 하나만 바꿈", pass: "저장·공유가 처음 생기는 형식을 기록" },
+] as const;
+
 const label = (p: InstagramPostRow) => `${p.postedOn.slice(5)} ${p.title.length > 16 ? `${p.title.slice(0, 16)}…` : p.title}`;
 
 async function Charts() {
@@ -89,6 +104,51 @@ async function Charts() {
         similarViews={similarViews}
         retention3={withCurve.map((r) => ({ r, v: retentionAt(r.retention ?? [], 3) })).filter((x) => x.v !== null) as { r: InstagramPostRow; v: number }[]}
       />
+
+      <Card>
+        <h2 className="font-semibold">영상 구성 점검 (파일에서 직접 측정)</h2>
+        <p className="mt-1 text-xs text-muted">공통점: 4개 모두 슬라이드쇼형이고, 처음 2~5초 동안 화면이 거의 안 변하며, 길이가 17~40초입니다. 위 차트에서 건너뛰기가 높게 나온 이유와 맞닿아 있습니다. 표본이 작아 가설로 보세요.</p>
+        <div className="mt-3 overflow-x-auto">
+          <table className="w-full min-w-[40rem] text-left text-xs">
+            <thead className="text-subtle">
+              <tr>
+                <th className="py-1 pr-3 font-medium">날짜</th>
+                <th className="py-1 pr-3 font-medium">릴스</th>
+                <th className="py-1 pr-3 font-medium">길이</th>
+                <th className="py-1 pr-3 font-medium">소리</th>
+                <th className="py-1 pr-3 font-medium">첫 변화</th>
+                <th className="py-1 font-medium">구성 메모</th>
+              </tr>
+            </thead>
+            <tbody className="align-top text-muted">
+              {VIDEO_FACTS.map((v) => (
+                <tr key={v.date} className="border-t border-line">
+                  <td className="py-2 pr-3 whitespace-nowrap">{v.date}</td>
+                  <td className="py-2 pr-3 whitespace-nowrap text-foreground">{v.title}</td>
+                  <td className="py-2 pr-3 whitespace-nowrap tabular-nums">{v.length}</td>
+                  <td className="py-2 pr-3 whitespace-nowrap">{v.sound}</td>
+                  <td className="py-2 pr-3 whitespace-nowrap tabular-nums">{v.firstChange}</td>
+                  <td className="py-2">{v.note}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+
+      <Card>
+        <h2 className="font-semibold">다음 릴스 실험 계획</h2>
+        <p className="mt-1 text-xs text-muted">한 번에 하나만 바꾸고, 같은 조건으로 3개씩 올린 뒤 위 차트의 평균으로 판단합니다. 통과 기준은 건너뛰기·3초 유지율·평균 시청입니다.</p>
+        <ul className="mt-3 space-y-2 text-sm">
+          {EXPERIMENTS.map((e) => (
+            <li key={e.when} className="rounded-md border border-line px-3 py-2">
+              <p className="text-xs font-medium text-[#2f7469]">{e.when}</p>
+              <p className="mt-0.5 text-muted">{e.change}</p>
+              <p className="mt-0.5 text-xs text-subtle">통과 기준: {e.pass}</p>
+            </li>
+          ))}
+        </ul>
+      </Card>
 
       <ChartCard title="릴스별 조회" note="조회가 비슷한 숫자에서 멈추면 인스타가 처음 소수에게 보여 준 뒤 더 퍼뜨리지 않았다는 신호입니다.">
         <Bars rows={reels.map((r) => ({ key: r.id, label: label(r), value: r.views ?? r.reach, max: maxViews, text: fmt(r.views ?? r.reach), color: "#4f78a8" }))} />
