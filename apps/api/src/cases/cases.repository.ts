@@ -126,6 +126,20 @@ export class CasesRepository {
     });
   }
 
+  /** 다큐·방송·영화 등으로 다뤄진 공개 사건 (책 제외). 사건방 맨 위 '영상으로 본 사건'용, 최근 갱신순 */
+  findMediaCases(preview: boolean, take = 12) {
+    const mediaWhere = { kind: { not: 'BOOK' as const } };
+    return this.prisma.case.findMany({
+      where: { ...visibilityWhere(preview), relatedContents: { some: mediaWhere } },
+      select: {
+        ...caseListSelect,
+        relatedContents: { where: mediaWhere, orderBy: { sortOrder: 'asc' }, take: 2, select: { kind: true, platform: true, title: true } },
+      },
+      orderBy: { updatedAt: 'desc' },
+      take,
+    });
+  }
+
   /** 관리실에서 홈 대표로 지정한 사건 */
   findHomeFeatured(preview: boolean) {
     return this.prisma.case.findMany({

@@ -34,6 +34,13 @@ export class CasesService {
     return { items: rows.map((row) => toCaseListItem(row, preview)) };
   }
 
+  /** 다큐·방송·영화로 다뤄진 사건: 사건방에서 "이 작품의 그 사건"으로 이어 줌 */
+  async mediaCases() {
+    const preview = draftsVisible();
+    const rows = await this.repo.findMediaCases(preview);
+    return { items: rows.map((row) => ({ ...toCaseListItem(row, preview), media: row.relatedContents })) };
+  }
+
   /** 사건이 바꾼 것(법·기념일·제도) 모아 보기 */
   async changes() {
     const rows = await this.repo.findChanges(draftsVisible());

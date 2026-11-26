@@ -1,4 +1,4 @@
-import { ApiUnavailableError, InvalidQueryError, getCases, getFilePicks } from "@/lib/cases/api";
+import { ApiUnavailableError, InvalidQueryError, getCases, getFilePicks, getMediaCases } from "@/lib/cases/api";
 import { hasActiveFilters, type CaseFilters } from "@/lib/cases/filters";
 import { Bookshelf } from "./Bookshelf";
 import { Notice } from "./Notice";
@@ -10,9 +10,11 @@ const IS_DEV = process.env.NODE_ENV === "development";
 export async function CaseList({ filters }: { filters: CaseFilters }) {
   let data;
   let pinned: string[] = [];
+  let media: Awaited<ReturnType<typeof getMediaCases>> = [];
   try {
     data = await getCases(filters);
     pinned = (await getFilePicks().catch(() => [])).map((i) => i.slug);
+    media = await getMediaCases().catch(() => []);
   } catch (error) {
     if (error instanceof ApiUnavailableError) {
       return (
@@ -60,7 +62,7 @@ export async function CaseList({ filters }: { filters: CaseFilters }) {
           찾은 사건 파일 <span className="font-semibold text-foreground">{data.items.length}</span>건
         </p>
       )}
-      <Bookshelf items={data.items} pinnedSlugs={pinned} />
+      <Bookshelf items={data.items} pinnedSlugs={pinned} mediaItems={filtered ? [] : media} />
     </>
   );
 }

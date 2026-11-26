@@ -28,6 +28,11 @@ export class CasesController {
     return this.cases.reelCases();
   }
 
+  @Get('media')
+  media() {
+    return this.cases.mediaCases();
+  }
+
   @Get('featured')
   featured() {
     return this.cases.homeFeatured();

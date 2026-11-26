@@ -13,7 +13,7 @@ import {
   caseStamp,
   formatCaseDate,
 } from "@/lib/cases/labels";
-import type { CaseListItem, Country } from "@/lib/cases/types";
+import type { CaseListItem, Country, MediaCaseItem, RelatedKind } from "@/lib/cases/types";
 import { FileSpine } from "./FileSpine";
 
 /** 국가별로 묶음. 정렬은 COUNTRY_ORDER, 같은 책장 안은 API 순서(최신 발생일순) 유지 */
@@ -88,7 +88,26 @@ function fileHref(params: URLSearchParams, slug: string) {
   return `/cases?${next.toString()}`;
 }
 
-export function Bookshelf({ items, pinnedSlugs = [] }: { items: CaseListItem[]; pinnedSlugs?: string[] }) {
+const MEDIA_KIND: Record<RelatedKind, string> = {
+  DOCUMENTARY: "다큐멘터리",
+  TV_PROGRAM: "방송",
+  YOUTUBE: "유튜브",
+  PODCAST: "팟캐스트",
+  MOVIE: "영화",
+  SERIES: "시리즈",
+  BOOK: "책",
+};
+
+export function Bookshelf({
+  items,
+  pinnedSlugs = [],
+  mediaItems = [],
+}: {
+  items: CaseListItem[];
+  pinnedSlugs?: string[];
+  /** 다큐·방송·영화로 다뤄진 사건. 있으면 '오늘의 사건 파일' 자리에 먼저 보여 줌 */
+  mediaItems?: MediaCaseItem[];
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [view, setView] = useState<"shelf" | "list">("shelf");
@@ -97,6 +116,13 @@ export function Bookshelf({ items, pinnedSlugs = [] }: { items: CaseListItem[]; 
   useEffect(() => setDayIndex(Math.floor((Date.now() + 9 * 3_600_000) / 86_400_000)), []);
   const picks = useMemo(() => (dayIndex === null ? [] : recommended(items, dayIndex, pinnedSlugs)), [items, dayIndex, pinnedSlugs]);
 
+  // 날마다 시작 카드가 바뀌도록 돌려서 보여 줌 (서버와 브라우저 날짜가 달라도 어긋나지 않게 브라우저에서 정함)
+  const media = useMemo(() => {
+    if (dayIndex === null || mediaItems.length === 0) return mediaItems;
+    const start = dayIndex % mediaItems.length;
+    return [...mediaItems.slice(start), ...mediaItems.slice(0, start)];
+  }, [mediaItems, dayIndex]);
+
   const openRandom = () => {
     const pick = items[Math.floor(Math.random() * items.length)];
     if (pick) router.push(fileHref(searchParams, pick.slug), { scroll: false });
@@ -104,7 +130,34 @@ export function Bookshelf({ items, pinnedSlugs = [] }: { items: CaseListItem[]; 
 
   return (
     <div>
-      {picks.length > 0 && (
+      {mediaItems.length > 0 && (
+        <section aria-labelledby="media-title">
+          <h2 id="media-title" className="mb-3 text-sm font-semibold uppercase tracking-widest text-subtle">
+            영상으로 먼저 본 그 사건
+          </h2>
+          <ul className="-mx-6 flex snap-x snap-mandatory scroll-px-6 gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {media.map((item) => (
+              <li key={item.id} className="flex min-w-[16rem] flex-1 snap-start sm:min-w-[18rem]">
+                <Link
+                  href={fileHref(searchParams, item.slug)}
+                  scroll={false}
+                  className="group flex w-full flex-col gap-2 rounded-2xl border border-line bg-surface p-4 transition-all hover:-translate-y-1 hover:shadow-md"
+                >
+                  <span className="w-fit rounded-full bg-brand/10 px-2 py-0.5 text-[11px] font-medium text-brand-fg">
+                    {item.media[0].platform} · {MEDIA_KIND[item.media[0].kind]}
+                  </span>
+                  <span className="line-clamp-1 text-sm font-semibold">「{item.media[0].title}」</span>
+                  <span className="text-xs text-muted">이 작품이 다룬 사건</span>
+                  <span className="mt-auto block font-semibold leading-snug">{item.title}</span>
+                  <span className="line-clamp-2 text-sm leading-6 text-muted">{item.summary}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {mediaItems.length === 0 && picks.length > 0 && (
         <section aria-labelledby="picks-title">
           <h2 id="picks-title" className="mb-3 text-sm font-semibold uppercase tracking-widest text-subtle">
             오늘의 사건 파일

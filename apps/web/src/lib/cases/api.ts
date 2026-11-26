@@ -1,5 +1,5 @@
 import { toQueryString, type CaseFilters } from "./filters";
-import type { CaseDetail, CaseListResponse } from "./types";
+import type { CaseDetail, CaseListResponse, MediaCaseItem } from "./types";
 
 /**
  * 서버 컴포넌트에서만 호출함 (브라우저 → Next 서버 → NestJS).
@@ -43,6 +43,11 @@ export async function getCases(filters: CaseFilters = {}): Promise<CaseListRespo
 /** 관리실에서 '오늘의 사건 파일'로 고정한 사건 (없으면 빈 목록) */
 export async function getFilePicks(): Promise<CaseListResponse["items"]> {
   return (await request<{ items: CaseListResponse["items"] }>("/cases/picks"))?.items ?? [];
+}
+
+/** 다큐·방송·영화로 다뤄진 사건 (없으면 빈 목록) */
+export async function getMediaCases(): Promise<MediaCaseItem[]> {
+  return (await request<{ items: MediaCaseItem[] }>("/cases/media"))?.items ?? [];
 }
 
 /** 최근 인스타 릴스에서 다룬 사건 (없으면 빈 목록) */

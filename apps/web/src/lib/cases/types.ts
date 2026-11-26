@@ -63,6 +63,11 @@ export interface CaseListItem {
   unpublished?: boolean;
 }
 
+/** 다큐·방송·영화로 다뤄진 사건 (사건방 '영상으로 본 사건') */
+export interface MediaCaseItem extends CaseListItem {
+  media: { kind: RelatedKind; platform: string; title: string }[];
+}
+
 export interface CaseListResponse {
   items: CaseListItem[];
   nextCursor: string | null;
