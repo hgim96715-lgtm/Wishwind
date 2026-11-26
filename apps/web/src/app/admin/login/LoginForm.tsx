@@ -16,7 +16,7 @@ export function LoginForm() {
         className="w-full rounded-md border border-line bg-white/60 px-3 py-2.5 outline-none focus:border-foreground/50"
       />
       {state.error && (
-        <p role="alert" className="text-sm text-[#b5543a]">
+        <p role="alert" className="text-sm text-clay-ink">
           {state.error}
         </p>
       )}

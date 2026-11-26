@@ -139,7 +139,7 @@ function ModerationRow({ item }: { item: ModerationItem }) {
           </span>
         )}
         {item.reportCount > 0 && (
-          <span className="text-[#b5543a]">
+          <span className="text-clay-ink">
             신고 {item.reportCount}회 ·{" "}
             {item.reports.some((r) => r.reason)
               ? `사유: ${item.reports.flatMap((r) => (r.reason ? [r.reason] : [])).join(", ")}`

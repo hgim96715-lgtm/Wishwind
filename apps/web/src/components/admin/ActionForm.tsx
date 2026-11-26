@@ -39,7 +39,7 @@ export function ActionForm({
         {children}
       </fieldset>
       {state.error && (
-        <p role="alert" className="mt-2 text-sm text-[#b5543a]">
+        <p role="alert" className="mt-2 text-sm text-clay-ink">
           {state.error}
         </p>
       )}
@@ -55,8 +55,8 @@ export function ActionForm({
 const TONE = {
   primary: "bg-foreground text-surface hover:bg-foreground/85",
   plain: "border border-line bg-surface hover:border-foreground/40",
-  danger: "border border-[#c46a4b]/50 text-[#b5543a] bg-surface hover:bg-[#c46a4b]/10",
-  ok: "border border-[#3f8f84]/50 text-[#2f7a70] bg-surface hover:bg-[#3f8f84]/10",
+  danger: "border border-brand/50 text-clay-ink bg-surface hover:bg-brand/10",
+  ok: "border border-jade/50 text-[#2f7a70] bg-surface hover:bg-jade/10",
 } as const;
 
 export function Button({

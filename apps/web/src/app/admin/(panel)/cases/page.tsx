@@ -97,7 +97,7 @@ async function CaseTable({ q, review, published }: { q: string; review: string; 
                   <td className="px-3 py-2.5">
                     <Badge color={caseStamp(c).color}>{caseStamp(c).label}</Badge>
                   </td>
-                  <td className={`px-3 py-2.5 tabular-nums ${c.sourceCount < 2 ? "text-[#b5543a]" : ""}`}>{c.sourceCount}</td>
+                  <td className={`px-3 py-2.5 tabular-nums ${c.sourceCount < 2 ? "text-clay-ink" : ""}`}>{c.sourceCount}</td>
                   <td className="px-3 py-2.5 text-xs text-muted">{formatDateTime(c.updatedAt)}</td>
                 </tr>
               ))}

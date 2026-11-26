@@ -302,7 +302,7 @@ async function CaseEditor({ id }: { id: string }) {
 
           <Card>
             <h2 className="mb-1 text-sm font-semibold">출처 {c.sources.length}개</h2>
-            <p className={`mb-3 text-xs ${publishers < 2 ? "text-[#b5543a]" : "text-subtle"}`}>
+            <p className={`mb-3 text-xs ${publishers < 2 ? "text-clay-ink" : "text-subtle"}`}>
               서로 다른 출처 {publishers}곳 {publishers < 2 && "· 검증 완료에는 2곳 이상 필요합니다"}
             </p>
             <ul className="space-y-2 text-sm">
@@ -322,7 +322,7 @@ async function CaseEditor({ id }: { id: string }) {
                     action={removeCaseSource.bind(null, c.id, s.id)}
                     confirmMessage={`이 출처를 지울까요?\n${s.title}`}
                   >
-                    <button type="submit" className="shrink-0 text-xs text-subtle hover:text-[#b5543a]" aria-label="출처 지우기">
+                    <button type="submit" className="shrink-0 text-xs text-subtle hover:text-clay-ink" aria-label="출처 지우기">
                       지우기
                     </button>
                   </ActionForm>
@@ -375,7 +375,7 @@ async function CaseEditor({ id }: { id: string }) {
                       </p>
                     </div>
                     <ActionForm inline action={removeCaseChange.bind(null, c.id, ch.id)} confirmMessage={`이 항목을 지울까요?\n${ch.name}`}>
-                      <button type="submit" className="shrink-0 text-xs text-subtle hover:text-[#b5543a]" aria-label="바뀐 것 지우기">
+                      <button type="submit" className="shrink-0 text-xs text-subtle hover:text-clay-ink" aria-label="바뀐 것 지우기">
                         지우기
                       </button>
                     </ActionForm>
@@ -421,7 +421,7 @@ async function CaseEditor({ id }: { id: string }) {
                       action={removeCaseRelated.bind(null, c.id, r.id)}
                       confirmMessage={`이 관련 콘텐츠를 지울까요?\n${r.title}`}
                     >
-                      <button type="submit" className="shrink-0 text-xs text-subtle hover:text-[#b5543a]" aria-label="관련 콘텐츠 지우기">
+                      <button type="submit" className="shrink-0 text-xs text-subtle hover:text-clay-ink" aria-label="관련 콘텐츠 지우기">
                         지우기
                       </button>
                     </ActionForm>

@@ -22,7 +22,7 @@ export default function ReelsPage() {
         <Charts />
       </Suspense>
       <p className="mt-6 text-sm">
-        <Link href="/admin/instagram" className="text-[#2f7469] underline">
+        <Link href="/admin/instagram" className="text-jade-ink underline">
           인스타 성과로 돌아가기
         </Link>
       </p>
@@ -142,7 +142,7 @@ async function Charts() {
         <ul className="mt-3 space-y-2 text-sm">
           {EXPERIMENTS.map((e) => (
             <li key={e.when} className="rounded-md border border-line px-3 py-2">
-              <p className="text-xs font-medium text-[#2f7469]">{e.when}</p>
+              <p className="text-xs font-medium text-jade-ink">{e.when}</p>
               <p className="mt-0.5 text-muted">{e.change}</p>
               <p className="mt-0.5 text-xs text-subtle">통과 기준: {e.pass}</p>
             </li>
@@ -262,7 +262,7 @@ function Bars({ rows, marker }: { rows: { key: string; label: string; value: num
           <span className="truncate text-muted">{r.label}</span>
           <span className="relative h-3 rounded-full bg-line/60">
             <span className="block h-3 rounded-full" style={{ width: `${Math.min(100, (r.value / (r.max || 1)) * 100)}%`, background: r.color }} />
-            {marker !== undefined && <span className="absolute inset-y-[-2px] w-px bg-[#b5543a]" style={{ left: `${marker}%` }} />}
+            {marker !== undefined && <span className="absolute inset-y-[-2px] w-px bg-clay" style={{ left: `${marker}%` }} />}
           </span>
           <span className="tabular-nums">{r.text}</span>
         </li>

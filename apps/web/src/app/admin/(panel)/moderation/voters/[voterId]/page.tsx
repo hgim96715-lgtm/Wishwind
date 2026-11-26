@@ -104,7 +104,7 @@ function PostRow({ type, post }: { type: "answer" | "question" | "cloud"; post: 
       <div className="flex flex-wrap items-center gap-2 text-xs text-muted">
         <Badge color={CONTENT_STATUS_COLOR[post.status]}>{CONTENT_STATUS_LABEL[post.status]}</Badge>
         <span>{post.context}</span>
-        {post.reportCount > 0 && <span className="text-[#b5543a]">신고 {post.reportCount}</span>}
+        {post.reportCount > 0 && <span className="text-clay-ink">신고 {post.reportCount}</span>}
         <span className="ml-auto">{formatDateTime(post.at)}</span>
       </div>
       <p className="mt-1.5 whitespace-pre-wrap break-words text-sm">{post.body}</p>

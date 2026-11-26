@@ -59,7 +59,7 @@ export function NicknameForm({ initial }: { initial: string }) {
         취소
       </button>
       <p className="w-full text-xs text-subtle">실종자들의 정원에서 바람개비를 꽂을 때도 이 닉네임으로 보입니다.</p>
-      {message && <p className="w-full text-xs text-[#a3523f]">{message}</p>}
+      {message && <p className="w-full text-xs text-clay-ink-deep">{message}</p>}
     </form>
   );
 }

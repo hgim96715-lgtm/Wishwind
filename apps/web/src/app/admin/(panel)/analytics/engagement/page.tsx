@@ -78,7 +78,7 @@ async function EngagementReport({ days }: { days: number }) {
             </p>
           </div>
           {questions.length > 0 && (
-            <span className="rounded-full bg-[#c46a4b]/10 px-3 py-1 text-xs font-medium text-[#c46a4b]">
+            <span className="rounded-full bg-brand/10 px-3 py-1 text-xs font-medium text-brand-fg">
               나중에 홈 검토 {Math.min(3, questions.length)}개
             </span>
           )}
@@ -94,13 +94,13 @@ async function EngagementReport({ days }: { days: number }) {
                 <div className="min-w-0">
                   <p className="flex flex-wrap items-center gap-2 text-xs text-muted">
                     <span className="truncate">{item.caseTitle}</span>
-                    {index < 3 && <span className="rounded-full bg-[#2f7469]/10 px-2 py-0.5 text-[#2f7469]">검토 후보</span>}
+                    {index < 3 && <span className="rounded-full bg-jade-deep/10 px-2 py-0.5 text-jade-ink">검토 후보</span>}
                   </p>
                   <Link href={`/cases/${item.caseSlug}`} className="mt-1 block text-sm font-medium leading-6 hover:underline">
                     {item.question}
                   </Link>
                   <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-line/60" aria-hidden>
-                    <div className="h-full rounded-full bg-[#c46a4b]" style={{ width: `${(item.answers / maxAnswers) * 100}%` }} />
+                    <div className="h-full rounded-full bg-brand" style={{ width: `${(item.answers / maxAnswers) * 100}%` }} />
                   </div>
                 </div>
                 <p className="text-sm tabular-nums text-muted sm:text-right">

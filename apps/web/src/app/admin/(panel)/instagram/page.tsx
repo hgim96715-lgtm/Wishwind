@@ -28,21 +28,21 @@ export default function InstagramPage() {
         <Card>
           <h2 className="font-semibold">릴스 분석 차트</h2>
           <p className="mt-1 text-sm text-muted">건너뛰기 비율, 시청 유지 곡선, 조회 출처를 릴스별로 비교합니다.</p>
-          <Link href="/admin/instagram/reels" className="mt-3 inline-block text-xs font-medium text-[#2f7469] hover:opacity-70">
+          <Link href="/admin/instagram/reels" className="mt-3 inline-block text-xs font-medium text-jade-ink hover:opacity-70">
             릴스 분석 열기
           </Link>
         </Card>
         <Card>
           <h2 className="font-semibold">성장 계획</h2>
           <p className="mt-1 text-sm text-muted">목표 단계, 수익 3트랙 분석, 릴스 하루 1개 현황은 따로 모았습니다.</p>
-          <Link href="/admin/growth" className="mt-3 inline-block text-xs font-medium text-[#2f7469] hover:opacity-70">
+          <Link href="/admin/growth" className="mt-3 inline-block text-xs font-medium text-jade-ink hover:opacity-70">
             성장 계획 열기
           </Link>
         </Card>
         <Card>
           <h2 className="font-semibold">글감 만들기</h2>
           <p className="mt-1 text-sm text-muted">기념일·사건 문구와 스토리 이미지는 따로 모아 두었습니다.</p>
-          <Link href="/admin/instagram/ideas" className="mt-3 inline-block text-xs font-medium text-[#2f7469] hover:opacity-70">
+          <Link href="/admin/instagram/ideas" className="mt-3 inline-block text-xs font-medium text-jade-ink hover:opacity-70">
             인스타 글감 열기
           </Link>
         </Card>
@@ -168,7 +168,7 @@ async function Dashboard() {
                 <span className="w-20 shrink-0 text-xs text-subtle tabular-nums">{p.postedOn.slice(5)}</span>
                 <span className="w-32 shrink-0 truncate">{p.title}</span>
                 <span className="h-3 flex-1 rounded-full bg-line/60">
-                  <span className="block h-3 rounded-full bg-[#3f8f84]" style={{ width: `${(p.reach / maxReach) * 100}%` }} />
+                  <span className="block h-3 rounded-full bg-jade" style={{ width: `${(p.reach / maxReach) * 100}%` }} />
                 </span>
                 <span className="w-16 shrink-0 text-right text-xs tabular-nums">{p.reach.toLocaleString("ko-KR")}</span>
               </li>
@@ -191,7 +191,7 @@ async function Dashboard() {
                 <span className="text-xs tabular-nums text-muted">
                   {views === undefined ? "기록 없음" : `${views.toLocaleString("ko-KR")}회`}
                   {diff !== null && (
-                    <span className={diff >= 0 ? "ml-2 text-[#2f7469]" : "ml-2 text-[#b5543a]"}>
+                    <span className={diff >= 0 ? "ml-2 text-jade-ink" : "ml-2 text-clay-ink"}>
                       평균보다 {diff >= 0 ? "+" : ""}{diff}%
                     </span>
                   )}

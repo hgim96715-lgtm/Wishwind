@@ -59,7 +59,7 @@ async function LoginOptions({ searchParams }: { searchParams: PageProps<"/login"
 
   return (
     <>
-      {error && <p className="mt-6 rounded-lg bg-[#fbe9e4] px-4 py-3 text-sm text-[#a3523f]">{error}</p>}
+      {error && <p className="mt-6 rounded-lg bg-clay-wash px-4 py-3 text-sm text-clay-ink-deep">{error}</p>}
 
       <div className="mt-8 flex flex-col gap-3">
         {providers.naver && (

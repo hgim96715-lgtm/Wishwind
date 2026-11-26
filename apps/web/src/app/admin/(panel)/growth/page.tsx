@@ -100,7 +100,7 @@ export default function GrowthPage() {
                     <li key={n}>{n}</li>
                   ))}
                 </ul>
-                <p className="mt-2 text-xs text-[#b5543a]">주의: {t.risk}</p>
+                <p className="mt-2 text-xs text-clay-ink">주의: {t.risk}</p>
               </Card>
             ))}
           </div>
@@ -164,7 +164,7 @@ async function ReelStatus() {
       </div>
       <div className="mt-3 flex gap-0.5" aria-label="최근 14일 릴스 업로드 기록">
         {last14.map((d) => (
-          <span key={d} title={d} className={`h-2 flex-1 rounded-full ${reelDays.has(d) ? "bg-[#3f8f84]" : "bg-line"}`} />
+          <span key={d} title={d} className={`h-2 flex-1 rounded-full ${reelDays.has(d) ? "bg-jade" : "bg-line"}`} />
         ))}
       </div>
     </section>

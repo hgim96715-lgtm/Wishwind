@@ -52,7 +52,7 @@ async function MyLog({ searchParams }: { searchParams: PageProps<"/me">["searchP
         {me.providers.map((p) => PROVIDER[p]).join("·")} 계정 · {day(me.joinedAt)}부터 함께하고 있습니다
       </p>
       {sp.error === "withdraw" && (
-        <p className="mt-4 rounded-lg bg-[#fbe9e4] px-4 py-3 text-sm text-[#a3523f]">탈퇴하지 못했습니다. 잠시 후 다시 시도해 주세요.</p>
+        <p className="mt-4 rounded-lg bg-clay-wash px-4 py-3 text-sm text-clay-ink-deep">탈퇴하지 못했습니다. 잠시 후 다시 시도해 주세요.</p>
       )}
 
       <Counts counts={me.counts} />

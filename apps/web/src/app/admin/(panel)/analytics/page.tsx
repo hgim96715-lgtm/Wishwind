@@ -57,7 +57,7 @@ async function ThisDevice() {
       action={setDeviceExcluded.bind(null, !excluded)}
       className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-line bg-surface px-4 py-3 text-sm"
     >
-      <p className={excluded ? "text-[#2f7469]" : "text-muted"}>
+      <p className={excluded ? "text-jade-ink" : "text-muted"}>
         {excluded
           ? "이 기기에서 둘러본 것은 방문자 분석에 넣지 않습니다. 폰 등 다른 기기는 그 기기에서 관리실에 한 번 로그인하면 똑같이 빠집니다."
           : "이 기기에서 둘러본 것도 지금은 방문자로 셉니다."}
@@ -97,7 +97,7 @@ function Bars({ rows, unit = "번" }: { rows: { label: string; value: number; su
             </span>
           </div>
           <div className="mt-1 h-1.5 rounded-full bg-line/60">
-            <div className="h-1.5 rounded-full bg-[#4f78a8]" style={{ width: `${(r.value / max) * 100}%` }} />
+            <div className="h-1.5 rounded-full bg-steel" style={{ width: `${(r.value / max) * 100}%` }} />
           </div>
         </li>
       ))}
@@ -183,11 +183,11 @@ function DailyChart({ daily }: { daily: Analytics["daily"] }) {
               {groups.map((d) => (
                 <div key={d.key} className="group flex h-full min-w-0 flex-1 items-end justify-center gap-px" title={d.title}>
                   <div
-                    className="w-[42%] max-w-6 rounded-t-[3px] bg-[#2f7469] transition-opacity group-hover:opacity-75"
+                    className="w-[42%] max-w-6 rounded-t-[3px] bg-jade-deep transition-opacity group-hover:opacity-75"
                     style={{ height: `${(d.visitors / max) * 100}%`, minHeight: d.visitors ? 3 : 0 }}
                   />
                   <div
-                    className="w-[42%] max-w-6 rounded-t-[3px] bg-[#c46a4b] transition-opacity group-hover:opacity-75"
+                    className="w-[42%] max-w-6 rounded-t-[3px] bg-brand transition-opacity group-hover:opacity-75"
                     style={{ height: `${(d.views / max) * 100}%`, minHeight: d.views ? 3 : 0 }}
                   />
                 </div>
@@ -208,8 +208,8 @@ function DailyChart({ daily }: { daily: Analytics["daily"] }) {
         </div>
       </div>
       <p className="mt-4 flex flex-wrap gap-4 pl-10 text-xs text-muted">
-        <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-[#2f7469]" /> 방문자</span>
-        <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-[#c46a4b]" /> 페이지 조회</span>
+        <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-jade-deep" /> 방문자</span>
+        <span className="flex items-center gap-1.5"><span className="inline-block size-2.5 rounded-sm bg-brand" /> 페이지 조회</span>
         {daily.length > 14 && <span className="text-subtle">막대 하나는 {daily.length <= 31 ? "3일" : "7일"} 합계</span>}
       </p>
       <dl className="sr-only">
@@ -243,7 +243,7 @@ function HourlyChart({ hourly }: { hourly: Analytics["hourly"] }) {
             <span className="text-xs tabular-nums text-muted">{h.label}</span>
             <div className="h-2.5 overflow-hidden rounded-full bg-line/60">
               <div
-                className={`h-full rounded-full ${h === peak && h.views > 0 ? "bg-[#c46a4b]" : "bg-[#2f7469]"}`}
+                className={`h-full rounded-full ${h === peak && h.views > 0 ? "bg-brand" : "bg-jade-deep"}`}
                 style={{ width: `${(h.views / max) * 100}%`, minWidth: h.views ? 3 : 0 }}
               />
             </div>
@@ -410,7 +410,7 @@ async function Report({ days }: { days: number }) {
           <ul className="space-y-3 text-sm">
             {SEARCH_CONSOLES.map((c) => (
               <li key={c.name}>
-                <a href={c.href} target="_blank" rel="noreferrer noopener" className="font-medium text-[#2f7469] transition-opacity hover:opacity-70">
+                <a href={c.href} target="_blank" rel="noreferrer noopener" className="font-medium text-jade-ink transition-opacity hover:opacity-70">
                   {c.name}
                 </a>
                 <p className="text-xs text-subtle">{c.hint}</p>

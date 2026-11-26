@@ -27,7 +27,7 @@ function Stat({ href, label, value, hint, alert }: { href: string; label: string
       className="block rounded-lg border border-line bg-surface p-4 transition-colors hover:border-foreground/40"
     >
       <p className="text-xs text-muted">{label}</p>
-      <p className={`mt-1 text-2xl font-semibold tabular-nums ${alert && value > 0 ? "text-[#b5543a]" : ""}`}>{value}</p>
+      <p className={`mt-1 text-2xl font-semibold tabular-nums ${alert && value > 0 ? "text-clay-ink" : ""}`}>{value}</p>
       {hint && <p className="mt-1 text-xs text-subtle">{hint}</p>}
     </Link>
   );
@@ -73,7 +73,7 @@ async function OverviewCards() {
             <li key={j.key} className="flex flex-col gap-1 py-3 sm:flex-row sm:items-start sm:gap-4">
               <div className="w-40 shrink-0">
                 <p className="font-medium">{j.name}</p>
-                <p className="text-xs text-[#2f7469]">{j.enabled ? j.schedule : "꺼져 있음"}</p>
+                <p className="text-xs text-jade-ink">{j.enabled ? j.schedule : "꺼져 있음"}</p>
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-muted">{j.description}</p>

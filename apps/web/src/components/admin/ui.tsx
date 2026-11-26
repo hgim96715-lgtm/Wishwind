@@ -42,7 +42,7 @@ export function Skeleton() {
 
 export function ErrorBox({ message }: { message: string }) {
   return (
-    <p role="alert" className="rounded-lg border border-[#c46a4b]/40 bg-[#c46a4b]/5 px-4 py-3 text-sm text-[#b5543a]">
+    <p role="alert" className="rounded-lg border border-brand/40 bg-brand/5 px-4 py-3 text-sm text-clay-ink">
       {message}
     </p>
   );

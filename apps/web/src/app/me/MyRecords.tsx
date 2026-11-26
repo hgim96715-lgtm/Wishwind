@@ -5,10 +5,10 @@ import { useState } from "react";
 import type { ActivityKind, Me } from "@/lib/account/types";
 
 const STATUS: Record<string, { label: string; tone: string }> = {
-  PUBLISHED: { label: "공개", tone: "bg-[#e3f1ea] text-[#2f7a5b]" },
+  PUBLISHED: { label: "공개", tone: "bg-jade-wash text-[#2f7a5b]" },
   HELD: { label: "확인 중", tone: "bg-[#fff4d6] text-[#8a6a1f]" },
   HIDDEN: { label: "숨김", tone: "bg-line/60 text-subtle" },
-  BLOCKED: { label: "게시 안 됨", tone: "bg-[#fbe9e4] text-[#a3523f]" },
+  BLOCKED: { label: "게시 안 됨", tone: "bg-clay-wash text-clay-ink-deep" },
 };
 const INQUIRY = { QUESTION: "문의", CORRECTION: "정정 요청", FEEDBACK: "의견" } as const;
 const day = (iso: string) =>
@@ -128,14 +128,14 @@ export function MyRecords({ initial, counts }: { initial: Lists; counts: Me["cou
                   <span className="block text-[15px] leading-6">{q.body}</span>
                   <span className="mt-1 flex items-center gap-2 text-xs text-subtle">
                     {q.reply ? (
-                      <span className="rounded bg-[#e3f1ea] px-1.5 py-0.5 font-medium text-[#2f7a5b]">답변이 왔습니다</span>
+                      <span className="rounded bg-jade-wash px-1.5 py-0.5 font-medium text-[#2f7a5b]">답변이 왔습니다</span>
                     ) : (
                       <span className="rounded bg-line/60 px-1.5 py-0.5">답변을 기다리는 중</span>
                     )}
                     {INQUIRY[q.kind]} · {day(q.createdAt)}
                   </span>
                   {q.reply && (
-                    <div className="mt-3 rounded-lg border-l-2 border-[#3f8f84] bg-[#3f8f84]/5 px-3 py-2 text-sm leading-6">
+                    <div className="mt-3 rounded-lg border-l-2 border-jade bg-jade/5 px-3 py-2 text-sm leading-6">
                       <span className="block text-xs font-semibold text-[#2f7a5b]">
                         Wishwind 답변{q.repliedAt && ` · ${day(q.repliedAt)}`}
                       </span>
@@ -156,7 +156,7 @@ export function MyRecords({ initial, counts }: { initial: Lists; counts: Me["cou
             {loading ? "불러오는 중입니다" : `더 불러오기 (${items.length.toLocaleString("ko-KR")} / ${counts[tab].toLocaleString("ko-KR")})`}
           </button>
         )}
-        {error && <p className="mt-2 text-xs text-[#a3523f]">{error}</p>}
+        {error && <p className="mt-2 text-xs text-clay-ink-deep">{error}</p>}
       </div>
     </section>
   );

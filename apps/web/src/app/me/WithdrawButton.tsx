@@ -50,7 +50,7 @@ export function WithdrawButton() {
                 취소
               </button>
               <form action="/api/auth/withdraw" method="post">
-                <button type="submit" className="rounded-lg bg-[#b5543a] px-4 py-2 text-sm font-medium text-white hover:bg-[#a3482f]">
+                <button type="submit" className="rounded-lg bg-clay px-4 py-2 text-sm font-medium text-white hover:bg-[#a3482f]">
                   탈퇴하기
                 </button>
               </form>

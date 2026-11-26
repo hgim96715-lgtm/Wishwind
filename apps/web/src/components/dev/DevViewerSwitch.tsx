@@ -54,14 +54,14 @@ export function DevViewerSwitch() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="rounded-full border border-dashed border-[#c46a4b]/60 bg-white/90 px-3 py-1 font-mono text-[10px] text-[#c46a4b] shadow-sm backdrop-blur"
+        className="rounded-full border border-dashed border-brand/60 bg-white/90 px-3 py-1 font-mono text-[10px] text-brand-fg shadow-sm backdrop-blur"
       >
         {open ? "DEV 접기" : gardenTime || viewing ? "DEV ●" : "DEV"}
       </button>
     )}
     {inGarden && open && (
-      <label className="flex items-center gap-1 rounded-full border border-dashed border-[#c46a4b]/60 bg-white/90 py-1 pr-2 pl-1 text-xs shadow-sm backdrop-blur">
-        <span className="px-2 font-mono text-[10px] text-[#c46a4b]">DEV</span>
+      <label className="flex items-center gap-1 rounded-full border border-dashed border-brand/60 bg-white/90 py-1 pr-2 pl-1 text-xs shadow-sm backdrop-blur">
+        <span className="px-2 font-mono text-[10px] text-brand-fg">DEV</span>
         <span className="text-muted">언덕 시각</span>
         <select
           value={gardenTime}
@@ -89,9 +89,9 @@ export function DevViewerSwitch() {
     <form
       method="post"
       action="/dev/viewer"
-      className="flex items-center gap-1 rounded-full border border-dashed border-[#c46a4b]/60 bg-white/90 p-1 text-xs shadow-sm backdrop-blur"
+      className="flex items-center gap-1 rounded-full border border-dashed border-brand/60 bg-white/90 p-1 text-xs shadow-sm backdrop-blur"
     >
-      <span className="px-2 font-mono text-[10px] text-[#c46a4b]">DEV</span>
+      <span className="px-2 font-mono text-[10px] text-brand-fg">DEV</span>
       {viewing ? (
         <>
           <span className="px-1 whitespace-nowrap text-muted">다른 사람으로 보는 중</span>

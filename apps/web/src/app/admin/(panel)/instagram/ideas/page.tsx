@@ -22,7 +22,7 @@ import { INSTAGRAM_URL } from "@/lib/site";
 
 export const metadata: Metadata = { title: "인스타 글감" };
 
-const linkClass = "text-xs font-medium text-[#2f7469] transition-opacity hover:opacity-70";
+const linkClass = "text-xs font-medium text-jade-ink transition-opacity hover:opacity-70";
 
 export default function InstagramPage() {
   return (
