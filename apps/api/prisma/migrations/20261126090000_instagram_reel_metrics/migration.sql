@@ -1,0 +1,11 @@
+ALTER TABLE "instagram_posts"
+  ADD COLUMN "views" INTEGER,
+  ADD COLUMN "viewers" INTEGER,
+  ADD COLUMN "avg_watch_sec" DOUBLE PRECISION,
+  ADD COLUMN "duration_sec" INTEGER,
+  ADD COLUMN "skip_rate" DOUBLE PRECISION,
+  ADD COLUMN "src_reels" DOUBLE PRECISION,
+  ADD COLUMN "src_explore" DOUBLE PRECISION,
+  ADD COLUMN "src_profile" DOUBLE PRECISION,
+  ADD COLUMN "src_follow" DOUBLE PRECISION,
+  ADD COLUMN "retention" JSONB;

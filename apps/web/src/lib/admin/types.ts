@@ -228,6 +228,16 @@ export interface InstagramPostRow {
   profileVisits: number;
   followsGained: number;
   note: string | null;
+  views: number | null;
+  viewers: number | null;
+  avgWatchSec: number | null;
+  durationSec: number | null;
+  skipRate: number | null;
+  srcReels: number | null;
+  srcExplore: number | null;
+  srcProfile: number | null;
+  srcFollow: number | null;
+  retention: { t: number; p: number }[] | null;
 }
 
 export interface InstagramPosts {

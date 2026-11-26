@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   LuChartColumn,
+  LuClapperboard,
   LuClipboardList,
   LuFolderSearch,
   LuInbox,
@@ -24,6 +25,7 @@ const LINKS = [
   { href: "/admin/feedback", label: "의견", icon: LuMessageSquareHeart },
   { href: "/admin/analytics", label: "방문자 분석", icon: LuChartColumn },
   { href: "/admin/instagram", label: "인스타 준비", icon: LuInstagram },
+  { href: "/admin/instagram/reels", label: "릴스 분석", icon: LuClapperboard },
   { href: "/admin/growth", label: "성장 계획", icon: LuTrendingUp },
 ] as const;
 

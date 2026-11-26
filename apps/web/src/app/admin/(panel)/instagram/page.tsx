@@ -26,6 +26,13 @@ export default function InstagramPage() {
           <Dashboard />
         </Suspense>
         <Card>
+          <h2 className="font-semibold">릴스 분석 차트</h2>
+          <p className="mt-1 text-sm text-muted">건너뛰기 비율, 시청 유지 곡선, 조회 출처를 릴스별로 비교합니다.</p>
+          <Link href="/admin/instagram/reels" className="mt-3 inline-block text-xs font-medium text-[#2f7469] hover:opacity-70">
+            릴스 분석 열기
+          </Link>
+        </Card>
+        <Card>
           <h2 className="font-semibold">성장 계획</h2>
           <p className="mt-1 text-sm text-muted">목표 단계, 수익 3트랙 분석, 릴스 하루 1개 현황은 따로 모았습니다.</p>
           <Link href="/admin/growth" className="mt-3 inline-block text-xs font-medium text-[#2f7469] hover:opacity-70">
@@ -113,6 +120,33 @@ async function Dashboard() {
                 </Field>
               ))}
             </div>
+            <details className="rounded-md border border-line px-3 py-2">
+              <summary className="cursor-pointer text-sm font-medium">릴스 인사이트 상세 (선택, 인사이트 화면 그대로)</summary>
+              <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {(
+                  [
+                    ["views", "조회"],
+                    ["viewers", "조회한 사람"],
+                    ["avgWatchSec", "평균 조회 시간(초)"],
+                    ["durationSec", "영상 길이(초)"],
+                    ["skipRate", "건너뛰기 비율(%)"],
+                    ["srcReels", "출처: 릴스 탭(%)"],
+                    ["srcExplore", "출처: 탐색 탭(%)"],
+                    ["srcProfile", "출처: 프로필(%)"],
+                    ["srcFollow", "출처: 팔로워 등(%)"],
+                  ] as const
+                ).map(([name, label]) => (
+                  <Field key={name} label={label}>
+                    <input type="number" name={name} min={0} step="any" className={inputClass} />
+                  </Field>
+                ))}
+              </div>
+              <div className="mt-3">
+                <Field label="시청 유지 곡선 (선택)" hint="그래프를 보고 '초:남은 %'를 쉼표로. 예: 0:100, 2:30, 5:12, 26:3">
+                  <input name="retention" maxLength={400} className={inputClass} />
+                </Field>
+              </div>
+            </details>
             <Field label="메모 (선택)">
               <input name="note" maxLength={500} className={inputClass} />
             </Field>

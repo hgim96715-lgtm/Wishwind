@@ -373,6 +373,22 @@ export async function dismissAllNews() {
 
 const num = (form: FormData, key: string) => Math.max(0, Math.round(Number(text(form, key)) || 0));
 
+/** 비어 있으면 null, 값이 있으면 숫자 (릴스 상세는 선택 입력) */
+const optNum = (form: FormData, key: string) => {
+  const raw = text(form, key);
+  return raw === "" || Number.isNaN(Number(raw)) ? null : Number(raw);
+};
+
+/** "0:100, 2:30, 5:12" → [{t:0,p:100},...]  (초:남은 시청 %) */
+function parseRetention(raw: string) {
+  const points = raw
+    .split(/[,\n]/)
+    .map((part) => part.trim().split(":").map(Number))
+    .filter(([t, p]) => Number.isFinite(t) && Number.isFinite(p))
+    .map(([t, p]) => ({ t, p }));
+  return points.length > 0 ? points : null;
+}
+
 function instagramBody(form: FormData) {
   return {
     postedOn: text(form, "postedOn"),
@@ -386,6 +402,16 @@ function instagramBody(form: FormData) {
     profileVisits: num(form, "profileVisits"),
     followsGained: num(form, "followsGained"),
     note: text(form, "note") || null,
+    views: optNum(form, "views"),
+    viewers: optNum(form, "viewers"),
+    avgWatchSec: optNum(form, "avgWatchSec"),
+    durationSec: optNum(form, "durationSec"),
+    skipRate: optNum(form, "skipRate"),
+    srcReels: optNum(form, "srcReels"),
+    srcExplore: optNum(form, "srcExplore"),
+    srcProfile: optNum(form, "srcProfile"),
+    srcFollow: optNum(form, "srcFollow"),
+    retention: parseRetention(text(form, "retention")),
   };
 }
 

@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, NotFoundException, Param, ParseUUIDPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Prisma } from '../../generated/prisma/client.js';
 import { ZodPipe } from '../../common/pipes/zod-validation.pipe.js';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import { AdminGuard } from '../auth/admin.guard.js';
@@ -7,6 +8,14 @@ import {
   instagramPostSchema,
   type InstagramPostInput,
 } from './admin-instagram.dto.js';
+
+function toData(body: InstagramPostInput) {
+  return {
+    ...body,
+    postedOn: new Date(`${body.postedOn}T00:00:00Z`),
+    retention: body.retention ?? Prisma.JsonNull,
+  };
+}
 
 /** 인스타 게시물 기록·성과 숫자, 홈 대표 사건 지정 */
 @Controller('admin/instagram')
@@ -31,13 +40,13 @@ export class AdminInstagramController {
 
   @Post('posts')
   async create(@Body(new ZodPipe(instagramPostSchema)) body: InstagramPostInput) {
-    await this.prisma.instagramPost.create({ data: { ...body, postedOn: new Date(`${body.postedOn}T00:00:00Z`) } });
+    await this.prisma.instagramPost.create({ data: toData(body) });
     return { ok: true };
   }
 
   @Patch('posts/:id')
   async update(@Param('id', ParseUUIDPipe) id: string, @Body(new ZodPipe(instagramPostSchema)) body: InstagramPostInput) {
-    await this.prisma.instagramPost.update({ where: { id }, data: { ...body, postedOn: new Date(`${body.postedOn}T00:00:00Z`) } });
+    await this.prisma.instagramPost.update({ where: { id }, data: toData(body) });
     return { ok: true };
   }
 
