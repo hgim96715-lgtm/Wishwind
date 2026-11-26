@@ -140,8 +140,8 @@ async function Charts() {
         <h2 className="font-semibold">다음 릴스 실험 계획</h2>
         <p className="mt-1 text-xs text-muted">한 번에 하나만 바꾸고, 같은 조건으로 3개씩 올린 뒤 위 차트의 평균으로 판단합니다. 통과 기준은 건너뛰기·3초 유지율·평균 시청입니다.</p>
         <ul className="mt-3 space-y-2 text-sm">
-          {EXPERIMENTS.map((e) => (
-            <li key={e.when} className="rounded-md border border-line px-3 py-2">
+          {EXPERIMENTS.map((e, i) => (
+            <li key={`${i}-${e.when}`} className="rounded-md border border-line px-3 py-2">
               <p className="text-xs font-medium text-jade-ink">{e.when}</p>
               <p className="mt-0.5 text-muted">{e.change}</p>
               <p className="mt-0.5 text-xs text-subtle">통과 기준: {e.pass}</p>
