@@ -168,6 +168,8 @@ export interface Analytics {
   /** 한국 시간 시각별 조회수 (0~23시) */
   hourly: { hour: number; views: number }[];
   singlePageVisitors: number;
+  /** 들어온 곳별 방문자와 한 페이지만 보고 나간 방문자 */
+  bounceBySource?: { host: string; visitors: number; single: number; homeOnly: number }[];
   /** 숫자를 보고 만든 할 일 제안 */
   tips: string[];
   participation: {

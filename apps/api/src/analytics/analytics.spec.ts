@@ -1,4 +1,4 @@
-import { fillDays, pathLabel, growthTips, sourceOf } from './analytics.mapper.js';
+import { appFromUserAgent, fillDays, growthTips, pathLabel, referrerLabel, sourceOf } from './analytics.mapper.js';
 
 describe('fillDays', () => {
   it('빈 날을 0으로 채우고 날짜 순서를 유지함', () => {
@@ -36,5 +36,26 @@ describe('들어온 곳 분류와 할 일 제안', () => {
     expect(tips.some((t) => t.includes('SNS에서 들어온 방문이 아직 없습니다'))).toBe(true);
     expect(tips.some((t) => t.includes('한 페이지만 보고'))).toBe(true);
     expect(tips.some((t) => t.includes('오후 9시대'))).toBe(true);
+  });
+});
+
+describe('앱 안 브라우저와 링크 표시', () => {
+  it('접속 정보에서 앱 이름을 찾고, 모르면 null', () => {
+    expect(appFromUserAgent('Mozilla/5.0 (iPhone) Instagram 350.0.0')).toBe('app:instagram');
+    expect(appFromUserAgent('Mozilla/5.0 (Android) KAKAOTALK 10.4')).toBe('app:kakaotalk');
+    expect(appFromUserAgent('Mozilla/5.0 (iPhone) Safari/604.1')).toBeNull();
+  });
+
+  it('들어온 곳 분류와 화면 이름', () => {
+    expect(sourceOf('app:instagram')).toBe('sns');
+    expect(sourceOf('app:naver')).toBe('search');
+    expect(sourceOf('utm:instagram')).toBe('sns');
+    expect(referrerLabel('app:instagram')).toBe('인스타그램 앱 안 브라우저');
+    expect(referrerLabel('utm:instagram')).toBe('instagram (링크 표시)');
+    expect(referrerLabel(null)).toBe('직접·출처 없음');
+  });
+
+  it('이름이 정해진 페이지는 주소 대신 이름으로 보임', () => {
+    expect(pathLabel('/changes', new Map())).toBe('사건이 바꾼 것들');
   });
 });

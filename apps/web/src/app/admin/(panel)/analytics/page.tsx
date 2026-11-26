@@ -378,6 +378,24 @@ async function Report({ days }: { days: number }) {
                 한 페이지만 보고 나간 방문자 {a.singlePageVisitors.toLocaleString("ko-KR")}명
                 {sourceTotal > 0 && ` · ${Math.round((a.singlePageVisitors / sourceTotal) * 100)}%`}
               </p>
+              <h3 className="mt-5 mb-1 text-xs font-semibold text-muted">들어온 곳별 이탈</h3>
+              <p className="mb-3 text-xs text-subtle">
+                한 페이지만 보고 나간 방문자와, 그중 홈만 보고 나간 방문자입니다. 인스타 앱 안 브라우저는 이전 사이트를 알려 주지 않아 &lsquo;직접&rsquo;으로 잡히기도 합니다. 프로필 링크를 <code>?utm_source=instagram</code>으로 걸면 구분됩니다.
+              </p>
+              {a.bounceBySource?.length ? (
+                <ul className="space-y-1.5 text-sm">
+                  {a.bounceBySource?.map((r) => (
+                    <li key={r.host} className="flex flex-wrap items-baseline justify-between gap-x-3">
+                      <span className="truncate">{r.host}</span>
+                      <span className="tabular-nums text-xs text-muted">
+                        방문 {r.visitors} · 한 페이지만 {r.single}({Math.round((r.single / r.visitors) * 100)}%) · 홈만 {r.homeOnly}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-subtle">아직 기록이 없습니다.</p>
+              )}
             </div>
             <div className="border-t border-line pt-5 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8">
               <h3 className="mb-1 text-xs font-semibold text-muted">참조 도메인 · 페이지 조회 기준</h3>

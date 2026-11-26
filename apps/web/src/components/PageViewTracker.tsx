@@ -11,7 +11,8 @@ export function PageViewTracker() {
   const pathname = usePathname();
   useEffect(() => {
     if (!pathname || pathname.startsWith("/admin")) return;
-    const body = JSON.stringify({ path: pathname, referrer: document.referrer || undefined });
+    const source = new URLSearchParams(window.location.search).get("utm_source") ?? undefined;
+    const body = JSON.stringify({ path: pathname, referrer: document.referrer || undefined, source });
     const blob = new Blob([body], { type: "application/json" });
     if (!navigator.sendBeacon?.("/api/pageview", blob)) {
       void fetch("/api/pageview", { method: "POST", body, keepalive: true, headers: { "content-type": "application/json" } });

@@ -5,6 +5,9 @@ export function kstDay(now = Date.now()) {
   return new Date(now + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
 }
 
+/** 내 컴퓨터(개발)·사설 주소 */
+export const LOCAL_HOST = /^(localhost|127\.0\.0\.1|\[?::1\]?|0\.0\.0\.0|.*\.local)$/i;
+
 /** 우리 사이트가 아닌 곳에서 들어온 경우만 도메인을 남김 */
 export function referrerHost(referrer: string | undefined, siteHost: string | undefined) {
   if (!referrer) return null;
@@ -31,6 +34,11 @@ const PAGE_LABEL: Record<string, string> = {
   '/missing': '실종자들의 정원',
   '/briefing': '브리핑룸',
   '/contact': '문의·의견 보내기',
+  '/changes': '사건이 바꾼 것들',
+  '/help': '도움받는 곳',
+  '/privacy': '개인정보 처리방침',
+  '/login': '로그인',
+  '/me': '나의 기록',
 };
 
 export function decodeSafe(v: string) {
@@ -60,11 +68,45 @@ export function pathLabel(path: string, caseTitles: Map<string, string>) {
   return base ? `${base} · ${decodeSafe(path.slice(room.length + 2))}` : decodeSafe(path);
 }
 
+/** 앱 안 브라우저는 이전 사이트를 알려 주지 않지만 접속 정보에 앱 이름이 남음. 텔레그램·아이메시지 등은 구분할 수 없어 '직접'으로 남음 */
+const IN_APP: [RegExp, string][] = [
+  [/Instagram/i, 'instagram'],
+  [/KAKAOTALK/i, 'kakaotalk'],
+  [/FBAN|FBAV|FB_IAB/i, 'facebook'],
+  [/NAVER\(inapp/i, 'naver'],
+  [/\bLine\//i, 'line'],
+  [/DaumApps/i, 'daum'],
+];
+
+export function appFromUserAgent(ua: string) {
+  const hit = IN_APP.find(([rx]) => rx.test(ua));
+  return hit ? `app:${hit[1]}` : null;
+}
+
+const APP_LABEL: Record<string, string> = {
+  instagram: '인스타그램 앱 안 브라우저',
+  kakaotalk: '카카오톡 안 브라우저',
+  facebook: '페이스북 앱 안 브라우저',
+  naver: '네이버 앱 안 브라우저',
+  line: '라인 안 브라우저',
+  daum: '다음 앱 안 브라우저',
+};
+
+/** 저장된 들어온 곳 값(도메인, app:이름, utm:이름)을 화면에 쓸 이름으로 */
+export function referrerLabel(host: string | null) {
+  if (!host) return '직접·출처 없음';
+  if (host.startsWith('app:')) return APP_LABEL[host.slice(4)] ?? host.slice(4);
+  if (host.startsWith('app:')) return /^app:(naver|daum)/.test(host) ? 'search' : 'sns';
+  if (host.startsWith('utm:')) return `${host.slice(4)} (링크 표시)`;
+  return host;
+}
+
 export type TrafficSource = 'search' | 'sns' | 'direct' | 'other';
 
 /** 들어온 곳 분류: 검색(구글·네이버 등), SNS(인스타 등), 직접(주소 입력·북마크·앱 안 링크), 그 밖의 사이트 */
 export function sourceOf(host: string | null): TrafficSource {
   if (!host) return 'direct';
+  if (host.startsWith('utm:')) return /^(instagram|facebook|threads|x|twitter|kakao|youtube|tiktok|band|reddit)/i.test(host.slice(4)) ? 'sns' : 'other';
   if (/(^|\.)(google|naver|daum|bing|yahoo|duckduckgo|zum|nate|yandex|baidu)\./i.test(host)) return 'search';
   if (/(^|\.)(instagram|facebook|threads|x|twitter|t|kakao|youtube|tiktok|band|reddit|l\.instagram)\./i.test(host) || host === 't.co') {
     return 'sns';

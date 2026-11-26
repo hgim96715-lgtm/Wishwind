@@ -74,6 +74,28 @@ export class AnalyticsRepository {
     return rows[0]?.n ?? 0;
   }
 
+  /** 들어온 곳별: 방문자 수, 한 페이지만 보고 나간 수, 그중 홈만 보고 나간 수 (방문자=하루 단위 해시) */
+  sourceBounce(since: Date) {
+    return this.prisma.$queryRaw<{ host: string; visitors: number; single: number; homeOnly: number }[]>`
+      WITH v AS (
+        SELECT visitor_hash,
+               (array_agg(path ORDER BY created_at))[1] AS landing,
+               coalesce((array_agg(referrer_host ORDER BY created_at))[1], '') AS host,
+               count(*)::int AS views
+        FROM page_views
+        WHERE created_at >= ${since}
+        GROUP BY visitor_hash
+      )
+      SELECT host,
+             count(*)::int AS visitors,
+             (count(*) FILTER (WHERE views = 1))::int AS single,
+             (count(*) FILTER (WHERE views = 1 AND landing = '/'))::int AS "homeOnly"
+      FROM v
+      GROUP BY host
+      ORDER BY visitors DESC
+      LIMIT 12`;
+  }
+
   /** 한국 시간 시각(0~23시)별 조회수 */
   hourly(since: Date) {
     return this.prisma.$queryRaw<{ hour: number; views: number }[]>`
