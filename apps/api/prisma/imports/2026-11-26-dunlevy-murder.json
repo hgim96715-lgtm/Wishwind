@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "jacqueline-dunlevy-murder",
+      "content": {
+        "title": "재클린 던리비 살해 사건",
+        "summary": "1968년 1월 캐나다 온타리오주 런던에서 16세 재클린 '재키' 던리비가 숨진 채 발견된 사건으로, 58년이 지난 2026년 보관된 DNA와 수사 유전 계보 분석(IGG)으로 범인이 특정됐습니다",
+        "overview": "1968년 1월 9일, 캐나다 온타리오주 런던에서 16세 재클린 '재키' 던리비가 잡화점 일을 마치고 집으로 가던 중 연락이 끊겼습니다. 던리비는 런던 경찰관의 딸이었고, 약 1시간 30분 뒤 캐서린 할리 학교 부지에서 숨진 채 발견됐습니다. 사건은 오랫동안 풀리지 않았습니다. 경찰은 보관해 둔 1968년의 생물학적 증거로 DNA를 다시 검사하고, 미국 법의학 업체 오스럼(Othram)과 수사 유전 계보 분석을 진행했습니다. 그 결과 범행 당시 25세였던 마이클 조지프 무어가 범인으로 특정됐습니다. 무어는 사건 뒤 런던 소방본부에서 약 28년간 일하다 2002년 소방대장으로 은퇴했고, 2018년 3월에 숨져 기소할 수 없었습니다. 경찰은 유족에게 답을 전하기 위해 무어의 이름을 공개했습니다. 해결 사실은 2026년 11월 23일 알려졌습니다.",
+        "victimCountNote": "사망 1명",
+        "country": "OTHER",
+        "category": "MURDER",
+        "status": "SOLVED",
+        "location": "캐나다 온타리오주 런던",
+        "occurredAt": "1968-01-09",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": "2026-11-23",
+        "timeline": [
+          {
+            "occurredAt": "1968-01-09",
+            "occurredAtPrecision": "DAY",
+            "title": "귀가 중 연락이 끊김",
+            "description": "잡화점 일을 마치고 집으로 가던 16세 던리비와 연락이 끊겼습니다."
+          },
+          {
+            "occurredAt": "1968-01-09",
+            "occurredAtPrecision": "DAY",
+            "title": "학교 부지에서 발견",
+            "description": "약 1시간 30분 뒤 캐서린 할리 학교 부지에서 던리비가 숨진 채 발견됐습니다."
+          },
+          {
+            "occurredAt": "2026-11-23",
+            "occurredAtPrecision": "DAY",
+            "title": "58년 만에 범인 특정 발표",
+            "description": "보관된 증거의 DNA 재검사와 수사 유전 계보 분석으로 마이클 조지프 무어가 범인으로 특정됐다는 사실이 알려졌습니다."
+          }
+        ],
+        "victims": [
+          {
+            "name": "Jacqueline 'Jackie' Dunlevy",
+            "alias": "재클린 '재키' 던리비",
+            "age": 16,
+            "gender": "FEMALE",
+            "description": "런던 경찰관의 딸이었습니다.",
+            "status": "DECEASED"
+          }
+        ],
+        "suspects": [
+          {
+            "name": "Michael Joseph Moore",
+            "status": "DECEASED",
+            "description": "범행 당시 25세였습니다. 사건 뒤 런던 소방본부에서 약 28년간 일하고 2002년 소방대장으로 은퇴했으며, 2018년 3월 숨져 기소할 수 없었습니다.",
+            "identityDisclosedAt": "2026-11-23",
+            "identityDisclosureAgency": "런던 경찰",
+            "identityDisclosureSource": "https://www.news1.kr/world/general-world/6365737",
+            "nameExceptionReason": "범인이 숨져 기소할 수 없는 사건이며, 경찰이 유족에게 답을 전하기 위해 이름을 공개함",
+            "nameExceptionDecidedAt": "2026-11-26",
+            "sentences": []
+          }
+        ],
+        "questions": [
+          {
+            "question": "수십 년 된 증거물을 안전하게 보관하는 일은 왜 중요할까요?"
+          },
+          {
+            "question": "범인이 이미 숨진 뒤에 밝혀진 진실은 유족에게 어떤 의미가 될 수 있을까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://www.news1.kr/world/general-world/6365737",
+          "title": "58년 미제 '16살 소녀 살인'…범인은 평생 소방관으로 존경받았다",
+          "publisher": "뉴스1",
+          "type": "NEWS_AGENCY",
+          "publishedAt": "2026-11-25",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "claims": []
+    }
+  ]
+}
