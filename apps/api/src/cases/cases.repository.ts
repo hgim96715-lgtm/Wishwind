@@ -111,6 +111,16 @@ export class CasesRepository {
     });
   }
 
+  /** 관리실에서 홈 대표로 지정한 사건 */
+  findHomeFeatured(preview: boolean) {
+    return this.prisma.case.findMany({
+      where: { ...visibilityWhere(preview), isHomeFeatured: true },
+      select: caseListSelect,
+      orderBy: { updatedAt: 'desc' },
+      take: 3,
+    });
+  }
+
   /** 공개 사건의 '바뀐 것' 전체 (홈 '알고 계셨나요?'·/changes). 많아야 수백 개라 한 번에 보냄 */
   findChanges(preview: boolean) {
     return this.prisma.caseChange.findMany({

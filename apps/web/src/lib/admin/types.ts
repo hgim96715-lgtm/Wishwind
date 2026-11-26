@@ -213,3 +213,23 @@ export interface NewsItem {
   suggestions: { id: string; title: string; isPublished: boolean }[];
   createdAt: string;
 }
+
+export interface InstagramPostRow {
+  id: string;
+  postedOn: string;
+  kind: "STORY" | "FEED" | "REEL";
+  title: string;
+  caseSlug: string | null;
+  reach: number;
+  likes: number;
+  saves: number;
+  shares: number;
+  profileVisits: number;
+  followsGained: number;
+  note: string | null;
+}
+
+export interface InstagramPosts {
+  items: InstagramPostRow[];
+  featured: { slug: string; title: string }[];
+}

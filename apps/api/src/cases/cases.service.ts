@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import type { ListCasesQuery } from './dto/cases.dto.js';
 import { CasesRepository } from './cases.repository.js';
-import { toCaseDetail, toCasePage } from './cases.mapper.js';
+import { toCaseDetail, toCaseListItem, toCasePage } from './cases.mapper.js';
 import { draftsVisible } from './draft-preview.js';
 import { photoCountries } from './public-suspect.js';
 
@@ -13,6 +13,12 @@ export class CasesService {
     const preview = draftsVisible();
     const rows = await this.repo.findPage(query, preview);
     return toCasePage(rows, query.take, preview);
+  }
+
+  async homeFeatured() {
+    const preview = draftsVisible();
+    const rows = await this.repo.findHomeFeatured(preview);
+    return { items: rows.map((row) => toCaseListItem(row, preview)) };
   }
 
   /** 사건이 바꾼 것(법·기념일·제도) 모아 보기 */

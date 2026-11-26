@@ -1,226 +1,206 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { connection } from "next/server";
 import { Suspense } from "react";
-import { CopyText } from "@/components/admin/CopyText";
-import { Card, Empty, ErrorBox, PageTitle, Skeleton } from "@/components/admin/ui";
-import {
-  anniversaryCaption,
-  caseCaption,
-  changeCaption,
-  dateLabel,
-  dayCaption,
-  pickChanges,
-  upcomingAnniversaries,
-  upcomingDays,
-} from "@/lib/admin/instagram";
+import { addInstagramPost, deleteInstagramPost, setHomeFeatured } from "@/app/admin/actions";
+import { ActionForm, Button } from "@/components/admin/ActionForm";
+import { Card, Empty, ErrorBox, Field, PageTitle, Skeleton, inputClass } from "@/components/admin/ui";
 import { AdminApiError, adminGet } from "@/lib/admin/session";
-import type { AdminCaseList } from "@/lib/admin/types";
-import { getCase } from "@/lib/cases/api";
-import { getChanges } from "@/lib/cases/changes";
-import { INSTAGRAM_URL } from "@/lib/site";
+import type { Analytics, InstagramPostRow, InstagramPosts } from "@/lib/admin/types";
 
-export const metadata: Metadata = { title: "인스타 준비" };
+export const metadata: Metadata = { title: "인스타 성과" };
 
-const linkClass = "text-xs font-medium text-[#2f7469] transition-opacity hover:opacity-70";
+const KIND_LABEL = { STORY: "스토리", FEED: "피드", REEL: "릴스" } as const;
+const pct = (a: number, b: number) => (b > 0 ? `${((a / b) * 100).toFixed(1)}%` : "-");
+const sum = (rows: InstagramPostRow[], k: keyof Pick<InstagramPostRow, "reach" | "likes" | "saves" | "shares" | "profileVisits" | "followsGained">) =>
+  rows.reduce((n, r) => n + r[k], 0);
 
 export default function InstagramPage() {
   return (
     <>
       <PageTitle
-        title="인스타 준비"
-        description="사건이 일어난 날, 다가오는 기념일, 최근 공개한 사건, 사건이 바꾼 법·제도를 인스타 글감으로 모았습니다. 문구를 복사하고 스토리 이미지를 저장해 올리면 됩니다."
+        title="인스타 성과"
+        description="올린 게시물과 반응 숫자를 기록하고, 올린 날 사이트 방문이 얼마나 늘었는지 함께 봅니다. 숫자는 인스타 인사이트 화면을 보고 직접 입력합니다."
       />
       <div className="space-y-8">
-        <Guide />
         <Suspense fallback={<Skeleton />}>
-          <Anniversaries />
+          <Dashboard />
         </Suspense>
-        <Suspense fallback={<Skeleton />}>
-          <Upcoming />
-        </Suspense>
-        <Suspense fallback={<Skeleton />}>
-          <RecentCases />
-        </Suspense>
-        <Suspense fallback={<Skeleton />}>
-          <ChangePicks />
-        </Suspense>
-        <AutoUpload />
+        <Card>
+          <h2 className="font-semibold">글감 만들기</h2>
+          <p className="mt-1 text-sm text-muted">기념일·사건 문구와 스토리 이미지는 따로 모아 두었습니다.</p>
+          <Link href="/admin/instagram/ideas" className="mt-3 inline-block text-xs font-medium text-[#2f7469] hover:opacity-70">
+            인스타 글감 열기
+          </Link>
+        </Card>
       </div>
     </>
   );
 }
 
-function Guide() {
-  return (
-    <Card>
-      <h2 className="font-semibold">올릴 때 지킬 것</h2>
-      <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted">
-        <li>피해자 사진과 얼굴은 올리지 않습니다. 스토리 이미지에도 넣지 않았습니다.</li>
-        <li>확정 판결 전인 사람은 실명 대신 직책이나 &apos;피고인&apos;으로 씁니다.</li>
-        <li>사건을 자극적으로 꾸미지 않고, 재발 방지와 기억에 초점을 둡니다.</li>
-        <li>기념일 글은 그날 아침에 올리면 가장 잘 읽힙니다.</li>
-      </ul>
-      <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer noopener" className={`mt-3 inline-block ${linkClass}`}>
-        Wishwind 인스타 열기
-      </a>
-    </Card>
-  );
-}
+async function Dashboard() {
+  let data: InstagramPosts;
+  let daily: Analytics["daily"] = [];
+  try {
+    data = await adminGet<InstagramPosts>("/instagram/posts");
+    daily = (await adminGet<Analytics>("/analytics?days=60").catch(() => null))?.daily ?? [];
+  } catch (error) {
+    if (error instanceof AdminApiError) return <ErrorBox message={error.message} />;
+    throw error;
+  }
 
-async function Upcoming() {
-  // 오늘 날짜로 계산하므로 요청 때마다 다시 그림
-  await connection();
-  const days = upcomingDays(await getChanges(), new Date(), 60);
+  const since = new Date(Date.now() - 30 * 86_400_000).toISOString().slice(0, 10);
+  const recent = data.items.filter((p) => p.postedOn >= since);
+  const maxReach = Math.max(1, ...recent.map((p) => p.reach));
+  const viewsByDay = new Map(daily.map((d) => [d.day, d.views]));
+  const avgViews = daily.length > 0 ? daily.reduce((n, d) => n + d.views, 0) / daily.length : 0;
+  const featuredSlugs = new Set(data.featured.map((f) => f.slug));
+
   return (
-    <section>
-      <h2 className="text-lg font-semibold">다가오는 기념일 (60일)</h2>
-      {days.length === 0 ? (
-        <div className="mt-3">
-          <Empty>앞으로 60일 안에 돌아오는 기념일이 없습니다.</Empty>
+    <>
+      <section>
+        <h2 className="text-lg font-semibold">최근 30일</h2>
+        <div className="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-5">
+          <Stat label="게시물" value={`${recent.length}개`} />
+          <Stat label="총 도달" value={sum(recent, "reach").toLocaleString("ko-KR")} />
+          <Stat label="저장률" value={pct(sum(recent, "saves"), sum(recent, "reach"))} hint="저장 ÷ 도달" />
+          <Stat label="프로필 방문" value={sum(recent, "profileVisits").toLocaleString("ko-KR")} />
+          <Stat label="새 팔로워" value={`+${sum(recent, "followsGained").toLocaleString("ko-KR")}`} />
         </div>
-      ) : (
-        <div className="mt-3 grid gap-4 lg:grid-cols-2">
-          {days.map((d) => (
-            <Card key={d.item.id}>
-              <p className="text-xs text-subtle">
-                {dateLabel(d.date)} · {d.daysLeft === 0 ? "오늘" : `${d.daysLeft}일 남음`}
-              </p>
-              <h3 className="mt-1 font-semibold">{d.item.name}</h3>
-              <p className="mt-0.5 text-xs text-subtle">{d.item.case.title}</p>
-              <CopyText text={dayCaption(d)} />
-              <Links slug={d.item.case.slug} />
+      </section>
+
+      <Card>
+        <h2 className="font-semibold">게시물 기록하기</h2>
+        <div className="mt-3">
+          <ActionForm action={addInstagramPost}>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <Field label="올린 날">
+                <input type="date" name="postedOn" required defaultValue={new Date(Date.now() + 9 * 3_600_000).toISOString().slice(0, 10)} className={inputClass} />
+              </Field>
+              <Field label="종류">
+                <select name="kind" className={inputClass}>
+                  {Object.entries(KIND_LABEL).map(([k, v]) => (
+                    <option key={k} value={k}>{v}</option>
+                  ))}
+                </select>
+              </Field>
+              <Field label="사건 주소 (선택)" hint="예: yeongdeungpo-... 사건 슬러그">
+                <input name="caseSlug" maxLength={200} className={inputClass} />
+              </Field>
+            </div>
+            <Field label="제목·메모용 이름">
+              <input name="title" required maxLength={200} className={inputClass} />
+            </Field>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-6">
+              {(
+                [
+                  ["reach", "도달"],
+                  ["likes", "좋아요"],
+                  ["saves", "저장"],
+                  ["shares", "공유"],
+                  ["profileVisits", "프로필 방문"],
+                  ["followsGained", "새 팔로워"],
+                ] as const
+              ).map(([name, label]) => (
+                <Field key={name} label={label}>
+                  <input type="number" name={name} min={0} defaultValue={0} className={inputClass} />
+                </Field>
+              ))}
+            </div>
+            <Field label="메모 (선택)">
+              <input name="note" maxLength={500} className={inputClass} />
+            </Field>
+            <Button tone="primary">기록</Button>
+          </ActionForm>
+        </div>
+      </Card>
+
+      <section>
+        <h2 className="text-lg font-semibold">게시물별 도달</h2>
+        {recent.length === 0 ? (
+          <div className="mt-3">
+            <Empty>최근 30일에 기록한 게시물이 없습니다.</Empty>
+          </div>
+        ) : (
+          <ul className="mt-3 space-y-2">
+            {recent.slice(0, 12).map((p) => (
+              <li key={p.id} className="flex items-center gap-3 text-sm">
+                <span className="w-20 shrink-0 text-xs text-subtle tabular-nums">{p.postedOn.slice(5)}</span>
+                <span className="w-32 shrink-0 truncate">{p.title}</span>
+                <span className="h-3 flex-1 rounded-full bg-line/60">
+                  <span className="block h-3 rounded-full bg-[#3f8f84]" style={{ width: `${(p.reach / maxReach) * 100}%` }} />
+                </span>
+                <span className="w-16 shrink-0 text-right text-xs tabular-nums">{p.reach.toLocaleString("ko-KR")}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section>
+        <h2 className="text-lg font-semibold">올린 날 사이트 방문</h2>
+        <p className="mt-1 text-sm text-muted">게시 당일 사이트 조회수를 최근 60일 하루 평균과 비교합니다.</p>
+        <div className="mt-3 space-y-2">
+          {data.items.slice(0, 10).map((p) => {
+            const views = viewsByDay.get(p.postedOn);
+            const diff = views !== undefined && avgViews > 0 ? Math.round(((views - avgViews) / avgViews) * 100) : null;
+            return (
+              <div key={p.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 rounded-md border border-line px-3 py-2 text-sm">
+                <span className="text-xs text-subtle tabular-nums">{p.postedOn}</span>
+                <span className="min-w-0 flex-1 truncate">{p.title}</span>
+                <span className="text-xs tabular-nums text-muted">
+                  {views === undefined ? "기록 없음" : `${views.toLocaleString("ko-KR")}회`}
+                  {diff !== null && (
+                    <span className={diff >= 0 ? "ml-2 text-[#2f7469]" : "ml-2 text-[#b5543a]"}>
+                      평균보다 {diff >= 0 ? "+" : ""}{diff}%
+                    </span>
+                  )}
+                </span>
+              </div>
+            );
+          })}
+          {data.items.length === 0 && <Empty>기록한 게시물이 없습니다.</Empty>}
+        </div>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-semibold">기록한 게시물</h2>
+        <div className="mt-3 space-y-2">
+          {data.items.map((p) => (
+            <Card key={p.id}>
+              <div className="flex flex-wrap items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="text-xs text-subtle">{p.postedOn} · {KIND_LABEL[p.kind]}</p>
+                  <p className="font-medium">{p.title}</p>
+                  <p className="mt-1 text-xs text-muted tabular-nums">
+                    도달 {p.reach.toLocaleString("ko-KR")} · 좋아요 {p.likes} · 저장 {p.saves} · 공유 {p.shares} · 프로필 {p.profileVisits} · 팔로워 +{p.followsGained}
+                  </p>
+                  {p.note && <p className="mt-1 text-xs text-subtle">{p.note}</p>}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {p.caseSlug && (
+                    <ActionForm action={setHomeFeatured.bind(null, p.caseSlug, !featuredSlugs.has(p.caseSlug))} inline>
+                      <Button tone="ok">{featuredSlugs.has(p.caseSlug) ? "홈 대표 해제" : "홈 대표 사건으로"}</Button>
+                    </ActionForm>
+                  )}
+                  <ActionForm action={deleteInstagramPost.bind(null, p.id)} confirmMessage="이 기록을 삭제할까요?" inline>
+                    <Button tone="danger">삭제</Button>
+                  </ActionForm>
+                </div>
+              </div>
             </Card>
           ))}
         </div>
-      )}
-    </section>
+      </section>
+    </>
   );
 }
 
-/** 사건이 일어난 날(월·일)이 오늘부터 7일 안에 돌아오는 공개 사건 */
-async function Anniversaries() {
-  await connection();
-  let rows: AdminCaseList["items"];
-  try {
-    rows = (await adminGet<AdminCaseList>("/cases?published=true")).items;
-  } catch (error) {
-    if (error instanceof AdminApiError) return <ErrorBox message={error.message} />;
-    throw error;
-  }
-  const picks = upcomingAnniversaries(rows, new Date(), 7);
-  const details = await Promise.all(picks.map((p) => getCase(p.row.slug)));
-  return (
-    <section>
-      <h2 className="text-lg font-semibold">○년 전 이날 (7일)</h2>
-      <p className="mt-1 text-sm text-muted">사건이 일어난 날이 오늘부터 7일 안에 돌아오는 사건입니다. 그날 아침에 올리면 됩니다.</p>
-      {picks.length === 0 ? (
-        <div className="mt-3">
-          <Empty>앞으로 7일 안에 일어난 날이 돌아오는 사건이 없습니다.</Empty>
-        </div>
-      ) : (
-        <div className="mt-3 grid gap-4 lg:grid-cols-2">
-          {picks.map((p, i) => {
-            const d = details[i];
-            if (!d) return null;
-            return (
-              <Card key={p.row.id}>
-                <p className="text-xs text-subtle">
-                  {dateLabel(p.date)} · {p.daysLeft === 0 ? "오늘" : `${p.daysLeft}일 남음`} · {p.yearsAgo}년 전
-                </p>
-                <h3 className="mt-1 font-semibold">{d.title}</h3>
-                <CopyText text={anniversaryCaption(d, p)} />
-                <Links slug={d.slug} />
-              </Card>
-            );
-          })}
-        </div>
-      )}
-    </section>
-  );
-}
-
-async function RecentCases() {
-  let rows: AdminCaseList["items"];
-  try {
-    rows = (await adminGet<AdminCaseList>("/cases?published=true")).items.slice(0, 4);
-  } catch (error) {
-    if (error instanceof AdminApiError) return <ErrorBox message={error.message} />;
-    throw error;
-  }
-  const details = (await Promise.all(rows.map((r) => getCase(r.slug)))).filter((d) => d !== null);
-  return (
-    <section>
-      <h2 className="text-lg font-semibold">최근 공개·수정한 사건</h2>
-      <div className="mt-3 grid gap-4 lg:grid-cols-2">
-        {details.map((d) => (
-          <Card key={d.slug}>
-            <h3 className="font-semibold">{d.title}</h3>
-            <CopyText text={caseCaption(d)} />
-            <Links slug={d.slug} />
-          </Card>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/** 오늘 날짜로 돌아가며 법·제도 두 개를 고름 (날마다 다른 글감) */
-async function ChangePicks() {
-  await connection();
-  const items = (await getChanges()).filter((c) => c.kind !== "DAY");
-  if (items.length === 0) return null;
-  const picks = pickChanges(items, new Date());
-  return (
-    <section>
-      <h2 className="text-lg font-semibold">알고 계셨나요? 글감</h2>
-      <p className="mt-1 text-sm text-muted">사건이 바꾼 법·제도 가운데 두 개를 날마다 바꿔 보여 줍니다.</p>
-      <div className="mt-3 grid gap-4 lg:grid-cols-2">
-        {picks.map((c) => (
-          <Card key={c.id}>
-            <h3 className="font-semibold">{c.name}</h3>
-            <p className="mt-0.5 text-xs text-subtle">{c.case.title}</p>
-            <CopyText text={changeCaption(c)} />
-            <Links slug={c.case.slug} />
-          </Card>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function Links({ slug }: { slug: string }) {
-  return (
-    <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
-      <a href={`/api/flyer/case/${slug}`} target="_blank" rel="noreferrer noopener" className={linkClass}>
-        스토리 이미지 열기
-      </a>
-      <a href={`/api/flyer/post/${slug}`} target="_blank" rel="noreferrer noopener" className={linkClass}>
-        게시물 이미지 열기 (4:5)
-      </a>
-      <Link href={`/cases/${slug}`} target="_blank" className={linkClass}>
-        사건 페이지
-      </Link>
-    </div>
-  );
-}
-
-function AutoUpload() {
+function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <Card>
-      <h2 className="font-semibold">자동 업로드</h2>
-      <p className="mt-2 text-sm leading-6 text-muted">
-        인스타그램은 비즈니스·크리에이터 계정이면 Meta의 공식 API(Instagram Graph API)로 사진과 글을 자동으로 올릴 수 있습니다.
-        지금은 연결되어 있지 않아 위 문구와 이미지를 직접 올려야 합니다.
-      </p>
-      <ol className="mt-3 list-decimal space-y-1 pl-5 text-sm text-muted">
-        <li>인스타 계정을 비즈니스(또는 크리에이터) 계정으로 바꾸고 페이스북 페이지와 연결합니다.</li>
-        <li>Meta 개발자 사이트에서 앱을 만들고 instagram_content_publish 권한을 받습니다.</li>
-        <li>발급한 액세스 토큰을 API 서버 환경 변수에 넣으면, 기념일 아침에 자동으로 올리도록 연결할 수 있습니다.</li>
-      </ol>
-      <p className="mt-3 text-xs text-subtle">
-        계정 전환과 토큰 발급은 운영자가 직접 해야 합니다. 연결하면 피드 게시물부터 시작하고, 잘 되면 스토리까지 넓히는 것을 권합니다.
-      </p>
+      <p className="text-xs text-subtle">{label}</p>
+      <p className="mt-1 text-xl font-semibold tabular-nums">{value}</p>
+      {hint && <p className="mt-0.5 text-xs text-subtle">{hint}</p>}
     </Card>
   );
 }

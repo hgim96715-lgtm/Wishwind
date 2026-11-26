@@ -18,6 +18,11 @@ export class CasesController {
     return this.cases.changes();
   }
 
+  @Get('featured')
+  featured() {
+    return this.cases.homeFeatured();
+  }
+
   @Get(':slug')
   detail(@Param('slug') slug: string) {
     return this.cases.findBySlug(slug);

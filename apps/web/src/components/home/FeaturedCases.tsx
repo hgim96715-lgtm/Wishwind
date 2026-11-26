@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getCases } from "@/lib/cases/api";
+import { getCases, getHomeFeatured } from "@/lib/cases/api";
 import { CATEGORY_COLOR, CATEGORY_LABEL, caseStamp } from "@/lib/cases/labels";
 
 /**
@@ -8,9 +8,14 @@ import { CATEGORY_COLOR, CATEGORY_LABEL, caseStamp } from "@/lib/cases/labels";
 export async function FeaturedCases() {
   let items: Awaited<ReturnType<typeof getCases>>["items"] = [];
   try {
-    // 국내(KR) 미해결 사건 위주로 3건
+    // 관리실에서 지정한 대표 사건을 먼저, 모자라면 국내(KR) 미해결 사건으로 채움
+    items = await getHomeFeatured();
     const krRes = await getCases({ country: "KR", status: "UNSOLVED" });
-    items = krRes.items.slice(0, 3);
+    const picked = new Set(items.map((i) => i.slug));
+    for (const item of krRes.items) {
+      if (items.length >= 3) break;
+      if (!picked.has(item.slug)) items.push(item);
+    }
     // 3건 미만이면 전체 미해결 사건에서 보충
     if (items.length < 3) {
       const allRes = await getCases({ status: "UNSOLVED" });

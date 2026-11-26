@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AdminAuthController } from './auth/admin-auth.controller.js';
+import { AdminInstagramController } from './instagram/admin-instagram.controller.js';
 import { AdminCasesController } from './cases/admin-cases.controller.js';
 import { AdminCasesRepository } from './cases/admin-cases.repository.js';
 import { AdminCasesService } from './cases/admin-cases.service.js';
@@ -15,7 +16,7 @@ import { AdminOverviewService } from './overview/admin-overview.service.js';
  * 브리핑·문의·분석·뉴스의 관리자 API는 각 모듈에 있고 AdminGuard만 가져다 씀
  */
 @Module({
-  controllers: [AdminAuthController, AdminOverviewController, AdminCasesController, AdminModerationController],
+  controllers: [AdminAuthController, AdminOverviewController, AdminCasesController, AdminModerationController, AdminInstagramController],
   providers: [
     AdminOverviewRepository,
     AdminOverviewService,

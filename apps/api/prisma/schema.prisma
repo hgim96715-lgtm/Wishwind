@@ -168,6 +168,8 @@ model Case {
   solvedAt            DateTime?     @map("solved_at") @db.Date
 
   isPublished    Boolean          @default(false) @map("is_published")
+  /** 홈 '지금 살펴볼 사건'에 먼저 보여 줄 사건 (관리실에서 지정) */
+  isHomeFeatured Boolean          @default(false) @map("is_home_featured")
   reviewStatus   CaseReviewStatus @default(DRAFT) @map("review_status")
   reviewNote     String?          @map("review_note") @db.Text
   lastVerifiedAt DateTime?        @map("last_verified_at") @db.Timestamptz(3)
@@ -837,4 +839,26 @@ model UserAccount {
   @@unique([provider, providerUserId])
   @@index([userId])
   @@map("user_accounts")
+}
+
+/** 관리자가 직접 기록하는 인스타 게시물과 성과 숫자 */
+model InstagramPost {
+  id            String   @id @default(uuid(7)) @db.Uuid
+  postedOn      DateTime @map("posted_on") @db.Date
+  kind          String   @db.VarChar(20)
+  title         String   @db.VarChar(200)
+  caseSlug      String?  @map("case_slug") @db.VarChar(200)
+  reach         Int      @default(0)
+  likes         Int      @default(0)
+  saves         Int      @default(0)
+  shares        Int      @default(0)
+  profileVisits Int      @default(0) @map("profile_visits")
+  followsGained Int      @default(0) @map("follows_gained")
+  note          String?  @db.VarChar(500)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([postedOn(sort: Desc)])
+  @@map("instagram_posts")
 }

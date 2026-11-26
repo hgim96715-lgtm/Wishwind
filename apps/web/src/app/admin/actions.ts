@@ -361,3 +361,38 @@ export async function syncNews() {
 export async function dismissAllNews() {
   return run(() => adminSend("/news/dismiss-all", "POST"), "확인 안 한 기사를 모두 숨겼습니다.");
 }
+
+// ---- 인스타 성과 기록 ----
+
+const num = (form: FormData, key: string) => Math.max(0, Math.round(Number(text(form, key)) || 0));
+
+function instagramBody(form: FormData) {
+  return {
+    postedOn: text(form, "postedOn"),
+    kind: text(form, "kind"),
+    title: text(form, "title"),
+    caseSlug: text(form, "caseSlug") || null,
+    reach: num(form, "reach"),
+    likes: num(form, "likes"),
+    saves: num(form, "saves"),
+    shares: num(form, "shares"),
+    profileVisits: num(form, "profileVisits"),
+    followsGained: num(form, "followsGained"),
+    note: text(form, "note") || null,
+  };
+}
+
+export async function addInstagramPost(_: ActionState, form: FormData) {
+  return run(() => adminSend("/instagram/posts", "POST", instagramBody(form)), "게시물을 기록했습니다.");
+}
+
+export async function deleteInstagramPost(id: string, _: ActionState, __: FormData) {
+  return run(() => adminSend(`/instagram/posts/${id}`, "DELETE"), "삭제했습니다.");
+}
+
+export async function setHomeFeatured(slug: string, featured: boolean, _: ActionState, __: FormData) {
+  return run(
+    () => adminSend(`/instagram/feature/${encodeURIComponent(slug)}`, "PATCH", { featured }),
+    featured ? "홈 대표 사건으로 지정했습니다." : "홈 대표 지정을 풀었습니다.",
+  );
+}
