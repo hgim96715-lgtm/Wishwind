@@ -3,6 +3,8 @@
  * 해마다 새 값이 나오면 이 파일의 배열 끝에 한 해씩 더하고 CHECKED_ON을 고침.
  * 각 배열은 [연도, 값] 쌍이고 값이 없는 해(-)는 아예 넣지 않음.
  */
+import policeData from "./police-counts.json";
+
 export type Point = readonly [year: number, value: number];
 
 export const CHECKED_ON = "2026-11-26";
@@ -27,16 +29,25 @@ export const CRIME_NOTES: Record<string, string> = {
 
 export const CRIME_SOURCE = "검찰청 「범죄분석」, 국가데이터처 「장래인구추계(2022년 기준)」 · 지표누리 '형법범죄율'";
 
-const Y2018_2025 = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025] as const;
-
-/** 경찰청 5대 범죄 발생건수 (공공데이터포털 OpenAPI, 2026-11-26 받음). 인구로 나누지 않은 건수라 인구 변화는 반영되지 않음 */
-export const POLICE_COUNTS = [
-  { id: "murder", label: "살인", points: zip(Y2018_2025, [791, 775, 720, 652, 688, 765, 772, 670]) },
-  { id: "robbery", label: "강도", points: zip(Y2018_2025, [818, 798, 662, 495, 515, 572, 457, 477]) },
-  { id: "sexual", label: "강간·강제추행", points: zip(Y2018_2025, [23467, 23531, 21702, 20269, 22484, 22381, 21199, 21451]) },
-  { id: "theft", label: "절도", points: zip(Y2018_2025, [176613, 186649, 179315, 166251, 182133, 189426, 183534, 169007]) },
-  { id: "violence", label: "폭력", points: zip(Y2018_2025, [286599, 287257, 265148, 232018, 244643, 234347, 219798, 206806]) },
+/** 경찰청 5대 범죄 발생건수 (`pnpm stats:police`가 공공데이터포털 OpenAPI에서 받아 저장). 인구로 나누지 않은 건수라 인구 변화는 반영되지 않음 */
+const POLICE_ORDER = [
+  ["murder", "살인"],
+  ["robbery", "강도"],
+  ["sexual", "강간·강제추행"],
+  ["theft", "절도"],
+  ["violence", "폭력"],
 ] as const;
+
+export const POLICE_COUNTS = POLICE_ORDER.flatMap(([id, label]) => {
+  const row = policeData.rows.find((r) => r.label === label);
+  if (!row) return [];
+  const points: Point[] = Object.entries(row.values)
+    .map(([year, value]) => [Number(year), value] as const)
+    .sort((a, b) => a[0] - b[0]);
+  return [{ id, label, points }];
+});
+
+export const POLICE_CHECKED_ON = policeData.fetchedAt;
 
 export const POLICE_SOURCE = "경찰청 「5대 범죄 발생건수」(공공데이터포털)";
 

@@ -11,6 +11,7 @@
     "postinstall": "prisma generate",
     "build": "nest build",
     "cases": "tsc -p tsconfig.cli.json && node .cases-cli/case-import/cli.js",
+    "stats:police": "node --env-file=.env scripts/fetch-police-stats.mjs",
     "missing": "tsc -p tsconfig.cli.json && node .cases-cli/missing/cli.js",
     "deploy": "nest deploy",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

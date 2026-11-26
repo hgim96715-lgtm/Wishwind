@@ -10,7 +10,7 @@ export interface ChartSeries {
 
 const W = 640;
 const H = 280;
-const PAD = { l: 58, r: 50, t: 18, b: 28 };
+const PAD = { l: 58, r: 18, t: 22, b: 28 };
 
 /** 최댓값을 눈금 4칸으로 나눴을 때 떨어지는 값 (1·2·2.5·5·10 배수) */
 function niceStep(max: number) {
@@ -61,7 +61,7 @@ export function StatsChart({ series, unit, label }: { series: ChartSeries[]; uni
                 <title>{`${s.label} ${yr}년 ${fmt(v)}${unit.startsWith("%") ? "%" : ""}`}</title>
               </circle>
             ))}
-            <text x={x(last[0]) + 7} y={y(last[1]) + 4} fontSize={12} fontWeight={700} fill="currentColor">
+            <text x={x(last[0])} y={y(last[1]) - 10} textAnchor="end" fontSize={12} fontWeight={700} fill="currentColor">
               {fmt(last[1])}
             </text>
           </g>

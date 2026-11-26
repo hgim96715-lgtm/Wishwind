@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { LuChartLine } from "react-icons/lu";
+import { LuArrowRight, LuChartLine, LuTrendingDown, LuTrendingUp } from "react-icons/lu";
 import { StatsChart } from "@/components/stats/StatsChart";
 import {
   CHECKED_ON,
   CRIME_NOTES,
   CRIME_RATE,
   CRIME_SOURCE,
+  POLICE_CHECKED_ON,
   POLICE_COUNTS,
   POLICE_SOURCE,
   RECIDIVISM,
@@ -18,6 +19,11 @@ type Tab = "trend" | "recidivism" | "ours";
 
 const chip = (on: boolean) =>
   `rounded-full border px-3 py-1.5 text-sm transition-colors ${on ? "border-foreground bg-foreground font-semibold text-surface" : "border-line bg-surface hover:border-foreground/40"}`;
+
+/** 글자 화살표(→) 대신 쓰는 아이콘. 글자 높이에 맞춰 줄 안에 들어감 */
+function Arrow() {
+  return <LuArrowRight role="img" aria-label="에서" className="mx-1 inline size-[0.9em] align-[-0.12em]" />;
+}
 
 const fmt = (v: number) => v.toLocaleString("ko-KR", { maximumFractionDigits: 1 });
 
@@ -90,7 +96,7 @@ export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
               ))}
             </div>
             <p className="mt-4 text-lg font-semibold leading-snug">
-              {crime.label}: {crimeChange.first[0]}년 {fmt(crimeChange.first[1])}건 → {crimeChange.last[0]}년 {fmt(crimeChange.last[1])}건{" "}
+              {crime.label}: {crimeChange.first[0]}년 {fmt(crimeChange.first[1])}건<Arrow />{crimeChange.last[0]}년 {fmt(crimeChange.last[1])}건{" "}
               <span className={crimeChange.pct <= 0 ? "text-jade-ink" : "text-clay-ink"}>({pctText(crimeChange.pct)})</span>
             </p>
             <p className="text-xs text-subtle">{basis === "rate" ? "인구 10만 명당 발생건수 (검찰 집계)" : "발생 건수 (경찰 집계, 인구로 나누지 않음)"}</p>
@@ -106,7 +112,7 @@ export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
             <div className="mt-5 overflow-x-auto">
               <table className="w-full min-w-[22rem] text-sm">
                 <caption className="pb-2 text-left text-xs text-subtle">
-                  {dataset[0].points[0][0]}년 → {dataset[0].points[dataset[0].points.length - 1][0]}년, 한눈에
+                  {dataset[0].points[0][0]}년<Arrow />{dataset[0].points[dataset[0].points.length - 1][0]}년, 한눈에
                 </caption>
                 <tbody>
                   {(basis === "rate" ? CRIME_RATE.slice(1) : POLICE_COUNTS).map((c) => {
@@ -115,10 +121,13 @@ export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
                       <tr key={c.id} className="border-t border-line">
                         <th scope="row" className="py-2 pr-3 text-left font-medium">{c.label}</th>
                         <td className="py-2 pr-3 tabular-nums text-muted">
-                          {fmt(ch.first[1])} → {fmt(ch.last[1])}
+                          {fmt(ch.first[1])}<Arrow />{fmt(ch.last[1])}
                         </td>
                         <td className={`py-2 text-right font-semibold tabular-nums ${ch.pct <= 0 ? "text-jade-ink" : "text-clay-ink"}`}>
-                          {ch.pct <= 0 ? "▼" : "▲"} {pctText(ch.pct)}
+                          <span className="inline-flex items-center justify-end gap-1">
+                            {ch.pct <= 0 ? <LuTrendingDown aria-hidden className="size-4" /> : <LuTrendingUp aria-hidden className="size-4" />}
+                            {pctText(ch.pct)}
+                          </span>
                         </td>
                       </tr>
                     );
@@ -143,7 +152,11 @@ export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
             <p className="mt-4 text-lg font-semibold leading-snug">
               {rec.id === "release"
                 ? `출소자 ${fmt(recLast[1])}%가 3년 안에 다시 교도소에 들어갔습니다 (${recLast[0]}년).`
-                : `${rec.label}: ${recFirst[0]}년 ${fmt(recFirst[1])}% → ${recLast[0]}년 ${fmt(recLast[1])}%`}
+                : (
+                    <>
+                      {rec.label}: {recFirst[0]}년 {fmt(recFirst[1])}%<Arrow />{recLast[0]}년 {fmt(recLast[1])}%
+                    </>
+                  )}
             </p>
             <p className="mt-1 text-sm text-muted">
               {rec.id === "release" ? `나머지 ${fmt(100 - recLast[1])}%는 3년 안에 돌아오지 않았습니다. ` : ""}
@@ -166,7 +179,7 @@ export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
         )}
 
         <p className="mt-4 border-t border-line pt-3 text-xs leading-5 text-subtle">
-          {tab === "ours" ? "출처: Wishwind 사건 기록" : `출처: ${tab === "trend" ? (basis === "rate" ? CRIME_SOURCE : POLICE_SOURCE) : RECIDIVISM_SOURCE}. ${CHECKED_ON} 확인.`}
+          {tab === "ours" ? "출처: Wishwind 사건 기록" : `출처: ${tab === "trend" ? (basis === "rate" ? CRIME_SOURCE : POLICE_SOURCE) : RECIDIVISM_SOURCE}. ${basis === "count" && tab === "trend" ? POLICE_CHECKED_ON : CHECKED_ON} 확인.`}
         </p>
       </div>
     </section>
