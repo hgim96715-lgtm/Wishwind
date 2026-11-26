@@ -61,11 +61,12 @@ async function EngagementReport({ days }: { days: number }) {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
         <Metric label="수사 노트 답변" value={p.answers} hint="사건 질문에 남긴 생각" />
         <Metric label="형량 의견" value={p.votes} hint="확정 형량에 대한 투표" />
         <Metric label="사용자 질문" value={p.questions} hint="사건에서 더 궁금한 점" />
         <Metric label="실종자들의 정원 응원" value={p.clouds} hint="실종자에게 보낸 마음" />
+        <Metric label="함께 기억하기" value={p.remembers} hint="사건 상세에서 누른 사람" />
       </div>
 
       <Card>

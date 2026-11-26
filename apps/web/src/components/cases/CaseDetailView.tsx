@@ -18,6 +18,7 @@ import { CaseNotes } from "./CaseNotes";
 import { CaseTabs, type CaseTab } from "./CaseTabs";
 import { Notice } from "./Notice";
 import { RelatedPanel } from "./RelatedPanel";
+import { RememberButton } from "./RememberButton";
 import { SentenceVote } from "./SentenceVote";
 import { ReviewStamp, StatusStamp } from "./StatusStamp";
 import { FileShareBar } from "@/components/files/FileShareBar";
@@ -128,6 +129,7 @@ export async function CaseDetailView({ slug }: { slug: string }) {
       </header>
 
       <CaseTabs tabs={tabs} />
+      <RememberButton slug={data.slug} />
     </article>
   );
 }

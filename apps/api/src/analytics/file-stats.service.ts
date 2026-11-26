@@ -54,4 +54,18 @@ export class FileStatsService {
     if (count > 0) this.cache.delete(`${type}:${key}`);
     return { recorded: count > 0 };
   }
+
+  async rememberCount({ type, key }: FileTargetParams) {
+    if (type !== 'case') throw new NotFoundException('사건을 찾을 수 없습니다.');
+    return { count: await this.repo.rememberCount(key) };
+  }
+
+  async remember({ type, key }: FileTargetParams, ip: string, ua: string) {
+    if (type !== 'case') throw new NotFoundException('사건을 찾을 수 없습니다.');
+    if (!(await this.repo.exists(FileTarget.CASE, key))) throw new NotFoundException('사건을 찾을 수 없습니다.');
+    if (ua && !BOT.test(ua)) {
+      await this.repo.recordRemember(key, this.analytics.visitorHash(ip, ua, kstDay()));
+    }
+    return { count: await this.repo.rememberCount(key) };
+  }
 }

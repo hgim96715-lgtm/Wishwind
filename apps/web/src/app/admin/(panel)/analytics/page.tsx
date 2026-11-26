@@ -299,7 +299,7 @@ async function Report({ days }: { days: number }) {
   const trend = previousViews > 0 ? Math.round(((recentViews - previousViews) / previousViews) * 100) : null;
   const discoveryVisitors = a.sources.search + a.sources.sns + a.sources.other;
   const directShare = sourceTotal > 0 ? Math.round((a.sources.direct / sourceTotal) * 100) : 0;
-  const participationTotal = p.answers + p.questions + p.votes + p.clouds + p.inquiries + p.feedback;
+  const participationTotal = p.answers + p.questions + p.votes + p.clouds + p.remembers + p.inquiries + p.feedback;
 
   return (
     <div className="space-y-6">

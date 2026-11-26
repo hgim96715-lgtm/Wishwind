@@ -174,6 +174,7 @@ export interface Analytics {
     questions: number;
     votes: number;
     clouds: number;
+    remembers: number;
     inquiries: number;
     feedback: number;
     blockedAnswers: number;

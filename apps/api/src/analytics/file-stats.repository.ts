@@ -28,4 +28,13 @@ export class FileStatsRepository {
       WHERE target = ${target}::"FileTarget" AND target_key = ${key}`;
     return rows[0] ?? { views: 0, today: 0, shares: 0 };
   }
+
+  rememberCount(caseSlug: string) {
+    return this.prisma.caseRemember.count({ where: { caseSlug } });
+  }
+
+  /** 같은 사람이 같은 날 여러 번 눌러도 1번만 셈 */
+  recordRemember(caseSlug: string, visitorHash: string) {
+    return this.prisma.caseRemember.createMany({ data: [{ caseSlug, visitorHash }], skipDuplicates: true });
+  }
 }

@@ -113,16 +113,18 @@ export class AnalyticsRepository {
       this.prisma.userQuestion.count({ where: created }),
       this.prisma.sentenceVote.count({ where: created }),
       this.prisma.cloudMessage.count({ where: created }),
+      this.prisma.caseRemember.count({ where: created }),
       this.prisma.inquiry.count({ where: { ...created, kind: { not: InquiryKind.FEEDBACK } } }),
       this.prisma.inquiry.count({ where: { ...created, kind: InquiryKind.FEEDBACK } }),
       this.prisma.userAnswer.count({
         where: { ...created, status: { in: [UserContentStatus.BLOCKED, UserContentStatus.HIDDEN] } },
       }),
-    ]).then(([answers, questions, votes, clouds, inquiries, feedback, blockedAnswers]) => ({
+    ]).then(([answers, questions, votes, clouds, remembers, inquiries, feedback, blockedAnswers]) => ({
       answers,
       questions,
       votes,
       clouds,
+      remembers,
       inquiries,
       feedback,
       blockedAnswers,

@@ -754,6 +754,19 @@ model FileEvent {
   @@map("file_events")
 }
 
+/** 비로그인 "함께 기억하기" 클릭. 방문자 해시는 날마다 바뀌어 하루 1회만 셈 */
+model CaseRemember {
+  id          String @id @default(uuid(7)) @db.Uuid
+  caseSlug    String @map("case_slug") @db.VarChar(200)
+  visitorHash String @map("visitor_hash") @db.VarChar(64)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@unique([caseSlug, visitorHash])
+  @@index([caseSlug, createdAt])
+  @@map("case_remembers")
+}
+
 enum NewsStatus {
   NEW
   PUBLISHED

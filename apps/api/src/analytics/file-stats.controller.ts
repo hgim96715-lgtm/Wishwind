@@ -24,4 +24,20 @@ export class FileStatsController {
   ) {
     return this.files.record(target, body, ip ?? '', ua ?? '');
   }
+
+  /** 사건의 "함께 기억하기" 숫자 */
+  @Get('remember')
+  rememberCount(@Param(new ZodPipe(fileTargetSchema)) target: FileTargetParams) {
+    return this.files.rememberCount(target);
+  }
+
+  @Post('remember')
+  @HttpCode(200)
+  remember(
+    @Param(new ZodPipe(fileTargetSchema)) target: FileTargetParams,
+    @Headers('x-visitor-ip') ip: string | undefined,
+    @Headers('x-visitor-ua') ua: string | undefined,
+  ) {
+    return this.files.remember(target, ip ?? '', ua ?? '');
+  }
 }
