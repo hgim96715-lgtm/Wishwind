@@ -24,7 +24,7 @@ export const ROOMS: readonly Room[] = [
     description: "끝난 사건과 미제 사건을 함께 살펴보는 곳",
     icon: LuFolderSearch,
     accent: "#c46a4b",
-    badge: "사건 기록",
+    badge: "미제부터 종결까지",
   },
   {
     slug: "missing",

@@ -9,17 +9,7 @@ import { DidYouKnow } from "@/components/home/DidYouKnow";
 import { ReelCases } from "@/components/home/ReelCases";
 import { RoomGrid } from "@/components/home/RoomGrid";
 import { AccountLinkSkeleton, DidYouKnowSkeleton, ReelCasesSkeleton } from "@/components/home/HomeSkeletons";
-import { getCases } from "@/lib/cases/api";
 import { INSTAGRAM_URL } from "@/lib/site";
-
-/** 사건 수는 요청 때 가져오므로 Suspense 안에서만 읽음. 실패하면 기본 배지 */
-async function CaseCountBadge() {
-  try {
-    return `${(await getCases()).items.length}건 기록`;
-  } catch {
-    return "사건 기록";
-  }
-}
 
 // 대표 주소를 홈에만 지정함 (다른 페이지가 홈을 대표 주소로 물려받지 않게 레이아웃에서는 뺌)
 export const metadata: Metadata = { alternates: { canonical: "/" } };
@@ -62,13 +52,7 @@ export default function Home() {
       </Suspense>
 
       {/* 3개 방 카드 */}
-      <RoomGrid
-        casesBadge={
-          <Suspense fallback="사건 기록">
-            <CaseCountBadge />
-          </Suspense>
-        }
-      />
+      <RoomGrid />
 
       {/* 도움이 필요할 때: 하단으로 이동 */}
       <div className="mt-10 flex flex-col gap-3 rounded-xl border border-[#d9cdb8] bg-[#fbf6ea] px-4 py-3 sm:flex-row sm:items-center sm:gap-4 sm:px-5">
