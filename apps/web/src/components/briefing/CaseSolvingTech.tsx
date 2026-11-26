@@ -4,6 +4,11 @@ import { INVESTIGATION_TECHNIQUES } from "@/lib/briefing/techniques";
 import { getCase } from "@/lib/cases/api";
 
 /** 사건을 푸는 기술: 기술 칩 6개와 설명 카드 1장. 처음에는 오늘 날짜로 돌아가며 한 기술이 선택됨 */
+/** 철자 수정 전(dunlevy) slug로 이미 공개된 사건도 칩에 연결되도록 함 */
+const LEGACY_SLUGS: Record<string, string> = {
+  "jacqueline-dunleavy-murder": "jacqueline-dunlevy-murder",
+};
+
 export async function CaseSolvingTech() {
   await connection();
   const kst = new Date(Date.now() + 9 * 60 * 60 * 1000);
@@ -12,6 +17,7 @@ export async function CaseSolvingTech() {
   // 공개된 사건만 칩으로 보이도록 slug로 직접 조회함 (목록 take 제한·정렬과 무관하게 찾음, 실패하면 해당 칩만 생략)
   const titles: Record<string, string> = {};
   const slugs = [...new Set(INVESTIGATION_TECHNIQUES.flatMap((t) => t.caseSlugs))];
+  for (const [slug, legacy] of Object.entries(LEGACY_SLUGS)) if (slugs.includes(slug)) slugs.push(legacy);
   await Promise.all(
     slugs.map(async (slug) => {
       try {
@@ -21,13 +27,21 @@ export async function CaseSolvingTech() {
     }),
   );
 
+  const techs = INVESTIGATION_TECHNIQUES.map((t) => ({
+    ...t,
+    caseSlugs: t.caseSlugs.map((slug) => {
+      const legacy = LEGACY_SLUGS[slug];
+      return !titles[slug] && legacy && titles[legacy] ? legacy : slug;
+    }),
+  }));
+
   return (
     <section aria-labelledby="tech-title" className="mt-8">
       <h2 id="tech-title" className="font-mono text-xs uppercase tracking-[0.2em] text-subtle">
         How Cases Get Solved
       </h2>
       <p className="mt-2 text-lg font-semibold">사건을 푸는 기술</p>
-      <TechTabs techs={INVESTIGATION_TECHNIQUES} initial={initial} titles={titles} />
+      <TechTabs techs={techs} initial={initial} titles={titles} />
     </section>
   );
 }
