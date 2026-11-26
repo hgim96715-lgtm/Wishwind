@@ -56,7 +56,7 @@ function Ticker({ items, paused, still }: { items: BoardItem[]; paused: boolean;
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <span className="flex shrink-0 items-center bg-[#c46a4b] px-2.5 font-mono font-semibold tracking-wider text-white">
+      <span className="flex shrink-0 items-center bg-brand px-2.5 font-mono font-semibold tracking-wider text-white">
         속보
       </span>
       <div className={`min-w-0 flex-1 py-2 ${still ? "overflow-x-auto" : "overflow-hidden"}`}>

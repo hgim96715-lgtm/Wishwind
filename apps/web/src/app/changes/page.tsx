@@ -64,13 +64,13 @@ function ChangeItem({ c }: { c: CaseChangeWithCase }) {
   return (
     <li className="rounded-xl border border-line bg-surface p-4">
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <span className="rounded-full bg-[#3f8f84]/15 px-2 py-0.5 text-xs font-medium text-[#2f7469]">{CHANGE_KIND_LABEL[c.kind]}</span>
+        <span className="rounded-full bg-jade/15 px-2 py-0.5 text-xs font-medium text-jade-ink">{CHANGE_KIND_LABEL[c.kind]}</span>
         <h3 className="font-semibold">{c.name}</h3>
         {meta.length > 0 && <span className="text-xs text-subtle">{meta.join(" · ")}</span>}
       </div>
       <p className="mt-2 text-sm leading-6 text-muted">{c.description}</p>
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
-        <Link href={`/cases/${c.case.slug}`} className="font-medium text-[#2f7469] transition-opacity hover:opacity-70">
+        <Link href={`/cases/${c.case.slug}`} className="font-medium text-jade-ink transition-opacity hover:opacity-70">
           {c.case.title} 기록 보기
         </Link>
         <a href={c.sourceUrl} target="_blank" rel="noreferrer noopener" className="text-subtle transition-colors hover:text-foreground">

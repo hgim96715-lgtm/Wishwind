@@ -64,7 +64,7 @@ export function BriefingAutoRefresh() {
         setFresh(0);
         await check();
       }}
-      className="fixed top-20 left-1/2 z-40 -translate-x-1/2 rounded-full bg-[#2f7469] px-4 py-2 text-sm font-semibold text-white shadow-lg transition-opacity hover:opacity-90"
+      className="fixed top-20 left-1/2 z-40 -translate-x-1/2 rounded-full bg-jade-deep px-4 py-2 text-sm font-semibold text-white shadow-lg transition-opacity hover:opacity-90"
     >
       새 소식 {fresh}건 보기
     </button>

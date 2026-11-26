@@ -129,7 +129,7 @@ export function ContactForm({ initialCase }: { initialCase: string }) {
           </span>
         </label>
         {message && (
-          <p role={message.ok ? "status" : "alert"} className={`text-sm ${message.ok ? "text-[#2f7a70]" : "text-[#b5543a]"}`}>
+          <p role={message.ok ? "status" : "alert"} className={`text-sm ${message.ok ? "text-[#2f7a70]" : "text-clay-ink"}`}>
             {message.text}
           </p>
         )}
@@ -204,7 +204,7 @@ function MyInquiryItem({ item: q, onChange }: { item: MyInquiry; onChange: (mine
             maxLength={MAX}
             rows={4}
             onChange={(e) => setDraft(e.target.value)}
-            className="w-full resize-y rounded-lg border border-line bg-background p-3 text-sm leading-6 outline-none focus-visible:ring-4 focus-visible:ring-[#4f78a8]/20"
+            className="w-full resize-y rounded-lg border border-line bg-background p-3 text-sm leading-6 outline-none focus-visible:ring-4 focus-visible:ring-steel/20"
           />
           <div className="mt-2 flex justify-end gap-2">
             <button type="button" onClick={() => { setEditing(false); setDraft(q.body); }} className="rounded-lg px-3 py-1.5 text-xs text-muted hover:bg-black/5">
@@ -224,8 +224,8 @@ function MyInquiryItem({ item: q, onChange }: { item: MyInquiry; onChange: (mine
         <p className="mt-2 whitespace-pre-wrap break-words">{q.body}</p>
       )}
       {q.reply && (
-        <div className="mt-3 rounded-lg bg-[#4f78a8]/8 p-3">
-          <p className="text-xs font-semibold text-[#4f78a8]">답변</p>
+        <div className="mt-3 rounded-lg bg-steel/8 p-3">
+          <p className="text-xs font-semibold text-steel-ink">답변</p>
           <p className="mt-1 whitespace-pre-wrap text-muted">{q.reply}</p>
         </div>
       )}
@@ -244,13 +244,13 @@ function MyInquiryItem({ item: q, onChange }: { item: MyInquiry; onChange: (mine
                 void run(() => call(`/api/inquiries/${q.id}/delete`));
               }
             }}
-            className="hover:text-[#b5543a]"
+            className="hover:text-clay-ink"
           >
             삭제
           </button>
         </div>
       )}
-      {error && <p className="mt-2 text-xs text-[#b5543a]">{error}</p>}
+      {error && <p className="mt-2 text-xs text-clay-ink">{error}</p>}
     </li>
   );
 }

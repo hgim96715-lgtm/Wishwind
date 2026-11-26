@@ -146,7 +146,7 @@ function NewsList({ news }: { news: Briefing["news"] }) {
   return (
     <details className="group border-t border-line px-5 py-2.5">
       <summary className="flex cursor-pointer list-none items-center gap-2 text-sm text-muted hover:text-foreground">
-        <span className="font-mono text-[11px] tracking-wider text-[#3f8f84]">NEWS</span>
+        <span className="font-mono text-[11px] tracking-wider text-jade-ink-soft">NEWS</span>
         <span className="group-open:hidden">새 소식 전체 보기 ({news.length}건) ↓</span>
         <span className="hidden group-open:inline">접기 ↑</span>
       </summary>
@@ -178,7 +178,7 @@ function NewsItem({ n }: { n: Briefing["news"][number] }) {
         {n.case && (
           <>
             {" · "}
-            <Link href={`/cases/${n.case.slug}`} className="text-[#c46a4b] transition-opacity hover:opacity-70">
+            <Link href={`/cases/${n.case.slug}`} className="text-brand-fg transition-opacity hover:opacity-70">
               {n.case.title} 사건 파일
             </Link>
           </>
@@ -196,7 +196,7 @@ function RecentCases({ cases }: { cases: Briefing["recentCases"] }) {
         <h2 id="recent-title" className="text-lg font-semibold">
           최근 들어온 사건 파일
         </h2>
-        <Link href="/cases" className="text-sm text-[#c46a4b] transition-opacity hover:opacity-70">
+        <Link href="/cases" className="text-sm text-brand-fg transition-opacity hover:opacity-70">
           사건방 전체 보기
         </Link>
       </div>
@@ -232,14 +232,14 @@ function RecentCases({ cases }: { cases: Briefing["recentCases"] }) {
 
 function Notices({ notices }: { notices: BriefingPost[] }) {
   return (
-    <section aria-label="공지사항" className="rounded-xl border border-[#4f78a8]/30 bg-[#4f78a8]/5 p-5">
+    <section aria-label="공지사항" className="rounded-xl border border-steel/30 bg-steel/5 p-5">
       <ul className="space-y-3">
         {notices.map((n) => (
           <li key={n.id}>
             <details>
               <summary className="flex cursor-pointer list-none items-center gap-2">
-                {n.isPinned ? <LuPin aria-label="고정" className="size-4 text-[#4f78a8]" /> : <span className="text-[#4f78a8]">•</span>}
-                <span className="text-xs font-semibold text-[#4f78a8]">공지</span>
+                {n.isPinned ? <LuPin aria-label="고정" className="size-4 text-steel-ink" /> : <span className="text-steel-ink">•</span>}
+                <span className="text-xs font-semibold text-steel-ink">공지</span>
                 <span className="font-medium">{n.title}</span>
                 <span className="ml-auto shrink-0 text-xs text-subtle">{formatDate(n.publishedAt)}</span>
               </summary>
@@ -281,7 +281,7 @@ function PostCard({ post }: { post: BriefingPost }) {
         <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-muted">{post.body}</p>
       )}
       {post.case && (
-        <Link href={`/cases/${post.case.slug}`} className="mt-3 inline-block text-sm text-[#c46a4b] transition-opacity hover:opacity-70">
+        <Link href={`/cases/${post.case.slug}`} className="mt-3 inline-block text-sm text-brand-fg transition-opacity hover:opacity-70">
           📁 {post.case.title} 사건 파일 보기
         </Link>
       )}
@@ -359,7 +359,7 @@ function NewMissing({ missing }: { missing: Briefing["missing"] }) {
           </li>
         ))}
       </ul>
-      <Link href="/missing" className="mt-4 inline-block text-sm text-[#3f8f84] transition-opacity hover:opacity-70">
+      <Link href="/missing" className="mt-4 inline-block text-sm text-jade-ink-soft transition-opacity hover:opacity-70">
         실종자들의 정원에서 자세히 보기
       </Link>
     </section>

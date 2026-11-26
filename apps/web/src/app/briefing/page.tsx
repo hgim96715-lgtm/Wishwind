@@ -21,7 +21,7 @@ export default function BriefingPage() {
         <BriefingFeed />
       </Suspense>
       <section className="mt-14 flex flex-col items-start gap-3 rounded-xl border border-dashed border-line bg-surface/70 p-6 sm:flex-row sm:items-center">
-        <LuMegaphone aria-hidden className="size-6 shrink-0 text-[#4f78a8]" />
+        <LuMegaphone aria-hidden className="size-6 shrink-0 text-steel-ink" />
         <div className="flex-1">
           <p className="font-medium">잘못된 내용을 찾았거나, 바라는 점이 있나요?</p>
           <p className="text-sm text-muted">정정 요청, 문의, 의견을 남겨 주시면 확인하고 답변드립니다.</p>

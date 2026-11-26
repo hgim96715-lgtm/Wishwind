@@ -172,12 +172,12 @@ export function DepartureBoard({ items }: { items: BoardItem[] }) {
           <span key={pos} aria-hidden className={`absolute ${pos} size-1.5 rounded-full bg-[#c9bda8]/70`} />
         ))}
 
-        <div className="mb-2.5 flex items-center gap-3 border-b border-white/10 pb-2 font-mono text-[11px] tracking-[0.18em] text-[#cfc5b2]">
+        <div className="mb-2.5 flex items-center gap-3 border-b border-white/10 pb-2 font-mono text-[11px] tracking-[0.18em] text-ink-faint">
           <span className="flex items-center gap-1.5">
             <span aria-hidden className={`size-1.5 rounded-full bg-[#7fb7a8] ${running && !reduced ? "animate-pulse" : ""}`} />
             BRIEFING BOARD
           </span>
-          <span className="hidden text-[#cfc5b2]/60 sm:inline">시각 · 구분 · 소식 · 지역</span>
+          <span className="hidden text-ink-faint/60 sm:inline">시각 · 구분 · 소식 · 지역</span>
           <span className="ml-auto tabular-nums" suppressHydrationWarning>
             {clock && `KST ${clock}`}
           </span>
@@ -222,7 +222,7 @@ export function DepartureBoard({ items }: { items: BoardItem[] }) {
           })}
         </ul>
 
-        <div className="mt-3 flex items-center gap-2 font-mono text-[11px] text-[#cfc5b2]">
+        <div className="mt-3 flex items-center gap-2 font-mono text-[11px] text-ink-faint">
           <button
             type="button"
             onClick={() => setPlaying((p) => !p)}
@@ -240,7 +240,7 @@ export function DepartureBoard({ items }: { items: BoardItem[] }) {
           <button type="button" onClick={() => go(1)} aria-label="다음 소식" className="rounded-md p-1 hover:bg-white/10">
             <LuChevronRight className="size-3.5" />
           </button>
-          <span className="ml-auto text-[#cfc5b2]/60">{hovered ? "잠시 멈춤" : "눌러서 원문 보기"}</span>
+          <span className="ml-auto text-ink-faint/60">{hovered ? "잠시 멈춤" : "눌러서 원문 보기"}</span>
         </div>
 
         {/* 자동으로 넘길 때는 읽지 않고, 직접 넘겼을 때만 새 목록을 읽어 줌 */}
