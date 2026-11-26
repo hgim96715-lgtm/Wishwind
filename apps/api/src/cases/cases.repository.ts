@@ -95,6 +95,11 @@ export class CasesRepository {
            OR strpos(lower(regexp_replace(c.summary, '[[:space:]]', '', 'g')), ${compactSearch(query.q)}) > 0
            OR strpos(lower(regexp_replace(c.location, '[[:space:]]', '', 'g')), ${compactSearch(query.q)}) > 0
            OR EXISTS (
+             SELECT 1 FROM related_contents rc WHERE rc.case_id = c.id
+               AND (strpos(lower(regexp_replace(rc.title, '[[:space:]]', '', 'g')), ${compactSearch(query.q)}) > 0
+                 OR strpos(lower(regexp_replace(rc.platform, '[[:space:]]', '', 'g')), ${compactSearch(query.q)}) > 0)
+           )
+           OR EXISTS (
              SELECT 1 FROM suspects s WHERE s.case_id = c.id
                AND s.status::text NOT IN (${Prisma.join([...HIDE_NAME_STATUSES])})
                AND strpos(lower(regexp_replace(s.name, '[[:space:]]', '', 'g')), ${compactSearch(query.q)}) > 0
