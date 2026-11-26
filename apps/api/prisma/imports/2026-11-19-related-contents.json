@@ -1,47 +1,207 @@
 {
   "version": 1,
   "cases": [
-    { "slug": "yoo-young-chul-serial-murders", "related": [
-      { "kind": "DOCUMENTARY", "title": "레인코트 킬러: 유영철을 추격하다", "platform": "넷플릭스", "url": "https://www.netflix.com/title/81087760", "releaseYear": 2021, "note": "수사 과정과 당시 사회 분위기를 짚은 3부작 다큐멘터리 시리즈입니다." }
-    ]},
-    { "slug": "nth-room-digital-sex-crimes", "related": [
-      { "kind": "DOCUMENTARY", "title": "사이버 지옥: n번방을 무너뜨려라", "platform": "넷플릭스", "url": "https://www.netflix.com/title/81354041", "releaseYear": 2022, "note": "사건을 처음 추적한 대학생 기자단과 기자들의 취재 과정을 담은 다큐멘터리입니다." }
-    ]},
-    { "slug": "hwaseong-serial-murders", "related": [
-      { "kind": "MOVIE", "title": "살인의 추억", "platform": "왓챠피디아", "creator": "봉준호 감독", "url": "https://pedia.watcha.com/ko/contents/mE5DYeW", "releaseYear": 2003, "isDramatized": true, "note": "사건을 모티브로 한 극영화입니다. 인물과 수사 장면은 각색되었습니다." }
-    ]},
-    { "slug": "itaewon-burger-king-murder", "related": [
-      { "kind": "MOVIE", "title": "이태원 살인사건", "platform": "왓챠피디아", "creator": "홍기선 감독", "url": "https://pedia.watcha.com/ko/contents/m5m6eGW", "releaseYear": 2009, "isDramatized": true, "note": "사건을 바탕으로 한 극영화입니다. 개봉 뒤 재수사로 이어지는 계기가 되었습니다." }
-    ]},
-    { "slug": "daegu-frog-boys", "related": [
-      { "kind": "MOVIE", "title": "아이들...", "platform": "TMDB", "creator": "이규만 감독", "url": "https://www.themoviedb.org/movie/72066", "releaseYear": 2011, "isDramatized": true, "note": "사건을 바탕으로 한 극영화입니다. 일부 인물과 내용은 각색되었습니다." }
-    ]},
-    { "slug": "yorkshire-ripper-murders", "related": [
-      { "kind": "DOCUMENTARY", "title": "더 리퍼: 요크셔 연쇄살인 사건", "platform": "넷플릭스", "url": "https://www.netflix.com/title/81006684", "releaseYear": 2020, "language": "en", "note": "5년 넘게 이어진 수사와 피해자들의 이야기를 다룬 영국 다큐멘터리 시리즈입니다." }
-    ]},
-    { "slug": "db-cooper-hijacking", "related": [
-      { "kind": "DOCUMENTARY", "title": "D.B. 쿠퍼: 하이재킹 미스터리", "platform": "넷플릭스", "url": "https://www.netflix.com/title/81349547", "releaseYear": 2022, "language": "en", "note": "범인으로 지목된 여러 인물과 추적자들을 따라가는 다큐멘터리 시리즈입니다." }
-    ]},
-    { "slug": "chicago-tylenol-murders", "related": [
-      { "kind": "DOCUMENTARY", "title": "콜드 케이스: 타이레놀 독극물 사건", "platform": "넷플릭스", "url": "https://www.netflix.com/title/81757969", "releaseYear": 2023, "language": "en", "note": "제품 포장 규정을 바꾼 미제 사건을 다룬 다큐멘터리입니다." }
-    ]},
-    { "slug": "jonbenet-ramsey", "related": [
-      { "kind": "DOCUMENTARY", "title": "콜드 케이스: 누가 존베넷 램지를 죽였나", "platform": "넷플릭스", "url": "https://www.netflix.com/title/81705443", "releaseYear": 2024, "language": "en", "note": "초기 수사와 언론 보도의 문제를 다룬 3부작 다큐멘터리 시리즈입니다." }
-    ]},
-    { "slug": "golden-state-killer", "related": [
-      { "kind": "DOCUMENTARY", "title": "I'll Be Gone in the Dark", "platform": "HBO Max", "url": "https://www.hbomax.com/series/urn:hbo:series:GXqxXYwlxdEKuqwEAAASS", "releaseYear": 2020, "language": "en", "note": "범인을 추적한 작가 미셸 맥나마라의 책을 바탕으로 한 7부작 다큐멘터리입니다. 국내에서는 볼 수 없을 수 있습니다." }
-    ]},
-    { "slug": "oklahoma-city-bombing", "related": [
-      { "kind": "DOCUMENTARY", "title": "오클라호마시티 폭탄 테러: 미국의 테러", "platform": "넷플릭스", "url": "https://www.netflix.com/title/81704384", "releaseYear": 2025, "language": "en", "note": "테러의 배경과 극단주의를 다룬 다큐멘터리입니다." }
-    ]},
-    { "slug": "norway-utoya-attacks", "related": [
-      { "kind": "MOVIE", "title": "7월 22일", "platform": "넷플릭스", "creator": "폴 그린그래스 감독", "url": "https://www.netflix.com/title/80210932", "releaseYear": 2018, "language": "en", "isDramatized": true, "note": "생존자와 유족의 이야기를 중심으로 사건을 재구성한 극영화입니다." }
-    ]},
-    { "slug": "zodiac-killer", "related": [
-      { "kind": "MOVIE", "title": "조디악", "platform": "IMDb", "creator": "데이비드 핀처 감독", "url": "https://www.imdb.com/title/tt0443706/", "releaseYear": 2007, "language": "en", "isDramatized": true, "note": "사건을 추적한 기자와 형사들의 이야기를 그린 극영화입니다." }
-    ]},
-    { "slug": "btk-serial-murders", "related": [
-      { "kind": "SERIES", "title": "마인드헌터", "platform": "넷플릭스", "url": "https://www.netflix.com/title/80114855", "releaseYear": 2017, "language": "en", "isDramatized": true, "note": "FBI 행동분석 초기를 그린 드라마로, BTK 사건이 이야기 곳곳에 등장합니다." }
-    ]}
+    {
+      "slug": "yoo-young-chul-serial-murders",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "레인코트 킬러: 유영철을 추격하다",
+          "platform": "넷플릭스",
+          "url": "https://www.netflix.com/title/81087760",
+          "releaseYear": 2021,
+          "note": "수사 과정과 당시 사회 분위기를 짚은 3부작 다큐멘터리 시리즈입니다."
+        }
+      ]
+    },
+    {
+      "slug": "nth-room-digital-sex-crimes",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "사이버 지옥: n번방을 무너뜨려라",
+          "platform": "넷플릭스",
+          "url": "https://www.netflix.com/title/81354041",
+          "releaseYear": 2022,
+          "note": "사건을 처음 추적한 대학생 기자단과 기자들의 취재 과정을 담은 다큐멘터리입니다."
+        }
+      ]
+    },
+    {
+      "slug": "hwaseong-serial-murders",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "살인의 추억",
+          "platform": "왓챠피디아",
+          "creator": "봉준호 감독",
+          "url": "https://pedia.watcha.com/ko/contents/mE5DYeW",
+          "releaseYear": 2003,
+          "isDramatized": true,
+          "note": "사건을 모티브로 한 극영화입니다. 인물과 수사 장면은 각색되었습니다."
+        }
+      ]
+    },
+    {
+      "slug": "itaewon-burger-king-murder",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "이태원 살인사건",
+          "platform": "왓챠피디아",
+          "creator": "홍기선 감독",
+          "url": "https://pedia.watcha.com/ko/contents/m5m6eGW",
+          "releaseYear": 2009,
+          "isDramatized": true,
+          "note": "사건을 바탕으로 한 극영화입니다. 개봉 뒤 재수사로 이어지는 계기가 되었습니다."
+        }
+      ]
+    },
+    {
+      "slug": "daegu-frog-boys",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "아이들...",
+          "platform": "네이버 검색",
+          "creator": "이규만 감독",
+          "url": "https://search.naver.com/search.naver?query=아이들...",
+          "releaseYear": 2011,
+          "isDramatized": true,
+          "note": "사건을 바탕으로 한 극영화입니다. 일부 인물과 내용은 각색되었습니다."
+        }
+      ]
+    },
+    {
+      "slug": "yorkshire-ripper-murders",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "더 리퍼: 요크셔 연쇄살인 사건",
+          "platform": "넷플릭스",
+          "url": "https://www.netflix.com/title/81006684",
+          "releaseYear": 2020,
+          "language": "en",
+          "note": "5년 넘게 이어진 수사와 피해자들의 이야기를 다룬 영국 다큐멘터리 시리즈입니다."
+        }
+      ]
+    },
+    {
+      "slug": "db-cooper-hijacking",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "D.B. 쿠퍼: 하이재킹 미스터리",
+          "platform": "넷플릭스",
+          "url": "https://www.netflix.com/title/81349547",
+          "releaseYear": 2022,
+          "language": "en",
+          "note": "범인으로 지목된 여러 인물과 추적자들을 따라가는 다큐멘터리 시리즈입니다."
+        }
+      ]
+    },
+    {
+      "slug": "chicago-tylenol-murders",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "콜드 케이스: 타이레놀 독극물 사건",
+          "platform": "넷플릭스",
+          "url": "https://www.netflix.com/title/81757969",
+          "releaseYear": 2023,
+          "language": "en",
+          "note": "제품 포장 규정을 바꾼 미제 사건을 다룬 다큐멘터리입니다."
+        }
+      ]
+    },
+    {
+      "slug": "jonbenet-ramsey",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "콜드 케이스: 누가 존베넷 램지를 죽였나",
+          "platform": "넷플릭스",
+          "url": "https://www.netflix.com/title/81705443",
+          "releaseYear": 2024,
+          "language": "en",
+          "note": "초기 수사와 언론 보도의 문제를 다룬 3부작 다큐멘터리 시리즈입니다."
+        }
+      ]
+    },
+    {
+      "slug": "golden-state-killer",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "I'll Be Gone in the Dark",
+          "platform": "HBO Max",
+          "url": "https://www.hbomax.com/series/urn:hbo:series:GXqxXYwlxdEKuqwEAAASS",
+          "releaseYear": 2020,
+          "language": "en",
+          "note": "범인을 추적한 작가 미셸 맥나마라의 책을 바탕으로 한 7부작 다큐멘터리입니다. 국내에서는 볼 수 없을 수 있습니다."
+        }
+      ]
+    },
+    {
+      "slug": "oklahoma-city-bombing",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "오클라호마시티 폭탄 테러: 미국의 테러",
+          "platform": "넷플릭스",
+          "url": "https://www.netflix.com/title/81704384",
+          "releaseYear": 2025,
+          "language": "en",
+          "note": "테러의 배경과 극단주의를 다룬 다큐멘터리입니다."
+        }
+      ]
+    },
+    {
+      "slug": "norway-utoya-attacks",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "7월 22일",
+          "platform": "넷플릭스",
+          "creator": "폴 그린그래스 감독",
+          "url": "https://www.netflix.com/title/80210932",
+          "releaseYear": 2018,
+          "language": "en",
+          "isDramatized": true,
+          "note": "생존자와 유족의 이야기를 중심으로 사건을 재구성한 극영화입니다."
+        }
+      ]
+    },
+    {
+      "slug": "zodiac-killer",
+      "related": [
+        {
+          "kind": "MOVIE",
+          "title": "조디악",
+          "platform": "네이버 검색",
+          "creator": "데이비드 핀처 감독",
+          "url": "https://search.naver.com/search.naver?query=조디악",
+          "releaseYear": 2007,
+          "language": "en",
+          "isDramatized": true,
+          "note": "사건을 추적한 기자와 형사들의 이야기를 그린 극영화입니다."
+        }
+      ]
+    },
+    {
+      "slug": "btk-serial-murders",
+      "related": [
+        {
+          "kind": "SERIES",
+          "title": "마인드헌터",
+          "platform": "넷플릭스",
+          "url": "https://www.netflix.com/title/80114855",
+          "releaseYear": 2017,
+          "language": "en",
+          "isDramatized": true,
+          "note": "FBI 행동분석 초기를 그린 드라마로, BTK 사건이 이야기 곳곳에 등장합니다."
+        }
+      ]
+    }
   ]
 }

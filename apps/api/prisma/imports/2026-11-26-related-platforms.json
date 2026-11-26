@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "natascha-kampusch-abduction",
+      "related": [
+        {
+          "kind": "BOOK",
+          "title": "3096일",
+          "platform": "교보문고",
+          "creator": "나타샤 캄푸쉬",
+          "url": "https://search.kyobobook.co.kr/search?keyword=3096%EC%9D%BC",
+          "language": "ko",
+          "note": "피해자 본인이 쓴 회고록"
+        }
+      ]
+    },
+    {
+      "slug": "tokyo-subway-sarin-attack",
+      "related": [
+        {
+          "kind": "BOOK",
+          "title": "언더그라운드",
+          "platform": "교보문고",
+          "creator": "무라카미 하루키",
+          "url": "https://search.kyobobook.co.kr/search?keyword=%EC%96%B8%EB%8D%94%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C%20%ED%95%98%EB%A3%A8%ED%82%A4",
+          "language": "ko",
+          "note": "피해자·유족 60여 명을 인터뷰한 논픽션"
+        }
+      ]
+    },
+    {
+      "slug": "sewol-ferry-disaster",
+      "related": [
+        {
+          "kind": "BOOK",
+          "title": "금요일에 돌아오렴",
+          "platform": "교보문고",
+          "creator": "416 단원고 약전 발간위원회",
+          "url": "https://search.kyobobook.co.kr/search?keyword=%EA%B8%88%EC%9A%94%EC%9D%BC%EC%97%90%20%EB%8F%8C%EC%95%84%EC%98%A4%EB%A0%B4",
+          "language": "ko",
+          "note": "단원고 희생자 261명을 기록한 책"
+        }
+      ]
+    },
+    {
+      "slug": "jack-the-ripper",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "Jack the Ripper: The Case Reopened",
+          "platform": "아마존 프라임 비디오",
+          "url": "https://www.primevideo.com/detail/0O211F6WO3WRKJPWSN50XZQERK",
+          "language": "en",
+          "note": "지역에 따라 볼 수 없을 수 있음"
+        }
+      ]
+    },
+    {
+      "slug": "madeleine-mccann-disappearance",
+      "related": [
+        {
+          "kind": "DOCUMENTARY",
+          "title": "Madeleine McCann: An ID Murder Mystery",
+          "platform": "아마존 프라임 비디오",
+          "url": "https://www.primevideo.com/-/ja/detail/0STDERMOPWFT2FVS4ZCKUXNL9C",
+          "language": "en",
+          "note": "지역에 따라 볼 수 없을 수 있음"
+        }
+      ]
+    }
+  ]
+}

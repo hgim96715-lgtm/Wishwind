@@ -70,13 +70,6 @@ function Shelves({ items }: { items: CaseListItem[] }) {
   );
 }
 
-const FILTERS = [
-  { id: "all", label: "전체", test: () => true },
-  { id: "unsolved", label: "미제", test: (i: CaseListItem) => i.status === "UNSOLVED" },
-  { id: "missing", label: "실종", test: (i: CaseListItem) => i.category === "MISSING" || i.category === "KIDNAPPING" },
-  { id: "kr", label: "한국", test: (i: CaseListItem) => i.country === "KR" },
-] as const;
-
 /** 오늘(한국 날짜) 기준으로 날마다 바뀌는 추천 파일 3건. 미제 사건을 먼저 고름 */
 function recommended(items: CaseListItem[], dayIndex: number) {
   const pool = items.filter((i) => i.status === "UNSOLVED");
@@ -94,17 +87,14 @@ function fileHref(params: URLSearchParams, slug: string) {
 export function Bookshelf({ items }: { items: CaseListItem[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [filter, setFilter] = useState<(typeof FILTERS)[number]["id"]>("all");
   const [view, setView] = useState<"shelf" | "list">("shelf");
-  const shown = useMemo(() => items.filter(FILTERS.find((f) => f.id === filter)!.test), [items, filter]);
   // 날짜는 브라우저에서 정해 prerender 때 시각 값이 굳지 않게 함 (그 전에는 추천 칸을 비움)
   const [dayIndex, setDayIndex] = useState<number | null>(null);
   useEffect(() => setDayIndex(Math.floor((Date.now() + 9 * 3_600_000) / 86_400_000)), []);
   const picks = useMemo(() => (dayIndex === null ? [] : recommended(items, dayIndex)), [items, dayIndex]);
 
   const openRandom = () => {
-    const pool = shown.length > 0 ? shown : items;
-    const pick = pool[Math.floor(Math.random() * pool.length)];
+    const pick = items[Math.floor(Math.random() * items.length)];
     if (pick) router.push(fileHref(searchParams, pick.slug), { scroll: false });
   };
 
@@ -113,7 +103,7 @@ export function Bookshelf({ items }: { items: CaseListItem[] }) {
       {picks.length > 0 && (
         <section aria-labelledby="picks-title" className="mb-8">
           <h2 id="picks-title" className="mb-3 text-sm font-semibold uppercase tracking-widest text-subtle">
-            오늘의 추천 파일
+            오늘의 사건 파일
           </h2>
           <ul className="grid gap-3 sm:grid-cols-3">
             {picks.map((item) => {
@@ -140,28 +130,15 @@ export function Bookshelf({ items }: { items: CaseListItem[] }) {
         </section>
       )}
 
-      <div className="mb-6 flex flex-wrap items-center gap-2">
-        {FILTERS.map((f) => (
-          <button
-            key={f.id}
-            type="button"
-            onClick={() => setFilter(f.id)}
-            aria-pressed={filter === f.id}
-            className={`rounded-full border px-3 py-1 text-sm transition-colors ${
-              filter === f.id ? "border-foreground bg-foreground text-surface" : "border-line bg-surface hover:border-foreground/40"
-            }`}
-          >
-            {f.label}
-          </button>
-        ))}
-        <span className="ml-auto flex items-center gap-2">
+      <div className="mb-6 flex flex-wrap items-center justify-end gap-2">
+        <span className="flex items-center gap-2">
           <button
             type="button"
             onClick={openRandom}
             className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-1 text-sm transition-colors hover:border-foreground/40"
           >
             <LuDices aria-hidden className="size-4" />
-            아무 파일 열기
+            랜덤 파일 열기
           </button>
           <button
             type="button"
@@ -175,15 +152,11 @@ export function Bookshelf({ items }: { items: CaseListItem[] }) {
         </span>
       </div>
 
-      {shown.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-line px-4 py-10 text-center text-sm text-subtle">
-          이 조건에 맞는 파일이 없습니다.
-        </p>
-      ) : view === "shelf" ? (
-        <Shelves items={shown} />
+      {view === "shelf" ? (
+        <Shelves items={items} />
       ) : (
         <ul className="divide-y divide-line rounded-xl border border-line bg-surface">
-          {shown.map((item) => {
+          {items.map((item) => {
             const stamp = caseStamp(item);
             return (
               <li key={item.id}>
