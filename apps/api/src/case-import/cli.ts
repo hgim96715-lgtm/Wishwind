@@ -29,6 +29,7 @@ import { listHeld, moderateContent } from './moderation.service.js';
 
 const USAGE = `사용법:
   pnpm cases import <파일.json> [--dry-run]   JSON 검증 후 가져오기
+  pnpm cases push <파일.json> [--dry-run]     배포 서버로 보내 비공개 초안으로 가져오기 (DB 접속 불필요)
   pnpm cases extract <slug...|--batch 파일> [--dry-run] [--fetch-only]
                                               출처 원문 대조 추출 (공개하지 않음)
   pnpm cases moderate list                    확인 대기 중인 사용자 글 보기
@@ -111,6 +112,43 @@ async function runImport(prisma: PrismaClient, file: string, dryRun: boolean) {
   return 0;
 }
 
+/** 배포 서버의 '사건 파일 올리기'로 보냄. CASE_IMPORT_URL(예: https://서버/api)과 CASE_IMPORT_TOKEN은 .env에 둠 */
+async function runPush(file: string, dryRun: boolean) {
+  const base = process.env.INIT_CWD ?? process.cwd();
+  const fullPath = path.resolve(base, file);
+  const data: unknown = JSON.parse(await readFile(fullPath, 'utf8'));
+  const parsed = importFileSchema.safeParse(data);
+  if (!parsed.success) {
+    for (const issue of parsed.error.issues) console.error(`${issue.path.join('.')}: ${issue.message}`);
+    throw new Error('파일 형식이 맞지 않아 보내지 않았습니다');
+  }
+  console.log(`검사 통과: 사건 ${parsed.data.cases.length}건`);
+  if (dryRun) return;
+
+  const url = process.env.CASE_IMPORT_URL?.replace(/\/+$/, '');
+  const token = process.env.CASE_IMPORT_TOKEN;
+  if (!url || !token) throw new Error('.env에 CASE_IMPORT_URL과 CASE_IMPORT_TOKEN이 필요합니다');
+  const name = path.basename(fullPath, '.json');
+  const res = await fetch(`${url}/case-import?name=${encodeURIComponent(name)}`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-import-token': token },
+    body: JSON.stringify(data),
+  });
+  const body = (await res.json().catch(() => null)) as {
+    created?: string[];
+    relatedAdded?: string[];
+    skipped?: { slug: string; reason: string }[];
+    error?: string;
+    message?: string;
+  } | null;
+  if (!res.ok) throw new Error(`서버 응답 ${res.status}: ${body?.message ?? '알 수 없는 오류'}`);
+  if (body?.error) throw new Error(`서버에서 거부함: ${body.error}`);
+  console.log(`만든 사건 ${body?.created?.length ?? 0}건: ${(body?.created ?? []).join(', ') || '-'}`);
+  for (const slug of body?.relatedAdded ?? []) console.log(`관련 콘텐츠만 추가: ${slug}`);
+  for (const skip of body?.skipped ?? []) console.log(`건너뜀: ${skip.slug} (${skip.reason})`);
+  console.log('초안으로 들어갔습니다. 관리실에서 확인하고 공개하세요');
+}
+
 async function main() {
   const { values, positionals } = parseArgs({
     allowPositionals: true,
@@ -126,6 +164,11 @@ async function main() {
     },
   });
   const [command, first, second] = positionals;
+
+  if (command === 'push' && first) {
+    await runPush(first, values['dry-run']);
+    return 0;
+  }
 
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) throw new Error('DATABASE_URL이 필요합니다');
