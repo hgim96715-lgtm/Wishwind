@@ -44,7 +44,7 @@ export const ROOMS: readonly Room[] = [
     description: "새 소식, 사건 변경, 사람들의 생각을 한눈에 모아 보는 곳",
     icon: LuClipboardList,
     accent: "#4f78a8",
-    badge: "새 소식 · 추적 지식",
+    badge: "새 소식 · 사건 변경",
   },
 ] as const;
 
