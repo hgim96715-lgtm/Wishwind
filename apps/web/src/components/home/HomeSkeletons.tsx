@@ -10,11 +10,7 @@ export function ReelCasesSkeleton() {
     <section aria-hidden className="mb-8">
       <h2 className="text-sm font-semibold tracking-widest text-subtle uppercase">릴스에서 본 사건</h2>
       <p className="mt-1 text-xs text-muted">인스타그램 릴스에서 다룬 사건을 바로 열어 보세요.</p>
-      <ul className="mt-3 space-y-2">
-        {[0, 1, 2].map((i) => (
-          <li key={i} className="h-[3.75rem] animate-pulse rounded-xl border border-line bg-surface" />
-        ))}
-      </ul>
+      <div className="mt-3 h-[7.6rem] animate-pulse rounded-xl border border-line bg-surface" />
     </section>
   );
 }

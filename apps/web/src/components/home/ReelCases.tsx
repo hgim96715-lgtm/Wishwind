@@ -18,17 +18,17 @@ export async function ReelCases() {
         릴스에서 본 사건
       </h2>
       <p className="mt-1 text-xs text-muted">인스타그램 릴스에서 다룬 사건을 바로 열어 보세요.</p>
-      <ul className="mt-3 space-y-2">
+      <ul className="mt-3 divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
         {items.map((c) => (
           <li key={c.slug}>
             <Link
               href={`/cases/${c.slug}`}
-              className="flex items-center gap-3 rounded-xl border border-line bg-surface px-4 py-3 transition-colors hover:border-foreground/30"
+              className="flex items-center gap-2 px-4 py-2.5 transition-colors hover:bg-foreground/5"
             >
-              <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-semibold">{c.title}</span>
-                <span className="block truncate text-xs text-muted">{CATEGORY_LABEL[c.category]}</span>
+              <span className="shrink-0 rounded-full border border-line px-2 py-0.5 text-[11px] text-muted">
+                {CATEGORY_LABEL[c.category]}
               </span>
+              <span className="min-w-0 flex-1 truncate text-sm font-medium">{c.title}</span>
               <span aria-hidden className="text-sm text-brand-fg">→</span>
             </Link>
           </li>
