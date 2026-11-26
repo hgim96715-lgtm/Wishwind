@@ -41,10 +41,10 @@ export const ROOMS: readonly Room[] = [
     href: "/briefing",
     title: "브리핑룸",
     subtitle: "Briefing Room",
-    description: "새 소식, 사건 변경, 사람들의 생각을 한눈에 모아 보는 곳",
+    description: "오늘의 새 소식과 새로 들어온 사건, 범죄·재범 통계를 한곳에서 보는 곳",
     icon: LuClipboardList,
     accent: "#4f78a8",
-    badge: "새 소식 · 공지",
+    badge: "새 소식 · 통계",
   },
 ] as const;
 

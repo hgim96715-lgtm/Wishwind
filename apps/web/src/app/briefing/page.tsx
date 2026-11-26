@@ -9,7 +9,7 @@ import { RoomHeader } from "@/components/room/RoomHeader";
 export const metadata: Metadata = {
   alternates: { canonical: "/briefing" },
   title: "브리핑룸",
-  description: "새 소식, 사건 변경, 사람들의 생각, 공지사항을 한곳에서 봅니다.",
+  description: "오늘의 새 소식, 새로 등록된 실종자, 최근 사건 파일과 범죄·재범 공식 통계를 한곳에서 봅니다.",
 };
 
 export default function BriefingPage() {
