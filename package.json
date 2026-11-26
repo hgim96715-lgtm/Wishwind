@@ -13,7 +13,6 @@
     "build": "pnpm --filter api build && pnpm --filter web build",
     "lint": "pnpm --parallel --filter web --filter api lint",
     "cases": "pnpm --filter api cases",
-    "stats:police": "pnpm --filter api stats:police",
     "missing": "pnpm --filter api missing",
     "db:up": "docker compose up -d --wait",
     "db:down": "docker compose down",

@@ -19,6 +19,8 @@ export const envSchema = z
 
     MISSING_SYNC_ENABLED: z.stringbool().default(true),
     MISSING_SYNC_INTERVAL_HOURS: z.coerce.number().min(1).max(168).default(6),
+    /** 공공데이터포털 인증키. 경찰청 5대 범죄 발생건수(브리핑룸 통계)에 씀. 없으면 그 통계만 빠짐 */
+    DATA_GO_KR_KEY: optional(z.string().min(1)),
     SAFE182_ESNTL_ID: optional(z.string().min(1)),
     SAFE182_AUTH_KEY: optional(z.string().min(1)),
 

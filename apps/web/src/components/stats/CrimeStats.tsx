@@ -8,12 +8,12 @@ import {
   CRIME_NOTES,
   CRIME_RATE,
   CRIME_SOURCE,
-  POLICE_CHECKED_ON,
-  POLICE_COUNTS,
   POLICE_SOURCE,
   RECIDIVISM,
   RECIDIVISM_SOURCE,
+  policeSeries,
 } from "@/lib/stats/crime";
+import type { PoliceCounts } from "@/lib/stats/api";
 
 type Tab = "trend" | "recidivism" | "ours";
 
@@ -38,13 +38,14 @@ function change(points: readonly (readonly [number, number])[]) {
 const pctText = (pct: number) => `${pct > 0 ? "+" : pct < 0 ? "−" : ""}${Math.abs(pct).toFixed(0)}%`;
 
 /** 브리핑룸 '숫자로 보기': 공식 통계로 범죄가 늘었는지 줄었는지, 재범은 얼마나 되는지 */
-export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
+export function CrimeStats({ ourCases, police }: { ourCases?: ReactNode; /** 경찰청 발생 건수. API에서 못 받으면 null이고 그 기준 전환 버튼은 숨김 */ police?: PoliceCounts | null }) {
+  const policeData = police ? policeSeries(police.rows) : [];
   const [tab, setTab] = useState<Tab>("trend");
   const [basis, setBasis] = useState<"rate" | "count">("rate");
   const [crimeId, setCrimeId] = useState<string>("all");
   const [recId, setRecId] = useState<string>("release");
 
-  const dataset = basis === "rate" ? CRIME_RATE : POLICE_COUNTS;
+  const dataset = basis === "rate" || policeData.length === 0 ? CRIME_RATE : policeData;
   const crime = dataset.find((c) => c.id === crimeId) ?? dataset[0];
   const crimeChange = change(crime.points);
   const rec = RECIDIVISM.find((r) => r.id === recId) ?? RECIDIVISM[0];
@@ -76,11 +77,12 @@ export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
       <div className="mt-4 rounded-2xl border border-line bg-surface p-4 sm:p-6">
         {tab === "trend" ? (
           <>
+            {policeData.length > 0 && (
             <div className="flex flex-wrap gap-2 border-b border-line pb-4">
               {(
                 [
                   ["rate", "인구 10만 명당 (2013~2024)"],
-                  ["count", "경찰청 발생 건수 (2018~2025)"],
+                  ["count", `경찰청 발생 건수 (${policeData[0].points[0][0]}~${policeData[0].points[policeData[0].points.length - 1][0]})`],
                 ] as const
               ).map(([id, text]) => (
                 <button key={id} type="button" aria-pressed={basis === id} onClick={() => { setBasis(id); setCrimeId(id === "rate" ? "all" : "murder"); }} className={`rounded-md border px-3 py-1.5 text-xs transition-colors ${basis === id ? "border-brand-fg font-semibold text-brand-fg" : "border-line text-muted hover:border-foreground/40"}`}>
@@ -88,6 +90,7 @@ export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
                 </button>
               ))}
             </div>
+            )}
             <div className="mt-4 flex flex-wrap gap-2">
               {dataset.map((c) => (
                 <button key={c.id} type="button" aria-pressed={c.id === crimeId} onClick={() => setCrimeId(c.id)} className={chip(c.id === crimeId)}>
@@ -114,7 +117,7 @@ export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
                   {dataset[0].points[0][0]}년<Arrow />{dataset[0].points[dataset[0].points.length - 1][0]}년, 한눈에
                 </caption>
                 <tbody>
-                  {(basis === "rate" ? CRIME_RATE.slice(1) : POLICE_COUNTS).map((c) => {
+                  {(dataset === CRIME_RATE ? CRIME_RATE.slice(1) : policeData).map((c) => {
                     const ch = change(c.points);
                     return (
                       <tr key={c.id} className="border-t border-line">
@@ -178,7 +181,7 @@ export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
         )}
 
         <p className="mt-4 border-t border-line pt-3 text-xs leading-5 text-subtle">
-          {tab === "ours" ? "출처: Wishwind 사건 기록" : `출처: ${tab === "trend" ? (basis === "rate" ? CRIME_SOURCE : POLICE_SOURCE) : RECIDIVISM_SOURCE}. ${basis === "count" && tab === "trend" ? POLICE_CHECKED_ON : CHECKED_ON} 확인.`}
+          {tab === "ours" ? "출처: Wishwind 사건 기록" : `출처: ${tab === "trend" ? (basis === "rate" ? CRIME_SOURCE : POLICE_SOURCE) : RECIDIVISM_SOURCE}. ${basis === "count" && tab === "trend" && police ? police.fetchedAt : CHECKED_ON} 확인.`}
         </p>
       </div>
     </section>

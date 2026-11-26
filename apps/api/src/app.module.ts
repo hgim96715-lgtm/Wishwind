@@ -14,6 +14,7 @@ import { InquiriesModule } from './inquiries/inquiries.module.js';
 import { MissingModule } from './missing/missing.module.js';
 import { NewsModule } from './news/news.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
+import { StatsModule } from './stats/stats.module.js';
 import { SentenceVotesModule } from './sentence-votes/sentence-votes.module.js';
 
 @Module({
@@ -31,6 +32,7 @@ import { SentenceVotesModule } from './sentence-votes/sentence-votes.module.js';
     NewsModule,
     CaseImportModule,
     AccountModule,
+    StatsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

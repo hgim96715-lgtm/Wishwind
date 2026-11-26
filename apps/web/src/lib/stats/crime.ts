@@ -3,8 +3,6 @@
  * 해마다 새 값이 나오면 이 파일의 배열 끝에 한 해씩 더하고 CHECKED_ON을 고침.
  * 각 배열은 [연도, 값] 쌍이고 값이 없는 해(-)는 아예 넣지 않음.
  */
-import policeData from "./police-counts.json";
-
 export type Point = readonly [year: number, value: number];
 
 export const CHECKED_ON = "2026-11-26";
@@ -29,7 +27,7 @@ export const CRIME_NOTES: Record<string, string> = {
 
 export const CRIME_SOURCE = "검찰청 「범죄분석」, 국가데이터처 「장래인구추계(2022년 기준)」 · 지표누리 '형법범죄율'";
 
-/** 경찰청 5대 범죄 발생건수 (`pnpm stats:police`가 공공데이터포털 OpenAPI에서 받아 저장). 인구로 나누지 않은 건수라 인구 변화는 반영되지 않음 */
+/** 경찰청 5대 범죄 발생건수(API에서 받은 값)를 차트용 줄로 바꿈. 인구로 나누지 않은 건수라 인구 변화는 반영되지 않음 */
 const POLICE_ORDER = [
   ["murder", "살인"],
   ["robbery", "강도"],
@@ -38,16 +36,16 @@ const POLICE_ORDER = [
   ["violence", "폭력"],
 ] as const;
 
-export const POLICE_COUNTS = POLICE_ORDER.flatMap(([id, label]) => {
-  const row = policeData.rows.find((r) => r.label === label);
-  if (!row) return [];
-  const points: Point[] = Object.entries(row.values)
-    .map(([year, value]) => [Number(year), value] as const)
-    .sort((a, b) => a[0] - b[0]);
-  return [{ id, label, points }];
-});
-
-export const POLICE_CHECKED_ON = policeData.fetchedAt;
+export function policeSeries(rows: readonly { label: string; values: Record<string, number> }[]) {
+  return POLICE_ORDER.flatMap(([id, label]) => {
+    const row = rows.find((r) => r.label === label);
+    if (!row) return [];
+    const points: Point[] = Object.entries(row.values)
+      .map(([year, value]) => [Number(year), value] as const)
+      .sort((a, b) => a[0] - b[0]);
+    return [{ id, label, points }];
+  });
+}
 
 export const POLICE_SOURCE = "경찰청 「5대 범죄 발생건수」(공공데이터포털)";
 

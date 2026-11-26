@@ -6,6 +6,7 @@ import type { BoardItem } from "@/components/briefing/DepartureBoard";
 import { HeadlineBoard } from "@/components/briefing/HeadlineBoard";
 import { CrimeStats } from "@/components/stats/CrimeStats";
 import { ParticipationBanner } from "@/components/briefing/ParticipationBanner";
+import { getPoliceCounts } from "@/lib/stats/api";
 import { getBriefing, type Briefing, type BriefingKind, type BriefingPost } from "@/lib/briefing/api";
 import { ApiUnavailableError } from "@/lib/cases/api";
 import { CATEGORY_COLOR, CATEGORY_LABEL, COUNTRY_LABEL, caseRoomCountry, caseStamp, stampOfKey } from "@/lib/cases/labels";
@@ -85,6 +86,8 @@ export async function BriefingFeed() {
     console.error(error instanceof ApiUnavailableError ? error.message : error);
     return <p className="mt-10 text-sm text-muted">브리핑을 불러오지 못했습니다. 잠시 뒤 다시 와 주세요.</p>;
   }
+  // 경찰청 통계는 곁들이는 정보라 못 받아도 브리핑룸은 그대로 보여 줌 (그 기준 전환 버튼만 빠짐)
+  const police = await getPoliceCounts().catch(() => null);
   return (
     <div className="mt-10 space-y-10">
       {data.notices.length > 0 && <Notices notices={data.notices} />}
@@ -132,7 +135,7 @@ export async function BriefingFeed() {
         </aside>
       </div>
       <RecentCases cases={data.recentCases} />
-      <CrimeStats ourCases={<CaseStats stats={data.stats} embedded />} />
+      <CrimeStats ourCases={<CaseStats stats={data.stats} embedded />} police={police} />
     </div>
   );
 }
