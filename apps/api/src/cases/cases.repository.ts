@@ -137,7 +137,7 @@ export class CasesRepository {
   }
 
   /** 최근 인스타 릴스에서 다룬 공개 사건 (관리실 '인스타 성과'에 사건 주소를 적어 둔 것). 최근 올린 순 */
-  async findReelCases(preview: boolean, take = 3) {
+  async findReelCases(preview: boolean, take = 6) {
     const posts = await this.prisma.instagramPost.findMany({
       where: { kind: 'REEL', caseSlug: { not: null } },
       orderBy: { postedOn: 'desc' },
