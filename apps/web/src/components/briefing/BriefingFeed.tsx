@@ -141,7 +141,6 @@ export async function BriefingFeed() {
 
 const REGION_FLAG = { KR: "🇰🇷", US: "🇺🇸", GB: "🇬🇧", JP: "🇯🇵", CN: "🇨🇳", OTHER: "🌐" } as const;
 
-/** 기사 본문은 옮기지 않고 제목·언론사·원문 링크만 보여 줌 */
 /** 헤드라인판 아래 한 줄. 펼치면 새 소식 전체 목록 (기사 본문은 옮기지 않고 제목·언론사·원문 링크만) */
 function NewsList({ news }: { news: Briefing["news"] }) {
   return (

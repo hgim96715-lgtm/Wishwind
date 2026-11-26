@@ -35,7 +35,6 @@ export class FbiMissingClient {
 
   /**
    * api.fbi.gov 앞단의 봇 차단이 Node 내장 fetch 요청은 403으로 막고 curl 요청은 통과시킴
-   * (2026-11-19 사용자 Mac에서 확인: curl 200 / node 403).
    * FBI 공식 안내도 프로그램 호출을 예시로 들고 있어서, 헤더를 위장하지 않고 curl을 그대로 실행함.
    * 운영 서버에도 curl이 설치돼 있어야 함
    */
