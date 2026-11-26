@@ -12,3 +12,6 @@ export type AnswerInput = z.output<typeof answerSchema>;
 export type QuestionInput = z.output<typeof questionSchema>;
 export type ReportInput = z.output<typeof reportSchema>;
 export type ReportTarget = ReportInput['target'];
+
+export const pollSchema = z.object({ choice: z.number().int().min(0).max(9) });
+export type PollInput = z.infer<typeof pollSchema>;

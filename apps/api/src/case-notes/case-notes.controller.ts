@@ -4,9 +4,11 @@ import { ZodPipe } from '../common/pipes/zod-validation.pipe.js';
 import { CaseNotesService } from './case-notes.service.js';
 import {
   answerSchema,
+  pollSchema,
   questionSchema,
   reportSchema,
   type AnswerInput,
+  type PollInput,
   type QuestionInput,
   type ReportInput,
 } from './dto/case-notes.dto.js';
@@ -19,6 +21,21 @@ export class CaseNotesController {
   @Get()
   get(@Param('slug') slug: string, @OptionalVoterId() voterId?: string) {
     return this.notes.getNotes(slug, voterId);
+  }
+
+  @Get('polls')
+  polls(@Param('slug') slug: string, @OptionalVoterId() voterId?: string) {
+    return this.notes.getPolls(slug, voterId);
+  }
+
+  @Put('polls/:questionId')
+  castPoll(
+    @Param('slug') slug: string,
+    @Param('questionId', ParseUUIDPipe) questionId: string,
+    @VoterId() voterId: string,
+    @Body(new ZodPipe(pollSchema)) input: PollInput,
+  ) {
+    return this.notes.castPoll(slug, questionId, voterId, input.choice);
   }
 
   @Put('answers/:questionId')

@@ -10,6 +10,11 @@ import type {
   UserContentStatus,
 } from "@/lib/cases/types";
 
+interface PollsState {
+  choices: string[];
+  polls: { questionId: string; myChoice: number | null; votes: number[] | null }[];
+}
+
 const ANSWER_MAX = 500;
 const QUESTION_MAX = 200;
 
@@ -32,6 +37,61 @@ async function send<T>(path: string, method: "PUT" | "POST", body?: unknown) {
     );
   }
   return data;
+}
+
+/** 로그인 없이 고르는 객관식 의견. 고르기 전에는 득표를 숨기고, 고르면 비율을 보여 줌 */
+function PollBox({
+  choices,
+  poll,
+  onVote,
+}: {
+  choices: string[];
+  poll: PollsState["polls"][number];
+  onVote: (choice: number) => Promise<void>;
+}) {
+  const [pending, setPending] = useState(false);
+  const total = poll.votes?.reduce((n, v) => n + v, 0) ?? 0;
+  return (
+    <div className="mt-3">
+      <p className="text-xs font-semibold text-muted">가장 가까운 생각을 하나 골라 주세요</p>
+      <ul className="mt-2 space-y-1.5">
+        {choices.map((label, i) => {
+          const count = poll.votes?.[i] ?? 0;
+          const percent = total > 0 ? Math.round((count / total) * 100) : 0;
+          const mine = poll.myChoice === i;
+          return (
+            <li key={label}>
+              <button
+                type="button"
+                disabled={poll.myChoice !== null || pending}
+                aria-pressed={mine}
+                onClick={() => {
+                  setPending(true);
+                  onVote(i).finally(() => setPending(false));
+                }}
+                className={`relative flex min-h-10 w-full items-center justify-between gap-3 overflow-hidden rounded-lg border px-3 text-left text-sm transition-colors enabled:hover:border-[#c46a4b]/60 disabled:cursor-default ${
+                  mine ? "border-[#c46a4b] font-semibold" : "border-line"
+                } bg-surface`}
+              >
+                {poll.votes && (
+                  <span
+                    aria-hidden
+                    className="absolute inset-y-0 left-0 bg-[#c46a4b]/15"
+                    style={{ width: `${percent}%` }}
+                  />
+                )}
+                <span className="relative">{label}</span>
+                {poll.votes && <span className="relative text-xs tabular-nums text-muted">{percent}%</span>}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      {poll.votes && (
+        <p className="mt-1.5 text-[11px] text-subtle">{total.toLocaleString("ko-KR")}명이 참여했습니다.</p>
+      )}
+    </div>
+  );
 }
 
 function ReportButton({ onReport }: { onReport: () => Promise<void> }) {
@@ -195,6 +255,7 @@ export function CaseNotes({
 }) {
   const [notes, setNotes] = useState<CaseNotesState | null>(null);
   const [failed, setFailed] = useState(false);
+  const [polls, setPolls] = useState<PollsState | null>(null);
   const base = `/api/case-notes/${encodeURIComponent(slug)}`;
 
   useEffect(() => {
@@ -209,8 +270,22 @@ export function CaseNotes({
       .catch(() => {
         if (!controller.signal.aborted) setFailed(true);
       });
+    if (!solved) {
+      fetch(`${base}/polls`, { signal: controller.signal, cache: "no-store" })
+        .then((res) => (res.ok ? (res.json() as Promise<PollsState>) : null))
+        .then((data) => data && setPolls(data))
+        .catch(() => null);
+    }
     return () => controller.abort();
-  }, [base, readOnly]);
+  }, [base, readOnly, solved]);
+
+  const votePoll = async (questionId: string, choice: number) => {
+    try {
+      setPolls(await send<PollsState>(`${base}/polls/${questionId}`, "PUT", { choice }));
+    } catch {
+      // 이미 투표했거나 차단된 경우 조용히 무시
+    }
+  };
 
   const save = async (path: string, method: "PUT" | "POST", body: string) => {
     const saved = await send<CaseNoteSaveResult>(`${base}${path}`, method, { body });
@@ -278,6 +353,13 @@ export function CaseNotes({
                   {q.answer}
                 </p>
               )}
+              {!readOnly && polls?.polls.find((p) => p.questionId === q.id) && (
+                <PollBox
+                  choices={polls.choices}
+                  poll={polls.polls.find((p) => p.questionId === q.id)!}
+                  onVote={(choice) => votePoll(q.id, choice)}
+                />
+              )}
               {note && (
                 <div className="mt-3 border-t border-[#c46a4b]/25 pt-1">
                   {note.mine && STATUS_NOTICE[note.mine.status] && (
@@ -286,8 +368,8 @@ export function CaseNotes({
                   {note.mine?.status !== "HIDDEN" && (
                     <NoteForm
                       key={note.mine?.body ?? "new"}
-                      label={note.mine ? "내 수사 노트" : "수사 노트 남기기"}
-                      guide="누군가를 탓하기보다, 같은 일을 막으려면 무엇이 필요할지 적어 주세요."
+                      label={note.mine ? "내 수사 노트" : "내 생각 남기기 (선택)"}
+                      guide="한 줄만 남겨도 괜찮습니다 (선택). 누군가를 탓하기보다, 같은 일을 막으려면 무엇이 필요할지 적어 주세요."
                       placeholder="이 질문에 대한 내 생각을 적어 주세요. 특정인을 범인으로 단정하는 글은 남길 수 없습니다."
                       submitLabel={note.mine ? "노트 수정하기" : "수사 노트 남기기"}
                       max={ANSWER_MAX}

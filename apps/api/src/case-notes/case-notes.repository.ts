@@ -256,6 +256,29 @@ export class CaseNotesRepository {
       }
     });
   }
+
+  // ── 객관식 의견 투표 ─────────────────
+
+  async pollCounts(questionIds: string[]) {
+    const rows = await this.prisma.questionVote.groupBy({
+      by: ['questionId', 'choice'],
+      where: { questionId: { in: questionIds } },
+      _count: true,
+    });
+    return rows.map((r) => ({ questionId: r.questionId, choice: r.choice, count: r._count }));
+  }
+
+  findMyPollVotes(voterId: string, questionIds: string[]) {
+    return this.prisma.questionVote.findMany({
+      where: { voterId, questionId: { in: questionIds } },
+      select: { questionId: true, choice: true },
+    });
+  }
+
+  /** 이미 투표했으면 무시 (표를 바꾸지 못하게 해 결과를 흔들지 않음) */
+  castPollVote(questionId: string, voterId: string, choice: number) {
+    return this.prisma.questionVote.createMany({ data: [{ questionId, voterId, choice }], skipDuplicates: true });
+  }
 }
 
 export type NoteCase = NonNullable<

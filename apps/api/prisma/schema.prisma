@@ -425,6 +425,7 @@ model UnsolvedQuestion {
 
   case        Case         @relation(fields: [caseId], references: [id], onDelete: Cascade)
   userAnswers UserAnswer[]
+  votes       QuestionVote[]
 
   @@index([caseId, sortOrder])
   @@map("unsolved_questions")
@@ -861,4 +862,20 @@ model InstagramPost {
 
   @@index([postedOn(sort: Desc)])
   @@map("instagram_posts")
+}
+
+/** 질문에 대한 객관식 의견 투표. 글이 아니라 번호만 저장하므로 검사 없이 받고, 브라우저(voter)당 1표 */
+model QuestionVote {
+  id         String @id @default(uuid(7)) @db.Uuid
+  questionId String @map("question_id") @db.Uuid
+  voterId    String @map("voter_id") @db.Uuid
+  choice     Int    @db.SmallInt
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  question UnsolvedQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, voterId])
+  @@index([questionId, choice])
+  @@map("question_votes")
 }
