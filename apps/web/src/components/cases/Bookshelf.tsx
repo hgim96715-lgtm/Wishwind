@@ -71,11 +71,15 @@ function Shelves({ items }: { items: CaseListItem[] }) {
 }
 
 /** 오늘(한국 날짜) 기준으로 날마다 바뀌는 추천 파일 3건. 미제 사건을 먼저 고름 */
-function recommended(items: CaseListItem[], dayIndex: number) {
-  const pool = items.filter((i) => i.status === "UNSOLVED");
-  const source = pool.length >= 3 ? pool : items;
-  if (source.length <= 3) return source;
-  return [0, 1, 2].map((k) => source[(dayIndex * 3 + k) % source.length]);
+function recommended(items: CaseListItem[], dayIndex: number, pinnedSlugs: string[]) {
+  // 관리실에서 고정한 사건을 먼저, 남는 칸은 날짜로 돌아가며 채움
+  const pinned = pinnedSlugs.map((slug) => items.find((i) => i.slug === slug)).filter((i): i is CaseListItem => !!i).slice(0, 3);
+  const rest = items.filter((i) => !pinned.includes(i));
+  const pool = rest.filter((i) => i.status === "UNSOLVED");
+  const source = pool.length >= 3 - pinned.length ? pool : rest;
+  const need = 3 - pinned.length;
+  const filled = source.length <= need ? source : Array.from({ length: need }, (_, k) => source[(dayIndex * 3 + k) % source.length]);
+  return [...pinned, ...filled];
 }
 
 function fileHref(params: URLSearchParams, slug: string) {
@@ -84,14 +88,14 @@ function fileHref(params: URLSearchParams, slug: string) {
   return `/cases?${next.toString()}`;
 }
 
-export function Bookshelf({ items }: { items: CaseListItem[] }) {
+export function Bookshelf({ items, pinnedSlugs = [] }: { items: CaseListItem[]; pinnedSlugs?: string[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [view, setView] = useState<"shelf" | "list">("shelf");
   // 날짜는 브라우저에서 정해 prerender 때 시각 값이 굳지 않게 함 (그 전에는 추천 칸을 비움)
   const [dayIndex, setDayIndex] = useState<number | null>(null);
   useEffect(() => setDayIndex(Math.floor((Date.now() + 9 * 3_600_000) / 86_400_000)), []);
-  const picks = useMemo(() => (dayIndex === null ? [] : recommended(items, dayIndex)), [items, dayIndex]);
+  const picks = useMemo(() => (dayIndex === null ? [] : recommended(items, dayIndex, pinnedSlugs)), [items, dayIndex, pinnedSlugs]);
 
   const openRandom = () => {
     const pick = items[Math.floor(Math.random() * items.length)];
@@ -101,7 +105,7 @@ export function Bookshelf({ items }: { items: CaseListItem[] }) {
   return (
     <div>
       {picks.length > 0 && (
-        <section aria-labelledby="picks-title" className="mb-8">
+        <section aria-labelledby="picks-title">
           <h2 id="picks-title" className="mb-3 text-sm font-semibold uppercase tracking-widest text-subtle">
             오늘의 사건 파일
           </h2>
@@ -130,7 +134,8 @@ export function Bookshelf({ items }: { items: CaseListItem[] }) {
         </section>
       )}
 
-      <div className="mb-6 flex flex-wrap items-center justify-end gap-2">
+      <div className="mt-10 mb-6 flex flex-wrap items-center justify-between gap-2 border-t border-line pt-5">
+        <p className="text-sm font-semibold text-subtle">전체 사건 파일 {items.length}건</p>
         <span className="flex items-center gap-2">
           <button
             type="button"

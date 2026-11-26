@@ -1,0 +1,1 @@
+ALTER TABLE "cases" ADD COLUMN "is_file_pick" BOOLEAN NOT NULL DEFAULT false;

@@ -15,6 +15,12 @@ export class CasesService {
     return toCasePage(rows, query.take, preview);
   }
 
+  async filePicks() {
+    const preview = draftsVisible();
+    const rows = await this.repo.findFilePicks(preview);
+    return { items: rows.map((row) => toCaseListItem(row, preview)) };
+  }
+
   async homeFeatured() {
     const preview = draftsVisible();
     const rows = await this.repo.findHomeFeatured(preview);

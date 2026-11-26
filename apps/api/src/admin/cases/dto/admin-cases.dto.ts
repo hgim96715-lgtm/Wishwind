@@ -124,3 +124,6 @@ export const changeAddSchema = z
   })
   .refine((v) => v.kind !== ChangeKind.DAY || !!v.observedOn, { message: '기념일은 매년 돌아오는 날(MM-DD)을 적어 주세요', path: ['observedOn'] });
 export type ChangeAdd = z.infer<typeof changeAddSchema>;
+
+export const filePickSchema = z.object({ picked: z.boolean() });
+export type FilePickInput = z.infer<typeof filePickSchema>;

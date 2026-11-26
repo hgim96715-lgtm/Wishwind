@@ -170,6 +170,8 @@ model Case {
   isPublished    Boolean          @default(false) @map("is_published")
   /** 홈 '지금 살펴볼 사건'에 먼저 보여 줄 사건 (관리실에서 지정) */
   isHomeFeatured Boolean          @default(false) @map("is_home_featured")
+  /** 사건방 '오늘의 사건 파일'에 고정할 사건 (관리실에서 지정, 최대 3건) */
+  isFilePick     Boolean          @default(false) @map("is_file_pick")
   reviewStatus   CaseReviewStatus @default(DRAFT) @map("review_status")
   reviewNote     String?          @map("review_note") @db.Text
   lastVerifiedAt DateTime?        @map("last_verified_at") @db.Timestamptz(3)

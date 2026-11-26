@@ -55,6 +55,17 @@ export class AdminCasesService {
     return this.detail(id);
   }
 
+  async setFilePick(id: string, picked: boolean) {
+    const found = await this.findOrThrow(id);
+    if (picked) {
+      if (!found.isPublished) throw new BadRequestException('공개된 사건만 고정할 수 있습니다.');
+      const count = await this.repo.prisma.case.count({ where: { isFilePick: true, id: { not: id } } });
+      if (count >= 3) throw new BadRequestException('오늘의 사건 파일은 3건까지 고정할 수 있습니다. 다른 사건의 고정을 먼저 풀어 주세요.');
+    }
+    await this.repo.prisma.case.update({ where: { id }, data: { isFilePick: picked } });
+    return this.detail(id);
+  }
+
   /**
    * 사건과 딸린 타임라인·출처·가해자·질문 등을 함께 지움 (DB onDelete: Cascade).
    * 연결된 기사·브리핑 글·실종자 기록은 남고 사건 연결만 끊김 (SetNull).

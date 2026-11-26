@@ -18,6 +18,11 @@ export class CasesController {
     return this.cases.changes();
   }
 
+  @Get('picks')
+  picks() {
+    return this.cases.filePicks();
+  }
+
   @Get('featured')
   featured() {
     return this.cases.homeFeatured();

@@ -116,6 +116,16 @@ export class CasesRepository {
     });
   }
 
+  /** 관리실에서 사건방 '오늘의 사건 파일'로 고정한 사건 */
+  findFilePicks(preview: boolean) {
+    return this.prisma.case.findMany({
+      where: { ...visibilityWhere(preview), isFilePick: true },
+      select: caseListSelect,
+      orderBy: { updatedAt: 'desc' },
+      take: 3,
+    });
+  }
+
   /** 관리실에서 홈 대표로 지정한 사건 */
   findHomeFeatured(preview: boolean) {
     return this.prisma.case.findMany({

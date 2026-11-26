@@ -46,6 +46,7 @@ export interface AdminCaseList {
 
 export interface AdminCaseDetail {
   id: string;
+  isFilePick?: boolean;
   slug: string;
   title: string;
   summary: string;

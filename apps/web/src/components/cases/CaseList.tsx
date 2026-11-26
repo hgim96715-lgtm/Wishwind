@@ -1,4 +1,4 @@
-import { ApiUnavailableError, InvalidQueryError, getCases } from "@/lib/cases/api";
+import { ApiUnavailableError, InvalidQueryError, getCases, getFilePicks } from "@/lib/cases/api";
 import { hasActiveFilters, type CaseFilters } from "@/lib/cases/filters";
 import { Bookshelf } from "./Bookshelf";
 import { Notice } from "./Notice";
@@ -9,8 +9,10 @@ const IS_DEV = process.env.NODE_ENV === "development";
 /** 요청마다 최신 목록을 가져오는 서버 컴포넌트. 페이지에서 Suspense로 감싸서 씀 */
 export async function CaseList({ filters }: { filters: CaseFilters }) {
   let data;
+  let pinned: string[] = [];
   try {
     data = await getCases(filters);
+    pinned = (await getFilePicks().catch(() => [])).map((i) => i.slug);
   } catch (error) {
     if (error instanceof ApiUnavailableError) {
       return (
@@ -58,7 +60,7 @@ export async function CaseList({ filters }: { filters: CaseFilters }) {
           찾은 사건 파일 <span className="font-semibold text-foreground">{data.items.length}</span>건
         </p>
       )}
-      <Bookshelf items={data.items} />
+      <Bookshelf items={data.items} pinnedSlugs={pinned} />
     </>
   );
 }

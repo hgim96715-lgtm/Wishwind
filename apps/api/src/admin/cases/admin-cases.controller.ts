@@ -4,6 +4,7 @@ import { AdminGuard } from '../auth/admin.guard.js';
 import {
   caseEditSchema,
   caseListSchema,
+  filePickSchema,
   publishSchema,
   changeAddSchema,
   relatedAddSchema,
@@ -13,6 +14,7 @@ import {
   type RelatedAdd,
   type CaseEdit,
   type CaseListQuery,
+  type FilePickInput,
   type PublishInput,
   type ReviewInput,
   type SourceAdd,
@@ -50,6 +52,13 @@ export class AdminCasesController {
   @HttpCode(200)
   publish(@Param('id', ParseUUIDPipe) id: string, @Body(new ZodPipe(publishSchema)) body: PublishInput) {
     return this.cases.publish(id, body.published);
+  }
+
+  /** 사건방 '오늘의 사건 파일'에 고정·해제 (공개 사건만, 최대 3건) */
+  @Post(':id/file-pick')
+  @HttpCode(200)
+  filePick(@Param('id', ParseUUIDPipe) id: string, @Body(new ZodPipe(filePickSchema)) body: FilePickInput) {
+    return this.cases.setFilePick(id, body.picked);
   }
 
   /** 사건방에 넣지 않을 초안을 지움. 공개 중인 사건은 먼저 비공개로 바꿔야 함 */
