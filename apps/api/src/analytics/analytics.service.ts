@@ -17,6 +17,30 @@ const DAY_MS = 24 * 60 * 60 * 1000;
  * 쿠키 없는 방문자 집계. IP·브라우저 정보를 그대로 저장하지 않고,
  * "날마다 바뀌는 비밀값 + IP + 브라우저"의 해시만 저장함 → 같은 날 안에서만 같은 사람으로 셈, 날이 바뀌면 추적 불가
  */
+/** 같은 이름으로 보이는 들어온 곳(예: l.instagram.com과 utm 값)을 합침 */
+function mergeByLabel(rows: { host: string | null; visitors: number; single: number; homeOnly: number }[]) {
+  const map = new Map<string, { host: string; visitors: number; single: number; homeOnly: number }>();
+  for (const r of rows) {
+    const host = referrerLabel(r.host || null);
+    const cur = map.get(host) ?? { host, visitors: 0, single: 0, homeOnly: 0 };
+    cur.visitors += r.visitors;
+    cur.single += r.single;
+    cur.homeOnly += r.homeOnly;
+    map.set(host, cur);
+  }
+  return [...map.values()].sort((a, b) => b.visitors - a.visitors);
+}
+
+function mergeReferrers<T extends { host: string; views: number }>(rows: T[]) {
+  const map = new Map<string, T>();
+  for (const r of rows) {
+    const host = referrerLabel(r.host);
+    const cur = map.get(host);
+    map.set(host, cur ? { ...cur, views: cur.views + r.views } : { ...r, host });
+  }
+  return [...map.values()].sort((a, b) => b.views - a.views);
+}
+
 @Injectable()
 export class AnalyticsService {
   constructor(
@@ -85,12 +109,7 @@ export class AnalyticsService {
       landing,
       hourly,
       singlePageVisitors,
-      bounceBySource: bounceRows.map((r) => ({
-        host: referrerLabel(r.host || null),
-        visitors: r.visitors,
-        single: r.single,
-        homeOnly: r.homeOnly,
-      })),
+      bounceBySource: mergeByLabel(bounceRows),
       tips: growthTips({
         days,
         visitorDays,
@@ -107,7 +126,7 @@ export class AnalyticsService {
         visitorDays,
       },
       daily: fillDays(daily, days),
-      referrers: referrers.map((r) => ({ ...r, host: referrerLabel(r.host) })),
+      referrers: mergeReferrers(referrers),
       rooms,
       participation,
       topAnsweredQuestions,

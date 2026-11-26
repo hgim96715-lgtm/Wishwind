@@ -92,13 +92,37 @@ const APP_LABEL: Record<string, string> = {
   daum: '다음 앱 안 브라우저',
 };
 
+/** 링크 주소에 붙인 ?utm_source=값 → 화면 이름 (모르는 값은 그대로 보여 줌) */
+const UTM_LABEL: Record<string, string> = {
+  ig: '인스타그램 (프로필 링크)',
+  instagram: '인스타그램 (프로필 링크)',
+  fb: '페이스북 (링크)',
+  facebook: '페이스북 (링크)',
+  threads: '스레드 (링크)',
+  kakao: '카카오톡 (링크)',
+  youtube: '유튜브 (링크)',
+};
+
+/** 자주 나오는 이전 사이트 주소 → 화면 이름 */
+const HOST_LABEL: [RegExp, string][] = [
+  [/(^|\.)instagram\.com$/i, '인스타그램 (링크)'],
+  [/(^|\.)facebook\.com$/i, '페이스북'],
+  [/^t\.co$/i, 'X(트위터)'],
+  [/(^|\.)google\./i, '구글'],
+  [/(^|\.)naver\.com$/i, '네이버'],
+  [/(^|\.)daum\.net$/i, '다음'],
+  [/(^|\.)youtube\.com$/i, '유튜브'],
+];
+
 /** 저장된 들어온 곳 값(도메인, app:이름, utm:이름)을 화면에 쓸 이름으로 */
 export function referrerLabel(host: string | null) {
   if (!host) return '직접·출처 없음';
   if (host.startsWith('app:')) return APP_LABEL[host.slice(4)] ?? host.slice(4);
-  if (host.startsWith('app:')) return /^app:(naver|daum)/.test(host) ? 'search' : 'sns';
-  if (host.startsWith('utm:')) return `${host.slice(4)} (링크 표시)`;
-  return host;
+  if (host.startsWith('utm:')) {
+    const name = host.slice(4);
+    return UTM_LABEL[name.toLowerCase()] ?? `링크 표시: ${name}`;
+  }
+  return HOST_LABEL.find(([rx]) => rx.test(host))?.[1] ?? host;
 }
 
 export type TrafficSource = 'search' | 'sns' | 'direct' | 'other';

@@ -51,7 +51,7 @@ describe('앱 안 브라우저와 링크 표시', () => {
     expect(sourceOf('app:naver')).toBe('search');
     expect(sourceOf('utm:instagram')).toBe('sns');
     expect(referrerLabel('app:instagram')).toBe('인스타그램 앱 안 브라우저');
-    expect(referrerLabel('utm:instagram')).toBe('instagram (링크 표시)');
+    expect(referrerLabel('utm:instagram')).toBe('인스타그램 (프로필 링크)');
     expect(referrerLabel(null)).toBe('직접·출처 없음');
   });
 

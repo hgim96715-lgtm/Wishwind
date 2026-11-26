@@ -4,6 +4,7 @@ import { TimeAgo } from "@/components/common/TimeAgo";
 import type { BoardItem } from "@/components/briefing/DepartureBoard";
 // 안내판형(DepartureBoard)도 남겨 둠. 같은 items로 바꿔 끼울 수 있음
 import { HeadlineBoard } from "@/components/briefing/HeadlineBoard";
+import { CrimeStats } from "@/components/stats/CrimeStats";
 import { ParticipationBanner } from "@/components/briefing/ParticipationBanner";
 import { getBriefing, type Briefing, type BriefingKind, type BriefingPost } from "@/lib/briefing/api";
 import { ApiUnavailableError } from "@/lib/cases/api";
@@ -127,11 +128,11 @@ export async function BriefingFeed() {
           <ParticipationBanner participation={data.participation} caseCount={data.stats.total} />
         </section>
         <aside className="space-y-8">
-          <CaseStats stats={data.stats} />
           <NewMissing missing={data.missing} />
         </aside>
       </div>
       <RecentCases cases={data.recentCases} />
+      <CrimeStats ourCases={<CaseStats stats={data.stats} embedded />} />
     </div>
   );
 }
@@ -298,11 +299,11 @@ function countryCounts(rows: { key: Country; count: number }[]) {
   return [...merged.entries()].sort(([a, x], [b, y]) => (a === "OTHER" ? 1 : b === "OTHER" ? -1 : y - x));
 }
 
-function CaseStats({ stats }: { stats: Briefing["stats"] }) {
+function CaseStats({ stats, embedded = false }: { stats: Briefing["stats"]; embedded?: boolean }) {
   const max = Math.max(1, ...stats.byCategory.map((c) => c.count));
   return (
-    <section aria-labelledby="stats-title" className="rounded-xl border border-line bg-surface p-5">
-      <h2 id="stats-title" className="font-semibold">어떤 사건이 많을까요?</h2>
+    <section aria-labelledby="case-mix-title" className={embedded ? "" : "rounded-xl border border-line bg-surface p-5"}>
+      <h3 id="case-mix-title" className="font-semibold">어떤 사건이 많을까요?</h3>
       <p className="mt-1 text-xs text-subtle">공개된 사건 파일 {stats.total}건 기준</p>
       <ul className="mt-4 space-y-2.5">
         {stats.byCategory.map((c) => (

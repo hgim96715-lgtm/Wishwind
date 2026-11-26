@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { LuChartLine } from "react-icons/lu";
 import { StatsChart } from "@/components/stats/StatsChart";
 import {
@@ -12,7 +12,7 @@ import {
   RECIDIVISM_SOURCE,
 } from "@/lib/stats/crime";
 
-type Tab = "trend" | "recidivism";
+type Tab = "trend" | "recidivism" | "ours";
 
 const chip = (on: boolean) =>
   `rounded-full border px-3 py-1.5 text-sm transition-colors ${on ? "border-foreground bg-foreground font-semibold text-surface" : "border-line bg-surface hover:border-foreground/40"}`;
@@ -30,19 +30,20 @@ function change(points: readonly (readonly [number, number])[]) {
 const pctText = (pct: number) => `${pct > 0 ? "+" : pct < 0 ? "−" : ""}${Math.abs(pct).toFixed(0)}%`;
 
 /** 브리핑룸 '숫자로 보기': 공식 통계로 범죄가 늘었는지 줄었는지, 재범은 얼마나 되는지 */
-export function CrimeStats() {
+export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
   const [tab, setTab] = useState<Tab>("trend");
   const [crimeId, setCrimeId] = useState<string>("all");
-  const [hidden, setHidden] = useState<string[]>([]);
+  const [recId, setRecId] = useState<string>("release");
 
   const crime = CRIME_RATE.find((c) => c.id === crimeId) ?? CRIME_RATE[0];
   const crimeChange = change(crime.points);
-  const release = RECIDIVISM[0];
-  const releaseLast = release.points[release.points.length - 1];
+  const rec = RECIDIVISM.find((r) => r.id === recId) ?? RECIDIVISM[0];
+  const recFirst = rec.points[0];
+  const recLast = rec.points[rec.points.length - 1];
 
   return (
-    <section aria-labelledby="stats-title" className="mt-14">
-      <h2 id="stats-title" className="flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-subtle">
+    <section aria-labelledby="numbers-title" className="mt-14">
+      <h2 id="numbers-title" className="flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-subtle">
         <LuChartLine aria-hidden className="size-4 text-brand-fg" />
         숫자로 보기
       </h2>
@@ -55,6 +56,11 @@ export function CrimeStats() {
         <button type="button" role="tab" aria-selected={tab === "recidivism"} onClick={() => setTab("recidivism")} className={chip(tab === "recidivism")}>
           재범
         </button>
+        {ourCases && (
+          <button type="button" role="tab" aria-selected={tab === "ours"} onClick={() => setTab("ours")} className={chip(tab === "ours")}>
+            우리 사건 기록
+          </button>
+        )}
       </div>
 
       <div className="mt-4 rounded-2xl border border-line bg-surface p-4 sm:p-6">
@@ -108,56 +114,42 @@ export function CrimeStats() {
               형법범죄 발생건수를 인구 10만 명당으로 환산한 값입니다. 법이 바뀌거나 신고하는 분위기가 달라지면 숫자도 달라질 수 있어, 숫자의 늘고 줄음이 곧 사회의 안전 정도를 뜻하지는 않습니다.
             </p>
           </>
-        ) : (
+        ) : tab === "recidivism" ? (
           <>
-            <p className="text-lg font-semibold leading-snug">
-              출소자 {fmt(releaseLast[1])}%가 3년 안에 다시 교도소에 들어갔습니다 ({releaseLast[0]}년).
-            </p>
-            <p className="mt-1 text-sm text-muted">나머지 {fmt(100 - releaseLast[1])}%는 3년 안에 돌아오지 않았습니다.</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {RECIDIVISM.map((s) => {
-                const off = hidden.includes(s.id);
-                return (
-                  <button
-                    key={s.id}
-                    type="button"
-                    aria-pressed={!off}
-                    onClick={() => setHidden(off ? hidden.filter((h) => h !== s.id) : [...hidden, s.id])}
-                    className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition-colors ${off ? "border-line bg-surface text-subtle" : "border-foreground/40 bg-surface font-semibold"}`}
-                  >
-                    <span aria-hidden className="size-2.5 rounded-full" style={{ background: off ? "var(--color-line)" : s.color }} />
-                    {s.label}
-                  </button>
-                );
-              })}
-            </div>
-            <div className="mt-3">
-              {hidden.length < RECIDIVISM.length ? (
-                <StatsChart
-                  series={RECIDIVISM.filter((s) => !hidden.includes(s.id)).map((s) => ({ id: s.id, label: s.label, color: s.color, points: s.points }))}
-                  unit="%"
-                  label="재범률과 재복역률 추이"
-                />
-              ) : (
-                <p className="py-10 text-center text-sm text-muted">보고 싶은 항목을 눌러 주세요.</p>
-              )}
-            </div>
-            <dl className="mt-4 space-y-2 text-sm leading-6">
+            <div className="flex flex-wrap gap-2">
               {RECIDIVISM.map((s) => (
-                <div key={s.id}>
-                  <dt className="inline font-medium" style={{ color: s.color }}>{s.label}</dt>
-                  <dd className="inline text-muted"> · {s.help}</dd>
-                </div>
+                <button key={s.id} type="button" aria-pressed={s.id === recId} onClick={() => setRecId(s.id)} className={chip(s.id === recId)}>
+                  {s.label}
+                </button>
               ))}
-            </dl>
+            </div>
+            <p className="mt-4 text-lg font-semibold leading-snug">
+              {rec.id === "release"
+                ? `출소자 ${fmt(recLast[1])}%가 3년 안에 다시 교도소에 들어갔습니다 (${recLast[0]}년).`
+                : `${rec.label}: ${recFirst[0]}년 ${fmt(recFirst[1])}% → ${recLast[0]}년 ${fmt(recLast[1])}%`}
+            </p>
+            <p className="mt-1 text-sm text-muted">
+              {rec.id === "release" ? `나머지 ${fmt(100 - recLast[1])}%는 3년 안에 돌아오지 않았습니다. ` : ""}
+              {rec.help}.
+            </p>
+            <div className="mt-3">
+              <StatsChart series={[{ id: rec.id, label: rec.label, color: "var(--color-brand-fg)", points: rec.points }]} unit="%" label={`${rec.label} 추이`} />
+            </div>
             <p className="mt-4 text-xs leading-5 text-subtle">
               다시 교도소 등에 들어간 경우만 세므로 실제로 다시 죄를 지은 사람 전체와 같지 않습니다. 뉴스에 나오는 전과가 아주 많은 사람의 사례는 눈에 띄는 경우이고, 이 평균을 대표하지 않습니다.
+            </p>
+          </>
+        ) : (
+          <>
+            {ourCases}
+            <p className="mt-4 text-xs leading-5 text-subtle">
+              Wishwind가 정리해 공개한 사건 파일의 분포입니다. 우리가 고른 사건이라 실제 범죄 통계나 늘고 줄어드는 흐름을 뜻하지 않습니다.
             </p>
           </>
         )}
 
         <p className="mt-4 border-t border-line pt-3 text-xs leading-5 text-subtle">
-          출처: {tab === "trend" ? CRIME_SOURCE : RECIDIVISM_SOURCE}. {CHECKED_ON} 확인.
+          {tab === "ours" ? "출처: Wishwind 사건 기록" : `출처: ${tab === "trend" ? CRIME_SOURCE : RECIDIVISM_SOURCE}. ${CHECKED_ON} 확인.`}
         </p>
       </div>
     </section>

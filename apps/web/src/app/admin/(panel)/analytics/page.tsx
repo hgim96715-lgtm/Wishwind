@@ -378,21 +378,36 @@ async function Report({ days }: { days: number }) {
                 한 페이지만 보고 나간 방문자 {a.singlePageVisitors.toLocaleString("ko-KR")}명
                 {sourceTotal > 0 && ` · ${Math.round((a.singlePageVisitors / sourceTotal) * 100)}%`}
               </p>
-              <h3 className="mt-5 mb-1 text-xs font-semibold text-muted">들어온 곳별 이탈</h3>
-              <p className="mb-3 text-xs text-subtle">
-                한 페이지만 보고 나간 방문자와, 그중 홈만 보고 나간 방문자입니다. 인스타 앱 안 브라우저는 이전 사이트를 알려 주지 않아 &lsquo;직접&rsquo;으로 잡히기도 합니다. 프로필 링크를 <code>?utm_source=instagram</code>으로 걸면 구분됩니다.
+              <h3 className="mt-6 mb-1 text-xs font-semibold text-muted">들어온 곳별 이탈</h3>
+              <p className="mb-3 text-xs leading-5 text-subtle">
+                &lsquo;한 페이지만&rsquo;은 한 곳만 보고 나간 방문자이고, &lsquo;홈만&rsquo;은 그중 홈에서 나간 방문자입니다. 프로필 링크 끝에 <code>?utm_source=ig</code>를 붙이면 인스타에서 온 방문자가 &lsquo;직접&rsquo;과 섞이지 않습니다.
               </p>
               {a.bounceBySource?.length ? (
-                <ul className="space-y-1.5 text-sm">
-                  {a.bounceBySource?.map((r) => (
-                    <li key={r.host} className="flex flex-wrap items-baseline justify-between gap-x-3">
-                      <span className="truncate">{r.host}</span>
-                      <span className="tabular-nums text-xs text-muted">
-                        방문 {r.visitors} · 한 페이지만 {r.single}({Math.round((r.single / r.visitors) * 100)}%) · 홈만 {r.homeOnly}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[20rem] text-sm">
+                    <thead>
+                      <tr className="text-left text-xs text-subtle">
+                        <th scope="col" className="pb-2 font-normal">들어온 곳</th>
+                        <th scope="col" className="pb-2 text-right font-normal">방문</th>
+                        <th scope="col" className="pb-2 text-right font-normal">한 페이지만</th>
+                        <th scope="col" className="pb-2 text-right font-normal">홈만</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {a.bounceBySource.map((r) => (
+                        <tr key={r.host} className="border-t border-line">
+                          <th scope="row" className="max-w-[11rem] truncate py-2 pr-3 text-left font-medium" title={r.host}>{r.host}</th>
+                          <td className="py-2 text-right tabular-nums">{r.visitors}</td>
+                          <td className="py-2 text-right tabular-nums">
+                            {r.single}
+                            <span className="ml-1 text-xs text-subtle">{Math.round((r.single / r.visitors) * 100)}%</span>
+                          </td>
+                          <td className="py-2 text-right tabular-nums">{r.homeOnly}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               ) : (
                 <p className="text-sm text-subtle">아직 기록이 없습니다.</p>
               )}

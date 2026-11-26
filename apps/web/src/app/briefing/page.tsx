@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { LuMegaphone, LuSend } from "react-icons/lu";
 import { BriefingAutoRefresh } from "@/components/briefing/BriefingAutoRefresh";
 import { BriefingFeed, BriefingSkeleton } from "@/components/briefing/BriefingFeed";
-import { CrimeStats } from "@/components/stats/CrimeStats";
 import { RoomHeader } from "@/components/room/RoomHeader";
 
 export const metadata: Metadata = {
@@ -21,7 +20,6 @@ export default function BriefingPage() {
       <Suspense fallback={<BriefingSkeleton />}>
         <BriefingFeed />
       </Suspense>
-      <CrimeStats />
       <section className="mt-14 flex flex-col items-start gap-3 rounded-xl border border-dashed border-line bg-surface/70 p-6 sm:flex-row sm:items-center">
         <LuMegaphone aria-hidden className="size-6 shrink-0 text-steel-ink" />
         <div className="flex-1">
