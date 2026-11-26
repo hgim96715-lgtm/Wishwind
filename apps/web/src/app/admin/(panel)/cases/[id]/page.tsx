@@ -90,7 +90,7 @@ function RelatedFields({ item }: { item?: RelatedContent }) {
           </select>
         </Field>
         <Field label="방송사·채널·플랫폼">
-          <input name="platform" required maxLength={100} defaultValue={item?.platform} placeholder="예: SBS, 넷플릭스, 유튜브" className={inputClass} />
+          <input name="platform" required maxLength={100} defaultValue={item?.platform} placeholder="예: 웨이브, 티빙, 넷플릭스, 디즈니+, 유튜브, 교보문고" className={inputClass} />
         </Field>
       </div>
       <Field label="제목" hint="예: 그것이 알고 싶다 1234회 ‘…’">

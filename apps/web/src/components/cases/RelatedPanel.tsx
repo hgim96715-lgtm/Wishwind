@@ -33,6 +33,24 @@ const GROUPS: { title: string; kinds: RelatedKind[] }[] = [
 
 const OFFICIAL: SourceType[] = ["COURT", "GOVERNMENT"];
 
+/** 책은 제목으로 국내 서점 검색 결과를 바로 열 수 있게 함 (서점 상품 주소를 외우지 않아도 됨) */
+const BOOKSTORES = [
+  { name: "교보문고", url: (q: string) => `https://search.kyobobook.co.kr/search?keyword=${q}` },
+  { name: "영풍문고", url: (q: string) => `https://www.ypbooks.co.kr/search?keyword=${q}` },
+  { name: "알라딘", url: (q: string) => `https://www.aladin.co.kr/search/wsearchresult.aspx?SearchWord=${q}` },
+  { name: "YES24", url: (q: string) => `https://www.yes24.com/Product/Search?query=${q}` },
+];
+
+/** 해외 영화 DB(IMDb 등) 주소는 감상처가 아니라 정보 페이지라고 알려 줌 */
+const isInfoOnly = (url: string) => /(^|\.)(imdb\.com|themoviedb\.org)$/.test(safeHost(url));
+function safeHost(url: string) {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return "";
+  }
+}
+
 /**
  * 관련 콘텐츠 탭: 다큐·영화·유튜브(관리자가 등록) + 뉴스(연결된 소식, 사건 정리에 쓴 기사) + 공식 자료.
  * 모두 바깥 링크라 새 탭으로 열고, 사이트 안에 영상을 붙이지 않음 (저작권·용량)
@@ -62,8 +80,9 @@ export function RelatedPanel({ data }: { data: CaseDetail }) {
           <Section key={title} title={title}>
             <ul className="grid gap-3 sm:grid-cols-2">
               {items.map((item) => (
-                <li key={item.id}>
+                <li key={item.id} className="flex flex-col gap-1.5">
                   <ContentCard item={item} />
+                  {item.kind === "BOOK" && <BookStores title={item.title} />}
                 </li>
               ))}
             </ul>
@@ -153,6 +172,7 @@ function ContentCard({ item }: { item: RelatedContent }) {
               <span>{year}</span>
             </>
           )}
+          {isInfoOnly(item.url) && <span className="rounded border border-line px-1.5 py-px text-[11px]">정보 페이지</span>}
           {item.isDramatized && (
             <span className="rounded border border-line px-1.5 py-px text-[11px]">각색</span>
           )}
@@ -163,6 +183,20 @@ function ContentCard({ item }: { item: RelatedContent }) {
       </span>
       <LuExternalLink aria-hidden className="mt-1 size-4 shrink-0 text-subtle" />
     </a>
+  );
+}
+
+function BookStores({ title }: { title: string }) {
+  const q = encodeURIComponent(title);
+  return (
+    <p className="flex flex-wrap items-center gap-x-3 gap-y-1 px-1 text-xs text-subtle">
+      <span>서점에서 찾기</span>
+      {BOOKSTORES.map((b) => (
+        <a key={b.name} href={b.url(q)} target="_blank" rel="noreferrer noopener" className="font-medium text-[#c46a4b] hover:opacity-70">
+          {b.name}
+        </a>
+      ))}
+    </p>
   );
 }
 
