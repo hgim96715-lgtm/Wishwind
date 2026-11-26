@@ -41,7 +41,7 @@ export async function FeaturedCases() {
         </h2>
         <Link
           href="/cases"
-          className="text-xs text-[#c46a4b] transition-opacity hover:opacity-70"
+          className="text-xs text-brand-fg transition-opacity hover:opacity-70"
         >
           사건방 전체 보기
         </Link>

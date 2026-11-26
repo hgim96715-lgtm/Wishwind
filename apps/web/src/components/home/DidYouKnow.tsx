@@ -11,9 +11,9 @@ export async function DidYouKnow() {
   return (
     <section
       aria-label="오늘의 기억"
-      className="mb-6 rounded-xl border border-[#3f8f84]/30 bg-[#3f8f84]/10 px-4 py-3 sm:px-5"
+      className="mb-6 rounded-xl border border-jade/30 bg-jade/10 px-4 py-3 sm:px-5"
     >
-      <p className="text-xs font-semibold text-[#2f7469]">
+      <p className="text-xs font-semibold text-jade-ink">
         {isToday ? "오늘은" : "알고 계셨나요?"}
       </p>
       <p className="mt-1 text-sm font-semibold leading-snug">{item.name}</p>
@@ -25,7 +25,7 @@ export async function DidYouKnow() {
       <div className="mt-3 flex flex-wrap items-center gap-3">
         <Link
           href={`/cases/${item.case.slug}`}
-          className="inline-flex items-center gap-1 rounded-md bg-[#2f7469] px-3 py-1 text-xs font-semibold text-white transition-opacity hover:opacity-80"
+          className="inline-flex items-center gap-1 rounded-md bg-jade-deep px-3 py-1 text-xs font-semibold text-white transition-opacity hover:opacity-80"
         >
           사건 보기 →
         </Link>

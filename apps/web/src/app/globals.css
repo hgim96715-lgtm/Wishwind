@@ -12,6 +12,17 @@
   --muted: #6b655d;
   --subtle: #9a9389;
   --dots: rgb(47 44 40 / 0.07);
+  /* 강조색 토큰: 라이트 값은 기존 직접 색과 같고, 글자색(-ink·-fg)만 다크에서 밝게 바뀜 */
+  --brand-fg: #c46a4b;
+  --jade-ink: #2f7469;
+  --jade-ink-soft: #3f8f84;
+  --clay-ink: #b5543a;
+  --clay-ink-deep: #a3523f;
+  --steel-ink: #4f78a8;
+  --clay-wash: #fbe9e4;
+  --jade-wash: #e3f1ea;
+  --paper: #fbf7ef;
+  --ink-faint: #cfc5b2;
 }
 
 /* 어두운 화면: 종이 느낌을 살린 짙은 갈회색 바탕 + 밝은 베이지 글자.
@@ -25,6 +36,16 @@
   --muted: #b3aa9c;
   --subtle: #8b8378;
   --dots: rgb(235 229 218 / 0.05);
+  --brand-fg: #e8906f;
+  --jade-ink: #82d2bf;
+  --jade-ink-soft: #74c7b9;
+  --clay-ink: #ee9580;
+  --clay-ink-deep: #ee9580;
+  --steel-ink: #93b6e2;
+  --clay-wash: #3d2622;
+  --jade-wash: #1f342b;
+  --paper: #2a2622;
+  --ink-faint: #a99b87;
 }
 
 /* 스크립트가 data-theme을 붙이기 전(첫 화면, 자바스크립트 꺼짐)에도 기기가 다크면 어둡게 */
@@ -52,6 +73,23 @@
   --color-line: var(--line);
   --color-muted: var(--muted);
   --color-subtle: var(--subtle);
+  /* 테마와 상관없이 같은 색 (배경·테두리·링) */
+  --color-brand: #c46a4b;
+  --color-jade: #3f8f84;
+  --color-jade-deep: #2f7469;
+  --color-clay: #b5543a;
+  --color-steel: #4f78a8;
+  /* 다크에서 값이 바뀌는 색 (글자·옅은 바탕) */
+  --color-brand-fg: var(--brand-fg);
+  --color-jade-ink: var(--jade-ink);
+  --color-jade-ink-soft: var(--jade-ink-soft);
+  --color-clay-ink: var(--clay-ink);
+  --color-clay-ink-deep: var(--clay-ink-deep);
+  --color-steel-ink: var(--steel-ink);
+  --color-clay-wash: var(--clay-wash);
+  --color-jade-wash: var(--jade-wash);
+  --color-paper: var(--paper);
+  --color-ink-faint: var(--ink-faint);
   /* Geist에는 한글 글리프가 없어서 한글은 시스템 고딕으로 폴백됨 */
   --font-sans: var(--font-geist-sans), "Apple SD Gothic Neo", "Pretendard",
     "Noto Sans KR", "Malgun Gothic", sans-serif;

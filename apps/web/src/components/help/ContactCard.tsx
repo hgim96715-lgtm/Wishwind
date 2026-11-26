@@ -8,7 +8,7 @@ export function ContactCard({ contact, compact = false }: { contact: HelpContact
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <a
           href={`tel:${contact.tel}`}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#3f8f84]/10 px-2.5 py-1 font-mono text-lg font-bold tabular-nums text-[#2f7469] hover:bg-[#3f8f84]/20"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-jade/10 px-2.5 py-1 font-mono text-lg font-bold tabular-nums text-jade-ink hover:bg-jade/20"
           aria-label={`${contact.name} ${contact.number}로 전화 걸기`}
         >
           <LuPhone aria-hidden className="size-4" />

@@ -10,7 +10,7 @@ export function HelpLink({ className = "" }: { className?: string }) {
   return (
     <Link
       href="/help"
-      className={`inline-flex items-center gap-1.5 rounded-full border border-[#3f8f84]/30 bg-[#fffdf8]/90 px-3 py-1 text-xs font-medium text-[#2f7469] hover:bg-white ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border border-jade/30 bg-[#fffdf8]/90 px-3 py-1 text-xs font-medium text-jade-ink hover:bg-white ${className}`}
     >
       <LuHeartHandshake aria-hidden className="size-3.5" />
       도움이 필요할 때

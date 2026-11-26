@@ -62,7 +62,7 @@ export default function HelpPage() {
       </a>
 
       <section className="mt-6 rounded-2xl bg-[#fbf3d9] px-6 py-6 text-center shadow-[0_1px_3px_rgb(47_44_40/0.08)]">
-        <LuHeartHandshake aria-hidden className="mx-auto size-6 text-[#c46a4b]" />
+        <LuHeartHandshake aria-hidden className="mx-auto size-6 text-brand-fg" />
         <p className="mt-3 space-y-1 leading-7 text-foreground [word-break:keep-all] sm:leading-8">
           <span className="block">누군가는 피해자에게도 잘못이 있다고 말합니다.</span>
           <span className="block">하지만 당신은 아무것도 잘못하지 않았습니다.</span>

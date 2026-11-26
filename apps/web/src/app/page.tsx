@@ -79,11 +79,11 @@ export default function Home() {
       {/* 도움이 필요할 때: 하단으로 이동 */}
       <div className="mt-10 flex flex-col gap-3 rounded-xl border border-[#d9cdb8] bg-[#fbf6ea] px-4 py-3 sm:flex-row sm:items-center sm:gap-4 sm:px-5">
         <Link href="/help" className="group flex min-w-0 flex-1 items-center gap-3">
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[#3f8f84]/15 text-[#2f7469]">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-jade/15 text-jade-ink">
             <LuHeartHandshake aria-hidden className="size-5" />
           </span>
           <span className="min-w-0">
-            <span className="block font-semibold transition-colors group-hover:text-[#2f7469]">도움이 필요할 때</span>
+            <span className="block font-semibold transition-colors group-hover:text-jade-ink">도움이 필요할 때</span>
             <span className="block text-xs text-muted">신고·상담 번호를 상황별로 모았습니다</span>
           </span>
         </Link>
@@ -97,14 +97,14 @@ export default function Home() {
               key={c.n}
               href={`tel:${c.n}`}
               aria-label={`${c.label} ${c.n}로 전화 걸기`}
-              className="rounded-full border border-[#3f8f84]/30 bg-white/70 px-2.5 py-1 text-[#2f7469] hover:bg-white"
+              className="rounded-full border border-jade/30 bg-white/70 px-2.5 py-1 text-jade-ink hover:bg-white"
             >
               {c.label} <span className="font-semibold tabular-nums">{c.n}</span>
             </a>
           ))}
           <Link
             href="/help"
-            className="ml-auto inline-flex items-center gap-1 pl-1 font-medium text-[#2f7469] transition-opacity hover:opacity-70 sm:ml-2"
+            className="ml-auto inline-flex items-center gap-1 pl-1 font-medium text-jade-ink transition-opacity hover:opacity-70 sm:ml-2"
           >
             도움받는 곳
           </Link>

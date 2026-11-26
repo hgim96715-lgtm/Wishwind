@@ -15,14 +15,14 @@ export async function TodayTechCard() {
   return (
     <section
       aria-label="오늘의 추적 지식"
-      className="mt-6 rounded-xl border border-[#4f78a8]/30 bg-[#4f78a8]/5 px-4 py-3 sm:px-5"
+      className="mt-6 rounded-xl border border-steel/30 bg-steel/5 px-4 py-3 sm:px-5"
     >
-      <p className="text-xs font-semibold text-[#4f78a8]">오늘의 추적 지식</p>
+      <p className="text-xs font-semibold text-steel-ink">오늘의 추적 지식</p>
       <p className="mt-1 text-sm font-semibold leading-snug">{tech.shortTitle}</p>
       <p className="mt-0.5 line-clamp-2 text-sm text-muted">{tech.definition}</p>
       <Link
         href="/briefing"
-        className="mt-2 inline-block text-xs font-medium text-[#4f78a8] transition-opacity hover:opacity-70"
+        className="mt-2 inline-block text-xs font-medium text-steel-ink transition-opacity hover:opacity-70"
       >
         브리핑룸에서 더 보기 →
       </Link>
