@@ -24,7 +24,7 @@ export const INVESTIGATION_TECHNIQUES: readonly InvestigationTech[] = [
     definition: "DNA와 공개 계보 데이터를 이어 수십 년 된 미제 사건의 범인을 찾는 방법입니다.",
     detail:
       "현장에서 나온 DNA를 계보 데이터베이스와 견주어 먼 친척을 찾고, 가계도를 거슬러 올라가 용의자를 좁힙니다. 2018년 골든 스테이트 킬러가 이 방법으로 체포된 뒤, 오래 묻혀 있던 사건들이 같은 방식으로 풀리고 있습니다. 보관된 증거물이 남아 있다면 몇십 년이 지나도 다시 시도할 수 있다는 점이 가장 큰 힘입니다.",
-    caseSlugs: ["golden-state-killer", "jacqueline-dunlevy-murder"],
+    caseSlugs: ["golden-state-killer", "jacqueline-dunleavy-murder"],
   },
   {
     id: "age-progression",

@@ -1,0 +1,127 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "jacqueline-dunleavy-murder",
+      "content": {
+        "title": "재클린 던리비 살해 사건",
+        "summary": "1968년 1월 캐나다 온타리오주 런던에서 16세 재클린 '재키' 던리비가 숨진 채 발견된 사건으로, 58년이 지난 2026년 보관된 DNA와 수사 유전 계보 분석(IGG)으로 범인이 특정됐습니다",
+        "overview": "1968년 1월 9일, 캐나다 온타리오주 런던에서 중등학교 10학년이던 16세 재클린 '재키' 던리비가 스탠리 스트리트 근처 잡화점 일을 마치고 오후 6시 30분쯤 걸어서 집으로 가던 중 연락이 끊겼습니다. 던리비는 런던 경찰관의 딸이었고, 같은 날 오후 8시쯤 캐서린 할리 학교(현 매튜스 홀) 부지에서 청소년 3명에게 숨진 채 발견됐습니다. 사인은 질식사로 전해졌습니다. 사건은 오랫동안 풀리지 않았습니다. 경찰은 보관해 둔 1968년의 생물학적 증거로 DNA를 다시 검사하고, 미국 법의학 업체 오스럼(Othram)과 수사 유전 계보 분석을 진행했습니다. 그 결과 범행 당시 25세였던 마이클 조지프 무어가 범인으로 특정됐습니다. 무어는 사건 뒤 런던 소방본부에서 약 28년간 일하다 2002년 소방대장으로 은퇴했고, 2018년 3월 3일에 숨져 기소할 수 없었습니다. 경찰은 유족에게 답을 전하기 위해 무어의 이름을 공개했고(경찰은 정확한 역사 기록을 남기고 유족과 지역사회의 오랜 질문에 답하기 위한 결정이라고 밝혔습니다), 던리비 유족과 무어 가족은 모두 사생활 보호를 요청했습니다. 런던 경찰이 법유전계보학으로 사건을 푼 첫 사례라고 전해졌습니다. 해결 사실은 2026년 11월 23일 런던 경찰청이 공식 발표했습니다.",
+        "victimCountNote": "사망 1명",
+        "country": "OTHER",
+        "category": "MURDER",
+        "status": "SOLVED",
+        "location": "캐나다 온타리오주 런던",
+        "occurredAt": "1968-01-09",
+        "occurredAtPrecision": "DAY",
+        "solvedAt": "2026-11-23",
+        "timeline": [
+          {
+            "occurredAt": "1968-01-09",
+            "occurredAtPrecision": "DAY",
+            "title": "귀가 중 연락이 끊김",
+            "description": "스탠리 스트리트 근처 잡화점 일을 마친 던리비가 오후 6시 30분쯤 걸어서 집으로 향했습니다."
+          },
+          {
+            "occurredAt": "1968-01-09",
+            "occurredAtPrecision": "DAY",
+            "title": "학교 부지에서 발견",
+            "description": "같은 날 오후 8시쯤 캐서린 할리 학교 부지에서 청소년 3명이 던리비를 발견했습니다."
+          },
+          {
+            "occurredAt": "2018-03-03",
+            "occurredAtPrecision": "DAY",
+            "title": "무어 사망",
+            "description": "무어가 숨져 훗날 범인으로 특정됐을 때 기소할 수 없었습니다."
+          },
+          {
+            "occurredAt": "2026-11-23",
+            "occurredAtPrecision": "DAY",
+            "title": "58년 만에 범인 특정 발표",
+            "description": "런던 경찰청이 공식 발표했습니다. 보관된 1968년 증거의 DNA 재검사와 수사 유전 계보 분석으로 마이클 조지프 무어가 범인으로 특정됐습니다."
+          }
+        ],
+        "victims": [
+          {
+            "name": "Jacqueline 'Jackie' Dunleavy",
+            "alias": "재클린 '재키' 던리비",
+            "age": 16,
+            "gender": "FEMALE",
+            "description": "런던 경찰관의 딸이었습니다.",
+            "status": "DECEASED"
+          }
+        ],
+        "suspects": [
+          {
+            "name": "Michael Joseph Moore",
+            "status": "DECEASED",
+            "description": "범행 당시 25세였습니다. 사건 뒤 런던 소방본부에서 약 28년간 일하고 2002년 소방대장으로 은퇴했으며, 2018년 3월 3일 숨져 기소할 수 없었습니다.",
+            "identityDisclosedAt": "2026-11-23",
+            "identityDisclosureAgency": "런던 경찰청 (London Police Service)",
+            "identityDisclosureSource": "https://www.londonpolice.ca/news/posts/cold-case-homicide-solved-using-dna-evidence-68-1101/",
+            "nameExceptionReason": "범인이 숨져 기소할 수 없는 사건이며, 경찰이 정확한 역사 기록과 유족·지역사회의 오랜 질문에 답하기 위해 공익과 투명성을 고려해 이름을 공개함",
+            "nameExceptionDecidedAt": "2026-11-26",
+            "sentences": []
+          }
+        ],
+        "questions": [
+          {
+            "question": "수십 년 된 증거물을 안전하게 보관하는 일은 왜 중요할까요?"
+          },
+          {
+            "question": "범인이 이미 숨진 뒤에 밝혀진 진실은 유족에게 어떤 의미가 될 수 있을까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://www.londonpolice.ca/news/posts/cold-case-homicide-solved-using-dna-evidence-68-1101/",
+          "title": "COLD CASE HOMICIDE SOLVED USING DNA EVIDENCE 68-1101",
+          "publisher": "London Police Service",
+          "type": "GOVERNMENT",
+          "publishedAt": "2026-11-23",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://www.cbc.ca/news/canada/london/jackie-dunleavy-murder-case-solved-dna-9.7432089",
+          "title": "재키 던리비 살인 사건 DNA로 해결 (CBC News 보도)",
+          "publisher": "CBC News",
+          "type": "NEWS",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://dnasolves.com/articles/london-police-service-canada-jacqueline-dunleavy/",
+          "title": "After 58 Years, Jackie Dunleavy's 1968 Ontario Murder is Solved",
+          "publisher": "DNASolves (Othram)",
+          "type": "OTHER",
+          "publishedAt": "2026-11-23",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://www.news1.kr/world/general-world/6365737",
+          "title": "58년 미제 '16살 소녀 살인'…범인은 평생 소방관으로 존경받았다",
+          "publisher": "뉴스1",
+          "type": "NEWS_AGENCY",
+          "publishedAt": "2026-11-25",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://www.ahaidea.com/WebPage.aspx?pageid=73&idx=83095",
+          "title": "1968년 온타리오주 런던 소녀 재클린 던리비 살인 미제 사건 해결",
+          "publisher": "아하아이디어",
+          "type": "OTHER",
+          "accessedAt": "2026-11-26"
+        },
+        {
+          "url": "https://www.msn.com/ko-kr/news/other/58%EB%85%84-%EB%AF%B8%EC%A0%9C-16%EC%82%B4-%EC%86%8C%EB%85%80-%EC%82%B4%EC%9D%B8-%EB%B2%94%EC%9D%B8%EC%9D%80-%ED%8F%89%EC%83%9D-%EC%86%8C%EB%B0%A9%EA%B4%80%EC%9C%BC%EB%A1%9C-%EC%A1%B4%EA%B2%BD%EB%B0%9B%EC%95%98%EB%8B%A4/ar-AA2ib6mS",
+          "title": "58년 미제 '16살 소녀 살인'…범인은 평생 소방관으로 존경받았다",
+          "publisher": "MSN",
+          "type": "NEWS",
+          "accessedAt": "2026-11-26"
+        }
+      ],
+      "claims": []
+    }
+  ]
+}
