@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
 import { PageViewTracker } from "@/components/PageViewTracker";
@@ -7,7 +6,7 @@ import "./globals.css";
 import { INSTAGRAM_URL, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL } from "@/lib/site";
 import { HelpBar } from "@/components/help/HelpBar";
 import { DevViewerSwitch } from "@/components/dev/DevViewerSwitch";
-import { THEME_INIT_SCRIPT } from "@/components/common/ThemeToggle";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -96,10 +95,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        {/* 첫 화면을 그리기 전에 실행해야 라이트가 번쩍이지 않음 (head의 인라인 스크립트) */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="flex min-h-full flex-col">
-        <Script id="theme-init" strategy="beforeInteractive">
-          {THEME_INIT_SCRIPT}
-        </Script>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
         <Suspense fallback={null}>
           <HelpBar />

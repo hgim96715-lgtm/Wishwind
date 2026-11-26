@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 
 export type Theme = "light" | "dark";
-export const THEME_KEY = "theme";
+import { THEME_KEY } from "@/lib/theme";
+
+export { THEME_KEY };
 
 function systemTheme(): Theme {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -113,6 +115,3 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
     </div>
   );
 }
-
-/** 화면을 그리기 전에 실행 → 저장한 선택(없으면 기기 설정)을 적용. 정원 색상은 별도의 CSS 범위에서 처리 */
-export const THEME_INIT_SCRIPT = `(function(){try{var t=localStorage.getItem('${THEME_KEY}');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=d?'dark':'light';}catch(e){}})();`;

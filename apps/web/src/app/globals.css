@@ -27,6 +27,20 @@
   --dots: rgb(235 229 218 / 0.05);
 }
 
+/* 스크립트가 data-theme을 붙이기 전(첫 화면, 자바스크립트 꺼짐)에도 기기가 다크면 어둡게 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --background: #1c1a17;
+    --foreground: #ebe5da;
+    --surface: #26231f;
+    --line: #3a3530;
+    --muted: #b3aa9c;
+    --subtle: #8b8378;
+    --dots: rgb(235 229 218 / 0.05);
+  }
+}
+
 /* Retained route styles must not override the active site's theme. */
 :root:not([data-garden-active="true"])[data-theme="light"] { color-scheme: light; }
 :root:not([data-garden-active="true"])[data-theme="dark"] { color-scheme: dark; }
