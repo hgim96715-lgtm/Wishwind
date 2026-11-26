@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { BottomSheet } from "@/components/cases/BottomSheet";
 import { CaseDetailView, CaseDetailSkeleton } from "@/components/cases/CaseDetailView";
+import { CaseSolvingTech } from "@/components/briefing/CaseSolvingTech";
 import { CaseFiltersForm } from "@/components/cases/CaseFilters";
 import { CaseList, CaseListSkeleton } from "@/components/cases/CaseList";
 import { RoomHeader } from "@/components/room/RoomHeader";
@@ -40,6 +41,11 @@ export default function CasesPage({ searchParams }: PageProps<"/cases">) {
               <section className="mt-10">
                 <Suspense key={JSON.stringify(filters)} fallback={<CaseListSkeleton />}>
                   <CaseList filters={filters} />
+                </Suspense>
+              </section>
+              <section className="mt-12">
+                <Suspense fallback={null}>
+                  <CaseSolvingTech />
                 </Suspense>
               </section>
             </>

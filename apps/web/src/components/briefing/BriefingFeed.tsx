@@ -4,7 +4,6 @@ import { TimeAgo } from "@/components/common/TimeAgo";
 import type { BoardItem } from "@/components/briefing/DepartureBoard";
 // 안내판형(DepartureBoard)도 남겨 둠. 같은 items로 바꿔 끼울 수 있음
 import { HeadlineBoard } from "@/components/briefing/HeadlineBoard";
-import { CaseSolvingTech } from "@/components/briefing/CaseSolvingTech";
 import { ParticipationBanner } from "@/components/briefing/ParticipationBanner";
 import { getBriefing, type Briefing, type BriefingKind, type BriefingPost } from "@/lib/briefing/api";
 import { ApiUnavailableError } from "@/lib/cases/api";
@@ -125,7 +124,6 @@ export async function BriefingFeed() {
               )}
             </>
           )}
-          <CaseSolvingTech />
           <ParticipationBanner participation={data.participation} caseCount={data.stats.total} />
         </section>
         <aside className="space-y-8">
