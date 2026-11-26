@@ -34,11 +34,11 @@ export class CasesService {
     return { items: rows.map((row) => toCaseListItem(row, preview)) };
   }
 
-  /** 다큐·방송·영화로 다뤄진 사건: 사건방에서 "이 작품의 그 사건"으로 이어 줌 */
+  /** 다큐·방송·영화로 다뤄진 사건 중 오늘의 한 건 (없으면 빈 목록) */
   async mediaCases() {
     const preview = draftsVisible();
-    const rows = await this.repo.findMediaCases(preview);
-    return { items: rows.map((row) => ({ ...toCaseListItem(row, preview), media: row.relatedContents })) };
+    const row = await this.repo.findTodayMediaCase(preview);
+    return { items: row ? [{ ...toCaseListItem(row, preview), media: row.relatedContents }] : [] };
   }
 
   /** 사건이 바꾼 것(법·기념일·제도) 모아 보기 */

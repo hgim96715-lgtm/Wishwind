@@ -105,7 +105,7 @@ export function Bookshelf({
 }: {
   items: CaseListItem[];
   pinnedSlugs?: string[];
-  /** 다큐·방송·영화로 다뤄진 사건. 있으면 '오늘의 사건 파일' 자리에 먼저 보여 줌 */
+  /** 오늘의 영상 연결 사건 (최대 1건). 있으면 '오늘의 사건 파일' 자리에 먼저 보여 줌 */
   mediaItems?: MediaCaseItem[];
 }) {
   const router = useRouter();
@@ -116,11 +116,8 @@ export function Bookshelf({
   useEffect(() => setDayIndex(Math.floor((Date.now() + 9 * 3_600_000) / 86_400_000)), []);
   const picks = useMemo(() => (dayIndex === null ? [] : recommended(items, dayIndex, pinnedSlugs)), [items, dayIndex, pinnedSlugs]);
 
-  // 날마다 한 건만 보여 줌: 날짜로 정하는 의사 난수라 하루 동안은 같은 사건이고 새로고침해도 안 바뀜
-  const todayMedia = useMemo(() => {
-    if (dayIndex === null || mediaItems.length === 0) return null;
-    return mediaItems[((dayIndex * 9301 + 49297) % 233280) % mediaItems.length];
-  }, [mediaItems, dayIndex]);
+  // 오늘의 한 건은 서버가 날짜로 골라 보냄 (하루 동안 같은 사건)
+  const todayMedia = mediaItems[0] ?? null;
 
   const openRandom = () => {
     const pick = items[Math.floor(Math.random() * items.length)];
@@ -135,8 +132,7 @@ export function Bookshelf({
             <LuClapperboard aria-hidden className="size-4 text-brand-fg" />
             영상으로 먼저 본 그 사건
           </h2>
-          {/* 날짜가 정해지기 전에도 같은 높이를 잡아 둬서 카드가 나타날 때 화면이 밀리지 않음 */}
-          <div className="min-h-[9.5rem]">
+          <div>
             {todayMedia && (
               <Link
                 href={fileHref(searchParams, todayMedia.slug)}

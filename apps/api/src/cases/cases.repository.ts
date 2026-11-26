@@ -126,17 +126,24 @@ export class CasesRepository {
     });
   }
 
-  /** 다큐·방송·영화 등으로 다뤄진 공개 사건 (책 제외). 사건방 맨 위 '영상으로 본 사건'용, 최근 갱신순 */
-  findMediaCases(preview: boolean, take = 100) {
+  /**
+   * 다큐·방송·영화 등으로 다뤄진 공개 사건(책 제외) 중 오늘(한국 날짜)의 한 건. 사건방 맨 위 '영상으로 먼저 본 그 사건'용.
+   * 날짜로 정하는 의사 난수라 하루 동안 같은 사건이고, 사건이 늘어도 한 건만 내려보냄
+   */
+  async findTodayMediaCase(preview: boolean) {
     const mediaWhere = { kind: { not: 'BOOK' as const } };
-    return this.prisma.case.findMany({
-      where: { ...visibilityWhere(preview), relatedContents: { some: mediaWhere } },
+    const where = { ...visibilityWhere(preview), relatedContents: { some: mediaWhere } };
+    const count = await this.prisma.case.count({ where });
+    if (count === 0) return null;
+    const day = Math.floor((Date.now() + 9 * 3_600_000) / 86_400_000);
+    return this.prisma.case.findFirst({
+      where,
       select: {
         ...caseListSelect,
-        relatedContents: { where: mediaWhere, orderBy: { sortOrder: 'asc' }, take: 2, select: { kind: true, platform: true, title: true } },
+        relatedContents: { where: mediaWhere, orderBy: { sortOrder: 'asc' }, take: 1, select: { kind: true, platform: true, title: true } },
       },
-      orderBy: { updatedAt: 'desc' },
-      take,
+      orderBy: { id: 'asc' },
+      skip: ((day * 9301 + 49297) % 233280) % count,
     });
   }
 
