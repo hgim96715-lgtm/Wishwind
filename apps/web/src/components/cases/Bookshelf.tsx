@@ -15,6 +15,7 @@ import {
 } from "@/lib/cases/labels";
 import type { CaseListItem, Country, MediaCaseItem, RelatedKind } from "@/lib/cases/types";
 import { FileSpine } from "./FileSpine";
+import { SheetPending } from "./SheetPending";
 
 /** 국가별로 묶음. 정렬은 COUNTRY_ORDER, 같은 책장 안은 API 순서(최신 발생일순) 유지 */
 function groupByCountry(items: CaseListItem[]) {
@@ -139,15 +140,14 @@ export function Bookshelf({
                 scroll={false}
                 className="group block rounded-2xl border border-line bg-surface p-4 transition-all hover:-translate-y-1 hover:shadow-md sm:p-5"
               >
-                <span className="flex items-center gap-2">
-                  <span className="rounded-full bg-brand/10 px-2 py-0.5 text-[11px] font-medium text-brand-fg">
-                    {todayMedia.media[0].platform} · {MEDIA_KIND[todayMedia.media[0].kind]}
-                  </span>
-                  <span className="line-clamp-1 text-sm font-semibold">「{todayMedia.media[0].title}」</span>
+                <span className="inline-block whitespace-nowrap rounded-full bg-brand/10 px-2.5 py-0.5 text-[11px] font-medium text-brand-fg">
+                  {todayMedia.media[0].platform} · {MEDIA_KIND[todayMedia.media[0].kind]}
                 </span>
-                <span className="mt-1 block text-xs text-muted">이 작품이 다룬 사건</span>
+                <span className="mt-2 line-clamp-2 block text-sm font-semibold leading-6">「{todayMedia.media[0].title}」</span>
+                <span className="mt-3 block border-t border-line pt-3 text-xs text-muted">이 작품이 다룬 사건</span>
                 <span className="mt-2 block text-lg font-semibold leading-snug">{todayMedia.title}</span>
                 <span className="mt-1 line-clamp-2 block text-sm leading-6 text-muted">{todayMedia.summary}</span>
+                <SheetPending />
               </Link>
             )}
           </div>
@@ -176,6 +176,7 @@ export function Bookshelf({
                     </span>
                     <span className="mt-2 block font-semibold leading-snug">{item.title}</span>
                     <span className="mt-1 line-clamp-2 block text-sm leading-6 text-muted">{item.summary}</span>
+                    <SheetPending />
                   </Link>
                 </li>
               );
@@ -225,6 +226,7 @@ export function Bookshelf({
                   <span className="hidden text-xs text-subtle sm:inline">{COUNTRY_LABEL[caseRoomCountry(item.country)]}</span>
                   <span className="text-xs text-subtle">{formatCaseDate(item.occurredAt, "YEAR")}</span>
                   <span className="font-mono text-xs font-bold" style={{ color: stamp.color }}>{stamp.label}</span>
+                  <SheetPending />
                 </Link>
               </li>
             );

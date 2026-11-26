@@ -65,17 +65,15 @@ export function TechTabs({
         className="mt-3 rounded-xl border bg-surface p-5"
         style={{ borderColor: `${color}55`, backgroundImage: `linear-gradient(135deg, ${color}12, transparent 55%)` }}
       >
-        <div className="flex items-start gap-3">
+        <div className="flex items-center gap-3">
           <span className="flex size-10 shrink-0 items-center justify-center rounded-lg" style={{ background: `${color}22`, color }}>
             <TechIconView name={tech.icon} className="size-5" />
           </span>
-          <div className="min-w-0">
-            <span className="inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold" style={{ background: `${color}22`, color }}>
-              {tech.badge}
-            </span>
-            <h3 className="mt-1 text-lg font-semibold leading-snug">{tech.title}</h3>
-          </div>
+          <span className="inline-block rounded-full px-2.5 py-0.5 text-[11px] font-semibold" style={{ background: `${color}22`, color }}>
+            {tech.badge}
+          </span>
         </div>
+        <h3 className="mt-3 text-lg font-semibold leading-snug">{tech.title}</h3>
         <p className="mt-3 font-medium leading-7">{tech.definition}</p>
         <p className="mt-2 text-sm leading-7 text-muted">{tech.detail}</p>
 

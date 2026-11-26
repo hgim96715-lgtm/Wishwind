@@ -9,6 +9,7 @@ import {
   type PanInfo,
 } from "motion/react";
 import { LuX } from "react-icons/lu";
+import { sheetPending } from "@/components/cases/sheet-pending";
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -54,6 +55,8 @@ export function BottomSheet({
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(true);
+  // 임시 시트(SheetPending)가 이미 떠 있었다면 같은 자리에서 이어받으므로 열림 애니메이션을 건너뜀
+  const [takeover] = useState(() => sheetPending.active);
   const dragControls = useDragControls();
   const sheetRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -97,7 +100,7 @@ export function BottomSheet({
           <motion.div
             aria-hidden
             onClick={close}
-            initial={{ opacity: 0 }}
+            initial={{ opacity: takeover ? 1 : 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
@@ -115,7 +118,7 @@ export function BottomSheet({
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={{ top: 0, bottom: 0.6 }}
             onDragEnd={onDragEnd}
-            initial={{ y: "100%" }}
+            initial={{ y: takeover ? 0 : "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 34 }}
@@ -142,7 +145,7 @@ export function BottomSheet({
             <div
               ref={scrollRef}
               tabIndex={0}
-              className="overflow-y-auto overscroll-contain px-6 pb-12 md:px-10"
+              className="overflow-y-auto overscroll-contain px-6 pb-12 [scrollbar-width:none] md:px-10 [&::-webkit-scrollbar]:hidden"
             >
               <div className="pt-4">{children}</div>
             </div>

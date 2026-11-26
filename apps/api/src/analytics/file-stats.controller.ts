@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, HttpCode, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Headers, HttpCode, Param, Post } from '@nestjs/common';
 import { ZodPipe } from '../common/pipes/zod-validation.pipe.js';
 import { fileEventSchema, fileTargetSchema, type FileEventInput, type FileTargetParams } from './dto/file-stats.dto.js';
 import { FileStatsService } from './file-stats.service.js';
@@ -39,5 +39,15 @@ export class FileStatsController {
     @Headers('x-visitor-ua') ua: string | undefined,
   ) {
     return this.files.remember(target, ip ?? '', ua ?? '');
+  }
+
+  @Delete('remember')
+  @HttpCode(200)
+  unremember(
+    @Param(new ZodPipe(fileTargetSchema)) target: FileTargetParams,
+    @Headers('x-visitor-ip') ip: string | undefined,
+    @Headers('x-visitor-ua') ua: string | undefined,
+  ) {
+    return this.files.unremember(target, ip ?? '', ua ?? '');
   }
 }

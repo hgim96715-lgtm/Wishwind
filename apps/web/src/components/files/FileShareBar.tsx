@@ -30,11 +30,10 @@ export function FileShareBar({
 
   useEffect(() => {
     const ac = new AbortController();
-    void (async () => {
-      await recordFileEvent(type, fileKey, "VIEW");
-      const next = await fetchFileStats(type, fileKey, ac.signal).catch(() => null);
-      if (next) setStats(next);
-    })();
+    // 기록과 숫자 조회를 동시에 시작해 문장이 먼저 보이게 하고, 기록이 끝나면 내 방문까지 반영해 한 번 더 갱신함
+    const load = () => fetchFileStats(type, fileKey, ac.signal).then((next) => next && setStats(next)).catch(() => null);
+    void load();
+    void recordFileEvent(type, fileKey, "VIEW").then(load);
     return () => ac.abort();
   }, [type, fileKey]);
 

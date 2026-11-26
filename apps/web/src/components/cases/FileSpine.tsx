@@ -10,6 +10,7 @@ import {
 } from "@/lib/cases/labels";
 import type { CaseListItem } from "@/lib/cases/types";
 import { ReviewStamp } from "./StatusStamp";
+import { SheetPending } from "./SheetPending";
 
 /** 책등에 들어가는 짧은 제목: 괄호 속 별칭과 끝의 '사건'을 뺌 (전체 제목은 aria-label·시트에 그대로 있음) */
 export function spineTitle(title: string) {
@@ -102,6 +103,7 @@ export function FileSpine({ item, fileNo }: { item: CaseListItem; fileNo: number
           {formatCaseDate(item.occurredAt, "YEAR")}
         </span>
       </span>
+      <SheetPending />
     </Link>
   );
 }

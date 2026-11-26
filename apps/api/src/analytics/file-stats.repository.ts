@@ -14,6 +14,11 @@ export class FileStatsRepository {
     return !!(await this.prisma.missingPerson.findUnique({ where: { id: key }, select: { id: true } }));
   }
 
+  /** 하트를 다시 눌러 취소: 오늘 기록한 것만 지워짐 (해시가 날마다 달라 지난 날 기록은 누구 것인지 알 수 없음) */
+  removeRemember(caseSlug: string, visitorHash: string) {
+    return this.prisma.caseRemember.deleteMany({ where: { caseSlug, visitorHash } });
+  }
+
   /** 같은 사람이 같은 날 여러 번 열거나 공유해도 1번만 셈 (유니크 키 충돌은 무시) */
   record(data: { target: FileTarget; targetKey: string; kind: FileEventKind; channel: string | null; visitorHash: string }) {
     return this.prisma.fileEvent.createMany({ data: [data], skipDuplicates: true });

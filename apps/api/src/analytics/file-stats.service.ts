@@ -68,4 +68,12 @@ export class FileStatsService {
     }
     return { count: await this.repo.rememberCount(key) };
   }
+
+  async unremember({ type, key }: FileTargetParams, ip: string, ua: string) {
+    if (type !== 'case') throw new NotFoundException('사건을 찾을 수 없습니다.');
+    if (ua && !BOT.test(ua)) {
+      await this.repo.removeRemember(key, this.analytics.visitorHash(ip, ua, kstDay()));
+    }
+    return { count: await this.repo.rememberCount(key) };
+  }
 }

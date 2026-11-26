@@ -22,6 +22,7 @@ import { RememberButton } from "./RememberButton";
 import { SentenceVote } from "./SentenceVote";
 import { ReviewStamp, StatusStamp } from "./StatusStamp";
 import { FileShareBar } from "@/components/files/FileShareBar";
+export { CaseDetailSkeleton } from "./CaseDetailSkeleton";
 
 /** 개발 중에만 서버 실행 방법 같은 안내를 보여 줌 (배포 사이트에는 노출하지 않음) */
 const IS_DEV = process.env.NODE_ENV === "development";
@@ -106,15 +107,16 @@ export async function CaseDetailView({ slug }: { slug: string }) {
   return (
     <article>
       <header className="pb-6">
-        <div className="flex items-start justify-between gap-4">
-          <p className="text-sm font-medium text-subtle">
-            {COUNTRY_LABEL[caseRoomCountry(data.country)]} · {CATEGORY_LABEL[data.category]} ·{" "}
-            {formatCaseDate(data.occurredAt, data.occurredAtPrecision)}
-          </p>
+        {/* 도장은 오른쪽 위 닫기(X) 버튼과 겹쳐 보이지 않게 왼쪽 줄 맨 앞에 둠 */}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-3">
           <div className="flex shrink-0 items-center gap-2">
             {data.reviewPending && <ReviewStamp />}
             <StatusStamp status={data.status} closure={data.closure} className="text-sm" />
           </div>
+          <p className="text-sm font-medium text-subtle">
+            {COUNTRY_LABEL[caseRoomCountry(data.country)]} · {CATEGORY_LABEL[data.category]} ·{" "}
+            {formatCaseDate(data.occurredAt, data.occurredAtPrecision)}
+          </p>
         </div>
         <h1 className="mt-4 text-2xl font-bold tracking-tight md:text-3xl">
           {data.title}
@@ -443,17 +445,3 @@ function Empty({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function CaseDetailSkeleton() {
-  return (
-    <div aria-busy className="animate-pulse space-y-4">
-      <div className="h-4 w-48 rounded bg-line/70" />
-      <div className="h-8 w-2/3 rounded bg-line/70" />
-      <div className="mt-6 flex gap-3">
-        {Array.from({ length: 5 }, (_, i) => (
-          <div key={i} className="h-5 w-14 rounded bg-line/50" />
-        ))}
-      </div>
-      <div className="mt-6 h-48 rounded-2xl bg-surface/70" />
-    </div>
-  );
-}
