@@ -8,18 +8,17 @@ import { DidYouKnow } from "@/components/home/DidYouKnow";
 import { RoomGrid } from "@/components/home/RoomGrid";
 import { FeaturedCases } from "@/components/home/FeaturedCases";
 import { TodayTechCard } from "@/components/home/TodayTechCard";
+import { AccountLinkSkeleton, DidYouKnowSkeleton, FeaturedCasesSkeleton, TodayTechCardSkeleton } from "@/components/home/HomeSkeletons";
 import { getCases } from "@/lib/cases/api";
 import { INSTAGRAM_URL } from "@/lib/site";
 
-/** 사건 수는 요청 때 가져오므로 Suspense 안에서만 읽음 (첫 화면 prerender를 막지 않게). 불러오는 동안·실패 시에는 숫자 없는 카드를 보여 줌 */
-async function RoomGridWithCount() {
-  let caseCount: number | undefined;
+/** 사건 수는 요청 때 가져오므로 Suspense 안에서만 읽음. 실패하면 기본 배지 */
+async function CaseCountBadge() {
   try {
-    caseCount = (await getCases()).items.length;
+    return `${(await getCases()).items.length}건 기록`;
   } catch {
-    caseCount = undefined;
+    return "사건 기록";
   }
-  return <RoomGrid caseCount={caseCount} />;
 }
 
 export default function Home() {
@@ -27,7 +26,7 @@ export default function Home() {
     <main className="relative mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-6 py-16">
       <div className="absolute top-6 right-6 flex items-center gap-2">
         <ThemeToggle />
-        <Suspense fallback={null}>
+        <Suspense fallback={<AccountLinkSkeleton />}>
           <AccountLink />
         </Suspense>
       </div>
@@ -50,22 +49,26 @@ export default function Home() {
       </section>
 
       {/* 오늘의 기념일 or 대표 사건 카드 */}
-      <Suspense fallback={null}>
+      <Suspense fallback={<DidYouKnowSkeleton />}>
         <DidYouKnow />
       </Suspense>
 
       {/* 3개 방 카드 */}
-      <Suspense fallback={<RoomGrid />}>
-        <RoomGridWithCount />
-      </Suspense>
+      <RoomGrid
+        casesBadge={
+          <Suspense fallback="사건 기록">
+            <CaseCountBadge />
+          </Suspense>
+        }
+      />
 
       {/* 지금 살펴볼 사건 3개 */}
-      <Suspense fallback={null}>
+      <Suspense fallback={<FeaturedCasesSkeleton />}>
         <FeaturedCases />
       </Suspense>
 
       {/* 오늘의 추적 지식 미니 카드 */}
-      <Suspense fallback={null}>
+      <Suspense fallback={<TodayTechCardSkeleton />}>
         <TodayTechCard />
       </Suspense>
 

@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { motion, type Variants } from "motion/react";
 import type { Room } from "@/lib/rooms";
@@ -18,14 +19,12 @@ const cardVariants: Variants = {
 
 interface RoomCardProps {
   room: Room;
-  /** 사건방에서 동적으로 받아온 전체 사건 수 */
-  caseCount?: number;
+  /** 동적 배지 (서버에서 그려 넘김). 있으면 정적 배지 대신 사용 */
+  badgeSlot?: ReactNode;
 }
 
-export function RoomCard({ room, caseCount }: RoomCardProps) {
-  const badge = room.slug === "cases" && caseCount != null
-    ? `${caseCount}건 기록`
-    : room.badge;
+export function RoomCard({ room, badgeSlot }: RoomCardProps) {
+  const badge = badgeSlot ?? room.badge;
 
   return (
     <MotionLink
