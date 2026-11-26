@@ -52,7 +52,7 @@ function Shelves({ items }: { items: CaseListItem[] }) {
 
           {/* 책장 본체: 뒷판 + 선반. 모바일에서는 가로 스크롤 */}
           <div className="rounded-xl border-x-[10px] border-t-[10px] border-[#b08b66] bg-[#e2d2b8] shadow-[inset_0_10px_18px_rgb(91_70_52/0.28)]">
-            <ul className="flex snap-x items-end gap-1.5 overflow-x-auto px-4 pt-6 [scrollbar-width:thin]">
+            <ul className="flex snap-x items-end gap-1.5 overflow-x-auto px-4 pt-8 [scrollbar-width:thin]">
               {cases.map((item) => (
                 <li key={item.id} className="snap-start">
                   <FileSpine item={item} fileNo={++fileNo} />

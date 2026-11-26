@@ -8,7 +8,7 @@ import {
   useDragControls,
   type PanInfo,
 } from "motion/react";
-import { LuX } from "react-icons/lu";
+import { LuFolderOpen, LuX } from "react-icons/lu";
 import { sheetPending } from "@/components/cases/sheet-pending";
 
 const FOCUSABLE =
@@ -122,20 +122,24 @@ export function BottomSheet({
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 34 }}
-            className="absolute inset-x-0 bottom-0 mx-auto flex max-h-[90dvh] w-full max-w-3xl flex-col rounded-t-3xl border border-b-0 border-line bg-background shadow-[0_-12px_40px_rgb(47_44_40/0.18)] outline-none"
+            className="absolute inset-x-0 bottom-0 mx-auto flex max-h-[90dvh] w-full max-w-3xl flex-col rounded-t-3xl border border-b-0 border-line bg-paper shadow-[0_-12px_40px_rgb(47_44_40/0.18)] outline-none"
           >
             {/* 손잡이: 여기서만 드래그 시작 */}
             <div
               onPointerDown={(e) => dragControls.start(e)}
-              className="relative z-20 flex shrink-0 cursor-grab touch-none justify-center pt-3 pb-2 active:cursor-grabbing"
+              className="relative z-20 flex h-12 shrink-0 cursor-grab touch-none items-center justify-center active:cursor-grabbing"
             >
+              <span aria-hidden className="pointer-events-none absolute top-1/2 left-6 flex -translate-y-1/2 items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-subtle md:left-10">
+                <LuFolderOpen className="size-3.5" />
+                Case File
+              </span>
               <span aria-hidden className="h-1.5 w-12 rounded-full bg-line" />
               <button
                 type="button"
                 onClick={close}
                 onPointerDown={(e) => e.stopPropagation()}
                 aria-label="닫기"
-                className="absolute top-2.5 right-4 rounded-full p-1.5 text-subtle transition-colors hover:bg-line/60 hover:text-foreground"
+                className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full p-1.5 text-subtle transition-colors hover:bg-line/60 hover:text-foreground"
               >
                 <LuX aria-hidden className="size-5" />
               </button>

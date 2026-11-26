@@ -55,6 +55,8 @@ export function FileSpine({ item, fileNo }: { item: CaseListItem; fileNo: number
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
   params.set("file", item.slug);
+  // 이 책의 사건 파일이 열려 있는 동안에는 책등이 뽑혀 있고, 닫히면 제자리로 꽂힘 (transition)
+  const pulledOut = searchParams.get("file") === item.slug;
   const color = CATEGORY_COLOR[item.category];
   const stamp = caseStamp(item);
   // 제목 길이에 따라 책등 높이를 살짝 다르게 → 실제 책장처럼 들쭉날쭉한 느낌
@@ -69,10 +71,11 @@ export function FileSpine({ item, fileNo }: { item: CaseListItem; fileNo: number
     <Link
       href={`/cases?${params.toString()}`}
       scroll={false}
+      draggable={false}
       aria-label={`${item.title} (${CATEGORY_LABEL[item.category]}, ${stamp.label})`}
       title={item.summary}
       style={{ "--spine": color, height } as React.CSSProperties}
-      className={`group relative flex ${width} flex-col items-center rounded-t-md rounded-b-sm bg-(--spine) px-1.5 pt-3 pb-2 text-white shadow-[inset_-6px_0_8px_rgb(0_0_0/0.18),inset_3px_0_4px_rgb(255_255_255/0.12)] outline-none transition-transform duration-300 ease-out hover:-translate-y-3 hover:shadow-[0_14px_14px_rgb(47_44_40/0.3)] focus-visible:-translate-y-3 focus-visible:ring-4 focus-visible:ring-white/50`}
+      className={`${pulledOut ? "-translate-y-6 ring-2 ring-white/70 " : ""}group relative flex ${width} flex-col items-center rounded-t-md rounded-b-sm bg-(--spine) px-1.5 pt-3 pb-2 text-white shadow-[inset_-6px_0_8px_rgb(0_0_0/0.18),inset_3px_0_4px_rgb(255_255_255/0.12)] outline-none transition-transform duration-300 ease-out motion-reduce:transition-none has-[[data-pending]]:-translate-y-6 has-[[data-pending]]:ring-2 has-[[data-pending]]:ring-white/70 active:-translate-y-4 active:brightness-110 [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] select-none hover:-translate-y-3 hover:shadow-[0_14px_14px_rgb(47_44_40/0.3)] focus-visible:-translate-y-3 focus-visible:ring-4 focus-visible:ring-white/50`}
     >
       {/* 상단 상태 라벨 */}
       <span

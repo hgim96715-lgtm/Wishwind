@@ -16,7 +16,7 @@ import { useWeather } from "./useWeather";
 import { WEATHER_LABEL } from "@/lib/weather/types";
 import { GardenChoice } from "./GardenChoice";
 import { AnimatePresence } from "motion/react";
-import { phaseAt } from "./garden/expo-environment";
+import { ENVIRONMENTS, phaseAt } from "./garden/expo-environment";
 import { currentHour } from "./time-of-day";
 import { regionLabel } from "@/lib/missing/regions";
 
@@ -87,6 +87,16 @@ export function GardenExpo() {
   const night=phase==="night";
   // 화면 위 로고(정원 바깥 머리글)도 정원의 시간대를 알도록 html에 표시 (globals.css의 로고 규칙)
   useEffect(()=>{const root=document.documentElement;root.dataset.expoPhase=phase;return()=>{delete root.dataset.expoPhase;};},[phase]);
+  // 폰 주소창·하단 막대·안전 영역 색을 정원 하늘 시간대에 맞춤 (이 페이지의 고정 theme-color가 밤에도 밝은 크림색이라 테두리가 밝게 보였음)
+  useEffect(()=>{
+    const color=ENVIRONMENTS[phase].top;
+    const metas=[...document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')];
+    const prevMetas=metas.map(m=>m.content);
+    metas.forEach(m=>{m.content=color;});
+    const root=document.documentElement,prevRoot=root.style.backgroundColor,prevBody=document.body.style.backgroundColor;
+    root.style.backgroundColor=color;document.body.style.backgroundColor=color;
+    return()=>{metas.forEach((m,i)=>{m.content=prevMetas[i];});root.style.backgroundColor=prevRoot;document.body.style.backgroundColor=prevBody;};
+  },[phase]);
   const setupOpen=avatarLoaded&&(!avatar||editingAvatar);
   const modalOpen=listOpen||!!lights.selected||setupOpen;
   const gardenCount=lights.groups[selectedGarden].length;
