@@ -27,7 +27,6 @@ export const envSchema = z
     CASE_INBOX_DIR: z.string().default('prisma/imports/inbox'),
     /** '사건 파일 올리기' API 키. 비우면 그 기능은 꺼짐 (배포 서버에서 새벽 수집을 받을 때 씀) */
     CASE_IMPORT_TOKEN: optional(z.string().min(32, '32자 이상이어야 합니다')),
-    NEWS_SYNC_INTERVAL_HOURS: z.coerce.number().min(1).max(48).default(3),
     NEWS_QUERIES: optional(z.string()),
     NEWS_FOREIGN_ENABLED: z.stringbool().default(true),
     /** 새 기사를 Claude가 분류해 바로 공개함 (ANTHROPIC_API_KEY 필요, 없으면 예전처럼 관리자 확인) */

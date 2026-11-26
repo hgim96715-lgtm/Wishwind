@@ -35,6 +35,17 @@ const CLASSIFY_LIMIT = 160;
 /** 한 번 수집에서 새로 만드는 사건 초안 수 상한 (관리실 확인 부담) */
 const DRAFT_LIMIT = 10;
 
+/** 뉴스 수집 시각(한국 시간). 사람들이 많이 보는 아침·점심·저녁·밤에 맞춤 */
+export const NEWS_SYNC_HOURS_KST = [8, 13, 18, 22] as const;
+
+export function msUntilNextSync(now: Date) {
+  const kst = new Date(now.getTime() + 9 * 3_600_000);
+  const minutes = kst.getUTCHours() * 60 + kst.getUTCMinutes() + kst.getUTCSeconds() / 60;
+  const next = NEWS_SYNC_HOURS_KST.map((h) => h * 60).find((m) => m > minutes);
+  const wait = next !== undefined ? next - minutes : 24 * 60 - minutes + NEWS_SYNC_HOURS_KST[0] * 60;
+  return Math.round(wait * 60_000);
+}
+
 /**
  * 새 기사를 모아 NEW로 저장한 뒤, NEWS_AUTO_PUBLISH가 켜져 있으면 Claude가 제목을 분류함.
  * - PUBLISH: 바로 브리핑룸에 공개 (reviewedAt은 비워 둬 '자동 공개'로 구분)
@@ -58,10 +69,17 @@ export class NewsSyncService implements OnApplicationBootstrap, OnApplicationShu
 
   onApplicationBootstrap() {
     if (!this.config.get('NEWS_SYNC_ENABLED', { infer: true })) return;
-    const hours = this.config.get('NEWS_SYNC_INTERVAL_HOURS', { infer: true });
     const run = () => void this.sync().catch((e: unknown) => this.logger.warn(`뉴스 수집 실패: ${String(e)}`));
     this.timers.push(setTimeout(run, FIRST_RUN_DELAY_MS));
-    this.timers.push(setInterval(run, hours * 60 * 60 * 1000));
+    const schedule = () => {
+      const timer = setTimeout(() => {
+        run();
+        schedule();
+      }, msUntilNextSync(new Date()));
+      timer.unref();
+      this.timers.push(timer);
+    };
+    schedule();
     for (const t of this.timers) t.unref();
   }
 

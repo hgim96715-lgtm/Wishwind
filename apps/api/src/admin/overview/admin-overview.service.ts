@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Env } from '../../config/env.js';
+import { NEWS_SYNC_HOURS_KST } from '../../news/news-sync.service.js';
 import { AdminOverviewRepository } from './admin-overview.repository.js';
 
-/** 매일 새벽 사건 수집은 claude.ai 예약 작업(한국 시간 01:52)이 '사건 파일 올리기' API로 넣음 */
-const NIGHTLY_AT = '매일 새벽 1시 52분';
+/** 새벽 사건 수집은 claude.ai 예약 작업(한국 시간 화·금 01:52)이 '사건 파일 올리기' API로 넣음 */
+const NIGHTLY_AT = '매주 화·금 새벽 1시 52분';
 
 /** 관리자 첫 화면: 지금 손봐야 할 일의 개수 */
 @Injectable()
@@ -34,14 +35,14 @@ export class AdminOverviewService {
         key: 'nightly',
         name: '새벽 사건 수집',
         schedule: NIGHTLY_AT,
-        description: '새로운 사건 12건을 조사해 비공개 초안으로 넣습니다. 확인한 뒤 공개해 주세요.',
+        description: '한 번에 새로운 사건 1~2건을 조사해 비공개 초안으로 넣습니다. 확인한 뒤 공개해 주세요.',
         lastAt: last.nightly,
         enabled: true,
       },
       {
         key: 'news',
         name: '새 소식(뉴스) 수집',
-        schedule: `${this.config.get('NEWS_SYNC_INTERVAL_HOURS', { infer: true })}시간마다`,
+        schedule: `매일 ${NEWS_SYNC_HOURS_KST.join('·')}시`,
         description: '사건·실종 관련 기사를 모아 AI가 분류합니다. 애매한 기사는 ‘확인 안 한 새 뉴스’로 남습니다.',
         lastAt: last.news,
         enabled: newsOn,
