@@ -17,6 +17,13 @@ import type { PoliceCounts } from "@/lib/stats/api";
 
 type Tab = "trend" | "recidivism" | "ours";
 
+/** 숫자를 가져온 공식 자료 페이지 */
+const SOURCE_URL = {
+  rate: "https://www.index.go.kr/unify/idx-info.do?idxCd=4262",
+  count: "https://www.data.go.kr/data/15083810/fileData.do",
+  recidivism: "https://www.index.go.kr/unity/potal/indicator/IndexInfo.do?cdNo=2&clasCd=10&idxCd=F0235",
+} as const;
+
 const chip = (on: boolean) =>
   `rounded-full border px-3 py-1.5 text-sm transition-colors ${on ? "border-foreground bg-foreground font-semibold text-surface" : "border-line bg-surface hover:border-foreground/40"}`;
 
@@ -181,7 +188,17 @@ export function CrimeStats({ ourCases, police }: { ourCases?: ReactNode; /** 경
         )}
 
         <p className="mt-4 border-t border-line pt-3 text-xs leading-5 text-subtle">
-          {tab === "ours" ? "출처: Wishwind 사건 기록" : `출처: ${tab === "trend" ? (basis === "rate" ? CRIME_SOURCE : POLICE_SOURCE) : RECIDIVISM_SOURCE}. ${basis === "count" && tab === "trend" && police ? police.fetchedAt : CHECKED_ON} 확인.`}
+          {tab === "ours" ? (
+            "출처: Wishwind 사건 기록"
+          ) : (
+            <>
+              출처: {tab === "trend" ? (basis === "rate" ? CRIME_SOURCE : POLICE_SOURCE) : RECIDIVISM_SOURCE}.{" "}
+              {basis === "count" && tab === "trend" && police ? police.fetchedAt : CHECKED_ON} 확인.{" "}
+              <a href={SOURCE_URL[tab === "trend" ? basis : "recidivism"]} target="_blank" rel="noreferrer noopener" className="underline underline-offset-2 hover:text-foreground">
+                원본 자료 보기
+              </a>
+            </>
+          )}
         </p>
       </div>
     </section>
