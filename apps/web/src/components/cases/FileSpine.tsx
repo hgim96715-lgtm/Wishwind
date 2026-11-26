@@ -71,7 +71,7 @@ export function FileSpine({ item, fileNo }: { item: CaseListItem; fileNo: number
       aria-label={`${item.title} (${CATEGORY_LABEL[item.category]}, ${stamp.label})`}
       title={item.summary}
       style={{ "--spine": color, height } as React.CSSProperties}
-      className={`group relative flex ${width} flex-col items-center rounded-t-md rounded-b-sm bg-(--spine) px-1.5 pt-3 pb-2 text-white shadow-[inset_-6px_0_8px_rgb(0_0_0/0.18),inset_3px_0_4px_rgb(255_255_255/0.12)] outline-none transition-transform duration-300 ease-out hover:-translate-y-3 focus-visible:-translate-y-3 focus-visible:ring-4 focus-visible:ring-white/50`}
+      className={`group relative flex ${width} flex-col items-center rounded-t-md rounded-b-sm bg-(--spine) px-1.5 pt-3 pb-2 text-white shadow-[inset_-6px_0_8px_rgb(0_0_0/0.18),inset_3px_0_4px_rgb(255_255_255/0.12)] outline-none transition-transform duration-300 ease-out hover:-translate-y-3 hover:shadow-[0_14px_14px_rgb(47_44_40/0.3)] focus-visible:-translate-y-3 focus-visible:ring-4 focus-visible:ring-white/50`}
     >
       {/* 상단 상태 라벨 */}
       <span
