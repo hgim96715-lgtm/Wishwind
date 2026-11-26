@@ -191,6 +191,28 @@ export async function removeCaseChange(id: string, changeId: string) {
   return run(() => adminSend(`/cases/${id}/changes/${changeId}`, "DELETE"), "‘바뀐 것’을 지웠습니다.");
 }
 
+/** 타임라인 폼 값 → API 형식 */
+function timelineBody(form: FormData) {
+  return {
+    occurredAt: text(form, "occurredAt") || null,
+    occurredAtPrecision: text(form, "occurredAtPrecision"),
+    title: text(form, "title"),
+    description: text(form, "description") || null,
+  };
+}
+
+export async function addCaseTimeline(id: string, _: ActionState, form: FormData) {
+  return run(() => adminSend(`/cases/${id}/timeline`, "POST", timelineBody(form)), "타임라인을 추가했습니다.");
+}
+
+export async function updateCaseTimeline(id: string, eventId: string, _: ActionState, form: FormData) {
+  return run(() => adminSend(`/cases/${id}/timeline/${eventId}`, "PATCH", timelineBody(form)), "타임라인을 고쳤습니다.");
+}
+
+export async function removeCaseTimeline(id: string, eventId: string) {
+  return run(() => adminSend(`/cases/${id}/timeline/${eventId}`, "DELETE"), "타임라인을 지웠습니다.");
+}
+
 export async function removeCaseRelated(id: string, relatedId: string) {
   return run(() => adminSend(`/cases/${id}/related/${relatedId}`, "DELETE"), "관련 콘텐츠를 지웠습니다.");
 }

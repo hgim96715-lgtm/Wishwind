@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ActionForm, Button } from "@/components/admin/ActionForm";
 import { Badge, Card, ErrorBox, Field, Skeleton, inputClass } from "@/components/admin/ui";
-import { addCaseChange, addCaseRelated, addCaseSource, deleteCase, publishCase, removeCaseChange, removeCaseRelated, removeCaseSource, reviewCase, setFilePick, updateCase, updateCaseChange, updateCaseRelated } from "@/app/admin/actions";
+import { addCaseChange, addCaseRelated, addCaseSource, addCaseTimeline, deleteCase, publishCase, removeCaseChange, removeCaseRelated, removeCaseSource, removeCaseTimeline, reviewCase, setFilePick, updateCase, updateCaseChange, updateCaseRelated, updateCaseTimeline } from "@/app/admin/actions";
 import {
   BRIEFING_KIND_LABEL,
   BRIEFING_STATUS_LABEL,
@@ -12,12 +12,38 @@ import {
 } from "@/lib/admin/labels";
 import { AdminApiError, adminGet } from "@/lib/admin/session";
 import type { AdminCaseDetail, ReviewStatus } from "@/lib/admin/types";
-import type { CaseChange, RelatedContent } from "@/lib/cases/types";
+import type { CaseChange, RelatedContent, TimelineEvent } from "@/lib/cases/types";
 import { CATEGORY_LABEL, COUNTRY_LABEL, COUNTRY_ORDER, STATUS_STAMP, caseRoomCountry } from "@/lib/cases/labels";
 
 const PRECISION = { DAY: "일까지", MONTH: "월까지", YEAR: "연도만", UNKNOWN: "모름" } as const;
 const REVIEWS: ReviewStatus[] = ["DRAFT", "NEEDS_REVIEW", "VERIFIED", "REJECTED"];
 const dateValue = (iso: string | null) => iso?.slice(0, 10) ?? "";
+
+/** 타임라인 추가·고치기 칸. item이 있으면 그 값으로 채움 */
+function TimelineFields({ item }: { item?: TimelineEvent }) {
+  return (
+    <>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Field label="날짜" hint="모르면 비워 두세요.">
+          <input name="occurredAt" type="date" defaultValue={dateValue(item?.occurredAt ?? null)} className={inputClass} />
+        </Field>
+        <Field label="어디까지 정확한지">
+          <select name="occurredAtPrecision" defaultValue={item?.occurredAtPrecision ?? "DAY"} className={inputClass}>
+            {Object.entries(PRECISION).map(([k, v]) => (
+              <option key={k} value={k}>{v}</option>
+            ))}
+          </select>
+        </Field>
+      </div>
+      <Field label="제목">
+        <input name="title" required maxLength={200} defaultValue={item?.title} className={inputClass} />
+      </Field>
+      <Field label="설명" hint="비워도 됩니다.">
+        <textarea name="description" maxLength={5000} rows={3} defaultValue={item?.description ?? ""} className={inputClass} />
+      </Field>
+    </>
+  );
+}
 
 const CHANGE_KIND: Record<string, string> = { LAW: "법", SYSTEM: "제도", DAY: "기념일" };
 
@@ -355,6 +381,44 @@ async function CaseEditor({ id }: { id: string }) {
                 </Field>
                 <Button tone="primary">출처 추가</Button>
                 <p className="text-xs text-subtle">나무위키는 단서용이라 검증 출처 2곳에 세지 않습니다. 출처를 바꾸면 검토 상태를 다시 확인해야 합니다.</p>
+              </ActionForm>
+            </details>
+          </Card>
+
+          <Card>
+            <h2 className="mb-1 text-sm font-semibold">타임라인 {c.timeline.length}개</h2>
+            <p className="mb-3 text-xs text-subtle">사건 페이지의 타임라인입니다. 공개된 사건도 바로 반영되고, 검토 상태에는 영향이 없습니다.</p>
+            <ul className="space-y-3 text-sm">
+              {c.timeline.map((ev) => (
+                <li key={ev.id} className="border-b border-line pb-3 last:border-0">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="font-medium">{ev.title}</p>
+                      <p className="text-xs text-subtle">
+                        {ev.occurredAt ? `${dateValue(ev.occurredAt)} (${PRECISION[ev.occurredAtPrecision]})` : "날짜 모름"}
+                      </p>
+                    </div>
+                    <ActionForm inline action={removeCaseTimeline.bind(null, c.id, ev.id)} confirmMessage={`이 항목을 지울까요?\n${ev.title}`}>
+                      <button type="submit" className="shrink-0 text-xs text-subtle hover:text-clay-ink" aria-label="타임라인 지우기">
+                        지우기
+                      </button>
+                    </ActionForm>
+                  </div>
+                  <details className="mt-2">
+                    <summary className="cursor-pointer text-xs text-muted">고치기</summary>
+                    <ActionForm action={updateCaseTimeline.bind(null, c.id, ev.id)} className="mt-3">
+                      <TimelineFields item={ev} />
+                      <Button tone="primary">저장</Button>
+                    </ActionForm>
+                  </details>
+                </li>
+              ))}
+            </ul>
+            <details className="mt-4 border-t border-line pt-4">
+              <summary className="cursor-pointer text-sm font-medium">타임라인 추가</summary>
+              <ActionForm action={addCaseTimeline.bind(null, c.id)} className="mt-3">
+                <TimelineFields />
+                <Button tone="primary">추가</Button>
               </ActionForm>
             </details>
           </Card>

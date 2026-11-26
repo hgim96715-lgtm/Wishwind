@@ -3,7 +3,7 @@ import type { Prisma } from '../../generated/prisma/client.js';
 import { BriefingKind, BriefingStatus, CaseReviewStatus } from '../../generated/prisma/enums.js';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import { closureSelect } from '../../cases/closure.js';
-import type { CaseEdit, CaseListQuery, ChangeAdd, RelatedAdd, SourceAdd } from './dto/admin-cases.dto.js';
+import type { CaseEdit, CaseListQuery, ChangeAdd, RelatedAdd, SourceAdd, TimelineAdd } from './dto/admin-cases.dto.js';
 
 export const adminCaseRowSelect = {
   id: true,
@@ -64,6 +64,10 @@ const detailInclude = {
       note: true,
       isDramatized: true,
     },
+  },
+  timeline: {
+    orderBy: [{ occurredAt: { sort: 'asc', nulls: 'last' } }, { sortOrder: 'asc' }],
+    select: { id: true, occurredAt: true, occurredAtPrecision: true, title: true, description: true },
   },
   briefingPosts: {
     orderBy: { createdAt: 'desc' },
@@ -204,6 +208,22 @@ export class AdminCasesRepository {
 
   async removeChange(caseId: string, changeId: string) {
     const { count } = await this.prisma.caseChange.deleteMany({ where: { id: changeId, caseId } });
+    return count > 0;
+  }
+
+  /** 타임라인은 관리실에서 바로 고치는 보충 정보라 검토 상태를 바꾸지 않음 */
+  async addTimeline(caseId: string, item: TimelineAdd) {
+    const last = await this.prisma.timelineEvent.aggregate({ where: { caseId }, _max: { sortOrder: true } });
+    return this.prisma.timelineEvent.create({ data: { caseId, ...item, sortOrder: (last._max.sortOrder ?? -1) + 1 } });
+  }
+
+  async updateTimeline(caseId: string, eventId: string, item: TimelineAdd) {
+    const { count } = await this.prisma.timelineEvent.updateMany({ where: { id: eventId, caseId }, data: item });
+    return count > 0;
+  }
+
+  async removeTimeline(caseId: string, eventId: string) {
+    const { count } = await this.prisma.timelineEvent.deleteMany({ where: { id: eventId, caseId } });
     return count > 0;
   }
 

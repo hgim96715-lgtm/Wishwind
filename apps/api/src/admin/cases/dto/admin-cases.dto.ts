@@ -125,5 +125,14 @@ export const changeAddSchema = z
   .refine((v) => v.kind !== ChangeKind.DAY || !!v.observedOn, { message: '기념일은 매년 돌아오는 날(MM-DD)을 적어 주세요', path: ['observedOn'] });
 export type ChangeAdd = z.infer<typeof changeAddSchema>;
 
+/** 타임라인 한 줄. 추가와 고치기 모두 칸 전체를 보냄 */
+export const timelineAddSchema = z.object({
+  occurredAt: dateOrNull.optional().transform((v) => v ?? null),
+  occurredAtPrecision: z.enum(DatePrecision),
+  title: z.string().trim().min(1).max(200),
+  description: textOrNull(5000).optional().transform((v) => v ?? null),
+});
+export type TimelineAdd = z.infer<typeof timelineAddSchema>;
+
 export const filePickSchema = z.object({ picked: z.boolean() });
 export type FilePickInput = z.infer<typeof filePickSchema>;

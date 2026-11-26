@@ -1,4 +1,4 @@
-import type { CaseCategory, CaseChange, CaseClosure, CaseStatus, Country, RelatedContent } from "@/lib/cases/types";
+import type { CaseCategory, CaseChange, CaseClosure, CaseStatus, Country, RelatedContent, TimelineEvent } from "@/lib/cases/types";
 
 export type ReviewStatus = "DRAFT" | "NEEDS_REVIEW" | "VERIFIED" | "REJECTED";
 export type ContentStatus = "PUBLISHED" | "HELD" | "BLOCKED" | "HIDDEN";
@@ -77,6 +77,8 @@ export interface AdminCaseDetail {
   relatedContents: RelatedContent[];
   /** 이 사건 뒤에 바뀐 것(법·기념일·제도) */
   changes: CaseChange[];
+  /** 사건 타임라인 (날짜순) */
+  timeline: TimelineEvent[];
   briefingPosts: { id: string; kind: BriefingKind; status: BriefingStatus; title: string; createdAt: string }[];
   _count: Record<
     "timeline" | "suspects" | "victims" | "unsolvedQuestions" | "suspiciousCircumstances" | "userQuestions",

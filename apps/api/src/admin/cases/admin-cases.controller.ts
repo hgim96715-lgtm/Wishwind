@@ -10,6 +10,7 @@ import {
   relatedAddSchema,
   reviewSchema,
   sourceAddSchema,
+  timelineAddSchema,
   type ChangeAdd,
   type RelatedAdd,
   type CaseEdit,
@@ -18,6 +19,7 @@ import {
   type PublishInput,
   type ReviewInput,
   type SourceAdd,
+  type TimelineAdd,
 } from './dto/admin-cases.dto.js';
 import { AdminCasesService } from './admin-cases.service.js';
 
@@ -98,6 +100,26 @@ export class AdminCasesController {
   @Delete(':id/changes/:changeId')
   removeChange(@Param('id', ParseUUIDPipe) id: string, @Param('changeId', ParseUUIDPipe) changeId: string) {
     return this.cases.removeChange(id, changeId);
+  }
+
+  /** 타임라인 추가·수정·삭제 */
+  @Post(':id/timeline')
+  addTimeline(@Param('id', ParseUUIDPipe) id: string, @Body(new ZodPipe(timelineAddSchema)) body: TimelineAdd) {
+    return this.cases.addTimeline(id, body);
+  }
+
+  @Patch(':id/timeline/:eventId')
+  updateTimeline(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('eventId', ParseUUIDPipe) eventId: string,
+    @Body(new ZodPipe(timelineAddSchema)) body: TimelineAdd,
+  ) {
+    return this.cases.updateTimeline(id, eventId, body);
+  }
+
+  @Delete(':id/timeline/:eventId')
+  removeTimeline(@Param('id', ParseUUIDPipe) id: string, @Param('eventId', ParseUUIDPipe) eventId: string) {
+    return this.cases.removeTimeline(id, eventId);
   }
 
   /** 관련 콘텐츠(방송·다큐·유튜브 등) 추가·수정·삭제 */

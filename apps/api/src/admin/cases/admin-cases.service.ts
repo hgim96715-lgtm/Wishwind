@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { reviewCase, setPublished } from '../../case-import/case-import.repository.js';
 import { asBadRequest } from '../../common/errors/as-bad-request.js';
 import type { CaseReviewStatus } from '../../generated/prisma/enums.js';
-import type { CaseEdit, CaseListQuery, ChangeAdd, RelatedAdd, SourceAdd } from './dto/admin-cases.dto.js';
+import type { CaseEdit, CaseListQuery, ChangeAdd, RelatedAdd, SourceAdd, TimelineAdd } from './dto/admin-cases.dto.js';
 import { newCaseDraft, statusChangedDraft, toAdminCaseRow, toReviewCounts } from './admin-cases.mapper.js';
 import { AdminCasesRepository } from './admin-cases.repository.js';
 
@@ -138,6 +138,24 @@ export class AdminCasesService {
   async removeChange(id: string, changeId: string) {
     await this.findOrThrow(id);
     if (!(await this.repo.removeChange(id, changeId))) throw new NotFoundException('항목을 찾을 수 없습니다.');
+    return this.detail(id);
+  }
+
+  async addTimeline(id: string, item: TimelineAdd) {
+    await this.findOrThrow(id);
+    await this.repo.addTimeline(id, item);
+    return this.detail(id);
+  }
+
+  async updateTimeline(id: string, eventId: string, item: TimelineAdd) {
+    await this.findOrThrow(id);
+    if (!(await this.repo.updateTimeline(id, eventId, item))) throw new NotFoundException('항목을 찾을 수 없습니다.');
+    return this.detail(id);
+  }
+
+  async removeTimeline(id: string, eventId: string) {
+    await this.findOrThrow(id);
+    if (!(await this.repo.removeTimeline(id, eventId))) throw new NotFoundException('항목을 찾을 수 없습니다.');
     return this.detail(id);
   }
 
