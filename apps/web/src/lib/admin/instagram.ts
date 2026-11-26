@@ -2,7 +2,7 @@ import type { AdminCaseRow } from "@/lib/admin/types";
 import type { CaseChangeWithCase, CaseDetail } from "@/lib/cases/types";
 
 /**
- * 관리실 '인스타 준비'에서 쓰는 글감 만들기.
+ * 관리실 '인스타 성과'의 글감 페이지에서 쓰는 글감 만들기.
  * 문구는 사이트와 같은 합니다체. 피해자 사진·실명 강조·자극적인 표현은 쓰지 않음
  */
 

@@ -419,6 +419,10 @@ export async function addInstagramPost(_: ActionState, form: FormData) {
   return run(() => adminSend("/instagram/posts", "POST", instagramBody(form)), "게시물을 기록했습니다.");
 }
 
+export async function updateInstagramPost(id: string, _: ActionState, form: FormData) {
+  return run(() => adminSend(`/instagram/posts/${id}`, "PATCH", instagramBody(form)), "수정했습니다.");
+}
+
 export async function deleteInstagramPost(id: string, _: ActionState, __: FormData) {
   return run(() => adminSend(`/instagram/posts/${id}`, "DELETE"), "삭제했습니다.");
 }

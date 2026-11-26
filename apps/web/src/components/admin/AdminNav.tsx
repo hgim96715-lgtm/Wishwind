@@ -24,7 +24,7 @@ const LINKS = [
   { href: "/admin/inquiries", label: "문의", icon: LuInbox },
   { href: "/admin/feedback", label: "의견", icon: LuMessageSquareHeart },
   { href: "/admin/analytics", label: "방문자 분석", icon: LuChartColumn },
-  { href: "/admin/instagram", label: "인스타 준비", icon: LuInstagram },
+  { href: "/admin/instagram", label: "인스타 성과", icon: LuInstagram },
   { href: "/admin/instagram/reels", label: "릴스 분석", icon: LuClapperboard },
   { href: "/admin/growth", label: "성장 계획", icon: LuTrendingUp },
 ] as const;

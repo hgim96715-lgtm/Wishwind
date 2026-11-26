@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { addInstagramPost, deleteInstagramPost, setHomeFeatured } from "@/app/admin/actions";
+import { addInstagramPost, deleteInstagramPost, updateInstagramPost } from "@/app/admin/actions";
 import { ActionForm, Button } from "@/components/admin/ActionForm";
-import { Card, Empty, ErrorBox, Field, PageTitle, Skeleton, inputClass } from "@/components/admin/ui";
+import { InstagramPostFields } from "@/components/admin/InstagramPostFields";
+import { Card, Empty, ErrorBox, PageTitle, Skeleton } from "@/components/admin/ui";
 import { AdminApiError, adminGet } from "@/lib/admin/session";
 import type { Analytics, InstagramPostRow, InstagramPosts } from "@/lib/admin/types";
 
@@ -67,7 +68,6 @@ async function Dashboard() {
   const maxReach = Math.max(1, ...recent.map((p) => p.reach));
   const viewsByDay = new Map(daily.map((d) => [d.day, d.views]));
   const avgViews = daily.length > 0 ? daily.reduce((n, d) => n + d.views, 0) / daily.length : 0;
-  const featuredSlugs = new Set(data.featured.map((f) => f.slug));
 
   return (
     <>
@@ -86,70 +86,7 @@ async function Dashboard() {
         <h2 className="font-semibold">게시물 기록하기</h2>
         <div className="mt-3">
           <ActionForm action={addInstagramPost}>
-            <div className="grid gap-3 sm:grid-cols-3">
-              <Field label="올린 날">
-                <input type="date" name="postedOn" required defaultValue={new Date(Date.now() + 9 * 3_600_000).toISOString().slice(0, 10)} className={inputClass} />
-              </Field>
-              <Field label="종류">
-                <select name="kind" className={inputClass}>
-                  {Object.entries(KIND_LABEL).map(([k, v]) => (
-                    <option key={k} value={k}>{v}</option>
-                  ))}
-                </select>
-              </Field>
-              <Field label="사건 주소 (선택)" hint="예: yeongdeungpo-... 사건 슬러그">
-                <input name="caseSlug" maxLength={200} className={inputClass} />
-              </Field>
-            </div>
-            <Field label="제목·메모용 이름">
-              <input name="title" required maxLength={200} className={inputClass} />
-            </Field>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-6">
-              {(
-                [
-                  ["reach", "도달"],
-                  ["likes", "좋아요"],
-                  ["saves", "저장"],
-                  ["shares", "공유"],
-                  ["profileVisits", "프로필 방문"],
-                  ["followsGained", "새 팔로워"],
-                ] as const
-              ).map(([name, label]) => (
-                <Field key={name} label={label}>
-                  <input type="number" name={name} min={0} defaultValue={0} className={inputClass} />
-                </Field>
-              ))}
-            </div>
-            <details className="rounded-md border border-line px-3 py-2">
-              <summary className="cursor-pointer text-sm font-medium">릴스 인사이트 상세 (선택, 인사이트 화면 그대로)</summary>
-              <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {(
-                  [
-                    ["views", "조회"],
-                    ["viewers", "조회한 사람"],
-                    ["avgWatchSec", "평균 조회 시간(초)"],
-                    ["durationSec", "영상 길이(초)"],
-                    ["skipRate", "건너뛰기 비율(%)"],
-                    ["srcReels", "출처: 릴스 탭(%)"],
-                    ["srcExplore", "출처: 탐색 탭(%)"],
-                    ["srcProfile", "출처: 프로필(%)"],
-                    ["srcFollow", "출처: 팔로워 등(%)"],
-                  ] as const
-                ).map(([name, label]) => (
-                  <Field key={name} label={label}>
-                    <input type="number" name={name} min={0} step="any" className={inputClass} />
-                  </Field>
-                ))}
-              </div>
-              <div className="mt-3">
-                <Field label="시청 유지 곡선 (선택)" hint="그래프를 보고 '초:남은 %'를 쉼표로. 예: 0:100, 2:30, 5:12, 26:3">
-                  <input name="retention" maxLength={400} className={inputClass} />
-                </Field>
-              </div>
-            </details>
-            <Field label="메모 (선택)">
-              <input name="note" maxLength={500} className={inputClass} />
-            </Field>
+            <InstagramPostFields today={new Date(Date.now() + 9 * 3_600_000).toISOString().slice(0, 10)} />
             <Button tone="primary">기록</Button>
           </ActionForm>
         </div>
@@ -218,16 +155,20 @@ async function Dashboard() {
                   {p.note && <p className="mt-1 text-xs text-subtle">{p.note}</p>}
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {p.caseSlug && (
-                    <ActionForm action={setHomeFeatured.bind(null, p.caseSlug, !featuredSlugs.has(p.caseSlug))} inline>
-                      <Button tone="ok">{featuredSlugs.has(p.caseSlug) ? "홈 대표 해제" : "홈 대표 사건으로"}</Button>
-                    </ActionForm>
-                  )}
                   <ActionForm action={deleteInstagramPost.bind(null, p.id)} confirmMessage="이 기록을 삭제할까요?" inline>
                     <Button tone="danger">삭제</Button>
                   </ActionForm>
                 </div>
               </div>
+              <details className="mt-3 rounded-md border border-line px-3 py-2">
+                <summary className="cursor-pointer text-sm font-medium">수정</summary>
+                <div className="mt-3">
+                  <ActionForm action={updateInstagramPost.bind(null, p.id)}>
+                    <InstagramPostFields post={p} />
+                    <Button tone="primary">저장</Button>
+                  </ActionForm>
+                </div>
+              </details>
             </Card>
           ))}
         </div>
