@@ -8,6 +8,9 @@ import { caseSlugOf, fillDays, growthTips, kstDay, pathLabel, referrerHost, sour
 import { AnalyticsRepository } from './analytics.repository.js';
 
 const BOT = /bot|crawl|spider|slurp|headless|preview|lighthouse|monitor|curl|wget|python|axios|node-fetch/i;
+/** 개발 중 내 컴퓨터(localhost)·사설망에서 본 것은 방문자 분석에 넣지 않음 */
+const LOCAL_HOST = /^(localhost|127\.0\.0\.1|\[?::1\]?|0\.0\.0\.0|.*\.local)$/i;
+const LOCAL_IP = /^(::1|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|::ffff:127\.)/;
 const SKIP = /^\/(admin|api|_next)(\/|$)/;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -31,6 +34,7 @@ export class AnalyticsService {
   async record(input: PageViewInput, ip: string, ua: string, siteHost?: string) {
     const path = input.path.split(/[?#]/)[0] || '/';
     if (!ua || BOT.test(ua) || SKIP.test(path)) return { recorded: false };
+    if ((siteHost && LOCAL_HOST.test(siteHost)) || LOCAL_IP.test(ip)) return { recorded: false };
     await this.repo.createPageView({
       path,
       visitorHash: this.visitorHash(ip, ua, kstDay()),

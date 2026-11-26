@@ -15,6 +15,7 @@ export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "";
   const ua = request.headers.get("user-agent") ?? "";
   const host = (request.headers.get("host") ?? "").replace(/:\d+$/, "").replace(/^www\./, "");
+  if (/^(localhost|127\.0\.0\.1|\[::1\]|0\.0\.0\.0)$/.test(host)) return new Response(null, { status: 204 });
   try {
     await fetch(`${API_URL}/analytics/pageview`, {
       method: "POST",
