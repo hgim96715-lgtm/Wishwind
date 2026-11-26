@@ -11,18 +11,18 @@ import { TodayTechCard } from "@/components/home/TodayTechCard";
 import { getCases } from "@/lib/cases/api";
 import { INSTAGRAM_URL } from "@/lib/site";
 
-async function getCaseCount(): Promise<number | undefined> {
+/** 사건 수는 요청 때 가져오므로 Suspense 안에서만 읽음 (첫 화면 prerender를 막지 않게). 불러오는 동안·실패 시에는 숫자 없는 카드를 보여 줌 */
+async function RoomGridWithCount() {
+  let caseCount: number | undefined;
   try {
-    const res = await getCases();
-    return res.items.length;
+    caseCount = (await getCases()).items.length;
   } catch {
-    return undefined;
+    caseCount = undefined;
   }
+  return <RoomGrid caseCount={caseCount} />;
 }
 
-export default async function Home() {
-  const caseCount = await getCaseCount();
-
+export default function Home() {
   return (
     <main className="relative mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-6 py-16">
       <div className="absolute top-6 right-6 flex items-center gap-2">
@@ -55,7 +55,9 @@ export default async function Home() {
       </Suspense>
 
       {/* 3개 방 카드 */}
-      <RoomGrid caseCount={caseCount} />
+      <Suspense fallback={<RoomGrid />}>
+        <RoomGridWithCount />
+      </Suspense>
 
       {/* 지금 살펴볼 사건 3개 */}
       <Suspense fallback={null}>
