@@ -3,6 +3,7 @@ import Link from "next/link";
 import { cacheLife } from "next/cache";
 import { Suspense } from "react";
 import { getCase } from "@/lib/cases/api";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import {
   CaseDetailSkeleton,
   CaseDetailView,
@@ -41,6 +42,38 @@ async function caseForMeta(slug: string) {
   }
 }
 
+/** 검색 결과용 구조화 데이터: 사건 글(Article)과 경로(BreadcrumbList). 제목은 `<`를 이스케이프해 넣음 */
+async function CaseJsonLd({ slug }: { slug: string }) {
+  const data = await caseForMeta(slug);
+  if (!data) return null;
+  const url = `${SITE_URL}/cases/${encodeURIComponent(slug)}`;
+  const json = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": `${url}#article`,
+        headline: data.title,
+        description: data.summary,
+        inLanguage: "ko-KR",
+        mainEntityOfPage: url,
+        image: `${SITE_URL}/og-image.png`,
+        ...(data.updatedAt && { dateModified: data.updatedAt }),
+        publisher: { "@id": `${SITE_URL}/#organization` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: SITE_NAME, item: SITE_URL },
+          { "@type": "ListItem", position: 2, name: "사건방", item: `${SITE_URL}/cases` },
+          { "@type": "ListItem", position: 3, name: data.title, item: url },
+        ],
+      },
+    ],
+  };
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(json).replace(/</g, "\\u003c") }} />;
+}
+
 // generateStaticParams 없이 쓰므로 params는 요청 시점 데이터임 → Suspense 안에서만 꺼냄
 export default function CasePage({ params }: PageProps<"/cases/[slug]">) {
   return (
@@ -51,6 +84,7 @@ export default function CasePage({ params }: PageProps<"/cases/[slug]">) {
       >
         사건방으로
       </Link>
+      <Suspense fallback={null}>{params.then(({ slug }) => <CaseJsonLd slug={slug} />)}</Suspense>
       <Suspense fallback={<CaseDetailSkeleton />}>
         {params.then(({ slug }) => (
           <CaseDetailView slug={slug} />

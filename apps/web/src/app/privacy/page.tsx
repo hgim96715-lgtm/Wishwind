@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { HomeLogo } from "@/components/common/HomeLogo";
 
-export const metadata: Metadata = { title: "개인정보 처리방침" };
+export const metadata: Metadata = {
+  title: "개인정보 처리방침",
+  description: "Wishwind가 어떤 정보를 어떻게 다루는지 안내합니다.",
+  alternates: { canonical: "/privacy" },
+};
 
 /** 출시 전 법률 검토 필요 (docs/notice.md). 시행일은 공개 전에 확정 */
 export default function PrivacyPage() {

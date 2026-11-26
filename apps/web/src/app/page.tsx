@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { Suspense } from "react";
 import Link from "next/link";
@@ -20,6 +21,9 @@ async function CaseCountBadge() {
     return "사건 기록";
   }
 }
+
+// 대표 주소를 홈에만 지정함 (다른 페이지가 홈을 대표 주소로 물려받지 않게 레이아웃에서는 뺌)
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default function Home() {
   return (

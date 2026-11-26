@@ -6,6 +6,7 @@ import { ContactForm } from "@/components/briefing/ContactForm";
 export const metadata: Metadata = {
   title: "문의·의견 보내기",
   description: "잘못된 내용 정정, 궁금한 점, 사이트에 바라는 점을 남겨 주세요.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage({ searchParams }: PageProps<"/contact">) {
