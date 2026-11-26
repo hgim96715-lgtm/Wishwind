@@ -26,6 +26,13 @@ export default function InstagramPage() {
           <Dashboard />
         </Suspense>
         <Card>
+          <h2 className="font-semibold">성장 계획</h2>
+          <p className="mt-1 text-sm text-muted">목표 단계, 수익 3트랙 분석, 릴스 하루 1개 현황은 따로 모았습니다.</p>
+          <Link href="/admin/growth" className="mt-3 inline-block text-xs font-medium text-[#2f7469] hover:opacity-70">
+            성장 계획 열기
+          </Link>
+        </Card>
+        <Card>
           <h2 className="font-semibold">글감 만들기</h2>
           <p className="mt-1 text-sm text-muted">기념일·사건 문구와 스토리 이미지는 따로 모아 두었습니다.</p>
           <Link href="/admin/instagram/ideas" className="mt-3 inline-block text-xs font-medium text-[#2f7469] hover:opacity-70">

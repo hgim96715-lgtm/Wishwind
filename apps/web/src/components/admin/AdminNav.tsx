@@ -10,6 +10,7 @@ import {
   LuMessageSquareHeart,
   LuNewspaper,
   LuShieldAlert,
+  LuTrendingUp,
 } from "react-icons/lu";
 import { logout } from "@/app/admin/actions";
 
@@ -23,6 +24,7 @@ const LINKS = [
   { href: "/admin/feedback", label: "의견", icon: LuMessageSquareHeart },
   { href: "/admin/analytics", label: "방문자 분석", icon: LuChartColumn },
   { href: "/admin/instagram", label: "인스타 준비", icon: LuInstagram },
+  { href: "/admin/growth", label: "성장 계획", icon: LuTrendingUp },
 ] as const;
 
 export function AdminNav() {
