@@ -19,7 +19,7 @@ export async function ReelCases() {
         <FaInstagram aria-hidden className="size-4 text-brand-fg" />
         방금 릴스에서 보셨나요?
       </h2>
-      <ul className="-mx-6 mt-3 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <ul className="-mx-6 mt-3 flex snap-x snap-mandatory scroll-px-6 gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {items.map((c) => (
           <li key={c.slug} className="flex min-w-[15rem] flex-1 snap-start">
             <Link
