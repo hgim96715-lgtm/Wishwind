@@ -1,3 +1,4 @@
+import { CaseSlugPicker, type CaseOption } from "@/components/admin/CaseSlugPicker";
 import { Field, inputClass } from "@/components/admin/ui";
 import type { InstagramPostRow } from "@/lib/admin/types";
 
@@ -25,7 +26,7 @@ const REEL_FIELDS = [
 ] as const;
 
 /** 기록 추가와 기록 수정이 같은 입력칸을 씀. post가 있으면 그 값이 처음에 채워짐 */
-export function InstagramPostFields({ post, today }: { post?: InstagramPostRow; today?: string }) {
+export function InstagramPostFields({ post, today, cases = [] }: { post?: InstagramPostRow; today?: string; cases?: CaseOption[] }) {
   const retention = post?.retention?.map((r) => `${r.t}:${r.p}`).join(", ") ?? "";
   return (
     <>
@@ -40,8 +41,8 @@ export function InstagramPostFields({ post, today }: { post?: InstagramPostRow; 
             ))}
           </select>
         </Field>
-        <Field label="사건 주소 (선택)" hint="사건 슬러그. 적으면 홈 '방금 릴스에서 보셨나요?'에 나옴">
-          <input name="caseSlug" maxLength={200} defaultValue={post?.caseSlug ?? ""} className={inputClass} />
+        <Field label="다룬 사건 (선택)" hint="고르면 홈 '방금 릴스에서 보셨나요?'에 나옴">
+          <CaseSlugPicker cases={cases} initial={post?.caseSlug} />
         </Field>
       </div>
       <Field label="제목·메모용 이름">

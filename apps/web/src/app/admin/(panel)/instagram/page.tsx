@@ -6,7 +6,7 @@ import { ActionForm, Button } from "@/components/admin/ActionForm";
 import { InstagramPostFields } from "@/components/admin/InstagramPostFields";
 import { Card, Empty, ErrorBox, PageTitle, Skeleton } from "@/components/admin/ui";
 import { AdminApiError, adminGet } from "@/lib/admin/session";
-import type { Analytics, InstagramPostRow, InstagramPosts } from "@/lib/admin/types";
+import type { AdminCaseList, Analytics, InstagramPostRow, InstagramPosts } from "@/lib/admin/types";
 
 export const metadata: Metadata = { title: "인스타 성과" };
 
@@ -55,9 +55,11 @@ export default function InstagramPage() {
 async function Dashboard() {
   let data: InstagramPosts;
   let daily: Analytics["daily"] = [];
+  let cases: { slug: string; title: string }[] = [];
   try {
     data = await adminGet<InstagramPosts>("/instagram/posts");
     daily = (await adminGet<Analytics>("/analytics?days=60").catch(() => null))?.daily ?? [];
+    cases = ((await adminGet<AdminCaseList>("/cases?published=true").catch(() => null))?.items ?? []).map((c) => ({ slug: c.slug, title: c.title }));
   } catch (error) {
     if (error instanceof AdminApiError) return <ErrorBox message={error.message} />;
     throw error;
@@ -84,9 +86,12 @@ async function Dashboard() {
 
       <Card>
         <h2 className="font-semibold">게시물 기록하기</h2>
+        <p className="mt-1 text-sm text-muted">
+          홈 ‘방금 릴스에서 보셨나요?’도 여기서 정합니다. 새 릴스를 기록할 때 ‘다룬 사건’을 고르고 기록을 누르면 홈에 나옵니다. 이미 기록한 릴스는 아래 목록의 ‘수정’에서 사건을 바꾸거나 비울 수 있고, 최근에 올린 릴스 순서로 최대 6건이 보입니다.
+        </p>
         <div className="mt-3">
           <ActionForm action={addInstagramPost}>
-            <InstagramPostFields today={new Date(Date.now() + 9 * 3_600_000).toISOString().slice(0, 10)} />
+            <InstagramPostFields cases={cases} today={new Date(Date.now() + 9 * 3_600_000).toISOString().slice(0, 10)} />
             <Button tone="primary">기록</Button>
           </ActionForm>
         </div>
@@ -164,7 +169,7 @@ async function Dashboard() {
                 <summary className="cursor-pointer text-sm font-medium">수정</summary>
                 <div className="mt-3">
                   <ActionForm action={updateInstagramPost.bind(null, p.id)}>
-                    <InstagramPostFields post={p} />
+                    <InstagramPostFields post={p} cases={cases} />
                     <Button tone="primary">저장</Button>
                   </ActionForm>
                 </div>

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ActionForm, Button } from "@/components/admin/ActionForm";
 import { Badge, Card, ErrorBox, Field, Skeleton, inputClass } from "@/components/admin/ui";
-import { addCaseChange, addCaseRelated, addCaseSource, addCaseTimeline, deleteCase, publishCase, removeCaseChange, removeCaseRelated, removeCaseSource, removeCaseTimeline, reviewCase, setFilePick, updateCase, updateCaseChange, updateCaseRelated, updateCaseTimeline } from "@/app/admin/actions";
+import { addCaseChange, addCaseRelated, addCaseSource, addCaseTimeline, deleteCase, publishCase, removeCaseChange, removeCaseRelated, removeCaseSource, removeCaseTimeline, reviewCase, updateCase, updateCaseChange, updateCaseRelated, updateCaseTimeline } from "@/app/admin/actions";
 import {
   BRIEFING_KIND_LABEL,
   BRIEFING_STATUS_LABEL,
@@ -301,16 +301,6 @@ async function CaseEditor({ id }: { id: string }) {
                 </ActionForm>
               )}
             </div>
-            {c.isPublished && (
-              <div className="mt-4 border-t border-line pt-4">
-                <ActionForm action={setFilePick.bind(null, c.id, !c.isFilePick)}>
-                  <Button tone={c.isFilePick ? "danger" : "ok"}>
-                    {c.isFilePick ? "오늘의 사건 파일 고정 풀기" : "오늘의 사건 파일에 고정"}
-                  </Button>
-                  <p className="text-xs text-subtle">사건방 맨 위 ‘오늘의 사건 파일’에 먼저 보입니다. 최대 3건이며, 모자라는 칸은 날마다 자동으로 채웁니다.</p>
-                </ActionForm>
-              </div>
-            )}
             <div className="mt-4 border-t border-line pt-4">
               {c.isPublished ? (
                 <p className="text-xs text-subtle">공개 중인 사건은 비공개로 바꾼 뒤 삭제할 수 있습니다.</p>

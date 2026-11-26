@@ -117,13 +117,6 @@ export async function publishCase(id: string, published: boolean) {
   );
 }
 
-export async function setFilePick(id: string, picked: boolean, _: ActionState, __: FormData) {
-  return run(
-    () => adminSend(`/cases/${id}/file-pick`, "POST", { picked }),
-    picked ? "오늘의 사건 파일에 고정했습니다." : "고정을 풀었습니다.",
-  );
-}
-
 export async function addCaseSource(id: string, _: ActionState, form: FormData) {
   return run(
     () =>
