@@ -8,6 +8,8 @@ import {
   CRIME_NOTES,
   CRIME_RATE,
   CRIME_SOURCE,
+  POLICE_COUNTS,
+  POLICE_SOURCE,
   RECIDIVISM,
   RECIDIVISM_SOURCE,
 } from "@/lib/stats/crime";
@@ -32,10 +34,12 @@ const pctText = (pct: number) => `${pct > 0 ? "+" : pct < 0 ? "−" : ""}${Math.
 /** 브리핑룸 '숫자로 보기': 공식 통계로 범죄가 늘었는지 줄었는지, 재범은 얼마나 되는지 */
 export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
   const [tab, setTab] = useState<Tab>("trend");
+  const [basis, setBasis] = useState<"rate" | "count">("rate");
   const [crimeId, setCrimeId] = useState<string>("all");
   const [recId, setRecId] = useState<string>("release");
 
-  const crime = CRIME_RATE.find((c) => c.id === crimeId) ?? CRIME_RATE[0];
+  const dataset = basis === "rate" ? CRIME_RATE : POLICE_COUNTS;
+  const crime = dataset.find((c) => c.id === crimeId) ?? dataset[0];
   const crimeChange = change(crime.points);
   const rec = RECIDIVISM.find((r) => r.id === recId) ?? RECIDIVISM[0];
   const recFirst = rec.points[0];
@@ -66,8 +70,20 @@ export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
       <div className="mt-4 rounded-2xl border border-line bg-surface p-4 sm:p-6">
         {tab === "trend" ? (
           <>
-            <div className="flex flex-wrap gap-2">
-              {CRIME_RATE.map((c) => (
+            <div className="flex flex-wrap gap-2 border-b border-line pb-4">
+              {(
+                [
+                  ["rate", "인구 10만 명당 (2013~2024)"],
+                  ["count", "경찰청 발생 건수 (2018~2025)"],
+                ] as const
+              ).map(([id, text]) => (
+                <button key={id} type="button" aria-pressed={basis === id} onClick={() => { setBasis(id); setCrimeId(id === "rate" ? "all" : "murder"); }} className={`rounded-md border px-3 py-1.5 text-xs transition-colors ${basis === id ? "border-brand-fg font-semibold text-brand-fg" : "border-line text-muted hover:border-foreground/40"}`}>
+                  {text}
+                </button>
+              ))}
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {dataset.map((c) => (
                 <button key={c.id} type="button" aria-pressed={c.id === crimeId} onClick={() => setCrimeId(c.id)} className={chip(c.id === crimeId)}>
                   {c.label}
                 </button>
@@ -77,23 +93,23 @@ export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
               {crime.label}: {crimeChange.first[0]}년 {fmt(crimeChange.first[1])}건 → {crimeChange.last[0]}년 {fmt(crimeChange.last[1])}건{" "}
               <span className={crimeChange.pct <= 0 ? "text-jade-ink" : "text-clay-ink"}>({pctText(crimeChange.pct)})</span>
             </p>
-            <p className="text-xs text-subtle">인구 10만 명당 발생건수</p>
+            <p className="text-xs text-subtle">{basis === "rate" ? "인구 10만 명당 발생건수 (검찰 집계)" : "발생 건수 (경찰 집계, 인구로 나누지 않음)"}</p>
             <div className="mt-3">
               <StatsChart
                 series={[{ id: crime.id, label: crime.label, color: "var(--color-brand-fg)", points: crime.points }]}
-                unit="건 / 인구 10만 명"
-                label={`${crime.label} 인구 10만 명당 발생건수 추이`}
+                unit={basis === "rate" ? "건 / 인구 10만 명" : "건"}
+                label={`${crime.label} ${basis === "rate" ? "인구 10만 명당 발생건수" : "발생 건수"} 추이`}
               />
             </div>
-            {CRIME_NOTES[crime.id] && <p className="mt-2 text-sm leading-6 text-muted">{CRIME_NOTES[crime.id]}</p>}
+            {basis === "rate" && CRIME_NOTES[crime.id] && <p className="mt-2 text-sm leading-6 text-muted">{CRIME_NOTES[crime.id]}</p>}
 
             <div className="mt-5 overflow-x-auto">
               <table className="w-full min-w-[22rem] text-sm">
                 <caption className="pb-2 text-left text-xs text-subtle">
-                  {CRIME_RATE[0].points[0][0]}년 → {CRIME_RATE[0].points[CRIME_RATE[0].points.length - 1][0]}년, 한눈에
+                  {dataset[0].points[0][0]}년 → {dataset[0].points[dataset[0].points.length - 1][0]}년, 한눈에
                 </caption>
                 <tbody>
-                  {CRIME_RATE.slice(1).map((c) => {
+                  {(basis === "rate" ? CRIME_RATE.slice(1) : POLICE_COUNTS).map((c) => {
                     const ch = change(c.points);
                     return (
                       <tr key={c.id} className="border-t border-line">
@@ -111,7 +127,8 @@ export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
               </table>
             </div>
             <p className="mt-4 text-xs leading-5 text-subtle">
-              형법범죄 발생건수를 인구 10만 명당으로 환산한 값입니다. 법이 바뀌거나 신고하는 분위기가 달라지면 숫자도 달라질 수 있어, 숫자의 늘고 줄음이 곧 사회의 안전 정도를 뜻하지는 않습니다.
+              {basis === "count" && "경찰이 집계한 발생 건수입니다. 검찰 통계와 집계 기준·분류(예: 성폭력과 강간·강제추행, 폭행과 폭력)가 달라 숫자가 서로 다르고, 인구 변화는 반영되지 않았습니다. "}
+              {basis === "rate" && "형법범죄 발생건수를 인구 10만 명당으로 환산한 값입니다. "}법이 바뀌거나 신고하는 분위기가 달라지면 숫자도 달라질 수 있어, 숫자의 늘고 줄음이 곧 사회의 안전 정도를 뜻하지는 않습니다.
             </p>
           </>
         ) : tab === "recidivism" ? (
@@ -149,7 +166,7 @@ export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
         )}
 
         <p className="mt-4 border-t border-line pt-3 text-xs leading-5 text-subtle">
-          {tab === "ours" ? "출처: Wishwind 사건 기록" : `출처: ${tab === "trend" ? CRIME_SOURCE : RECIDIVISM_SOURCE}. ${CHECKED_ON} 확인.`}
+          {tab === "ours" ? "출처: Wishwind 사건 기록" : `출처: ${tab === "trend" ? (basis === "rate" ? CRIME_SOURCE : POLICE_SOURCE) : RECIDIVISM_SOURCE}. ${CHECKED_ON} 확인.`}
         </p>
       </div>
     </section>

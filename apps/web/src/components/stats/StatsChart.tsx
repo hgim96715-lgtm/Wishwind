@@ -10,7 +10,7 @@ export interface ChartSeries {
 
 const W = 640;
 const H = 280;
-const PAD = { l: 44, r: 44, t: 18, b: 28 };
+const PAD = { l: 58, r: 50, t: 18, b: 28 };
 
 /** 최댓값을 눈금 4칸으로 나눴을 때 떨어지는 값 (1·2·2.5·5·10 배수) */
 function niceStep(max: number) {
