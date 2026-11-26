@@ -8,11 +8,20 @@ export interface PoliceCounts {
   rows: { label: string; values: Record<string, number> }[];
 }
 
-/** 경찰청 5대 범죄 발생건수. 연 1회 갱신 자료라 서버에서 몇 시간씩 캐시함 (실패는 캐시하지 않음) */
-export async function getPoliceCounts(): Promise<PoliceCounts> {
+/**
+ * 경찰청 5대 범죄 발생건수. 연 1회 갱신 자료라 받으면 몇 시간씩 캐시함.
+ * 못 받으면(API가 아직 없거나 꺼짐) 오류를 던지지 않고 null을 줘서 빌드와 페이지가 깨지지 않게 하고, 그 결과는 짧게만 캐시함
+ */
+export async function getPoliceCounts(): Promise<PoliceCounts | null> {
   "use cache";
-  cacheLife("hours");
-  const res = await fetch(`${API_URL}/stats/police-counts`);
-  if (!res.ok) throw new Error(`API 오류 ${res.status}: /stats/police-counts`);
-  return (await res.json()) as PoliceCounts;
+  let data: PoliceCounts | null = null;
+  try {
+    const res = await fetch(`${API_URL}/stats/police-counts`);
+    if (res.ok) data = (await res.json()) as PoliceCounts;
+  } catch {
+    // 연결 실패는 null로 처리
+  }
+  if (data) cacheLife("hours");
+  else cacheLife("seconds");
+  return data;
 }

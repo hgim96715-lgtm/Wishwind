@@ -87,7 +87,7 @@ export async function BriefingFeed() {
     return <p className="mt-10 text-sm text-muted">브리핑을 불러오지 못했습니다. 잠시 뒤 다시 와 주세요.</p>;
   }
   // 경찰청 통계는 곁들이는 정보라 못 받아도 브리핑룸은 그대로 보여 줌 (그 기준 전환 버튼만 빠짐)
-  const police = await getPoliceCounts().catch(() => null);
+  const police = await getPoliceCounts();
   return (
     <div className="mt-10 space-y-10">
       {data.notices.length > 0 && <Notices notices={data.notices} />}
