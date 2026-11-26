@@ -1,10 +1,6 @@
 import type { IconType } from "react-icons";
 import { LuFolderSearch, LuClipboardList, LuUserRoundSearch } from "react-icons/lu";
 
-/**
- * 홈에서 들어갈 수 있는 "방" 목록.
- * 방을 추가하려면 여기에 한 줄 넣고 같은 slug로 app/<slug>/page.tsx를 만들면 됨.
- */
 export type RoomSlug = "cases" | "missing" | "briefing";
 
 export interface Room {
@@ -14,8 +10,9 @@ export interface Room {
   subtitle: string;
   description: string;
   icon: IconType;
-  /** 방마다 쓰는 포인트 색. 아이콘 배경·호버 테두리에 씀. 밝은 배경에서 부드럽게 보이는 중간 채도 */
   accent: string;
+  /** 방 카드에 표시할 성격 배지 */
+  badge: string;
 }
 
 export const ROOMS: readonly Room[] = [
@@ -27,6 +24,7 @@ export const ROOMS: readonly Room[] = [
     description: "끝난 사건과 미제 사건을 함께 살펴보는 곳",
     icon: LuFolderSearch,
     accent: "#c46a4b",
+    badge: "사건 기록",
   },
   {
     slug: "missing",
@@ -36,6 +34,7 @@ export const ROOMS: readonly Room[] = [
     description: "지금도 누군가 기다리고 있는 사람들의 이야기",
     icon: LuUserRoundSearch,
     accent: "#3f8f84",
+    badge: "3D 바람개비 정원",
   },
   {
     slug: "briefing",
@@ -45,6 +44,7 @@ export const ROOMS: readonly Room[] = [
     description: "새 소식, 사건 변경, 사람들의 생각을 한눈에 모아 보는 곳",
     icon: LuClipboardList,
     accent: "#4f78a8",
+    badge: "새 소식 · 추적 지식",
   },
 ] as const;
 

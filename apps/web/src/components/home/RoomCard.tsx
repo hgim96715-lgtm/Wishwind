@@ -18,9 +18,15 @@ const cardVariants: Variants = {
 
 interface RoomCardProps {
   room: Room;
+  /** 사건방에서 동적으로 받아온 전체 사건 수 */
+  caseCount?: number;
 }
 
-export function RoomCard({ room }: RoomCardProps) {
+export function RoomCard({ room, caseCount }: RoomCardProps) {
+  const badge = room.slug === "cases" && caseCount != null
+    ? `${caseCount}건 기록`
+    : room.badge;
+
   return (
     <MotionLink
       href={room.href}
@@ -33,6 +39,13 @@ export function RoomCard({ room }: RoomCardProps) {
       className="group relative flex flex-col outline-none"
     >
       <div className="relative flex min-h-56 flex-1 flex-col overflow-hidden rounded-2xl border border-line bg-surface p-6 shadow-[0_1px_2px_rgb(47_44_40/0.05),0_6px_18px_rgb(47_44_40/0.06)] transition-[border-color,box-shadow] duration-300 group-hover:border-(--accent)/40 group-hover:shadow-[0_2px_4px_rgb(47_44_40/0.06),0_16px_36px_rgb(47_44_40/0.10)] group-focus-visible:border-(--accent)/60 group-focus-visible:ring-4 group-focus-visible:ring-(--accent)/15">
+        {/* 배지 */}
+        {badge && (
+          <span className="absolute top-3 right-3 rounded-full border border-(--accent)/40 bg-(--accent)/10 px-2 py-0.5 text-[10px] font-medium text-(--accent)">
+            {badge}
+          </span>
+        )}
+
         <RoomEmblem slug={room.slug} />
 
         <div className="mt-auto pt-10">
