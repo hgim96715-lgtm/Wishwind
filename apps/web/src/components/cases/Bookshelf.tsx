@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { LuDices, LuLayoutList, LuLibrary } from "react-icons/lu";
+import { LuClapperboard, LuDices, LuLayoutList, LuLibrary } from "react-icons/lu";
 import {
   CATEGORY_COLOR,
   CATEGORY_LABEL,
@@ -116,11 +116,10 @@ export function Bookshelf({
   useEffect(() => setDayIndex(Math.floor((Date.now() + 9 * 3_600_000) / 86_400_000)), []);
   const picks = useMemo(() => (dayIndex === null ? [] : recommended(items, dayIndex, pinnedSlugs)), [items, dayIndex, pinnedSlugs]);
 
-  // 날마다 시작 카드가 바뀌도록 돌려서 보여 줌 (서버와 브라우저 날짜가 달라도 어긋나지 않게 브라우저에서 정함)
-  const media = useMemo(() => {
-    if (dayIndex === null || mediaItems.length === 0) return mediaItems;
-    const start = dayIndex % mediaItems.length;
-    return [...mediaItems.slice(start), ...mediaItems.slice(0, start)];
+  // 날마다 한 건만 보여 줌: 날짜로 정하는 의사 난수라 하루 동안은 같은 사건이고 새로고침해도 안 바뀜
+  const todayMedia = useMemo(() => {
+    if (dayIndex === null || mediaItems.length === 0) return null;
+    return mediaItems[((dayIndex * 9301 + 49297) % 233280) % mediaItems.length];
   }, [mediaItems, dayIndex]);
 
   const openRandom = () => {
@@ -132,28 +131,30 @@ export function Bookshelf({
     <div>
       {mediaItems.length > 0 && (
         <section aria-labelledby="media-title">
-          <h2 id="media-title" className="mb-3 text-sm font-semibold uppercase tracking-widest text-subtle">
+          <h2 id="media-title" className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-subtle">
+            <LuClapperboard aria-hidden className="size-4 text-brand-fg" />
             영상으로 먼저 본 그 사건
           </h2>
-          <ul className="-mx-6 flex snap-x snap-mandatory scroll-px-6 gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {media.map((item) => (
-              <li key={item.id} className="flex min-w-[16rem] flex-1 snap-start sm:min-w-[18rem]">
-                <Link
-                  href={fileHref(searchParams, item.slug)}
-                  scroll={false}
-                  className="group flex w-full flex-col gap-2 rounded-2xl border border-line bg-surface p-4 transition-all hover:-translate-y-1 hover:shadow-md"
-                >
-                  <span className="w-fit rounded-full bg-brand/10 px-2 py-0.5 text-[11px] font-medium text-brand-fg">
-                    {item.media[0].platform} · {MEDIA_KIND[item.media[0].kind]}
+          {/* 날짜가 정해지기 전에도 같은 높이를 잡아 둬서 카드가 나타날 때 화면이 밀리지 않음 */}
+          <div className="min-h-[9.5rem]">
+            {todayMedia && (
+              <Link
+                href={fileHref(searchParams, todayMedia.slug)}
+                scroll={false}
+                className="group block rounded-2xl border border-line bg-surface p-4 transition-all hover:-translate-y-1 hover:shadow-md sm:p-5"
+              >
+                <span className="flex items-center gap-2">
+                  <span className="rounded-full bg-brand/10 px-2 py-0.5 text-[11px] font-medium text-brand-fg">
+                    {todayMedia.media[0].platform} · {MEDIA_KIND[todayMedia.media[0].kind]}
                   </span>
-                  <span className="line-clamp-1 text-sm font-semibold">「{item.media[0].title}」</span>
-                  <span className="text-xs text-muted">이 작품이 다룬 사건</span>
-                  <span className="mt-auto block font-semibold leading-snug">{item.title}</span>
-                  <span className="line-clamp-2 text-sm leading-6 text-muted">{item.summary}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+                  <span className="line-clamp-1 text-sm font-semibold">「{todayMedia.media[0].title}」</span>
+                </span>
+                <span className="mt-1 block text-xs text-muted">이 작품이 다룬 사건</span>
+                <span className="mt-2 block text-lg font-semibold leading-snug">{todayMedia.title}</span>
+                <span className="mt-1 line-clamp-2 block text-sm leading-6 text-muted">{todayMedia.summary}</span>
+              </Link>
+            )}
+          </div>
         </section>
       )}
 
