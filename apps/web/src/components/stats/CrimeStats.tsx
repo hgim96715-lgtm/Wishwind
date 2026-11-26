@@ -103,8 +103,7 @@ export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
             <div className="mt-3">
               <StatsChart
                 series={[{ id: crime.id, label: crime.label, color: "var(--color-brand-fg)", points: crime.points }]}
-                unit={basis === "rate" ? "건 / 인구 10만 명" : "건"}
-                label={`${crime.label} ${basis === "rate" ? "인구 10만 명당 발생건수" : "발생 건수"} 추이`}
+                                label={`${crime.label} ${basis === "rate" ? "인구 10만 명당 발생건수" : "발생 건수"} 추이`}
               />
             </div>
             {basis === "rate" && CRIME_NOTES[crime.id] && <p className="mt-2 text-sm leading-6 text-muted">{CRIME_NOTES[crime.id]}</p>}
@@ -163,7 +162,7 @@ export function CrimeStats({ ourCases }: { ourCases?: ReactNode }) {
               {rec.help}.
             </p>
             <div className="mt-3">
-              <StatsChart series={[{ id: rec.id, label: rec.label, color: "var(--color-brand-fg)", points: rec.points }]} unit="%" label={`${rec.label} 추이`} />
+              <StatsChart series={[{ id: rec.id, label: rec.label, color: "var(--color-brand-fg)", points: rec.points }]} suffix="%" label={`${rec.label} 추이`} />
             </div>
             <p className="mt-4 text-xs leading-5 text-subtle">
               다시 교도소 등에 들어간 경우만 세므로 실제로 다시 죄를 지은 사람 전체와 같지 않습니다. 뉴스에 나오는 전과가 아주 많은 사람의 사례는 눈에 띄는 경우이고, 이 평균을 대표하지 않습니다.

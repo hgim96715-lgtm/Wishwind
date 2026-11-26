@@ -127,7 +127,7 @@ export async function BriefingFeed() {
           )}
           <ParticipationBanner participation={data.participation} caseCount={data.stats.total} />
         </section>
-        <aside className="space-y-8">
+        <aside className="space-y-8 lg:mt-8">
           <NewMissing missing={data.missing} />
         </aside>
       </div>
