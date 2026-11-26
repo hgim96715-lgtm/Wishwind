@@ -8,9 +8,7 @@ import { ThemeToggle } from "@/components/common/ThemeToggle";
 import { DidYouKnow } from "@/components/home/DidYouKnow";
 import { ReelCases } from "@/components/home/ReelCases";
 import { RoomGrid } from "@/components/home/RoomGrid";
-import { FeaturedCases } from "@/components/home/FeaturedCases";
-import { TodayTechCard } from "@/components/home/TodayTechCard";
-import { AccountLinkSkeleton, DidYouKnowSkeleton, FeaturedCasesSkeleton, ReelCasesSkeleton, TodayTechCardSkeleton } from "@/components/home/HomeSkeletons";
+import { AccountLinkSkeleton, DidYouKnowSkeleton, ReelCasesSkeleton } from "@/components/home/HomeSkeletons";
 import { getCases } from "@/lib/cases/api";
 import { INSTAGRAM_URL } from "@/lib/site";
 
@@ -71,16 +69,6 @@ export default function Home() {
           </Suspense>
         }
       />
-
-      {/* 지금 살펴볼 사건 3개 */}
-      <Suspense fallback={<FeaturedCasesSkeleton />}>
-        <FeaturedCases />
-      </Suspense>
-
-      {/* 오늘의 추적 지식 미니 카드 */}
-      <Suspense fallback={<TodayTechCardSkeleton />}>
-        <TodayTechCard />
-      </Suspense>
 
       {/* 도움이 필요할 때: 하단으로 이동 */}
       <div className="mt-10 flex flex-col gap-3 rounded-xl border border-[#d9cdb8] bg-[#fbf6ea] px-4 py-3 sm:flex-row sm:items-center sm:gap-4 sm:px-5">
