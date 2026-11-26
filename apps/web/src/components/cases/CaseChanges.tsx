@@ -6,13 +6,13 @@ import type { CaseChange } from "@/lib/cases/types";
 export function CaseChanges({ items }: { items: CaseChange[] }) {
   if (items.length === 0) return null;
   return (
-    <section aria-label="이 사건 뒤에 바뀐 것" className="rounded-xl border border-[#3f8f84]/30 bg-[#3f8f84]/10 p-4">
-      <h3 className="text-sm font-semibold text-[#2f7469]">이 사건 뒤에 바뀐 것</h3>
+    <section aria-label="이 사건 뒤에 바뀐 것" className="rounded-xl border border-jade/30 bg-jade/10 p-4">
+      <h3 className="text-sm font-semibold text-jade-ink">이 사건 뒤에 바뀐 것</h3>
       <ul className="mt-3 space-y-3">
         {items.map((c) => (
           <li key={c.id} className="text-sm leading-6">
             <div className="flex flex-wrap items-baseline gap-x-2">
-              <span className="rounded-full bg-[#3f8f84]/15 px-2 py-0.5 text-xs font-medium text-[#2f7469]">{CHANGE_KIND_LABEL[c.kind]}</span>
+              <span className="rounded-full bg-jade/15 px-2 py-0.5 text-xs font-medium text-jade-ink">{CHANGE_KIND_LABEL[c.kind]}</span>
               <span className="font-semibold">{c.name}</span>
               <span className="text-xs text-subtle">{[c.year ? `${c.year}년` : null, observedLabel(c.observedOn)].filter(Boolean).join(" · ")}</span>
             </div>
@@ -23,7 +23,7 @@ export function CaseChanges({ items }: { items: CaseChange[] }) {
           </li>
         ))}
       </ul>
-      <Link href="/changes" className="mt-3 inline-block text-xs font-medium text-[#2f7469] transition-opacity hover:opacity-70">
+      <Link href="/changes" className="mt-3 inline-block text-xs font-medium text-jade-ink transition-opacity hover:opacity-70">
         사건이 바꾼 것들 모두 보기
       </Link>
     </section>

@@ -13,15 +13,15 @@ const OPTIONS = [
     choice: "AGREE",
     label: "괜찮다",
     Icon: LuThumbsUp,
-    selected: "border-[#3f8f84] bg-[#3f8f84] text-white",
-    idle: "hover:border-[#3f8f84]/60 hover:text-[#3f8f84]",
+    selected: "border-jade bg-jade text-white",
+    idle: "hover:border-jade/60 hover:text-jade-ink-soft",
   },
   {
     choice: "DISAGREE",
     label: "아니다",
     Icon: LuThumbsDown,
-    selected: "border-[#c46a4b] bg-[#c46a4b] text-white",
-    idle: "hover:border-[#c46a4b]/60 hover:text-[#c46a4b]",
+    selected: "border-brand bg-brand text-white",
+    idle: "hover:border-brand/60 hover:text-brand-fg",
   },
 ] as const;
 
@@ -94,7 +94,7 @@ export function SentenceVote({ sentenceId }: { sentenceId: string }) {
               aria-pressed={isMine}
               disabled={pending || !vote}
               onClick={() => cast(choice)}
-              className={`flex min-h-20 flex-col items-center justify-center gap-1.5 rounded-xl border-2 text-sm font-semibold transition-colors outline-none focus-visible:ring-4 focus-visible:ring-[#c46a4b]/25 disabled:cursor-wait ${
+              className={`flex min-h-20 flex-col items-center justify-center gap-1.5 rounded-xl border-2 text-sm font-semibold transition-colors outline-none focus-visible:ring-4 focus-visible:ring-brand/25 disabled:cursor-wait ${
                 isMine ? selected : `border-line bg-background text-muted ${idle}`
               }`}
             >
@@ -106,7 +106,7 @@ export function SentenceVote({ sentenceId }: { sentenceId: string }) {
       </div>
 
       {vote?.choice === "DISAGREE" && (
-        <div className="mt-4 rounded-xl bg-[#c46a4b]/8 p-4">
+        <div className="mt-4 rounded-xl bg-brand/8 p-4">
           <p className="text-center text-sm font-semibold">어느 쪽이라고 생각하십니까?</p>
           <div className="mt-3 grid grid-cols-2 gap-2">
             {DIRECTIONS.map(({ direction, label }) => {
@@ -118,10 +118,10 @@ export function SentenceVote({ sentenceId }: { sentenceId: string }) {
                   aria-pressed={isMine}
                   disabled={pending}
                   onClick={() => cast("DISAGREE", direction)}
-                  className={`min-h-11 rounded-lg border px-2 text-sm font-semibold transition-colors outline-none focus-visible:ring-4 focus-visible:ring-[#c46a4b]/25 disabled:cursor-wait ${
+                  className={`min-h-11 rounded-lg border px-2 text-sm font-semibold transition-colors outline-none focus-visible:ring-4 focus-visible:ring-brand/25 disabled:cursor-wait ${
                     isMine
-                      ? "border-[#c46a4b] bg-[#c46a4b] text-white"
-                      : "border-line bg-background text-muted hover:border-[#c46a4b]/60 hover:text-[#c46a4b]"
+                      ? "border-brand bg-brand text-white"
+                      : "border-line bg-background text-muted hover:border-brand/60 hover:text-brand-fg"
                   }`}
                 >
                   {label}
@@ -134,19 +134,19 @@ export function SentenceVote({ sentenceId }: { sentenceId: string }) {
 
       <div aria-live="polite" className="mt-4 text-sm">
         {failed && (
-          <p role="alert" className="text-center text-[#c46a4b]">
+          <p role="alert" className="text-center text-brand-fg">
             투표를 처리하지 못했습니다. 잠시 뒤 다시 시도해 주세요.
           </p>
         )}
         {results && !failed && (
           <div>
             <div className="flex justify-between font-semibold">
-              <span className="text-[#3f8f84]">괜찮다 {agreePercent}%</span>
-              <span className="text-[#c46a4b]">아니다 {100 - agreePercent}%</span>
+              <span className="text-jade-ink-soft">괜찮다 {agreePercent}%</span>
+              <span className="text-brand-fg">아니다 {100 - agreePercent}%</span>
             </div>
-            <div aria-hidden className="mt-2 h-2.5 overflow-hidden rounded-full bg-[#c46a4b]">
+            <div aria-hidden className="mt-2 h-2.5 overflow-hidden rounded-full bg-brand">
               <div
-                className="h-full bg-[#3f8f84] transition-[width] duration-300"
+                className="h-full bg-jade transition-[width] duration-300"
                 style={{ width: `${agreePercent}%` }}
               />
             </div>
@@ -159,9 +159,9 @@ export function SentenceVote({ sentenceId }: { sentenceId: string }) {
                   <span>너무 가볍습니다 {lenientPercent}%</span>
                   <span>너무 무겁습니다 {100 - lenientPercent}%</span>
                 </div>
-                <div aria-hidden className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-[#c46a4b]/30">
+                <div aria-hidden className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-brand/30">
                   <div
-                    className="h-full bg-[#c46a4b] transition-[width] duration-300"
+                    className="h-full bg-brand transition-[width] duration-300"
                     style={{ width: `${lenientPercent}%` }}
                   />
                 </div>

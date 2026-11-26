@@ -69,14 +69,14 @@ function PollBox({
                   setPending(true);
                   onVote(i).finally(() => setPending(false));
                 }}
-                className={`relative flex min-h-10 w-full items-center justify-between gap-3 overflow-hidden rounded-lg border px-3 text-left text-sm transition-colors enabled:hover:border-[#c46a4b]/60 disabled:cursor-default ${
-                  mine ? "border-[#c46a4b] font-semibold" : "border-line"
+                className={`relative flex min-h-10 w-full items-center justify-between gap-3 overflow-hidden rounded-lg border px-3 text-left text-sm transition-colors enabled:hover:border-brand/60 disabled:cursor-default ${
+                  mine ? "border-brand font-semibold" : "border-line"
                 } bg-surface`}
               >
                 {poll.votes && (
                   <span
                     aria-hidden
-                    className="absolute inset-y-0 left-0 bg-[#c46a4b]/15"
+                    className="absolute inset-y-0 left-0 bg-brand/15"
                     style={{ width: `${percent}%` }}
                   />
                 )}
@@ -101,7 +101,7 @@ function ReportButton({ onReport }: { onReport: () => Promise<void> }) {
       type="button"
       disabled={done}
       onClick={() => onReport().then(() => setDone(true))}
-      className="inline-flex min-h-8 items-center gap-1 text-xs text-subtle hover:text-[#c46a4b] disabled:cursor-default"
+      className="inline-flex min-h-8 items-center gap-1 text-xs text-subtle hover:text-brand-fg disabled:cursor-default"
     >
       <LuFlag aria-hidden className="size-3" />
       {done ? "신고했습니다" : "신고"}
@@ -133,7 +133,7 @@ function OtherNote({
             setPending(true);
             onEmpathy().finally(() => setPending(false));
           }}
-          className="inline-flex min-h-8 items-center gap-1 rounded-full border border-line px-3 text-xs font-semibold text-muted enabled:hover:border-[#c46a4b]/60 enabled:hover:text-[#c46a4b] disabled:cursor-default aria-pressed:border-[#c46a4b]/40 aria-pressed:text-[#c46a4b]"
+          className="inline-flex min-h-8 items-center gap-1 rounded-full border border-line px-3 text-xs font-semibold text-muted enabled:hover:border-brand/60 enabled:hover:text-brand-fg disabled:cursor-default aria-pressed:border-brand/40 aria-pressed:text-brand-fg"
         >
           <LuHeart aria-hidden className={`size-3.5 ${note.empathizedByMe ? "fill-current" : ""}`} />
           공감해요
@@ -194,7 +194,7 @@ function NoteForm({
           rows={3}
           placeholder={placeholder}
           onChange={(e) => setBody(e.target.value)}
-          className="mt-2 w-full resize-y rounded-lg border border-line bg-background p-3 text-base font-normal leading-6 outline-none focus-visible:ring-4 focus-visible:ring-[#c46a4b]/25"
+          className="mt-2 w-full resize-y rounded-lg border border-line bg-background p-3 text-base font-normal leading-6 outline-none focus-visible:ring-4 focus-visible:ring-brand/25"
         />
       </label>
       <div className="mt-1 flex items-center justify-between gap-3">
@@ -217,7 +217,7 @@ function NoteForm({
                   setPending(false);
                 }
               }}
-              className="inline-flex min-h-10 items-center gap-1 rounded-lg border border-line px-3 text-sm text-muted hover:border-[#c46a4b]/60 hover:text-[#c46a4b] disabled:opacity-50"
+              className="inline-flex min-h-10 items-center gap-1 rounded-lg border border-line px-3 text-sm text-muted hover:border-brand/60 hover:text-brand-fg disabled:opacity-50"
             >
               <LuTrash2 aria-hidden className="size-4" />
               지우기
@@ -226,14 +226,14 @@ function NoteForm({
         <button
           type="submit"
           disabled={pending || body.trim().length === 0}
-          className="inline-flex min-h-10 items-center gap-1.5 rounded-lg bg-[#c46a4b] px-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex min-h-10 items-center gap-1.5 rounded-lg bg-brand px-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
         >
           <LuNotebookPen aria-hidden className="size-4" />
           {pending ? "검토 중입니다" : submitLabel}
         </button>
         </span>
       </div>
-      <p aria-live="polite" className="mt-2 text-sm text-[#c46a4b] empty:hidden">
+      <p aria-live="polite" className="mt-2 text-sm text-brand-fg empty:hidden">
         {message}
       </p>
     </form>
@@ -328,7 +328,7 @@ export function CaseNotes({
         </p>
       )}
       {failed && (
-        <p role="alert" className="text-sm text-[#c46a4b]">
+        <p role="alert" className="text-sm text-brand-fg">
           수사 노트를 불러오지 못했습니다. 잠시 뒤 다시 시도해 주세요.
         </p>
       )}
@@ -340,16 +340,16 @@ export function CaseNotes({
           return (
             <li
               key={q.id}
-              className="rounded-xl border-2 border-dashed border-[#c46a4b]/35 bg-[#c46a4b]/5 p-4"
+              className="rounded-xl border-2 border-dashed border-brand/35 bg-brand/5 p-4"
             >
               <p className="font-semibold">
-                <span className="mr-1.5 font-mono text-[#c46a4b]">Q.</span>
+                <span className="mr-1.5 font-mono text-brand-fg">Q.</span>
                 {q.question}
               </p>
               {q.description && <p className="mt-1 text-sm leading-6 text-muted">{q.description}</p>}
               {q.isResolved && q.answer && (
                 <p className="mt-2 text-sm leading-6">
-                  <span className="mr-1.5 font-mono font-semibold text-[#3f8f84]">A.</span>
+                  <span className="mr-1.5 font-mono font-semibold text-jade-ink-soft">A.</span>
                   {q.answer}
                 </p>
               )}
@@ -361,9 +361,9 @@ export function CaseNotes({
                 />
               )}
               {note && (
-                <div className="mt-3 border-t border-[#c46a4b]/25 pt-1">
+                <div className="mt-3 border-t border-brand/25 pt-1">
                   {note.mine && STATUS_NOTICE[note.mine.status] && (
-                    <p className="mt-2 text-sm text-[#c46a4b]">{STATUS_NOTICE[note.mine.status]}</p>
+                    <p className="mt-2 text-sm text-brand-fg">{STATUS_NOTICE[note.mine.status]}</p>
                   )}
                   {note.mine?.status !== "HIDDEN" && (
                     <NoteForm
@@ -389,7 +389,7 @@ export function CaseNotes({
                     />
                   )}
                   {note.mine && note.mine.status === "PUBLISHED" && note.mine.empathyCount > 0 && (
-                    <p className="mt-1 flex items-center gap-1 text-xs text-[#c46a4b]">
+                    <p className="mt-1 flex items-center gap-1 text-xs text-brand-fg">
                       <LuHeart aria-hidden className="size-3.5 fill-current" />
                       {note.mine.empathyCount.toLocaleString("ko-KR")}명이 내 노트에 공감했습니다.
                     </p>
@@ -430,7 +430,7 @@ export function CaseNotes({
       {notes?.canAsk && (
         <section aria-label="수사관들의 질문" className="rounded-xl border border-line bg-surface p-4">
           <h3 className="flex items-center gap-1.5 font-semibold">
-            <LuSearch aria-hidden className="size-4 text-[#c46a4b]" />
+            <LuSearch aria-hidden className="size-4 text-brand-fg" />
             수사관들의 질문
           </h3>
           {notes.userQuestions.length > 0 && (
@@ -444,7 +444,7 @@ export function CaseNotes({
                       aria-pressed={q.curiousByMe}
                       disabled={q.curiousByMe || q.isMine}
                       onClick={() => curious(q.id)}
-                      className="min-h-8 rounded-full border border-line px-3 text-xs font-semibold text-muted enabled:hover:border-[#c46a4b]/60 enabled:hover:text-[#c46a4b] disabled:cursor-default"
+                      className="min-h-8 rounded-full border border-line px-3 text-xs font-semibold text-muted enabled:hover:border-brand/60 enabled:hover:text-brand-fg disabled:cursor-default"
                     >
                       나도 궁금합니다 {q.curiousCount.toLocaleString("ko-KR")}
                     </button>
@@ -457,11 +457,11 @@ export function CaseNotes({
           {notes.myQuestion?.status === "PUBLISHED" ? (
             <p className="mt-3 text-xs text-subtle">질문은 사건마다 하나만 남길 수 있습니다.</p>
           ) : notes.myQuestion?.status === "HIDDEN" ? (
-            <p className="mt-3 text-sm text-[#c46a4b]">{STATUS_NOTICE.HIDDEN}</p>
+            <p className="mt-3 text-sm text-brand-fg">{STATUS_NOTICE.HIDDEN}</p>
           ) : (
             <>
               {notes.myQuestion && (
-                <p className="mt-3 text-sm text-[#c46a4b]">{STATUS_NOTICE[notes.myQuestion.status]}</p>
+                <p className="mt-3 text-sm text-brand-fg">{STATUS_NOTICE[notes.myQuestion.status]}</p>
               )}
               <NoteForm
                 key={notes.myQuestion?.body ?? "new-question"}

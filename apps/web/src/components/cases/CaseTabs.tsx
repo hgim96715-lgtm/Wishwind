@@ -89,14 +89,14 @@ export function CaseTabs({ tabs }: { tabs: CaseTab[] }) {
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActive(tab.id)}
                 onKeyDown={(e) => onKeyDown(e, i)}
-                className={`relative shrink-0 px-3 py-3 text-sm font-semibold whitespace-nowrap transition-colors outline-none focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-[#c46a4b]/40 ${
+                className={`relative shrink-0 px-3 py-3 text-sm font-semibold whitespace-nowrap transition-colors outline-none focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-brand/40 ${
                   selected ? "text-foreground" : "text-subtle hover:text-muted"
                 }`}
               >
                 {tab.label}
                 {tab.count !== undefined && (
                   <span
-                    className={`ml-1 font-mono text-xs ${selected ? "text-[#c46a4b]" : "text-subtle"}`}
+                    className={`ml-1 font-mono text-xs ${selected ? "text-brand-fg" : "text-subtle"}`}
                   >
                     {tab.count}
                   </span>
@@ -104,7 +104,7 @@ export function CaseTabs({ tabs }: { tabs: CaseTab[] }) {
                 {selected && (
                   <span
                     aria-hidden
-                    className="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-[#c46a4b]"
+                    className="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-brand"
                   />
                 )}
               </button>

@@ -50,7 +50,7 @@ export function RememberButton({ slug }: { slug: string }) {
         onClick={press}
         disabled={done}
         aria-pressed={done}
-        className="inline-flex items-center gap-2 rounded-full bg-[#2f7469] px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-85 disabled:cursor-default disabled:opacity-70"
+        className="inline-flex items-center gap-2 rounded-full bg-jade-deep px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-85 disabled:cursor-default disabled:opacity-70"
       >
         <LuHeart aria-hidden className={`size-4 ${done ? "fill-current" : ""}`} />
         {done ? "함께 기억하고 있습니다" : "함께 기억하기"}

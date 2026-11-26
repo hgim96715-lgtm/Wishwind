@@ -100,7 +100,7 @@ export function FileShareBar({
     }
   };
 
-  const accent = tone === "missing" ? "bg-[#e9a94f] hover:bg-[#d9963b]" : "bg-[#c46a4b] hover:bg-[#b05a3d]";
+  const accent = tone === "missing" ? "bg-[#e9a94f] hover:bg-[#d9963b]" : "bg-brand hover:bg-[#b05a3d]";
   return (
     <div className="mt-4">
       <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-subtle" aria-live="polite">

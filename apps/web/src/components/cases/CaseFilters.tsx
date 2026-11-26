@@ -48,7 +48,7 @@ export function CaseFiltersForm({ filters }: { filters: CaseFilters }) {
           defaultValue={filters.q}
           maxLength={100}
           placeholder="사건 이름, 지역, 키워드로 찾아보기"
-          className="w-full rounded-xl border border-line bg-background py-2.5 pr-3 pl-10 text-sm outline-none placeholder:text-subtle focus:border-[#c46a4b]/50 focus:ring-4 focus:ring-[#c46a4b]/10"
+          className="w-full rounded-xl border border-line bg-background py-2.5 pr-3 pl-10 text-sm outline-none placeholder:text-subtle focus:border-brand/50 focus:ring-4 focus:ring-brand/10"
         />
       </label>
 
@@ -93,7 +93,7 @@ export function CaseFiltersForm({ filters }: { filters: CaseFilters }) {
         <div className="col-span-2 flex gap-2 sm:col-span-1">
           <button
             type="submit"
-            className="flex-1 rounded-xl bg-[#c46a4b] px-4 py-2 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-[#b05c3f] lg:flex-none"
+            className="flex-1 rounded-xl bg-brand px-4 py-2 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-[#b05c3f] lg:flex-none"
           >
             찾기
           </button>
@@ -130,7 +130,7 @@ function Select({
       <select
         name={name}
         defaultValue={value ?? ""}
-        className="w-full min-w-0 cursor-pointer appearance-none truncate rounded-xl border border-line bg-background py-2 pr-9 pl-3 text-sm outline-none focus:border-[#c46a4b]/50"
+        className="w-full min-w-0 cursor-pointer appearance-none truncate rounded-xl border border-line bg-background py-2 pr-9 pl-3 text-sm outline-none focus:border-brand/50"
       >
         <option value="">{label} 전체</option>
         {children}
@@ -155,7 +155,7 @@ function YearInput({ name, label, value }: { name: string; label: string; value?
         max={2100}
         inputMode="numeric"
         placeholder={label === "부터" ? "연도부터" : "연도까지"}
-        className="w-full min-w-0 rounded-xl border border-line bg-background px-3 py-2 text-sm outline-none placeholder:text-subtle focus:border-[#c46a4b]/50 lg:w-28"
+        className="w-full min-w-0 rounded-xl border border-line bg-background px-3 py-2 text-sm outline-none placeholder:text-subtle focus:border-brand/50 lg:w-28"
       />
     </label>
   );

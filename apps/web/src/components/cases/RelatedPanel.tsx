@@ -156,9 +156,9 @@ function ContentCard({ item }: { item: RelatedContent }) {
       href={item.url}
       target="_blank"
       rel="noreferrer noopener"
-      className="group flex h-full gap-3 rounded-xl border border-line bg-surface p-4 transition-colors hover:border-[#c46a4b]/40"
+      className="group flex h-full gap-3 rounded-xl border border-line bg-surface p-4 transition-colors hover:border-brand/40"
     >
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#c46a4b]/10 text-[#c46a4b]">
+      <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-brand-fg">
         <Icon aria-hidden className="size-5" />
       </span>
       <span className="min-w-0 flex-1">
@@ -177,7 +177,7 @@ function ContentCard({ item }: { item: RelatedContent }) {
             <span className="rounded border border-line px-1.5 py-px text-[11px]">각색</span>
           )}
         </span>
-        <span className="mt-1 block font-semibold leading-snug transition-colors group-hover:text-[#c46a4b]">{item.title}</span>
+        <span className="mt-1 block font-semibold leading-snug transition-colors group-hover:text-brand-fg">{item.title}</span>
         {item.creator && <span className="mt-0.5 block text-xs text-subtle">{item.creator}</span>}
         {item.note && <span className="mt-1.5 block text-sm leading-6 text-muted">{item.note}</span>}
       </span>
@@ -192,7 +192,7 @@ function BookStores({ title }: { title: string }) {
     <p className="flex flex-wrap items-center gap-x-3 gap-y-1 px-1 text-xs text-subtle">
       <span>서점에서 찾기</span>
       {BOOKSTORES.map((b) => (
-        <a key={b.name} href={b.url(q)} target="_blank" rel="noreferrer noopener" className="font-medium text-[#c46a4b] hover:opacity-70">
+        <a key={b.name} href={b.url(q)} target="_blank" rel="noreferrer noopener" className="font-medium text-brand-fg hover:opacity-70">
           {b.name}
         </a>
       ))}
@@ -225,7 +225,7 @@ function LinkRow({
         <span className="min-w-0 flex-1">
           <span className="leading-6">
             {badge && (
-              <span className="mr-1.5 rounded bg-[#c46a4b]/10 px-1.5 py-px text-[11px] font-medium text-[#c46a4b]">
+              <span className="mr-1.5 rounded bg-brand/10 px-1.5 py-px text-[11px] font-medium text-brand-fg">
                 {badge}
               </span>
             )}

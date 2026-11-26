@@ -184,7 +184,7 @@ function FinalSentenceCard({
       aria-label={heading}
       className="rounded-2xl border border-line bg-surface p-5 md:p-7"
     >
-      <p className="flex items-center justify-center gap-1.5 text-sm font-semibold text-[#c46a4b]">
+      <p className="flex items-center justify-center gap-1.5 text-sm font-semibold text-brand-fg">
         <LuGavel aria-hidden className="size-4" />
         {heading}
       </p>
@@ -289,9 +289,9 @@ function TimelinePanel({ data }: { data: CaseDetail }) {
         <li key={e.id} className="relative pb-7 pl-6 last:pb-0">
           <span
             aria-hidden
-            className="absolute top-1.5 -left-[7px] size-3 rounded-full border-2 border-surface bg-[#c46a4b]"
+            className="absolute top-1.5 -left-[7px] size-3 rounded-full border-2 border-surface bg-brand"
           />
-          <p className="font-mono text-xs font-semibold text-[#c46a4b]">
+          <p className="font-mono text-xs font-semibold text-brand-fg">
             {formatCaseDate(e.occurredAt, e.occurredAtPrecision, "Asia/Seoul")}
           </p>
           <p className="mt-1 font-semibold">{e.title}</p>

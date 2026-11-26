@@ -26,7 +26,7 @@ export function StatusStamp({
 export function ReviewStamp({ className = "" }: { className?: string }) {
   return (
     <span
-      className={`inline-flex -rotate-6 items-center rounded-md border-2 border-[#b4483a]/70 bg-[#fbf7ef] px-1.5 py-0.5 font-mono text-[10px] font-bold whitespace-nowrap text-[#b4483a] ${className}`}
+      className={`inline-flex -rotate-6 items-center rounded-md border-2 border-[#b4483a]/70 bg-paper px-1.5 py-0.5 font-mono text-[10px] font-bold whitespace-nowrap text-[#b4483a] ${className}`}
     >
       검토 필요
     </span>

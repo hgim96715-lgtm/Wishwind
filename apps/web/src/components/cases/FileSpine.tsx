@@ -75,7 +75,7 @@ export function FileSpine({ item, fileNo }: { item: CaseListItem; fileNo: number
     >
       {/* 상단 상태 라벨 */}
       <span
-        className="w-full rounded-sm bg-[#fbf7ef] py-0.5 text-center font-mono text-[10px] font-bold"
+        className="w-full rounded-sm bg-paper py-0.5 text-center font-mono text-[10px] font-bold"
         style={{ color: stamp.color }}
       >
         {stamp.label}
