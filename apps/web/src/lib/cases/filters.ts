@@ -1,17 +1,19 @@
 import type { CaseCategory, CaseStampKey, CaseStatus, Country } from "./types";
 
-/** /cases?q=&country=&category=&status=&yearFrom=&yearTo= */
+/** /cases?q=&country=&category=&status=&related=&yearFrom=&yearTo= */
 export interface CaseFilters {
   q?: string;
   country?: Country;
   category?: CaseCategory;
   /** 판결 확정(VERDICT)·수사 종결(CLOSED)도 받음. 예전 주소의 SOLVED는 둘 다 보여 줌 */
   status?: CaseStatus | CaseStampKey;
+  /** 관련 콘텐츠가 있는 사건: any·movie·documentary·youtube·book·netflix·prime·disney */
+  related?: string;
   yearFrom?: string;
   yearTo?: string;
 }
 
-const KEYS = ["q", "country", "category", "status", "yearFrom", "yearTo"] as const;
+const KEYS = ["q", "country", "category", "status", "related", "yearFrom", "yearTo"] as const;
 
 /**
  * URL 쿼리 → 필터. 값 검증은 API가 하므로(잘못되면 400) 여기선 문자열만 추림.

@@ -6,6 +6,18 @@ import {
 } from '../../generated/prisma/enums.js';
 import { CaseClosure } from '../closure.js';
 
+/** 사건방 '관련 콘텐츠' 필터: 종류(영화·다큐·유튜브·도서) 또는 플랫폼(넷플릭스·프라임·디즈니+) */
+export const RelatedFilter = {
+  any: 'any',
+  movie: 'movie',
+  documentary: 'documentary',
+  youtube: 'youtube',
+  book: 'book',
+  netflix: 'netflix',
+  prime: 'prime',
+  disney: 'disney',
+} as const;
+
 const DEFAULT_TAKE = 20;
 const MAX_TAKE = 100;
 const MAX_Q_LENGTH = 100;
@@ -60,6 +72,7 @@ export const listCasesSchema = z
     status: enumParam('status', CaseStatus),
     // 판결 확정(VERDICT) / 수사 종결(CLOSED). 고르면 status는 SOLVED로 봄
     closure: enumParam('closure', CaseClosure),
+    related: enumParam('related', RelatedFilter),
     yearFrom: yearParam('yearFrom'),
     yearTo: yearParam('yearTo'),
     cursor: z

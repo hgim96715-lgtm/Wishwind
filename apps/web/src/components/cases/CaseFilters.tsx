@@ -9,6 +9,18 @@ import {
 import { hasActiveFilters, type CaseFilters } from "@/lib/cases/filters";
 import type { CaseCategory, CaseStampKey } from "@/lib/cases/types";
 
+/** 영화·다큐를 보고 온 사람이 바로 찾을 수 있게 관련 콘텐츠 종류·플랫폼으로 좁힘 */
+const RELATED_OPTIONS = [
+  { value: "any", label: "관련 콘텐츠가 있는 사건" },
+  { value: "movie", label: "영화·시리즈 (실화)" },
+  { value: "documentary", label: "다큐·방송" },
+  { value: "netflix", label: "넷플릭스" },
+  { value: "youtube", label: "유튜브" },
+  { value: "prime", label: "아마존 프라임" },
+  { value: "disney", label: "디즈니+" },
+  { value: "book", label: "도서" },
+] as const;
+
 /**
  * 검색·필터 폼. 일반 GET 폼이라 JS 없이도 동작함 → 제출하면 /cases?q=...로 이동하고
  * 서버가 그 쿼리로 다시 렌더링함. 필터 상태가 URL에 남아서 공유·뒤로가기가 자연스러움.
@@ -40,7 +52,7 @@ export function CaseFiltersForm({ filters }: { filters: CaseFilters }) {
         />
       </label>
 
-      <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-[repeat(3,minmax(8rem,1fr))_auto_auto]">
+      <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-[repeat(4,minmax(8rem,1fr))_auto_auto]">
         <Select name="country" label="국가" value={filters.country}>
           {COUNTRY_ORDER.map((c) => (
             <option key={c} value={c}>
@@ -59,6 +71,14 @@ export function CaseFiltersForm({ filters }: { filters: CaseFilters }) {
           {(Object.keys(CASE_STAMP) as CaseStampKey[]).map((s) => (
             <option key={s} value={s}>
               {CASE_STAMP[s].label}
+            </option>
+          ))}
+        </Select>
+
+        <Select name="related" label="관련 콘텐츠" value={filters.related}>
+          {RELATED_OPTIONS.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
             </option>
           ))}
         </Select>

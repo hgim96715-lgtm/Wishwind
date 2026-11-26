@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CaseReviewStatus, Country, NewsStatus } from '../generated/prisma/enums.js';
+import { CaseReviewStatus, Country, NewsStatus, RelatedKind } from '../generated/prisma/enums.js';
 import { Prisma } from '../generated/prisma/client.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type { ListCasesQuery } from './dto/cases.dto.js';
@@ -173,7 +173,7 @@ function visibilityWhere(preview: boolean): Prisma.CaseWhereInput {
  * - yearFrom/yearTo: 발생일 범위. occurred_at은 date 컬럼이라 UTC 자정 기준으로 비교함
  */
 function listWhere(
-  { country, category, status, closure, yearFrom, yearTo }: ListCasesQuery,
+  { country, category, status, closure, related, yearFrom, yearTo }: ListCasesQuery,
   preview: boolean,
 ): Prisma.CaseWhereInput {
   const where: Prisma.CaseWhereInput = {
@@ -183,6 +183,7 @@ function listWhere(
     category,
     status,
     ...closureWhere(closure),
+    ...relatedWhere(related),
   };
 
   if (yearFrom || yearTo) {
@@ -193,6 +194,34 @@ function listWhere(
   }
 
   return where;
+}
+
+const platformIs = (...names: string[]) => ({
+  OR: names.map((name) => ({ platform: { contains: name, mode: 'insensitive' as const } })),
+});
+
+/** 관련 콘텐츠가 있는 사건만 (종류 또는 플랫폼으로 좁힘) */
+function relatedWhere(related: ListCasesQuery['related']): Prisma.CaseWhereInput {
+  switch (related) {
+    case undefined:
+      return {};
+    case 'any':
+      return { relatedContents: { some: {} } };
+    case 'movie':
+      return { relatedContents: { some: { kind: { in: [RelatedKind.MOVIE, RelatedKind.SERIES] } } } };
+    case 'documentary':
+      return { relatedContents: { some: { kind: { in: [RelatedKind.DOCUMENTARY, RelatedKind.TV_PROGRAM] } } } };
+    case 'youtube':
+      return { relatedContents: { some: { kind: RelatedKind.YOUTUBE } } };
+    case 'book':
+      return { relatedContents: { some: { kind: RelatedKind.BOOK } } };
+    case 'netflix':
+      return { relatedContents: { some: platformIs('넷플릭스', 'netflix') } };
+    case 'prime':
+      return { relatedContents: { some: platformIs('프라임', 'prime') } };
+    case 'disney':
+      return { relatedContents: { some: platformIs('디즈니', 'disney') } };
+  }
 }
 
 /** 검색어 공백을 없애 붙여 쓰기와 띄어쓰기를 동일하게 처리함. */
