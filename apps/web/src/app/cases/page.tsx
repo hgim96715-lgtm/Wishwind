@@ -6,7 +6,7 @@ import { CaseSolvingTech } from "@/components/briefing/CaseSolvingTech";
 import { CaseFiltersForm } from "@/components/cases/CaseFilters";
 import { CaseList, CaseListSkeleton } from "@/components/cases/CaseList";
 import { RoomHeader } from "@/components/room/RoomHeader";
-import { parseCaseFilters } from "@/lib/cases/filters";
+import { hasActiveFilters, parseCaseFilters } from "@/lib/cases/filters";
 
 export const metadata: Metadata = {
   title: "사건방",
@@ -38,14 +38,16 @@ export default function CasesPage({ searchParams }: PageProps<"/cases">) {
               <section className="mt-8">
                 <CaseFiltersForm filters={filters} />
               </section>
+              {!hasActiveFilters(filters) && (
+                <section className="mt-6">
+                  <Suspense fallback={<div aria-hidden className="h-[4.25rem] rounded-xl border border-line bg-surface" />}>
+                    <CaseSolvingTech />
+                  </Suspense>
+                </section>
+              )}
               <section className="mt-10">
                 <Suspense key={JSON.stringify(filters)} fallback={<CaseListSkeleton />}>
                   <CaseList filters={filters} />
-                </Suspense>
-              </section>
-              <section className="mt-12">
-                <Suspense fallback={null}>
-                  <CaseSolvingTech />
                 </Suspense>
               </section>
             </>

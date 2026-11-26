@@ -36,12 +36,16 @@ export async function CaseSolvingTech() {
   }));
 
   return (
-    <section aria-labelledby="tech-title" className="mt-8">
-      <h2 id="tech-title" className="font-mono text-xs uppercase tracking-[0.2em] text-subtle">
-        How Cases Get Solved
-      </h2>
-      <p className="mt-2 text-lg font-semibold">사건을 푸는 기술</p>
+    <details className="group rounded-xl border border-line bg-surface px-4 py-3 sm:px-5">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
+        <span className="min-w-0">
+          <span className="block font-mono text-[11px] uppercase tracking-[0.2em] text-subtle">How Cases Get Solved</span>
+          <span className="block font-semibold">사건을 푸는 기술</span>
+        </span>
+        <span aria-hidden className="shrink-0 text-xs text-muted group-open:hidden">펼치기 ↓</span>
+        <span aria-hidden className="hidden shrink-0 text-xs text-muted group-open:inline">접기 ↑</span>
+      </summary>
       <TechTabs techs={techs} initial={initial} titles={titles} />
-    </section>
+    </details>
   );
 }

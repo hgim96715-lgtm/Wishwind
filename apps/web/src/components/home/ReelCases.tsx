@@ -30,7 +30,7 @@ export async function ReelCases() {
                 {CATEGORY_LABEL[c.category]}
               </span>
               <span className="line-clamp-2 font-semibold leading-snug">{c.title}</span>
-              <span className="text-xs text-brand-fg transition-transform group-hover:translate-x-0.5">사건 파일 열기 →</span>
+              <span className="text-xs text-brand-fg transition-transform group-hover:translate-x-0.5">사건 파일 열기</span>
             </Link>
           </li>
         ))}
