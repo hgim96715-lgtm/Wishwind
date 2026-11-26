@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { LuDices, LuLayoutList, LuLibrary } from "react-icons/lu";
 import {
   CATEGORY_COLOR,
@@ -78,12 +78,11 @@ const FILTERS = [
 ] as const;
 
 /** 오늘(한국 날짜) 기준으로 날마다 바뀌는 추천 파일 3건. 미제 사건을 먼저 고름 */
-function recommended(items: CaseListItem[]) {
+function recommended(items: CaseListItem[], dayIndex: number) {
   const pool = items.filter((i) => i.status === "UNSOLVED");
   const source = pool.length >= 3 ? pool : items;
   if (source.length <= 3) return source;
-  const day = Math.floor((Date.now() + 9 * 3_600_000) / 86_400_000);
-  return [0, 1, 2].map((k) => source[(day * 3 + k) % source.length]);
+  return [0, 1, 2].map((k) => source[(dayIndex * 3 + k) % source.length]);
 }
 
 function fileHref(params: URLSearchParams, slug: string) {
@@ -98,7 +97,10 @@ export function Bookshelf({ items }: { items: CaseListItem[] }) {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]["id"]>("all");
   const [view, setView] = useState<"shelf" | "list">("shelf");
   const shown = useMemo(() => items.filter(FILTERS.find((f) => f.id === filter)!.test), [items, filter]);
-  const picks = useMemo(() => recommended(items), [items]);
+  // 날짜는 브라우저에서 정해 prerender 때 시각 값이 굳지 않게 함 (그 전에는 추천 칸을 비움)
+  const [dayIndex, setDayIndex] = useState<number | null>(null);
+  useEffect(() => setDayIndex(Math.floor((Date.now() + 9 * 3_600_000) / 86_400_000)), []);
+  const picks = useMemo(() => (dayIndex === null ? [] : recommended(items, dayIndex)), [items, dayIndex]);
 
   const openRandom = () => {
     const pool = shown.length > 0 ? shown : items;

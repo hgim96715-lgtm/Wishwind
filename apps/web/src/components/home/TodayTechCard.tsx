@@ -1,12 +1,15 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import { INVESTIGATION_TECHNIQUES } from "@/lib/briefing/techniques";
 
 /**
  * 홈 하단 '오늘의 추적 지식' 미니 카드: 날짜 기준 하루 하나씩 순환
  */
-export function TodayTechCard() {
-  const today = new Date();
-  const idx = (today.getFullYear() * 365 + today.getMonth() * 30 + today.getDate()) % INVESTIGATION_TECHNIQUES.length;
+export async function TodayTechCard() {
+  // 오늘 날짜로 고르므로 요청 때마다 계산 (prerender에 굳히지 않음)
+  await connection();
+  const kst = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  const idx = (kst.getUTCFullYear() * 365 + kst.getUTCMonth() * 30 + kst.getUTCDate()) % INVESTIGATION_TECHNIQUES.length;
   const tech = INVESTIGATION_TECHNIQUES[idx];
 
   return (
