@@ -4,7 +4,8 @@ import { TimeAgo } from "@/components/common/TimeAgo";
 import type { BoardItem } from "@/components/briefing/DepartureBoard";
 // 안내판형(DepartureBoard)도 남겨 둠. 같은 items로 바꿔 끼울 수 있음
 import { HeadlineBoard } from "@/components/briefing/HeadlineBoard";
-import { NotesBoard } from "@/components/briefing/NotesBoard";
+import { CaseSolvingTech } from "@/components/briefing/CaseSolvingTech";
+import { ParticipationBanner } from "@/components/briefing/ParticipationBanner";
 import { getBriefing, type Briefing, type BriefingKind, type BriefingPost } from "@/lib/briefing/api";
 import { ApiUnavailableError } from "@/lib/cases/api";
 import { CATEGORY_COLOR, CATEGORY_LABEL, COUNTRY_LABEL, caseRoomCountry, caseStamp, stampOfKey } from "@/lib/cases/labels";
@@ -23,7 +24,6 @@ const timeFmt = new Intl.DateTimeFormat("ko-KR", { timeZone: "Asia/Seoul", hour:
 const formatTime = (iso: string | null) => (iso ? timeFmt.format(new Date(iso)) : "--:--");
 const BOARD_MAX = 10;
 // API가 아직 board를 주지 않는 경우(배포 순서·캐시)에도 페이지가 깨지지 않도록
-const EMPTY_BOARD: Briefing["board"] = { question: null, notes: [], cheers: [] };
 const POSTS_SHOWN = 3;
 
 /** 새 소식과 브리핑 글을 최근 순으로 섞어 안내판에 올릴 10개를 고름 */
@@ -125,7 +125,8 @@ export async function BriefingFeed() {
               )}
             </>
           )}
-          <NotesBoard board={data.board ?? EMPTY_BOARD} participation={data.participation} />
+          <CaseSolvingTech />
+          <ParticipationBanner participation={data.participation} caseCount={data.stats.total} />
         </section>
         <aside className="space-y-8">
           <CaseStats stats={data.stats} />
