@@ -30,7 +30,11 @@ const navOn = "!bg-[#7f9a6e] !text-[#fffdf4] shadow-[inset_0_-2px_0_#5f7a50]";
 function Joystick({ onMove }: { onMove: (x: number, y: number) => void }) {
   const [knob, setKnob] = useState({ x: 0, y: 0 });
   const R = 32;
+  // 일부 브라우저(특히 모바일)에서 setPointerCapture 직후에도 hasPointerCapture가 false로 나와,
+  // 그 값만 믿고 움직임을 걸러내면 드래그가 통째로 씹히는 문제가 있어 자체 ref로 드래그 여부를 따로 추적함
+  const dragging = useRef(false);
   const move = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragging.current) return;
     const r = e.currentTarget.getBoundingClientRect();
     let dx = e.clientX - (r.left + r.width / 2);
     let dy = e.clientY - (r.top + r.height / 2);
@@ -39,15 +43,21 @@ function Joystick({ onMove }: { onMove: (x: number, y: number) => void }) {
     setKnob({ x: dx, y: dy });
     onMove(dx / R, -dy / R);
   };
-  const end = () => { setKnob({ x: 0, y: 0 }); onMove(0, 0); };
+  const start = (e: React.PointerEvent<HTMLDivElement>) => {
+    dragging.current = true;
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch {}
+    move(e);
+  };
+  const end = () => { dragging.current = false; setKnob({ x: 0, y: 0 }); onMove(0, 0); };
   return (
     <div
       role="group"
       aria-label="걷기 조이스틱"
-      onPointerDown={e => { e.currentTarget.setPointerCapture(e.pointerId); move(e); }}
-      onPointerMove={e => { if (e.currentTarget.hasPointerCapture(e.pointerId)) move(e); }}
+      onPointerDown={start}
+      onPointerMove={move}
       onPointerUp={end}
       onPointerCancel={end}
+      onPointerLeave={e => { if (dragging.current && !e.currentTarget.hasPointerCapture(e.pointerId)) end(); }}
       className="pointer-events-auto relative h-[100px] w-[100px] touch-none select-none rounded-full border-2 border-[#c99560] bg-[#fffaf0]/90 shadow-[0_3px_0_#a5784e,0_12px_26px_rgba(60,40,15,.3)]"
     >
       <LuChevronUp aria-hidden="true" size={14} className="absolute left-1/2 top-1.5 -translate-x-1/2 text-[#b08a60]" />
