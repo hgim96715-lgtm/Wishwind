@@ -14,6 +14,7 @@ import { useWeather } from "./useWeather";
 import { currentHour } from "./time-of-day";
 import { useOverriddenWeather } from "./dev-garden-weather";
 import type { WeatherApi } from "./GardenCorner";
+import { useNightBrowserTint } from "./useNightBrowserTint";
 import { phaseAt, type GardenPhase } from "./garden/expo-environment";
 import "./garden-mobile.css";
 
@@ -103,6 +104,7 @@ export function ExhibitionView({ onList, sound: shared, weather: sharedWeather }
   const [directory, setDirectory] = useState(false);
   const [garden, setGarden] = useState(0);
   const [phase, setPhase] = useState<GardenPhase>("day");
+  useNightBrowserTint(phase === "night" && !onList);
   const [still, setStill] = useState(false);
   const [view, setView] = useState(0);
   const [area, setArea] = useState(0);

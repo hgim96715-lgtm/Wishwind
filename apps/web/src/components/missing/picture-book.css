@@ -136,3 +136,30 @@
 .garden-gate-walk,.garden-gate-down{flex:1 1 0;max-width:11rem;justify-content:center;padding:.55rem .6rem;font-size:.8rem}
 }
 
+
+/* 밤의 지역 선택 창 */
+.garden-wall[data-phase="night"] .region-trigger {
+  background: #2c3550;
+  border-color: #8490a6;
+  color: #f3ecda;
+}
+.garden-wall[data-phase="night"] .region-panel {
+  background: #283650;
+  border-color: #64718a;
+  box-shadow: 0 22px 40px -18px #0b152bcc, 0 2px 6px #101a2c66;
+}
+.garden-wall[data-phase="night"] .region-panel h3 { color: #f0e8d5; }
+.garden-wall[data-phase="night"] .region-panel h3::after { border-color: #657087; }
+.garden-wall[data-phase="night"] .region-chip {
+  background: #35445e;
+  border-color: #71809a;
+  color: #f4eee0;
+}
+.garden-wall[data-phase="night"] .region-chip small { color: #c8d0d5; }
+.garden-wall[data-phase="night"] .region-chip:hover { background: #455874; border-color: #a6b5be; }
+.garden-wall[data-phase="night"] .region-chip[aria-pressed="true"] {
+  background: #8aa47f;
+  border-color: #aec4a0;
+  color: #152d2a;
+}
+.garden-wall[data-phase="night"] .region-chip[aria-pressed="true"] small { color: #243f37; }

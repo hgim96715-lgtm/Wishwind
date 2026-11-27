@@ -781,58 +781,6 @@ function useSoftDot() {
   }, []);
 }
 
-/** 낮엔 햇빛 먼지, 밤엔 아주 은은한 반딧불이 몇 점 */
-function Motes({ phase, still }: { phase: GardenPhase; still: boolean }) {
-  const dot = useSoftDot();
-  const points = useRef<THREE.Points>(null);
-  const night = phase === "night";
-  const count = night ? 40 : 120;
-  const data = useMemo(() => {
-    const r = rng(night ? 3 : 9);
-    const base = new Float32Array(count * 3);
-    const pos = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      base.set([(r() - 0.5) * 70, 1 + r() * (night ? 5 : 9), START_Z - 8 - r() * 80], i * 3);
-    }
-    pos.set(base);
-    const g = new THREE.BufferGeometry();
-    g.setAttribute("position", new THREE.BufferAttribute(pos, 3).setUsage(THREE.DynamicDrawUsage));
-    return { base, pos, g };
-  }, [count, night]);
-  useEffect(() => () => { data.g.dispose(); dot.dispose(); }, [data, dot]);
-  useFrame(() => {
-    if (still) return;
-    const t = performance.now() / 1000;
-    const attr = data.g.getAttribute("position") as THREE.BufferAttribute;
-    const arr = attr.array as Float32Array;
-    for (let i = 0; i < count; i++) {
-      const j = i * 3;
-      const k = i * 1.7;
-      arr[j] = data.base[j] + Math.sin(t * (night ? 0.35 : 0.12) + k) * (night ? 1.2 : 0.6);
-      arr[j + 1] = data.base[j + 1] + Math.sin(t * (night ? 0.5 : 0.18) + k * 1.3) * (night ? 0.5 : 0.3);
-      arr[j + 2] = data.base[j + 2] + Math.cos(t * 0.2 + k) * 0.8;
-    }
-    attr.needsUpdate = true;
-    const mat = points.current?.material as THREE.PointsMaterial | undefined;
-    // 반딧불이는 천천히 깜빡임
-    if (mat && night) mat.opacity = 0.55 + Math.sin(t * 1.4) * 0.25;
-  });
-  return (
-    <points ref={points} geometry={data.g} frustumCulled={false} raycast={() => null}>
-      <pointsMaterial
-        map={dot}
-        color={night ? "#e6f59a" : "#fff3c4"}
-        size={night ? 0.9 : 0.4}
-        sizeAttenuation
-        transparent
-        opacity={night ? 0.7 : 0.55}
-        depthWrite={false}
-        blending={THREE.AdditiveBlending}
-      />
-    </points>
-  );
-}
-
 /** 동화책 구름: 수채 그림 구름 그림을 하늘 높이 천천히 흘려보냄 */
 function Clouds({ phase, still }: { phase: GardenPhase; still: boolean }) {
   const group = useRef<THREE.Group>(null);
@@ -1128,7 +1076,7 @@ function Lighthouse({ phase, still }: { phase: GardenPhase; still: boolean }) {
         </sprite>
       )}
       <group position={[0, 21.3, 0]} scale={0.6}>
-        <LighthouseBeam night={phase === "night"} reducedMotion={still} />
+        <LighthouseBeam night={phase === "night"} reducedMotion={still} garden />
       </group>
     </group>
   );
@@ -1504,23 +1452,8 @@ function Trail({ t, snow }: { t: (typeof TRAILS)[number]; snow: boolean }) {
   );
 }
 
-/** 이동점: 바닥의 빛나는 고리와 떠 있는 표식. 누르면 그 구역으로 걸어감 */
-function Hotspots({ view, onView, still, dot }: { view: number; onView: (i: number) => void; still: boolean; dot: THREE.Texture }) {
-  const refs = useRef<(THREE.Group | null)[]>([]);
-  useFrame(() => {
-    if (still) return;
-    const t = performance.now() / 1000;
-    refs.current.forEach((g, i) => {
-      if (!g) return;
-      // 바닥에 박힌 느낌이 나지 않게: 빛이 공중에서 천천히 떠다님
-      const y = 2.5 + Math.sin(t * 1.3 + i) * 0.38;
-      const x = Math.sin(t * 0.7 + i * 2) * 0.22;
-      const k = 1 + Math.sin(t * 2 + i) * 0.08;
-      g.children[0].position.set(x, y, 0);
-      g.children[0].scale.set(2.6 * k, 2.6 * k, 1);
-      g.children[1].position.set(x, y, 0);
-    });
-  });
+/** 길 위에 놓인 작은 표식으로 구역 이동을 안내한다. */
+function Hotspots({ view, onView }: { view: number; onView: (i: number) => void }) {
   return (
     <group>
       {VIEWS.map((v, i) => {
@@ -1528,21 +1461,18 @@ function Hotspots({ view, onView, still, dot }: { view: number; onView: (i: numb
         const zoneIdx = [-1, 0, 3, 1, 2][i];
         const color = ZONES[zoneIdx]?.color ?? "#fff0c4";
         return (
-          <group key={v.name} position={[v.x, height(v.x, v.z), v.z]} ref={el => { refs.current[i] = el; }}>
-            <sprite position={[0, 2.5, 0]} scale={[2.6, 2.6, 1]} raycast={() => null}>
-              <spriteMaterial map={dot} color={color} transparent opacity={0.22} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
-            </sprite>
-            {/* 공중에 떠 있는 작고 따뜻한 빛 */}
-            <sprite position={[0, 2.5, 0]} scale={[0.7, 0.7, 1]} raycast={() => null}>
-              <spriteMaterial map={dot} color="#fff3cf" transparent opacity={0.95} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
-            </sprite>
+          <group key={v.name} position={[v.x, height(v.x, v.z) + 0.18, v.z]}>
+            <mesh rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
+              <ringGeometry args={[0.55, 0.68, 24]} />
+              <meshBasicMaterial color={color} transparent opacity={0.6} depthWrite={false} />
+            </mesh>
             <mesh
-              position={[0, 1.6, 0]}
+              position={[0, 0.9, 0]}
               onClick={e => { e.stopPropagation(); if (e.delta <= 6) onView(i); }}
               onPointerOver={e => { e.stopPropagation(); document.body.style.cursor = "pointer"; }}
               onPointerOut={() => { document.body.style.cursor = ""; }}
             >
-              <cylinderGeometry args={[2.1, 2.1, 3.6, 12]} />
+              <cylinderGeometry args={[1.4, 1.4, 1.8, 12]} />
               <meshBasicMaterial transparent opacity={0} depthWrite={false} />
             </mesh>
           </group>
@@ -1670,7 +1600,7 @@ function Scenery({ phase, still, view, onView, counts, snow }: { phase: GardenPh
       {[52, 19, 7, -10, -17].map((z, i) => (
         <LampPost key={z} at={{ x: pathX(z) + (i % 2 ? 3.4 : -3.4 * (z === 52 ? 1.9 : 1)), z }} night={night} dot={dot} />
       ))}
-      <Hotspots view={view} onView={onView} still={still} dot={dot} />
+      <Hotspots view={view} onView={onView} />
     </group>
   );
 }
@@ -1707,7 +1637,7 @@ const PALETTES = [
 ];
 
 /** 실종자 한 분당 바람개비 하나. 누르면 사연 카드, 응원하면 한동안 세차게 돎 */
-function Pinwheels({ people, boost, still, onSpots }: { people: LookPerson[]; boost: LookBoost | null; still: boolean; onSpots: (list: { x: number; z: number }[]) => void }) {
+function Pinwheels({ people, boost, still, phase, onSpots }: { people: LookPerson[]; boost: LookBoost | null; still: boolean; phase: GardenPhase; onSpots: (list: { x: number; z: number }[]) => void }) {
   const blade = getBlade();
   // 구역별 정돈: 실종자는 자기 구역 조형물 둘레에 해바라기 씨앗 배열로 고르게(서로 떨어지게), 길목과 조형물 자리는 비움
   const spots = useMemo(() => {
@@ -1783,16 +1713,17 @@ function Pinwheels({ people, boost, still, onSpots }: { people: LookPerson[]; bo
   const capRef = useRef<THREE.InstancedMesh>(null);
   const bladeRefs = useRef<(THREE.InstancedMesh | null)[]>([null, null, null, null]);
   const bladeMaterial = useMemo(() => {
-    const mat = new THREE.MeshStandardMaterial({ roughness: 0.8, side: THREE.DoubleSide });
+    const mat = new THREE.MeshStandardMaterial({ roughness: 0.8, side: THREE.DoubleSide, emissive: "#ffffff", emissiveIntensity: phase === "night" ? 0.16 : 0.08 });
     // instanceColor(날개마다 다른 색)를 diffuse뿐 아니라 emissive(은은한 자체 발광)에도 그대로 적용
     mat.onBeforeCompile = shader => {
       shader.fragmentShader = shader.fragmentShader.replace(
         "#include <emissivemap_fragment>",
-        "#include <emissivemap_fragment>\n#ifdef USE_INSTANCING_COLOR\n totalEmissiveRadiance *= vColor.rgb * 0.18;\n#endif"
+        "#include <emissivemap_fragment>\n#ifdef USE_INSTANCING_COLOR\n totalEmissiveRadiance *= vColor.rgb;\n#endif"
       );
     };
     return mat;
-  }, []);
+  }, [phase]);
+  useEffect(() => () => bladeMaterial.dispose(), [bladeMaterial]);
   useEffect(() => {
     for (let i = 0; i < count; i++) {
       const p = people[i];
@@ -1800,7 +1731,8 @@ function Pinwheels({ people, boost, still, onSpots }: { people: LookPerson[]; bo
       bladeRefs.current.forEach((b, k) => { if (b) b.setColorAt(i, new THREE.Color(palette[k])); });
     }
     bladeRefs.current.forEach(b => { if (b?.instanceColor) b.instanceColor.needsUpdate = true; });
-  }, [people, count]);
+    bladeMaterial.needsUpdate = true;
+  }, [people, count, bladeMaterial]);
 
   // 매 프레임: 자리별 위치·회전(보는 쪽 향하기)·거리별 축소·날개 회전을 합성 행렬로 계산해 instance 행렬만 갱신
   const mOuter = useMemo(() => new THREE.Matrix4(), []);
@@ -2117,9 +2049,8 @@ function Content({ phase, weather, reducedMotion, paused, december, people, boos
       <Path snow={snowy} />
       <StoryProps phase={phase} snow={snowy} still={reducedMotion || paused ? true : false} avoid={spotList} />
       <Scenery phase={phase} still={still} view={walked ? -1 : view} onView={onView} counts={counts} snow={snowy} />
-      <group userData={{ noShadow: true }}><Pinwheels people={people} boost={boost} still={reducedMotion} onSpots={onSpots} /></group>
+      <group userData={{ noShadow: true }}><Pinwheels people={people} boost={boost} still={reducedMotion} phase={phase} onSpots={onSpots} /></group>
       {!night && <WindStreaks still={still} />}
-      {!wet && night && <Motes phase={phase} still={still} />}
       <Clouds phase={phase} still={still} />
       <Airplane phase={phase} still={still} />
       <ExpoWeather weather={weather} player={player} paused={still} />

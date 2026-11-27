@@ -11,6 +11,7 @@ import { useAmbientSound } from "./useAmbientSound";
 import { useWeather } from "./useWeather";
 import { useOverriddenWeather } from "./dev-garden-weather";
 import { currentHour } from "./time-of-day";
+import { useNightBrowserTint } from "./useNightBrowserTint";
 import { phaseAt, type GardenPhase } from "./garden/expo-environment";
 
 /** 걷는 정원은 누를 때만 불러옴 */
@@ -65,6 +66,7 @@ export function MissingPictureBook() {
   const [memory,setMemory]=useState<string[]>([]);
   // 위쪽 물결(정원 입구)과 같은 시간대 기준을 써서 카드 목록 배경도 경계 없이 이어짐
   const [phase,setPhase]=useState<GardenPhase>("day");
+  useNightBrowserTint(phase === "night");
   const [season,setSeason]=useState(0);
   useEffect(()=>{
     try {const ids:unknown=JSON.parse(localStorage.getItem(MEMORY_KEY)??"[]");if(Array.isArray(ids))setMemory(ids.filter((x):x is string=>typeof x==="string"));} catch {}

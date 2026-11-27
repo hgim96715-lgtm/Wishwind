@@ -24,3 +24,31 @@
 .garden-weather-btn:focus-visible,.garden-sound:focus-visible{outline:3px solid #d9b87a;outline-offset:2px}
 @media(prefers-reduced-motion:reduce){.garden-weather-panel{animation:none}}
 @keyframes region-open{from{opacity:0;translate:0 -6px}}
+
+/* 밤하늘에 어울리는 시계와 날씨·소리 버튼 */
+[data-phase="night"] .garden-clock,
+[data-phase="night"] .garden-sound {
+  background: #26354e;
+  border-color: #7888a1;
+  color: #f3e8d2;
+  box-shadow: 0 2px 0 #17253a, 0 8px 18px -8px #080f1bcc;
+}
+[data-phase="night"] .garden-sound[aria-pressed="true"] {
+  background: #607b70;
+  border-color: #a4bba8;
+  color: #fff8e6;
+}
+[data-phase="night"] .garden-weather-panel {
+  background: #283650;
+  border-color: #7888a1;
+  color: #f3e8d2;
+  box-shadow: 0 3px 0 #17253a, 0 14px 30px -10px #080f1bcc;
+}
+[data-phase="night"] .garden-weather-panel svg { color: #e8c78e; }
+[data-phase="night"] .garden-weather-label span { color: #cbd1d2; }
+[data-phase="night"] .garden-weather-btn {
+  background: #607b70;
+  border-color: #a4bba8;
+  color: #fff8e6;
+  box-shadow: 0 2px 0 #405a50;
+}

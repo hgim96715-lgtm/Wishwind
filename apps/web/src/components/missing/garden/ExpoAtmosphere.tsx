@@ -41,7 +41,7 @@ export function Atmosphere({phase,overview,weather,exponential=false,meadow=fals
   </>;
 }
 
-export function LighthouseBeam({night,reducedMotion}:{night:boolean;reducedMotion:boolean}) {
+export function LighthouseBeam({night,reducedMotion,garden=false}:{night:boolean;reducedMotion:boolean;garden?:boolean}) {
   const rig=useRef<THREE.Group>(null),light=useRef<THREE.SpotLight>(null),target=useRef<THREE.Object3D>(null);
   const beam=useMemo(()=>{
     const material=new THREE.MeshBasicMaterial({color:"#ffe7b1",transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide});
@@ -56,12 +56,12 @@ export function LighthouseBeam({night,reducedMotion}:{night:boolean;reducedMotio
     const dt=Math.min(delta,.05);
     if(rig.current&&!reducedMotion)rig.current.rotation.y+=dt*.18;
     beam.opacity=THREE.MathUtils.damp(beam.opacity,night?.075:0,3,dt);
-    if(light.current)light.current.intensity=THREE.MathUtils.damp(light.current.intensity,night?130:0,3,dt);
+    if(light.current)light.current.intensity=THREE.MathUtils.damp(light.current.intensity,night?(garden?550:130):0,3,dt);
   });
-  return <group ref={rig} position={[0,4.9,0]}>
-    <spotLight ref={light} color="#ffe7b1" intensity={0} angle={0.09} penumbra={0.9} distance={140} decay={1} />
-    <object3D ref={target} position={[110,-2,0]} />
-    <mesh position={[55,0,0]} rotation={[0,0,Math.PI/2]} raycast={()=>null}><coneGeometry args={[9,110,24,1,true]} /><primitive object={beam} attach="material" /></mesh>
+  return <group ref={rig} position={[0,garden?0:4.9,0]}>
+    <spotLight ref={light} color="#ffe7b1" intensity={0} angle={garden?0.22:0.09} penumbra={0.9} distance={garden?240:140} decay={1} />
+    <object3D ref={target} position={garden?[110,-38,0]:[110,-2,0]} />
+    <mesh position={garden?[55,-19,0]:[55,0,0]} rotation={[0,0,garden?Math.PI/2-Math.atan2(38,110):Math.PI/2]} raycast={()=>null}><coneGeometry args={[9,garden?Math.hypot(110,38):110,24,1,true]} /><primitive object={beam} attach="material" /></mesh>
   </group>;
 }
 
