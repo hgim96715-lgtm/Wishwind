@@ -3,15 +3,17 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { LuMusic2, LuCloud, LuCloudFog, LuCloudRain, LuMoon, LuSnowflake, LuSun, LuChevronDown, LuChevronLeft, LuChevronRight, LuChevronUp, LuCloudSun, LuHouse, LuMapPin, LuSprout, LuBookOpen } from "react-icons/lu";
+import { LuChevronDown, LuChevronLeft, LuChevronRight, LuChevronUp, LuHouse, LuMapPin, LuSprout, LuBookOpen } from "react-icons/lu";
 import { regionLabel } from "@/lib/missing/regions";
+import { GardenCorner } from "./GardenCorner";
 import { LanternDirectory } from "./LanternDirectory";
 import { MissingCard } from "./MissingCard";
 import { useGardenLanterns } from "./useGardenLanterns";
 import { useAmbientSound } from "./useAmbientSound";
 import { useWeather } from "./useWeather";
 import { currentHour } from "./time-of-day";
-import { DEV_GARDEN_WEATHER_EVENT, DEV_GARDEN_WEATHER_KEY } from "./dev-garden-weather";
+import { useDevGardenWeather } from "./dev-garden-weather";
+import type { WeatherApi } from "./GardenCorner";
 import { phaseAt, type GardenPhase } from "./garden/expo-environment";
 import "./garden-mobile.css";
 
@@ -57,20 +59,11 @@ function Joystick({ onMove }: { onMove: (x: number, y: number) => void }) {
   );
 }
 
-function WeatherIcon({ kind, night }: { kind: string; night: boolean }) {
-  const cls = "text-[#c98a2e]";
-  if (kind === "rain") return <LuCloudRain size={40} aria-hidden="true" className="text-[#5f86a3]" />;
-  if (kind === "snow") return <LuSnowflake size={40} aria-hidden="true" className="text-[#7aa3bd]" />;
-  if (kind === "fog") return <LuCloudFog size={40} aria-hidden="true" className="text-[#8b9f91]" />;
-  if (kind === "cloudy") return <LuCloud size={40} aria-hidden="true" className="text-[#8b9f91]" />;
-  return night ? <LuMoon size={40} aria-hidden="true" className="text-[#8a7fc4]" /> : <LuSun size={40} aria-hidden="true" className={cls} />;
-}
-
-const WEATHER_LABEL: Record<string, string> = { clear: "맑음", cloudy: "구름", fog: "안개", rain: "비", snow: "눈" };
-
 /** onList가 있으면 카드 화면 안에서 띄운 걷는 정원: 목록 버튼이 같은 화면의 카드 목록으로 돌아감 */
-export function ExhibitionView({ onList }: { onList?: () => void } = {}) {
-  const sound = useAmbientSound();
+export function ExhibitionView({ onList, sound: shared, weather: sharedWeather }: { onList?: () => void; sound?: { on: boolean; toggle: () => void }; weather?: WeatherApi } = {}) {
+  // 카드 화면 안에서 띄우면 카드 화면의 소리를 같이 씀 (사진첩으로 돌아가도 끊기지 않게)
+  const own = useAmbientSound();
+  const sound = shared ?? own;
   const lights = useGardenLanterns(false);
   const [directory, setDirectory] = useState(false);
   const [garden, setGarden] = useState(0);
@@ -89,31 +82,16 @@ export function ExhibitionView({ onList }: { onList?: () => void } = {}) {
   const goView = useCallback((i: number) => { setView(i); setArea(i); setResetKey(k => k + 1); setEntered(false); }, []);
   const enterGarden = useCallback(() => { setZoneMenu(false); setEntered(true); setEnterEnd("path"); setEnterKey(k => k + 1); }, []);
   // 입구 버튼: 아치 정중앙에 서서 길을 바라봄
-  const { weather: realWeather, mine, loading, askMyLocation, clearWeather } = useWeather();
+  // 카드 화면 안에 떠 있을 때는(sharedWeather) 그 날씨 상태를 그대로 씀. 따로 열렸을 때만 제 날씨를 가짐
+  const ownWeather = useWeather();
+  const weatherApi = sharedWeather ?? ownWeather;
   // 개발 모드: DEV 메뉴에서 고른 날씨로 덮어써 비·눈을 미리 봄
-  const [devWeather, setDevWeather] = useState("");
-  useEffect(() => {
-    if (process.env.NODE_ENV !== "development") return;
-    const read = () => { try { setDevWeather(localStorage.getItem(DEV_GARDEN_WEATHER_KEY) ?? ""); } catch { setDevWeather(""); } };
-    read();
-    window.addEventListener(DEV_GARDEN_WEATHER_EVENT, read);
-    return () => window.removeEventListener(DEV_GARDEN_WEATHER_EVENT, read);
-  }, []);
-  const weather = useMemo(
-    () => (devWeather === "clear" || devWeather === "rain" || devWeather === "snow" ? { kind: devWeather, intensity: devWeather === "clear" ? 0 : 0.85, place: "정원" } as typeof realWeather : realWeather),
-    [devWeather, realWeather],
-  );
+  const devWeather = useDevGardenWeather();
+  const weather = devWeather.kind === "clear" || devWeather.kind === "rain" || devWeather.kind === "snow"
+    ? ({ kind: devWeather.kind, intensity: devWeather.kind === "clear" ? 0 : 0.85, place: "정원" } as typeof weatherApi.weather)
+    : weatherApi.weather;
   const [december, setDecember] = useState(false);
   const [boost, setBoost] = useState<{ id: string; at: number } | null>(null);
-  const [weatherMenu, setWeatherMenu] = useState(false);
-  const [clock, setClock] = useState("");
-  const [isNight, setIsNight] = useState(false);
-  useEffect(() => {
-    const tick = () => { const h = currentHour(); const hh = Math.floor(h) % 24; const mm = Math.floor((h - Math.floor(h)) * 60); setClock(`${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`); setIsNight(h < 5.5 || h >= 19.7); };
-    tick();
-    const id = setInterval(tick, 20000);
-    return () => clearInterval(id);
-  }, []);
   const [notice, setNotice] = useState("");
   useEffect(() => {
     if (!notice) return;
@@ -150,7 +128,7 @@ export function ExhibitionView({ onList }: { onList?: () => void } = {}) {
     <div className="absolute inset-0" inert={covered || undefined}>
       <Scene phase={phase} weather={weather} reducedMotion={still} paused={covered} december={december} people={people} boost={boost} onSelect={select} view={view} onView={goView} resetKey={resetKey} joy={joyRef} onArea={setArea} enterKey={enterKey} enterEnd={enterEnd} />
     </div>
-    <div className="pointer-events-none absolute right-4 top-[84px] z-10 inline-flex items-center gap-1.5 rounded-full border border-[#fff3d0]/55 bg-[#fff1cf]/18 px-3 py-1.5 text-[13px] font-bold text-[#fffdf4] shadow-[0_4px_16px_rgba(40,30,10,.2)] backdrop-blur-xl sm:right-12" inert={covered || undefined}>{isNight ? <LuMoon size={14} aria-hidden="true" /> : <LuSun size={14} aria-hidden="true" />}<span className="tabular-nums">{clock}</span></div>
+    {!shared && <GardenCorner sound={sound} weather={weatherApi} className="garden-corner-abs" />}
     <div className="absolute bottom-[calc(env(safe-area-inset-bottom,0px)+98px)] right-4 z-10" inert={covered || undefined}><Joystick onMove={onJoy} /></div>
     <div className={`pointer-events-none absolute left-5 top-[84px] z-10 text-[#fffdf4] ${phase === "night" ? "" : "[text-shadow:0_2px_12px_#203428a0]"} sm:left-12`} inert={covered || undefined}>
       <h1 className="text-[21px] font-bold sm:text-[30px]">{area === 0 ? "실종자들의 정원" : VIEW_LABELS[area]}</h1>
@@ -164,20 +142,11 @@ export function ExhibitionView({ onList }: { onList?: () => void } = {}) {
           ))}
         </div>
       )}
-      {weatherMenu && (
-        <div role="dialog" aria-label="날씨" className="garden-weather-panel flex w-[min(86vw,260px)] flex-col items-center gap-3 rounded-[28px] border-2 border-dashed border-[#e0cc9e] bg-[#f8edd3]/85 px-5 py-4 text-[#4a3522] shadow-[0_10px_34px_rgba(40,30,10,.3)] backdrop-blur-md">
-          <WeatherIcon kind={weather?.kind ?? "clear"} night={isNight} />
-          <p className="text-[18px] font-bold leading-none">{WEATHER_LABEL[weather?.kind ?? "clear"] ?? "맑음"}<span className="ml-2 text-[12px] font-semibold text-[#786650]">{mine ? "내 위치" : "정원"}</span></p>
-          <button type="button" disabled={loading} onClick={() => void (mine ? clearWeather() : askMyLocation())} className="inline-flex min-h-10 w-full items-center justify-center rounded-full border-2 border-[#d9b87a] bg-[#f2c77a] px-4 text-[13px] font-bold text-[#4a3522] shadow-[0_2px_0_#c99a52] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4a3522]/50 active:translate-y-px disabled:opacity-50">{loading ? "날씨 확인 중" : mine ? "정원 날씨로 돌아가기" : "내 위치 날씨 보기"}</button>
-        </div>
-      )}
       <nav aria-label="정원 이동" className="flex items-center gap-0.5 rounded-[30px] border-2 border-[#c99560] bg-[#fffaf0] px-2 py-1.5 shadow-[0_3px_0_#a5784e,0_14px_30px_rgba(60,40,15,.32)]">
-        <button type="button" aria-label="입구로" title="입구" onClick={() => { setZoneMenu(false); goView(0); }} className={`${navBtn} ${view === 0 ? navOn : ""}`}><LuHouse size={22} aria-hidden="true" /><span className="text-[10px] font-semibold leading-none">입구</span></button>
-        <button type="button" aria-label="구역 고르기" title="구역" aria-expanded={zoneMenu} onClick={() => { setWeatherMenu(false); setZoneMenu(v => !v); }} className={`${navBtn} ${zoneMenu || view > 0 ? navOn : ""}`}><LuMapPin size={22} aria-hidden="true" /><span className="text-[10px] font-semibold leading-none">구역</span></button>
+        <button type="button" aria-label={view === 0 && onList ? "사진첩으로 나가기" : "입구로"} title={view === 0 && onList ? "사진첩으로" : "입구"} onClick={() => { setZoneMenu(false); if (view === 0 && onList) onList(); else goView(0); }} className={`${navBtn} ${view === 0 ? navOn : ""}`}><LuHouse size={22} aria-hidden="true" /><span className="text-[10px] font-semibold leading-none">입구</span></button>
+        <button type="button" aria-label="구역 고르기" title="구역" aria-expanded={zoneMenu} onClick={() => { setZoneMenu(v => !v); }} className={`${navBtn} ${zoneMenu || view > 0 ? navOn : ""}`}><LuMapPin size={22} aria-hidden="true" /><span className="text-[10px] font-semibold leading-none">구역</span></button>
         <button type="button" aria-label={entered ? "길 따라 앞으로 걷기" : "정원으로 들어가기"} title={entered ? "길 따라 앞으로 걷기" : "정원으로 들어가기"} onClick={enterGarden} className={`${navBtn} ${view === 0 && !entered ? "bg-[#f2c77a] shadow-[inset_0_-2px_0_#c99a52]" : ""}`}><LuSprout size={22} aria-hidden="true" /><span className="text-[10px] font-semibold leading-none">{entered ? "앞으로" : "정원"}</span></button>
         {onList ? <button type="button" onClick={onList} aria-label="기다리는 분들의 사진첩 보기" title="사진첩" className={navBtn}><LuBookOpen size={22} aria-hidden="true" /><span className="text-[10px] font-semibold leading-none">사진첩</span></button> : <Link href="/missing#garden-list" aria-label="기다리는 분들의 사진첩 보기" title="사진첩" className={navBtn}><LuBookOpen size={22} aria-hidden="true" /><span className="text-[10px] font-semibold leading-none">사진첩</span></Link>}
-        <button type="button" aria-label="정원의 파도와 바람종 소리" aria-pressed={sound.on} onClick={sound.toggle} className={`${navBtn} ${sound.on ? navOn : ""}`}><LuMusic2 size={22} aria-hidden="true" /><span className="text-[10px] font-semibold leading-none">소리</span></button>
-        <button type="button" aria-label="날씨와 시간" title="날씨와 시간" aria-expanded={weatherMenu} onClick={() => { setZoneMenu(false); setWeatherMenu(v => !v); }} className={`${navBtn} ${weatherMenu || mine ? navOn : ""}`}><LuCloudSun size={22} aria-hidden="true" /><span className="text-[10px] font-semibold leading-none">날씨</span></button>
       </nav>
     </div>
     {notice && <p role="status" className="pointer-events-none absolute inset-x-0 bottom-44 z-30 mx-auto w-fit max-w-[86%] rounded-full border border-white/45 bg-white/20 px-4 py-2 text-center text-sm text-white shadow backdrop-blur-xl [text-shadow:0_1px_6px_rgba(0,0,0,.35)]">{notice}</p>}

@@ -297,7 +297,7 @@ function DragLook({ paused, reducedMotion, view, reset, walk, onLook, joy, solid
       // 좌우로 밀면 그쪽으로 몸을 돌리고, 위·아래로 밀면 보는 방향으로 앞·뒤로 걸음
       rig.current.yaw -= (Math.abs(jv.x) > 0.08 ? jv.x : 0) * 1.5 * dt;
       const yawNow = rig.current.yaw - state.current.yaw;
-      const fwd = Math.abs(jv.y) > 0.12 ? jv.y : 0;
+      const fwd = jv.y;
       const nx = rig.current.x - Math.sin(yawNow) * fwd * 5.5 * dt;
       const nz = rig.current.z - Math.cos(yawNow) * fwd * 5.5 * dt;
       const ok = solid(nx, nz);

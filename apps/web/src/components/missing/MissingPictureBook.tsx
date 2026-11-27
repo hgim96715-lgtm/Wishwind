@@ -6,6 +6,9 @@ import { GARDEN_PATHS, gardenPathMeta, gardenPathOf } from "@/lib/missing/garden
 import dynamic from "next/dynamic";
 import { GardenHero } from "./GardenHero";
 import { RegionPicker } from "./RegionPicker";
+import { GardenCorner } from "./GardenCorner";
+import { useAmbientSound } from "./useAmbientSound";
+import { useWeather } from "./useWeather";
 
 /** 걷는 정원은 누를 때만 불러옴 */
 const ExhibitionView = dynamic(() => import("./ExhibitionView").then(m => m.ExhibitionView), { ssr: false });
@@ -41,6 +44,8 @@ export function MissingPictureBook() {
   const lights=useGardenLanterns(false);
   // 정원 걸어 보기: 같은 화면 위에 걷는 정원을 띄움. 뒤로 가기나 "목록"을 누르면 카드 목록으로 돌아옴
   const [walking,setWalking]=useState(false);
+  const sound=useAmbientSound();
+  const weather=useWeather();
   useEffect(()=>{const pop=()=>setWalking(location.hash==="#garden-walk");addEventListener("popstate",pop);return()=>removeEventListener("popstate",pop);},[]);
   useEffect(()=>{if(!walking)return;const prev=document.documentElement.style.overflow;document.documentElement.style.overflow="hidden";return()=>{document.documentElement.style.overflow=prev;};},[walking]);
   const startWalk=()=>{history.pushState(null,"","#garden-walk");setWalking(true);};
@@ -69,7 +74,8 @@ export function MissingPictureBook() {
   const total=sections.reduce((n,s)=>n+s.length,0);
   return <div className="garden-wall" data-light={light} data-season={season}>
     <div inert={!!lights.selected||walking}><GardenHero grouped={lights.grouped} onWalk={startWalk} covered={walking}/></div>
-    {walking&&<div className="garden-walk-layer"><ExhibitionView onList={toList}/></div>}
+    {walking&&<div className="garden-walk-layer"><ExhibitionView onList={toList} sound={sound} weather={weather}/></div>}
+    <GardenCorner sound={sound} weather={weather} className="garden-corner-fixed"/>
     <section id="garden-list" className="wall-inner" inert={!!lights.selected||walking}>
       <div className="wall-filters"><RegionPicker value={region} choices={choices} onChange={r=>{setRegion(r);setLimits([PAGE,PAGE,PAGE,PAGE]);}}/>
       <label><LuSearch/><input aria-label="이름 또는 장소 찾기" placeholder="이름 또는 장소" type="search" value={query} onChange={e=>{setQuery(e.target.value);setLimits([PAGE,PAGE,PAGE,PAGE]);}}/></label></div>

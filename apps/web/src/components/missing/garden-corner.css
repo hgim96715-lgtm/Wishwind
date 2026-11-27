@@ -1,0 +1,20 @@
+/* 오른쪽 위 모서리: 정원 시계 + 소리 (사진첩·걷는 정원 같은 자리) */
+.garden-corner{display:flex;align-items:center;gap:.4rem;z-index:25}
+.garden-corner-fixed{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:14px}
+.garden-corner-abs{position:absolute;top:calc(env(safe-area-inset-top,0px) + 14px);right:14px}
+.garden-clock{display:inline-flex;align-items:center;gap:.35rem;height:38px;padding:0 .8rem;border-radius:2rem;border:2px solid #c99560;background:#fffaf0;color:#5b4630;font-size:.82rem;font-weight:700;font-variant-numeric:tabular-nums;box-shadow:0 2px 0 #a5784e,0 8px 18px -8px #3b2a1688}
+.garden-sound{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;border:2px solid #c99560;background:#fffaf0;color:#8f6240;font-size:1.05rem;cursor:pointer;box-shadow:0 2px 0 #a5784e,0 8px 18px -8px #3b2a1688;transition:transform .15s}
+.garden-sound:active{transform:translateY(1px)}
+.garden-sound[aria-pressed=true]{background:#7f9a6e;border-color:#5f7a50;color:#fffdf4;box-shadow:0 2px 0 #5f7a50,0 8px 18px -8px #3b2a1688}
+.garden-sound:focus-visible{outline:3px solid #d9b87a;outline-offset:2px}
+.garden-corner-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:.5rem}
+.garden-weather-panel{display:flex;flex-direction:column;align-items:center;gap:.5rem;width:13rem;padding:1rem;border-radius:20px;border:2px solid #c99560;background:#fffaf0;color:#4a3522;box-shadow:0 3px 0 #a5784e,0 14px 30px -10px rgba(60,40,15,.4);animation:region-open .16s ease-out}
+.garden-weather-panel svg{width:30px;height:30px;color:#c98a2e}
+.garden-weather-label{margin:0;font-size:1rem;font-weight:700;line-height:1.3;text-align:center}
+.garden-weather-label span{display:block;margin-top:.1rem;font-size:.72rem;font-weight:600;color:#8f7a5c}
+.garden-weather-btn{min-height:38px;width:100%;padding:0 .9rem;border-radius:2rem;border:2px solid #d9b87a;background:#f2c77a;color:#4a3522;font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 2px 0 #c99a52;transition:transform .1s}
+.garden-weather-btn:active{transform:translateY(1px)}
+.garden-weather-btn:disabled{opacity:.6;cursor:default}
+.garden-weather-btn:focus-visible,.garden-sound:focus-visible{outline:3px solid #d9b87a;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.garden-weather-panel{animation:none}}
+@keyframes region-open{from{opacity:0;translate:0 -6px}}
