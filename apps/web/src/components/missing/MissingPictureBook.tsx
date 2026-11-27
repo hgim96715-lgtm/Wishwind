@@ -71,7 +71,8 @@ export function MissingPictureBook() {
   const choices=useMemo(()=>groupByRegion(lights.people),[lights.people]);
   // 오늘의 세 분: 네 길의 맨 앞 분들 중에서 날마다 시작 길을 바꿔 세 분을 고름
   const q=query.trim().toLowerCase();
-  const sections=useMemo(()=>lights.grouped.map(rows=>rows.filter(p=>(!region||p.region===region)&&[p.name,p.lastSeenPlace,regionLabel(p.region)].join(" ").toLowerCase().includes(q))),[lights.grouped,region,q]);
+  // 공개된 사진이 없는 분은 목록 뒤로 보냄 (사진 있는 분이 먼저 보이게). 정렬은 안정적이라 그 안에서는 원래 순서 유지
+  const sections=useMemo(()=>lights.grouped.map(rows=>rows.filter(p=>(!region||p.region===region)&&[p.name,p.lastSeenPlace,regionLabel(p.region)].join(" ").toLowerCase().includes(q)).slice().sort((a,b)=>(a.thumbUrl?0:1)-(b.thumbUrl?0:1))),[lights.grouped,region,q]);
   // 기억하기: 정원에서 바람을 보낼 때처럼 "○○님의 바람개비가 힘차게 돌아가요" 알림을 잠깐 띄움
   const [notice,setNotice]=useState<{text:string;n:number}|null>(null);
   useEffect(()=>{if(!notice)return;const t=setTimeout(()=>setNotice(null),2800);return()=>clearTimeout(t);},[notice]);
