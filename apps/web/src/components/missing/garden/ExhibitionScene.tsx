@@ -119,6 +119,8 @@ const trailEnd = (t: (typeof TRAILS)[number]): Pt => {
 };
 // 큰길 끝에서도 길이 멈추지 않고 작은 고리로 이어짐
 const MAIN_LOOP = { c: { x: pathX(-54), z: -54 }, r: 6 };
+/** 입구 앞 넓은 풀밭의 작은 광장: 분수를 가운데 두고 우체국·우체통·꽃수레·그네가 둘러섬 */
+const PLAZA = { x: 10, z: 54, r: 6.5 };
 /** 아이들의 길의 공룡 친구들 (길 가까이에서 길을 바라봄) */
 const DINO_SPOTS: { at: Pt; face: number; kind: 0 | 1 }[] = [
   { at: { x: -26, z: 19 }, face: Math.atan2(26, -3), kind: 0 },
@@ -134,6 +136,7 @@ function segDist(x: number, z: number, a: Pt, b: Pt) {
 function nearPath(x: number, z: number, buf: number) {
   if (z < 60 && z > -70 && Math.abs(x - pathX(z)) < buf) return true;
   if (Math.abs(Math.hypot(x - MAIN_LOOP.c.x, z - MAIN_LOOP.c.z) - MAIN_LOOP.r) < buf + 1.2) return true;
+  if (Math.hypot(x - PLAZA.x, z - PLAZA.z) < PLAZA.r + 9 + buf * 0.3) return true;
   return TRAILS.some(t => segDist(x, z, t.from, trailEnd(t)) < buf + 1.2 || Math.abs(Math.hypot(x - t.ring.c.x, z - t.ring.c.z) - t.ring.r) < buf + 1.2);
 }
 
@@ -1533,18 +1536,14 @@ function StoryProps({ phase, snow, still, avoid }: { phase: GardenPhase; snow: b
     [[pathX(-4) + 3.6, -4], [pathX(-15) - 3.6, -15], [pathX(-22) + 3.4, -22]].forEach(([x, z]) => {
       out.push({ svg: bench, x, z, y: height(x, z), h: 2.6, aspect: 420 / 300 });
     });
-    // 광장의 분수
-    const fo = { x: 8 - 9, z: -20 + 5 };
-    out.push({ svg: fountainSvg(), x: fo.x, z: fo.z, y: height(fo.x, fo.z), h: 4.6, aspect: 460 / 400 });
-    // 광장 둘레의 작은 마을: 우체국·우체통·그네·꽃수레
-    const po = { x: -7, z: -29 };
-    out.push({ svg: postOfficeSvg(), x: po.x, z: po.z, y: height(po.x, po.z), h: 5.2, aspect: 520 / 440 });
-    const pb = { x: -0.6, z: -24.5 };
-    out.push({ svg: postboxSvg(), x: pb.x, z: pb.z, y: height(pb.x, pb.z), h: 2.6, aspect: 170 / 300 });
-    const sw = { x: 21, z: -28 };
-    out.push({ svg: swingSvg(), x: sw.x, z: sw.z, y: height(sw.x, sw.z), h: 4.6, aspect: 420 / 400 });
-    const fc = { x: 16, z: -15 };
-    out.push({ svg: flowerCartSvg(), x: fc.x, z: fc.z, y: height(fc.x, fc.z), h: 2.4, aspect: 380 / 280 });
+    // 입구 광장: 분수가 가운데, 둘레에 우체국·우체통·꽃수레·그네
+    const at = (dx: number, dz: number) => ({ x: PLAZA.x + dx, z: PLAZA.z + dz });
+    const put = (svg: string, p: Pt, h: number, aspect: number) => out.push({ svg, x: p.x, z: p.z, y: height(p.x, p.z), h, aspect });
+    put(fountainSvg(), at(0, 0), 4.2, 460 / 400);
+    put(postOfficeSvg(), at(4.5, -9), 5.2, 520 / 440);
+    put(postboxSvg(), at(-3.6, -5.6), 2.5, 170 / 300);
+    put(flowerCartSvg(), at(-4, 3.4), 2.2, 380 / 280);
+    put(swingSvg(), at(10.5, 1), 4.4, 420 / 400);
     const lamp = lampSvg();
     [52, 19, 7, -10, -17].forEach((z, i) => {
       const x = pathX(z) + (i % 2 ? 3.4 : -3.4 * (z === 52 ? 1.9 : 1));
@@ -1555,6 +1554,28 @@ function StoryProps({ phase, snow, still, avoid }: { phase: GardenPhase; snow: b
     return out;
   }, [snow, avoid]);
   return <Billboards items={items} tint={tint} still={still} />;
+}
+
+/** 입구 광장 바닥: 언덕 높이를 따라 깔린 연한 돌바닥 */
+function PlazaGround() {
+  const geo = useMemo(() => {
+    const g = new THREE.CircleGeometry(PLAZA.r, 56, 0, Math.PI * 2);
+    g.rotateX(-Math.PI / 2);
+    const pos = g.getAttribute("position") as THREE.BufferAttribute;
+    for (let i = 0; i < pos.count; i++) {
+      const x = PLAZA.x + pos.getX(i);
+      const z = PLAZA.z + pos.getZ(i);
+      pos.setY(i, height(x, z) + 0.04);
+    }
+    g.computeVertexNormals();
+    return g;
+  }, []);
+  useEffect(() => () => geo.dispose(), [geo]);
+  return (
+    <mesh geometry={geo} position={[PLAZA.x, 0, PLAZA.z]} userData={{ ground: true }} raycast={() => null}>
+      <meshStandardMaterial color="#e1d3ad" roughness={1} polygonOffset polygonOffsetFactor={-2} polygonOffsetUnits={-2} />
+    </mesh>
+  );
 }
 
 function Scenery({ phase, still, view, onView, counts, snow }: { phase: GardenPhase; still: boolean; view: number; onView: (i: number) => void; counts: number[]; snow: boolean }) {
@@ -1575,6 +1596,7 @@ function Scenery({ phase, still, view, onView, counts, snow }: { phase: GardenPh
       <group position={[A.x, height(A.x, A.z), A.z]} rotation={[0, Math.atan2(VIEWS[1].x - A.x, VIEWS[1].z - A.z), 0]} scale={1.5}><RainbowArch still={still} /></group>
       <group position={[W.x, height(W.x, W.z) - 0.3, W.z]} rotation={[0, 0, 0]} scale={1}><Windmill still={still} /></group>
       <group position={[L.x, height(L.x, L.z) - 0.3, L.z]} scale={1}><Lighthouse phase={phase} still={still} /></group>
+      <PlazaGround />
       {/* 광장 */}
       <group position={[8, height(8, -20), -20]}><PlazaPinwheel still={still} /></group>
       {/* 구역 팻말 */}
