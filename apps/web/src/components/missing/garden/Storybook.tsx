@@ -201,16 +201,46 @@ ${stripes}
 
 /** 가로등: 가는 기둥과 따뜻한 유리 등 */
 export function lampSvg() {
+  // 기둥 위에 등이 바로 얹힌 정원 가로등 (머리와 기둥이 한 몸)
   const W = 140, H = 420;
   return svg(W, H, `
 <ellipse cx="70" cy="410" rx="40" ry="7" fill="#7a9a5a" opacity="0.3"/>
-<path d="M62 408 L66 120 L74 120 L78 408 Z" fill="#6b5645" stroke="#4a3a2c" stroke-width="3" stroke-linejoin="round"/>
-<ellipse cx="70" cy="404" rx="22" ry="8" fill="#6b5645" stroke="#4a3a2c" stroke-width="3"/>
-<path d="M70 150 C40 150 38 118 56 112" fill="none" stroke="#4a3a2c" stroke-width="6" stroke-linecap="round"/>
-<path d="M40 112 L100 112 L88 56 L52 56 Z" fill="#fff0c0" stroke="#4a3a2c" stroke-width="4" stroke-linejoin="round"/>
-<path d="M52 66 L88 66" stroke="#f4cf72" stroke-width="10" opacity="0.8"/>
-<path d="M44 56 L96 56 L70 22 Z" fill="#5a4636" stroke="#4a3a2c" stroke-width="4" stroke-linejoin="round"/>
-<circle cx="70" cy="18" r="5" fill="#5a4636"/>`);
+<g stroke="#4a3a2c" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
+<path d="M62 392 L65 150 L75 150 L78 392 Z" fill="#6b5645"/>
+<path d="M50 406 Q70 388 90 406 Z" fill="#6b5645"/>
+<ellipse cx="70" cy="406" rx="24" ry="7" fill="#5a4636"/>
+<rect x="46" y="138" width="48" height="14" rx="5" fill="#5a4636"/>
+<path d="M50 138 L90 138 L100 66 L40 66 Z" fill="#fff0c0"/>
+<path d="M40 66 L100 66 L70 28 Z" fill="#5a4636"/>
+</g>
+<path d="M54 96 L86 96" stroke="#f4cf72" stroke-width="14" stroke-linecap="round" opacity="0.8"/>
+<g stroke="#4a3a2c" stroke-width="3" fill="none"><path d="M70 68 V136"/></g>
+<circle cx="70" cy="22" r="6" fill="#5a4636" stroke="#4a3a2c" stroke-width="3"/>`);
+}
+
+/** 광장의 돌 분수: 넓은 물받이, 기둥, 위쪽 그릇, 솟아오르는 물줄기 */
+export function fountainSvg() {
+  return svg(460, 400, `
+<ellipse cx="230" cy="388" rx="200" ry="12" fill="#7a9a5a" opacity="0.3"/>
+<g stroke="#6a6a5c" stroke-width="4" stroke-linejoin="round">
+<path d="M30 310 Q30 372 230 372 Q430 372 430 310 L430 286 L30 286 Z" fill="#d9d2c0"/>
+<ellipse cx="230" cy="286" rx="200" ry="52" fill="#e9e3d2"/>
+<ellipse cx="230" cy="288" rx="178" ry="40" fill="#a9d4ea" stroke="#7aa6c0" stroke-width="3"/>
+<path d="M206 290 L212 168 L248 168 L254 290 Z" fill="#cfc8b4"/>
+<path d="M150 170 Q150 214 230 214 Q310 214 310 170 Z" fill="#d9d2c0"/>
+<ellipse cx="230" cy="170" rx="80" ry="20" fill="#e9e3d2"/>
+<ellipse cx="230" cy="171" rx="66" ry="14" fill="#a9d4ea" stroke="#7aa6c0" stroke-width="2.5"/>
+<path d="M214 168 L218 100 L242 100 L246 168 Z" fill="#cfc8b4"/>
+<ellipse cx="230" cy="98" rx="26" ry="8" fill="#e9e3d2"/>
+</g>
+<g fill="none" stroke="#bfe3f4" stroke-width="7" stroke-linecap="round" opacity="0.95">
+<path d="M230 96 Q230 40 230 40"/><path d="M230 98 Q180 40 150 130"/><path d="M230 98 Q280 40 310 130"/>
+<path d="M170 172 Q130 190 96 262" stroke-width="5"/><path d="M290 172 Q330 190 364 262" stroke-width="5"/>
+</g>
+<g fill="#ffffff" opacity="0.9"><circle cx="230" cy="34" r="6"/><circle cx="198" cy="62" r="5"/><circle cx="262" cy="62" r="5"/><circle cx="150" cy="134" r="5"/><circle cx="310" cy="134" r="5"/></g>
+<g stroke="#8fc7e2" stroke-width="2.5" fill="none" opacity="0.8"><ellipse cx="120" cy="296" rx="26" ry="6"/><ellipse cx="340" cy="296" rx="26" ry="6"/><ellipse cx="230" cy="310" rx="40" ry="8"/></g>
+<g fill="#f6a5bd" stroke="#8a7a66" stroke-width="1.2"><circle cx="90" cy="300" r="7"/><circle cx="372" cy="300" r="7"/></g>
+<g fill="#fff" opacity="0.7"><ellipse cx="150" cy="276" rx="22" ry="4"/></g>`);
 }
 
 const OUT = `stroke="#6a5a45" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"`;
@@ -461,19 +491,90 @@ ${leaves}${flowers}${foot}`);
 
 /** 나무 벤치: 둥근 판자 등받이와 꽃이 놓인 모습(옆모습) */
 export function benchSvg() {
+  // 비스듬히 본 나무 벤치: 앉는 면이 위에서 보이고, 등받이는 뒤쪽에 있음
   return svg(420, 300, `
-<ellipse cx="210" cy="286" rx="170" ry="10" fill="#7a9a5a" opacity="0.28"/>
-<g fill="#a9794f" stroke="#5e4330" stroke-width="4" stroke-linejoin="round">
-<rect x="58" y="120" width="22" height="160" rx="9"/><rect x="340" y="120" width="22" height="160" rx="9"/>
-<path d="M70 126 L350 126 L372 156 L48 156 Z" fill="#d6aa78"/><rect x="56" y="156" width="308" height="26" rx="12"/>
-<rect x="46" y="190" width="328" height="0.1" rx="1"/>
-<rect x="54" y="30" width="22" height="130" rx="9" transform="rotate(-4 65 95)"/><rect x="344" y="30" width="22" height="130" rx="9" transform="rotate(4 355 95)"/>
-<rect x="62" y="44" width="296" height="24" rx="11"/><rect x="62" y="82" width="296" height="24" rx="11"/>
+<ellipse cx="210" cy="284" rx="176" ry="11" fill="#7a9a5a" opacity="0.28"/>
+<g stroke="#5e4330" stroke-width="4" stroke-linejoin="round">
+<rect x="92" y="170" width="20" height="86" rx="8" fill="#8f6240"/><rect x="316" y="170" width="20" height="86" rx="8" fill="#8f6240"/>
+<rect x="88" y="42" width="22" height="150" rx="9" fill="#a9794f"/><rect x="318" y="42" width="22" height="150" rx="9" fill="#a9794f"/>
+<rect x="96" y="56" width="236" height="26" rx="12" fill="#c99560"/><rect x="96" y="96" width="236" height="26" rx="12" fill="#c99560"/>
+<path d="M66 176 L362 176 L396 222 L32 222 Z" fill="#dcb482"/>
+<rect x="32" y="222" width="364" height="26" rx="12" fill="#a9794f"/>
+<rect x="46" y="248" width="24" height="36" rx="9" fill="#a9794f"/><rect x="358" y="248" width="24" height="36" rx="9" fill="#a9794f"/>
 </g>
-<g stroke="#c99a6a" stroke-width="4" stroke-linecap="round" opacity="0.8"><path d="M80 52 L330 52"/><path d="M80 90 L330 90"/><path d="M70 158 L340 158"/></g>
-<g stroke="#6e4c32" stroke-width="2.5" fill="none" opacity="0.7"><path d="M120 56 q10 -4 20 0"/><path d="M250 94 q10 -4 20 0"/><path d="M180 196 q12 -4 24 0"/></g>
-<g fill="#7fb35e" stroke="#3f7340" stroke-width="1.6"><ellipse cx="84" cy="272" rx="16" ry="7"/><ellipse cx="348" cy="272" rx="16" ry="7"/></g>
-<g fill="#ff9db8" stroke="#8a7a66" stroke-width="1.2"><circle cx="78" cy="262" r="6"/><circle cx="92" cy="266" r="5"/></g><g fill="#ffd54a" stroke="#8a7a66" stroke-width="1.2"><circle cx="344" cy="262" r="6"/><circle cx="356" cy="268" r="5"/></g>`);
+<g stroke="#f0cf9c" stroke-width="3" stroke-linecap="round" opacity="0.85"><path d="M108 68 L320 68"/><path d="M108 108 L320 108"/><path d="M96 194 L350 194"/><path d="M82 208 L376 208"/></g>
+<g stroke="#6e4c32" stroke-width="2.5" fill="none" opacity="0.6"><path d="M150 72 q10 -4 20 0"/><path d="M240 112 q10 -4 20 0"/><path d="M200 236 q12 -4 24 0"/></g>
+<g fill="#7fb35e" stroke="#3f7340" stroke-width="1.6"><ellipse cx="56" cy="282" rx="16" ry="7"/><ellipse cx="372" cy="282" rx="16" ry="7"/></g>
+<g fill="#ff9db8" stroke="#8a7a66" stroke-width="1.2"><circle cx="50" cy="272" r="6"/><circle cx="64" cy="276" r="5"/></g><g fill="#ffd54a" stroke="#8a7a66" stroke-width="1.2"><circle cx="368" cy="272" r="6"/><circle cx="380" cy="278" r="5"/></g>`);
+}
+
+/** 작은 우체국: 지붕, 둥근 창, 편지 간판, 빨간 우체통 */
+export function postOfficeSvg() {
+  return svg(520, 440, `
+<ellipse cx="260" cy="424" rx="220" ry="12" fill="#7a9a5a" opacity="0.28"/>
+<g stroke="#5e4330" stroke-width="4" stroke-linejoin="round">
+<rect x="70" y="200" width="380" height="216" rx="8" fill="#f6e6c6"/>
+<path d="M40 208 L260 60 L480 208 Z" fill="#cf6b52"/>
+<path d="M40 208 L480 208" stroke-width="6"/>
+<rect x="352" y="84" width="40" height="74" rx="4" fill="#b85a46"/>
+<rect x="220" y="290" width="86" height="126" rx="10" fill="#9a6a44"/>
+<rect x="100" y="250" width="92" height="86" rx="8" fill="#fff7e6"/>
+<rect x="334" y="250" width="92" height="86" rx="8" fill="#fff7e6"/>
+</g>
+<g fill="#cfe7f2" stroke="#5e4330" stroke-width="3"><rect x="108" y="258" width="76" height="70" rx="5"/><rect x="342" y="258" width="76" height="70" rx="5"/></g>
+<g stroke="#5e4330" stroke-width="3"><path d="M146 258 V328 M108 293 H184 M380 258 V328 M342 293 H418"/></g>
+<circle cx="292" cy="354" r="5" fill="#f6d98a" stroke="#5e4330" stroke-width="2"/>
+<g stroke="#5e4330" stroke-width="3.5" stroke-linejoin="round"><rect x="206" y="204" width="108" height="64" rx="12" fill="#fff0c8"/></g>
+<g stroke="#5e4330" stroke-width="3" fill="#fff" stroke-linejoin="round"><rect x="228" y="222" width="64" height="32" rx="4"/><path d="M228 222 L260 244 L292 222" fill="none"/></g>
+<path d="M260 262 l-6 -6 a5 5 0 0 1 8 -7 a5 5 0 0 1 8 7 z" fill="#ef7f8f" transform="translate(0 -4) scale(1)" opacity="0"/>
+<g fill="#7fb35e" stroke="#3f7340" stroke-width="1.6"><ellipse cx="104" cy="412" rx="22" ry="8"/><ellipse cx="420" cy="412" rx="22" ry="8"/></g>
+<g fill="#ff9db8" stroke="#8a7a66" stroke-width="1.2"><circle cx="96" cy="400" r="7"/><circle cx="112" cy="404" r="6"/></g><g fill="#ffd54a" stroke="#8a7a66" stroke-width="1.2"><circle cx="414" cy="400" r="7"/><circle cx="430" cy="405" r="6"/></g>`);
+}
+
+/** 빨간 우체통 */
+export function postboxSvg() {
+  return svg(170, 300, `
+<ellipse cx="85" cy="288" rx="46" ry="8" fill="#7a9a5a" opacity="0.3"/>
+<g stroke="#5e4330" stroke-width="4" stroke-linejoin="round">
+<rect x="70" y="188" width="30" height="96" rx="8" fill="#8f6240"/>
+<path d="M30 190 L30 90 A55 55 0 0 1 140 90 L140 190 Z" fill="#e0584f"/>
+<rect x="26" y="180" width="118" height="22" rx="8" fill="#b9423c"/>
+</g>
+<rect x="52" y="108" width="66" height="12" rx="6" fill="#4a2a24"/>
+<rect x="50" y="138" width="70" height="30" rx="6" fill="#fff0c8" stroke="#5e4330" stroke-width="3"/>
+<path d="M58 146 L85 162 L112 146" fill="none" stroke="#5e4330" stroke-width="3" stroke-linejoin="round"/>
+<path d="M44 74 q18 -22 56 -22" fill="none" stroke="#f59c92" stroke-width="6" stroke-linecap="round" opacity="0.8"/>
+<g fill="#7fb35e" stroke="#3f7340" stroke-width="1.6"><ellipse cx="46" cy="284" rx="14" ry="6"/></g><g fill="#ffd54a" stroke="#8a7a66" stroke-width="1.2"><circle cx="42" cy="276" r="5"/></g>`);
+}
+
+/** 나무 그네 */
+export function swingSvg() {
+  return svg(420, 400, `
+<ellipse cx="210" cy="388" rx="170" ry="10" fill="#7a9a5a" opacity="0.28"/>
+<g stroke="#5e4330" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" fill="#a9794f">
+<path d="M60 382 L120 40 L146 40 L96 382 Z"/><path d="M360 382 L300 40 L274 40 L324 382 Z"/>
+<rect x="104" y="28" width="212" height="24" rx="11" fill="#c99560"/>
+</g>
+<g stroke="#6e5a40" stroke-width="5" stroke-linecap="round"><path d="M168 52 L160 266"/><path d="M252 52 L260 266"/></g>
+<g stroke="#5e4330" stroke-width="4" stroke-linejoin="round"><rect x="138" y="262" width="144" height="22" rx="10" fill="#e8b774"/></g>
+<path d="M152 270 L268 270" stroke="#fbe1ae" stroke-width="3" stroke-linecap="round"/>
+<g fill="#7fb35e" stroke="#3f7340" stroke-width="1.6"><ellipse cx="82" cy="378" rx="18" ry="7"/><ellipse cx="338" cy="378" rx="18" ry="7"/></g>
+<g fill="#ff9db8" stroke="#8a7a66" stroke-width="1.2"><circle cx="76" cy="368" r="6"/></g><g fill="#ffd54a" stroke="#8a7a66" stroke-width="1.2"><circle cx="334" cy="368" r="6"/></g>`);
+}
+
+/** 꽃을 가득 실은 작은 수레 */
+export function flowerCartSvg() {
+  return svg(380, 280, `
+<ellipse cx="190" cy="268" rx="150" ry="10" fill="#7a9a5a" opacity="0.28"/>
+<g stroke="#5e4330" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+<path d="M310 150 L372 110 M310 170 L372 130" fill="none" stroke-width="6"/>
+<path d="M50 130 L330 130 L304 218 L76 218 Z" fill="#c99560"/>
+<path d="M60 150 H320 M66 176 H314 M70 198 H310" stroke="#8f6240" stroke-width="3" fill="none"/>
+<circle cx="130" cy="232" r="30" fill="#8f6240"/><circle cx="130" cy="232" r="9" fill="#e8b774"/>
+</g>
+<g stroke="#3f7340" stroke-width="4" stroke-linecap="round"><path d="M100 130 L96 96"/><path d="M150 130 L156 84"/><path d="M200 130 L196 76"/><path d="M250 130 L258 90"/><path d="M290 130 L288 100"/></g>
+<g stroke="#8a7a66" stroke-width="1.6"><circle cx="96" cy="90" r="16" fill="#ff9db8"/><circle cx="156" cy="78" r="18" fill="#ffd54a"/><circle cx="196" cy="70" r="17" fill="#c6a8f0"/><circle cx="258" cy="84" r="17" fill="#ff8f6b"/><circle cx="288" cy="94" r="14" fill="#ffffff"/></g>
+<g fill="#fff3c4"><circle cx="96" cy="90" r="5"/><circle cx="156" cy="78" r="6"/><circle cx="196" cy="70" r="5"/><circle cx="258" cy="84" r="5"/></g>`);
 }
 
 export interface TreeKind { svg: string; aspect: number; h: number }

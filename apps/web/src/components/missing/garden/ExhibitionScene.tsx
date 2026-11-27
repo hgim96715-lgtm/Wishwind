@@ -1,6 +1,6 @@
 "use client";
 
-import { cloudSvg, Billboards, planeSvg, wildSvg, treeKind, benchSvg, gateSvg, lampSvg, lighthouseSvg, paintTexture, sailsSvg, windmillSvg, rainbowSvg, storyTexture, bushSvg, flowerSvg, globeSvg, rexSvg, sauropodSvg, type BillboardItem } from "./Storybook";
+import { cloudSvg, Billboards, planeSvg, wildSvg, treeKind, benchSvg, gateSvg, lampSvg, lighthouseSvg, paintTexture, sailsSvg, windmillSvg, rainbowSvg, storyTexture, bushSvg, flowerSvg, globeSvg, rexSvg, sauropodSvg, postOfficeSvg, postboxSvg, fountainSvg, swingSvg, flowerCartSvg, type BillboardItem } from "./Storybook";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
@@ -1299,7 +1299,7 @@ function LampPost({ at, night, dot }: { at: Pt; night: boolean; dot: THREE.Textu
   if (!night) return null;
   return (
     <group position={[at.x, height(at.x, at.z), at.z]}>
-      <sprite position={[0, 3.7, 0.2]} scale={[3.4, 3.4, 1]} raycast={() => null}>
+      <sprite position={[0, 3.55, 0.2]} scale={[3.4, 3.4, 1]} raycast={() => null}>
         <spriteMaterial map={dot} color="#ffd18a" transparent opacity={0.75} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
       </sprite>
     </group>
@@ -1533,6 +1533,18 @@ function StoryProps({ phase, snow, still, avoid }: { phase: GardenPhase; snow: b
     [[pathX(-4) + 3.6, -4], [pathX(-15) - 3.6, -15], [pathX(-22) + 3.4, -22]].forEach(([x, z]) => {
       out.push({ svg: bench, x, z, y: height(x, z), h: 2.6, aspect: 420 / 300 });
     });
+    // 광장의 분수
+    const fo = { x: 8 - 9, z: -20 + 5 };
+    out.push({ svg: fountainSvg(), x: fo.x, z: fo.z, y: height(fo.x, fo.z), h: 4.6, aspect: 460 / 400 });
+    // 광장 둘레의 작은 마을: 우체국·우체통·그네·꽃수레
+    const po = { x: -7, z: -29 };
+    out.push({ svg: postOfficeSvg(), x: po.x, z: po.z, y: height(po.x, po.z), h: 5.2, aspect: 520 / 440 });
+    const pb = { x: -0.6, z: -24.5 };
+    out.push({ svg: postboxSvg(), x: pb.x, z: pb.z, y: height(pb.x, pb.z), h: 2.6, aspect: 170 / 300 });
+    const sw = { x: 21, z: -28 };
+    out.push({ svg: swingSvg(), x: sw.x, z: sw.z, y: height(sw.x, sw.z), h: 4.6, aspect: 420 / 400 });
+    const fc = { x: 16, z: -15 };
+    out.push({ svg: flowerCartSvg(), x: fc.x, z: fc.z, y: height(fc.x, fc.z), h: 2.4, aspect: 380 / 280 });
     const lamp = lampSvg();
     [52, 19, 7, -10, -17].forEach((z, i) => {
       const x = pathX(z) + (i % 2 ? 3.4 : -3.4 * (z === 52 ? 1.9 : 1));
