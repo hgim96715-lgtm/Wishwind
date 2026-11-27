@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { HomeLogo } from "@/components/common/HomeLogo";
-import { ExhibitionView } from "@/components/missing/ExhibitionView";
+import { MissingPictureBook } from "@/components/missing/MissingPictureBook";
 import { getMissing } from "@/lib/missing/api";
 import { formatMissingDate } from "@/lib/missing/regions";
 import { displayName } from "@/lib/og/helpers";
@@ -10,7 +10,7 @@ import { displayName } from "@/lib/og/helpers";
 // The garden owns its palette. Do not advertise automatic OS dark recoloring.
 export const viewport: Viewport = { colorScheme: "only light", themeColor: "#efe9df" };
 
-const ROOM_DESCRIPTION = "사정에 따라 이어진 정원별 길을 걸으며, 지금도 집으로 돌아오지 못한 분들을 기억하고 바람개비에 응원의 바람을 보냅니다.";
+const ROOM_DESCRIPTION = "정원 전시에서 지역별로 실종자의 공개 사진과 마지막 목격 정보를 확인하고 공식 제보처를 찾을 수 있습니다.";
 
 /**
  * 공유 미리보기: 실종자들의 정원 링크는 찾고 있는 분들의 사진·인원 수·QR이 담긴 이미지로,
@@ -48,9 +48,9 @@ export default function MissingPage() {
     <main className="garden-theme-scope relative bg-[#dce7df] text-[#34483e]">
       <header className="expo-header pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between gap-4 px-3 py-3 sm:px-5 sm:py-5 [&_a]:pointer-events-auto">
         <HomeLogo onSky />
-        <span className="hidden sm:block rounded-full border border-white/70 bg-[#fbfaf1]/90 px-4 py-2 text-xs">함께 기다리는 바람개비 정원</span>
+
       </header>
-      <ExhibitionView />
+      <MissingPictureBook />
       <Suspense fallback={null}><RequestMetadata /></Suspense>
     </main>
   );

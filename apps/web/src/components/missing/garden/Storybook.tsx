@@ -223,23 +223,18 @@ const eyeSvg = (x: number, y: number, s = 1) =>
   `<g transform="translate(${x} ${y}) scale(${s})"><circle r="14" fill="#fff" stroke="#6a5a45" stroke-width="2.5"/><circle cx="2" cy="1" r="8.5" fill="#2a2220"/><circle cx="5" cy="-3" r="3" fill="#fff"/></g>`;
 
 /** 목 긴 크림색 공룡(빨간 점) */
-export function sauropodSvg() {
-  const body = "#f3e4a6", belly = "#fcf4d2", spot = "#e66a5a";
-  return svg(520, 460, `
-<ellipse cx="260" cy="440" rx="190" ry="14" fill="#7a9a5a" opacity="0.28"/>
-<path d="M92 330 C40 360 30 400 70 408 C120 412 160 370 170 330 Z" fill="${body}" ${OUT}/>
-<g fill="${body}" ${OUT}><rect x="170" y="330" width="58" height="96" rx="26"/><rect x="290" y="330" width="58" height="96" rx="26"/></g>
-<ellipse cx="262" cy="316" rx="168" ry="104" fill="${body}" ${OUT}/>
-<ellipse cx="288" cy="344" rx="104" ry="64" fill="${belly}"/>
-<path d="M330 260 C376 220 384 170 360 118 C346 90 372 70 396 80" fill="none" stroke="${body}" stroke-width="56" stroke-linecap="round"/>
-<path d="M330 260 C376 220 384 170 360 118" fill="none" stroke="#6a5a45" stroke-width="3.5" opacity="0"/>
-<ellipse cx="400" cy="84" rx="58" ry="46" fill="${body}" ${OUT}/>
-${eyeSvg(398, 76, 1.2)}
-<path d="M404 108 q14 12 30 0" fill="none" stroke="#7a3b2a" stroke-width="4" stroke-linecap="round"/>
-<ellipse cx="368" cy="102" rx="12" ry="8" fill="#f4a79a" opacity="0.7"/>
-<circle cx="386" cy="42" r="10" fill="${spot}"/><circle cx="408" cy="40" r="8" fill="${spot}"/>
-<g fill="${spot}"><circle cx="200" cy="262" r="20"/><circle cx="250" cy="236" r="14"/><circle cx="300" cy="248" r="18"/><circle cx="168" cy="318" r="12"/></g>
-<g fill="${belly}" ${OUT}><ellipse cx="200" cy="428" rx="40" ry="14"/><ellipse cx="320" cy="428" rx="40" ry="14"/></g>`);
+export function meadowDinosaur(calf: boolean) {
+  const coat = calf ? "#e7ad84" : "#98bf9c";
+  return svg(320, 220, `
+    <ellipse cx="161" cy="209" rx="102" ry="6" fill="#809265" opacity=".24"/>
+    <g fill="${calf ? "#c58d70" : "#80a78a"}"><path d="M115 146h26l-4 55q-10 11-22 0zM194 144h25l-2 54q-10 10-22 1z"/></g>
+    <path fill="${coat}" stroke="${calf ? "#af7f62" : "#77997b"}" stroke-width="2.5" stroke-linejoin="round"
+      d="M20 127q31 19 62-6c25-27 57-26 86-17 26 8 36-6 42-31l6-29q5-28 32-27 18 1 21 15 22 1 21 15-1 17-34 15-3 61-27 89l-7 48q-1 12-17 10-8-1-8-11l1-29q-35 12-65 2l-5 30q-2 10-16 8-8-1-7-12l1-37q-50 9-86-30z"/>
+    <g fill="${calf ? "#f6d4a5" : "#d4dfb0"}"><ellipse cx="104" cy="127" rx="7" ry="4"/><ellipse cx="122" cy="116" rx="8" ry="5"/><ellipse cx="142" cy="121" rx="5" ry="3"/></g>
+    <circle cx="250" cy="36" r="3.4" fill="#594e40"/><ellipse cx="248" cy="46" rx="6" ry="3" fill="#dfab92"/>
+    <path d="M268 49q8 4 15-1" fill="none" stroke="#806e56" stroke-width="2" stroke-linecap="round"/>
+    ${calf ? '<path d="M216 53q-17-12-10-23 9 0 16 12m-1-11q-6-16 2-22 9 5 10 16" fill="#d49a7c"/>' : ''}
+  `);
 }
 
 /** 주황 티라노(작은 팔, 등 돌기) */
@@ -289,7 +284,7 @@ const cache = new Map<string, THREE.Texture>();
 function texFor(svgStr: string) {
   let t = cache.get(svgStr);
   if (!t) {
-    t = new THREE.TextureLoader().load("data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgStr));
+    t = new THREE.TextureLoader().load(svgStr.startsWith("/") ? svgStr : "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgStr));
     t.colorSpace = THREE.SRGBColorSpace;
     t.anisotropy = 4;
     cache.set(svgStr, t);
@@ -333,7 +328,7 @@ export function Billboards({ items, tint, still }: { items: BillboardItem[]; tin
           key={i}
           geometry={plane}
           material={mats.get(it.svg)}
-          position={[it.x, it.y - it.h * 0.035, it.z]}
+          position={[it.x, it.y - it.h * 0.014, it.z]}
           scale={[it.h * it.aspect * (it.flip ? -1 : 1), it.h, 1]}
           raycast={() => null}
           userData={{ noShadow: true }}
@@ -431,10 +426,10 @@ export function gateSvg() {
     const sx = (r() - 0.5) * 20, sy = (r() - 0.5) * 26 - 6;
     leaves += `<ellipse cx="${p.x + sx}" cy="${p.y + sy}" rx="${15 + r() * 8}" ry="${7 + r() * 3}" transform="rotate(${r() * 180} ${p.x + sx} ${p.y + sy})" fill="${["#6fae5c", "#8cc468", "#559a50"][i % 3]}" stroke="#3f7340" stroke-width="1.6"/>`;
   }
-  const cols = ["#ff9db8", "#ffd54a", "#ffffff", "#c4a3f2", "#ff8a5c"];
+  const cols = ["#f2b7a5", "#f5d792", "#fff4dc", "#dabfd6", "#eac7a3"];
   let flowers = "";
   for (let i = 0; i < 16; i++) {
-    const t = 0.04 + r() * 0.92, p = pt(t);
+    const t = 0.035 + i / 15 * 0.93, p = pt(t);
     const x = p.x + (r() - 0.5) * 24, y = p.y + (r() - 0.5) * 22 - 4, s = 13 + r() * 7;
     const c = cols[i % 5];
     let pe = "";

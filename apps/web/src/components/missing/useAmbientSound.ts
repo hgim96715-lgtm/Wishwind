@@ -11,10 +11,12 @@ export function useAmbientSound() {
   const ctxRef = useRef<AudioContext | null>(null);
   const masterRef = useRef<GainNode | null>(null);
   const chimeTimer = useRef<number | null>(null);
+  const suspendTimer = useRef<number | undefined>(undefined);
   const [on, setOn] = useState(false);
 
   /** 버튼을 누른 순간에 바로 켜고 끔 (아이폰 사파리는 누르는 동작 안에서 시작해야 소리가 남) */
   const toggle = useCallback(() => {
+    window.clearTimeout(suspendTimer.current);
     const next = !on;
     setOn(next);
     let ctx = ctxRef.current;
@@ -38,7 +40,7 @@ export function useAmbientSound() {
       // 바로 끊지 않고 1초쯤에 걸쳐 줄인 뒤 멈춤
       masterRef.current.gain.setTargetAtTime(0, ctx.currentTime, 0.3);
       const c = ctx;
-      window.setTimeout(() => void c.suspend(), 1200);
+      suspendTimer.current = window.setTimeout(() => void c.suspend(), 1200);
     }
   }, [on]);
 
@@ -46,6 +48,7 @@ export function useAmbientSound() {
   useEffect(
     () => () => {
       if (chimeTimer.current) window.clearTimeout(chimeTimer.current);
+      window.clearTimeout(suspendTimer.current);
       void ctxRef.current?.close();
       ctxRef.current = null;
     },

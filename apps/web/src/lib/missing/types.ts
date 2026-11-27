@@ -3,6 +3,7 @@ export type Gender = "MALE" | "FEMALE" | "UNKNOWN";
 
 /** 길가 등불 하나 = 실종자 한 명 (목록 API) */
 export interface MissingSummary {
+  appearance?: string | null;
   lightCount?: number;
   id: string;
   source: MissingSource;

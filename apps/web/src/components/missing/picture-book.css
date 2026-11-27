@@ -1,0 +1,121 @@
+.garden-wall{--sky:#cee1df;--leaves:#afc29b;min-height:100svh;color:#403f33;padding:5rem 4vw 4rem;background-color:#eee4cf;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 270'%3E%3Cg fill='%23fffae9' opacity='.78'%3E%3Cpath d='M40 80q-12-23 17-28 14-35 48-13 32-7 41 21 26 18-4 21Z M850 64q-12-18 15-23 15-28 40-10 28-4 32 18 20 14-4 15Z'/%3E%3C/g%3E%3Cpath d='M0 226Q140 103 326 202T690 210 970 192t230-31v109H0' fill='%239bb8a1'/%3E%3Cpath d='M0 208q145-54 314 26t390-22 496 19v39H0' fill='%23c5d1a7'/%3E%3C/svg%3E"),linear-gradient(var(--sky),#f5e9ce 255px,var(--leaves) 256px,#ece3cf 315px);background-size:auto 270px,100% 340px;background-repeat:repeat-x,no-repeat}
+.garden-wall[data-light=gold]{--sky:#efd6bb}.garden-wall[data-light=night]{--sky:#a6b5c8}.garden-wall[data-season="0"]{--leaves:#c5d1c9}.garden-wall[data-season="3"]{--leaves:#d5b791}
+.wall-inner{max-width:1020px;margin:auto}.wall-inner>h1,.wall-caption h2{font-family:"Nanum Myeongjo",Georgia,serif;font-weight:700}.wall-inner>h1{font-size:clamp(1.8rem,4vw,3rem);margin-bottom:1rem}.wall-filters,.wall-filters label,.wall-actions,.wall-actions button{display:flex;align-items:center;gap:.5rem}.wall-filters{flex-wrap:wrap;margin-bottom:1.2rem}.wall-filters label{background:#fffaee;border:1px solid #c9bc9e;border-radius:2rem;padding:.5rem .85rem}.wall-filters input,.wall-filters select{max-width:11rem;min-width:0;font-size:.9rem}
+.wall-card{position:relative;background:#fff8e9;padding:13px;border:1px solid #cdbc9c;border-radius:4px 8px 6px 5px;box-shadow:1px 4px 0 #c7b69c55,1px 7px 16px #80644318;min-width:0}.wall-photo{background:#eee7d8;height:155px;display:grid;place-items:center;color:#796c56;font-size:.8rem}.wall-photo img{width:100%;height:100%;min-height:0;object-fit:contain}.wall-caption{padding:.8rem .25rem .1rem}.wall-caption h2{font-size:1.25rem;overflow-wrap:anywhere;line-height:1.25}.wall-caption p{font-size:.84rem;margin:.4rem 0;color:#625b4c}.wall-feature{display:grid;grid-template-columns:minmax(120px,34%) 1fr;gap:clamp(.6rem,3vw,2rem);padding:clamp(.8rem,2vw,1.5rem);align-items:center}.wall-feature .wall-photo{height:clamp(165px,24vw,245px)}.wall-feature h2{font-size:clamp(1.35rem,3vw,2.3rem)}.wall-caption .wall-today{color:#426853;font-weight:700}.wall-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:1.35rem;margin-top:1.65rem}.wall-actions{flex-wrap:wrap;margin-top:.8rem;justify-content:space-between}.wall-actions button,.wall-more{min-height:44px;font-size:.83rem;font-weight:650;color:#365c4b}.wall-memory{position:relative}.wall-memory[aria-pressed=true] .wall-rotor{transform-origin:20px 19px;animation:wall-spin 1s ease-out}.wall-memory i{width:9px;height:19px;background:#dba08b;clip-path:polygon(0 0,100% 0,100% 100%,50% 75%,0 100%)}@keyframes wall-spin{to{transform:rotate(720deg)}}.wall-more{display:block;margin:2rem auto;padding:.5rem 2rem;border-radius:2rem;background:#fff8e9;border:1px solid #b8aa90}.wall-traits{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:600px){.wall-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem}.wall-card{padding:.6rem}.wall-feature{gap:.7rem}.wall-grid .wall-photo{height:125px}.wall-actions{gap:.15rem}.wall-caption h2{font-size:1.06rem}.wall-feature h2{font-size:1.3rem}.wall-filters label{max-width:52%}.wall-filters input,.wall-filters select{width:100%}.wall-filters{flex-wrap:nowrap}.wall-photo span{text-align:center}}
+@media(prefers-reduced-motion:reduce){.wall-memory[aria-pressed=true] .wall-rotor{animation:none}}
+
+/* ===== 그림책 온기 (2026-11-27): 위쪽 정원 그림, 종이 질감, 길 색 마스킹테이프, 잔잔한 움직임 ===== */
+.garden-wall{position:relative;isolation:isolate;padding-top:0;background-color:#f1e8d4;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .27 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");background-size:220px;background-repeat:repeat}
+.wall-filters label{background:#fffaeeee;box-shadow:0 4px 14px #5a4a2a1f;backdrop-filter:blur(6px)}
+
+/* 카드: 종이 카드 + 위쪽에 길 색 마스킹테이프, 손으로 붙인 듯 아주 조금 기울어짐 */
+.wall-card{--tape:#e2b35c;background:#fffaf0;border-color:#dccbab;border-radius:3px;box-shadow:0 1px 0 #fff inset,0 10px 24px -12px #6b4f2a55,0 2px 6px #6b4f2a14;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.wall-grid>.wall-card:nth-child(3n+1){transform:rotate(-.6deg)}.wall-grid>.wall-card:nth-child(3n+2){transform:rotate(.5deg)}
+.wall-grid>.wall-card:hover,.wall-grid>.wall-card:focus-within{transform:translateY(-4px) rotate(0);box-shadow:0 1px 0 #fff inset,0 18px 30px -14px #6b4f2a66,0 2px 6px #6b4f2a14}
+.wall-tape{position:absolute;left:50%;top:-11px;width:84px;height:22px;transform:translateX(-50%) rotate(-2.5deg);background:color-mix(in srgb,var(--tape) 70%,#fff);opacity:.88;-webkit-mask-image:linear-gradient(90deg,transparent 0 3px,#000 3px calc(100% - 3px),transparent 0);mask-image:linear-gradient(90deg,transparent 0 3px,#000 3px calc(100% - 3px),transparent 0);box-shadow:0 1px 2px #0001}
+.wall-grid>.wall-card:nth-child(even) .wall-tape{transform:translateX(-50%) rotate(2deg)}
+.wall-photo{background:#f2ebdc;border-radius:2px;box-shadow:inset 0 0 0 1px #e3d6bb,inset 0 2px 8px #6b4f2a14}
+.wall-caption .wall-path{display:inline-block;margin:0 0 .15rem;padding:.08rem .5rem;border-radius:1rem;font-size:.72rem;font-weight:700;color:color-mix(in srgb,var(--tape) 55%,#3b3528);background:color-mix(in srgb,var(--tape) 20%,#fffaf0)}
+
+/* 오늘 다시 기억할 분: 햇살이 비치는 큰 카드 */
+.wall-feature{background:radial-gradient(120% 90% at 85% 0%,#fff3cf 0,#fffaf0 55%);box-shadow:0 0 0 1px #e8d6ad,0 20px 40px -18px #8a6a3a77,0 0 60px -10px #ffe7a866}
+.wall-feature .wall-tape{width:110px}
+.wall-today{display:flex;align-items:center;gap:.35rem}
+.wall-today-pin svg{width:20px;height:23px}.wall-today-pin .wall-rotor{transform-origin:20px 19px;animation:wall-turn 6s linear infinite}
+.wall-memory .wall-rotor{transform-origin:20px 19px}
+.wall-memory[aria-pressed=true] .wall-rotor{animation:wall-spin 1s ease-out,wall-turn 9s linear 1s infinite}
+@keyframes wall-turn{to{transform:rotate(360deg)}}
+
+/* 스크롤하면 카드가 살며시 떠오름 (지원하는 브라우저만) */
+@supports (animation-timeline:view()){.wall-grid>.wall-card{animation:wall-rise linear both;animation-timeline:view();animation-range:entry 0% entry 45%}}
+@keyframes wall-rise{from{opacity:0;translate:0 26px}to{opacity:1;translate:0 0}}
+
+@media(max-width:600px){.wall-tape{width:62px;height:18px;top:-9px}}
+@media(prefers-reduced-motion:reduce){.wall-today-pin .wall-rotor,.wall-memory[aria-pressed=true] .wall-rotor,.wall-grid>.wall-card{animation:none!important}}
+
+/* ===== 정원 입구 (위): 움직이는 3D 정원 + 오늘의 세 분 판 ===== */
+.garden-gate{position:relative;height:clamp(520px,86svh,820px);margin:0 -4vw 1.5rem;overflow:hidden;isolation:isolate;background:#cfe0d8}
+.garden-gate-scene{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.garden-gate-scene canvas{pointer-events:none!important}
+.garden-gate::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:30px;z-index:1;pointer-events:none;background:#f1e8d4;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 30' preserveAspectRatio='none'%3E%3Cpath d='M0 14 C14 6 22 18 36 11 S62 4 74 13 S98 20 112 10 S140 3 152 12 S178 19 192 9 S222 5 240 13 V30 H0Z'/%3E%3C/svg%3E") 0 100%/240px 30px repeat-x;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 30' preserveAspectRatio='none'%3E%3Cpath d='M0 14 C14 6 22 18 36 11 S62 4 74 13 S98 20 112 10 S140 3 152 12 S178 19 192 9 S222 5 240 13 V30 H0Z'/%3E%3C/svg%3E") 0 100%/240px 30px repeat-x}
+.garden-gate-copy{position:relative;max-width:1020px;margin:0 auto;padding:5.2rem 4vw 0;color:#fffdf4;text-shadow:0 2px 16px #2d3a2fa6,0 1px 3px #2d3a2f80}
+.garden-gate-copy h1{font-family:"Nanum Myeongjo",Georgia,serif;font-weight:700;font-size:clamp(1.9rem,4.4vw,3.2rem);margin:0 0 .45rem}
+.garden-gate-copy p{margin:0;max-width:28rem;font-size:.95rem;line-height:1.65}
+.garden-gate-papers{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+/* 판 그림(360×540)과 같은 크기의 투명 버튼: 사진 타원·이름 리본 자리에만 내용이 얹힘 */
+.gate-paper{position:absolute;left:0;top:0;width:360px;height:540px;padding:0;border:0;background:none;visibility:hidden;transform-origin:50% 50%;pointer-events:auto;will-change:transform;cursor:pointer;font-family:inherit;color:#4a3826;-webkit-tap-highlight-color:transparent;clip-path:path("M58 456 L58 150 C58 74 112 34 180 30 C248 34 302 74 302 150 L302 456 Z")}
+.gate-photo{position:absolute;left:102px;top:104px;width:156px;height:196px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#efe2c4;color:#8a7558;font-size:20px;box-shadow:inset 0 0 18px 6px #f7ecd2}
+.gate-photo img{width:100%;height:100%;object-fit:cover;pointer-events:none;filter:sepia(.32) saturate(.85) brightness(1.06) contrast(.9);-webkit-mask-image:radial-gradient(closest-side,#000 80%,transparent);mask-image:radial-gradient(closest-side,#000 80%,transparent)}
+.gate-name{position:absolute;left:66px;right:66px;top:342px;height:50px;display:grid;place-items:center;font-family:"Nanum Myeongjo",Georgia,serif;font-weight:800;font-size:30px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gate-meta{position:absolute;left:76px;right:76px;top:398px;text-align:center;font-size:19px;color:#7a6446}
+.gate-paper:hover .gate-photo,.gate-paper:focus-visible .gate-photo{box-shadow:inset 0 0 18px 6px #f7ecd2,0 0 0 6px var(--tone)}
+.gate-paper:focus-visible{outline:none}
+.gate-paper.is-night .gate-photo img{filter:sepia(.4) saturate(.8) brightness(.8) contrast(.9)}
+.gate-paper.is-night .gate-name,.gate-paper.is-night .gate-meta{opacity:.82}
+.garden-gate-actions{position:absolute;z-index:2;left:0;right:0;bottom:2.4rem;display:flex;justify-content:center;flex-wrap:wrap;gap:.6rem;padding:0 12px}
+.garden-gate-walk,.garden-gate-down{display:flex;align-items:center;gap:.35rem;padding:.55rem 1rem;border-radius:2rem;font-size:.86rem;font-weight:600;text-decoration:none;white-space:nowrap;color:#fff8e8;background:#b88658;border:2px solid #8f6240;box-shadow:0 3px 0 #8f6240,0 8px 18px -8px #3b2a1688}
+.garden-gate-walk{background:#7f9a6e;border-color:#5f7a50;box-shadow:0 3px 0 #5f7a50,0 8px 18px -8px #3b2a1688}
+.garden-gate-down svg{animation:gate-hint 2.4s ease-in-out infinite}
+@keyframes gate-hint{50%{translate:0 4px}}
+
+/* ===== 네 길로 묶은 카드 목록 ===== */
+#garden-list{scroll-margin-top:4rem}
+.wall-path-section{--tape:#e2b35c;margin:2.6rem 0 0}
+.wall-path-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:.3rem .8rem;margin:0 0 1.4rem;padding:0 0 .55rem;border-bottom:2px dashed color-mix(in srgb,var(--tape) 60%,#d8c8a8)}
+.wall-path-head h2{position:relative;margin:0;padding-left:1.1rem;font-family:"Nanum Myeongjo",Georgia,serif;font-size:1.35rem}
+.wall-path-head h2::before{content:"";position:absolute;left:0;top:.3em;width:.7rem;height:.7rem;border-radius:50%;background:var(--tape)}
+.wall-path-head p{margin:0;flex:1;min-width:12rem;font-size:.86rem;color:#6f644d}
+.wall-path-head span{font-size:.8rem;font-weight:700;color:color-mix(in srgb,var(--tape) 55%,#3b3528)}
+
+@media(max-width:600px){
+.garden-gate{height:min(74svh,640px);min-height:520px;margin-bottom:.8rem}
+.garden-gate-copy{padding-top:4.4rem}.garden-gate-copy p{font-size:.86rem}
+.wall-path-head h2{font-size:1.15rem}
+}
+@media(prefers-reduced-motion:reduce){.garden-gate-down svg{animation:none}}
+
+/* 카드 화면 위에 띄운 걷는 정원 (로고 머리줄은 그 위에 남음) */
+.garden-walk-layer{position:fixed;inset:0;z-index:15;background:#d5e5cf}
+.wall-notice{position:fixed;left:50%;bottom:calc(1.4rem + env(safe-area-inset-bottom));z-index:60;transform:translateX(-50%);max-width:88vw;width:max-content;margin:0;padding:.6rem 1.1rem;border-radius:2rem;background:#5b4630e6;color:#fff8e8;font-size:.9rem;font-weight:600;box-shadow:0 10px 26px -10px #2d1f1088;animation:wall-notice 2.8s ease both;pointer-events:none}
+@keyframes wall-notice{0%{opacity:0;translate:0 10px}10%,85%{opacity:1;translate:0 0}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.wall-notice{animation:none}}
+
+/* 지역 고르기: 종이 판이 펼쳐지고 나라별 칩 */
+.region-picker{position:relative}
+.region-trigger{display:flex;align-items:center;gap:.5rem;max-width:15rem;min-height:44px;padding:.5rem .85rem;border-radius:2rem;border:1px solid #c9bc9e;background:#fffaeeee;box-shadow:0 4px 14px #5a4a2a1f;font-size:.9rem;color:#403f33;cursor:pointer}
+.region-trigger span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.region-caret{transition:transform .2s}.region-trigger[aria-expanded=true] .region-caret{transform:rotate(180deg)}
+.region-panel{position:absolute;left:0;top:calc(100% + .5rem);z-index:30;width:min(26rem,calc(100vw - 2rem));max-height:min(62vh,30rem);overflow:auto;overscroll-behavior:contain;padding:1rem 1rem 1.1rem;border-radius:18px;border:1px solid #dccbab;background:#fffaf0 radial-gradient(120% 60% at 100% 0,#fff1cf 0,transparent 60%);box-shadow:0 22px 40px -18px #6b4f2a88,0 2px 6px #6b4f2a1a;animation:region-open .18s ease-out}
+@keyframes region-open{from{opacity:0;translate:0 -6px}}
+.region-panel h3{margin:1rem 0 .5rem;font-family:"Nanum Myeongjo",Georgia,serif;font-size:.95rem;font-weight:700;color:#5b4630;display:flex;align-items:center;gap:.5rem}
+.region-panel h3::after{content:"";flex:1;border-top:2px dashed #e4d4b2}
+.region-chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.region-chip{display:inline-flex;align-items:center;gap:.3rem;min-height:36px;padding:.3rem .75rem;border-radius:2rem;border:1px solid #e0d0ae;background:#fff;color:#4e4434;font-size:.85rem;cursor:pointer;transition:background .15s,border-color .15s}
+.region-chip small{font-size:.72rem;color:#9b8a6c}
+.region-chip:hover{background:#fff3d6;border-color:#d9b87a}
+.region-chip[aria-pressed=true]{background:#7f9a6e;border-color:#5f7a50;color:#fffdf4}.region-chip[aria-pressed=true] small{color:#e8f0dc}
+.region-chip:focus-visible,.region-trigger:focus-visible{outline:3px solid #d9b87a;outline-offset:2px}
+.region-all{font-weight:700}
+@media(prefers-reduced-motion:reduce){.region-panel{animation:none}}
+
+/* ===== 폰: 카드 두 줄을 가지런히 (사진 꽉 차게, 버튼은 카드 바닥에 맞춤) ===== */
+@media(max-width:600px){
+.wall-grid{gap:1.1rem .7rem;align-items:stretch}
+.wall-grid>.wall-card{display:flex;flex-direction:column;padding:.5rem .5rem .6rem;transform:none}
+.wall-grid>.wall-card:nth-child(n){transform:none}
+.wall-grid .wall-photo{height:auto;aspect-ratio:4/5}
+.wall-grid .wall-photo img{object-fit:cover}
+.wall-grid .wall-caption{display:flex;flex-direction:column;flex:1;padding:.55rem .15rem 0}
+.wall-grid .wall-caption .wall-path,.wall-grid .wall-traits,.wall-grid .wall-region{display:none}
+.wall-grid .wall-caption h2{font-size:1.08rem;margin:0}
+.wall-grid .wall-caption p{font-size:.78rem;margin:.2rem 0 0;line-height:1.4}
+.wall-grid .wall-place{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wall-grid .wall-actions{margin-top:auto;padding-top:.6rem;display:grid;grid-template-columns:1fr;gap:.35rem}
+.wall-grid .wall-actions button{justify-content:center;min-height:38px;border-radius:2rem;font-size:.8rem;gap:.3rem}
+.wall-grid .wall-memory{background:#fff3d6;border:1px solid #ecd9a8}
+.wall-grid .wall-memory svg{width:20px;height:23px}
+.wall-grid .wall-detail{background:#7f9a6e;color:#fffdf4!important;border:1px solid #5f7a50}
+.garden-gate-actions{flex-wrap:nowrap;gap:.5rem}
+.garden-gate-walk,.garden-gate-down{flex:1 1 0;max-width:11rem;justify-content:center;padding:.55rem .6rem;font-size:.8rem}
+}

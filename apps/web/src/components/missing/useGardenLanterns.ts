@@ -50,5 +50,5 @@ export function useGardenLanterns(scene = true) {
   const retry=()=>{setStatus("loading");setAttempt(n=>n+1);};
   const updateLighting=useCallback((id:string,count:number)=>setPeople(rows=>rows.map(p=>p.id===id?{...p,lightCount:count}:p)),[]);
   const close=useCallback(()=>setSelected(null),[]);
-  return {updateLighting,pages,pageCounts,visibleGroups,nextGroup,reveal,people,status,retry,groups,grouped,query,search,lanterns,visited,remember,selected,select:setSelected,close};
+  return {day,updateLighting,pages,pageCounts,visibleGroups,nextGroup,reveal,people,status,retry,groups,grouped,query,search,lanterns,visited,remember,selected,select:setSelected,close};
 }
