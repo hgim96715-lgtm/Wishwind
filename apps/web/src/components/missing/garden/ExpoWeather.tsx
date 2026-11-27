@@ -5,9 +5,9 @@ import * as THREE from "three";
 import type { Weather } from "@/lib/weather/types";
 import { mapPoint, MAP_SCALE, type Point } from "./expo-layout";
 
-const RAIN_COUNT=750,SNOW_COUNT=600,RIPPLE_COUNT=48;
+const RAIN_COUNT=1600,SNOW_COUNT=900,RIPPLE_COUNT=48;
 const wrap=(v:number,center:number,width:number)=>((v-center+width/2)%width+width)%width-width/2+center;
-export function ExpoWeather({weather,paused,player}:{weather:Weather|null;paused:boolean;player:RefObject<Point>}){
+export function ExpoWeather({weather,paused,player,wind}:{weather:Weather|null;paused:boolean;player:RefObject<Point>;wind?:RefObject<number>}){
   const rain=useRef<THREE.LineSegments>(null),snow=useRef<THREE.Points>(null),rings=useRef<THREE.InstancedMesh>(null);
   const amount=useRef({rain:0,snow:0}),time=useRef(0),initialized=useRef(false);
   const data=useMemo(()=>{
@@ -33,12 +33,12 @@ export function ExpoWeather({weather,paused,player}:{weather:Weather|null;paused
     if(rain.current)rain.current.visible=amount.current.rain>.001;if(snow.current)snow.current.visible=amount.current.snow>.001;if(rings.current)rings.current.visible=amount.current.rain>.001;
     if(paused)return;time.current+=dt;
     if(amount.current.rain>.001){
-      for(let i=0;i<RAIN_COUNT;i++){const j=i*6,speed=24+(i%11)*.8;data.r[j]=wrap(data.r[j]+speed*.15*dt,p.x,36);data.r[j+1]=wrap(data.r[j+1]-speed*dt,11,22);data.r[j+2]=wrap(data.r[j+2]+speed*.04*dt,p.z,36);const len=.45+(i%5)*.09;data.r[j+3]=data.r[j]-.15*len;data.r[j+4]=data.r[j+1]+len;data.r[j+5]=data.r[j+2]-.04*len;}
+      for(let i=0;i<RAIN_COUNT;i++){const j=i*6,speed=24+(i%11)*.8,tilt=.08+.08*(wind?.current??1);data.r[j]=wrap(data.r[j]+speed*tilt*dt,p.x,36);data.r[j+1]=wrap(data.r[j+1]-speed*dt,11,22);data.r[j+2]=wrap(data.r[j+2]+speed*.04*dt,p.z,36);const len=.45+(i%5)*.09;data.r[j+3]=data.r[j]-tilt*len;data.r[j+4]=data.r[j+1]+len;data.r[j+5]=data.r[j+2]-.04*len;}
       data.rainGeometry.getAttribute('position').needsUpdate=true;
       const pond=mapPoint(700,550),fade=data.rippleGeometry.getAttribute('fade') as THREE.InstancedBufferAttribute;
       data.ripples.forEach((r,i)=>{const t=time.current*1.7+r.phase,cycle=Math.floor(t),age=t-cycle;if(cycle!==r.cycle||Math.hypot(r.x-p.x,r.z-p.z)>25){r.cycle=cycle;r.x=p.x+Math.sin(i*12.3+cycle*7.1)*17;r.z=p.z+Math.cos(i*8.7+cycle*5.3)*17;}const water=((r.x-pond.x)/(70*MAP_SCALE))**2+((r.z-pond.z)/(40*MAP_SCALE))**2<1;data.dummy.position.set(r.x,water?.075:.03,r.z);data.dummy.rotation.set(-Math.PI/2,0,0);data.dummy.scale.setScalar(.05+age*.55);data.dummy.updateMatrix();rings.current?.setMatrixAt(i,data.dummy.matrix);fade.setX(i,(1-age)**2);});fade.needsUpdate=true;if(rings.current)rings.current.instanceMatrix.needsUpdate=true;
     }
-    if(amount.current.snow>.001){for(let i=0;i<SNOW_COUNT;i++){const j=i*3,phase=i*2.399,speed=1.6+(i%7)*.2;data.s[j]=wrap(data.s[j]+Math.sin(time.current*.7+phase)*.55*dt,p.x,36);data.s[j+1]=wrap(data.s[j+1]-speed*dt,11,22);data.s[j+2]=wrap(data.s[j+2]+Math.cos(time.current*.5+phase)*.4*dt,p.z,36);}data.snowGeometry.getAttribute('position').needsUpdate=true;}
+    if(amount.current.snow>.001){for(let i=0;i<SNOW_COUNT;i++){const j=i*3,phase=i*2.399,speed=1.6+(i%7)*.2;data.s[j]=wrap(data.s[j]+(Math.sin(time.current*.7+phase)*.55+(wind?.current??1)*.25)*dt,p.x,36);data.s[j+1]=wrap(data.s[j+1]-speed*dt,11,22);data.s[j+2]=wrap(data.s[j+2]+Math.cos(time.current*.5+phase)*.4*dt,p.z,36);}data.snowGeometry.getAttribute('position').needsUpdate=true;}
   });
   return <><lineSegments ref={rain} geometry={data.rainGeometry} material={data.rainMaterial} frustumCulled={false} raycast={()=>null}/><points ref={snow} geometry={data.snowGeometry} material={data.snowMaterial} frustumCulled={false} raycast={()=>null}/><instancedMesh ref={rings} args={[data.rippleGeometry,data.rippleMaterial,RIPPLE_COUNT]} frustumCulled={false} raycast={()=>null}/></>;
 }

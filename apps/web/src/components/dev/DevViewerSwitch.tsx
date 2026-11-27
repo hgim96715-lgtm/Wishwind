@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { DEV_GARDEN_TIME_KEY } from "@/components/missing/dev-garden-time";
+import { DEV_GARDEN_WEATHER_EVENT, DEV_GARDEN_WEATHER_KEY } from "@/components/missing/dev-garden-weather";
 
 /** 실종자들의 정원 하늘 미리 보기용 시각 (time-of-day.ts의 시간대와 맞춤) */
 const GARDEN_TIMES: [string, string][] = [
@@ -17,6 +18,13 @@ const GARDEN_TIMES: [string, string][] = [
   ["22", "밤 10:00"],
 ];
 
+const GARDEN_WEATHERS: [string, string][] = [
+  ["", "실제 날씨"],
+  ["clear", "맑음"],
+  ["rain", "비"],
+  ["snow", "눈"],
+];
+
 /**
  * 개발 모드에서만 보이는 "다른 사람으로 보기" 버튼.
  * 같은 브라우저에서는 내 글이 '내 노트'로만 보여서, 남에게 어떻게 보이는지(익명 이름·공감해요·잠금 안내) 확인하기 어려움.
@@ -25,6 +33,7 @@ const GARDEN_TIMES: [string, string][] = [
 export function DevViewerSwitch() {
   const [viewing, setViewing] = useState<boolean | null>(null);
   const [gardenTime, setGardenTime] = useState("");
+  const [gardenWeather, setGardenWeather] = useState("");
   // 실종자들의 정원에서는 안내판을 가리지 않게 접어 두고 'DEV'를 누르면 펼침
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -32,6 +41,7 @@ export function DevViewerSwitch() {
     try {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setGardenTime(localStorage.getItem(DEV_GARDEN_TIME_KEY) ?? "");
+      setGardenWeather(localStorage.getItem(DEV_GARDEN_WEATHER_KEY) ?? "");
     } catch {
       /* 무시 */
     }
@@ -40,7 +50,7 @@ export function DevViewerSwitch() {
   }, []);
 
   if (process.env.NODE_ENV !== "development" || viewing === null) return null;
-  const inGarden = pathname === "/missing";
+  const inGarden = pathname === "/missing" || pathname === "/missing/exhibit";
 
   return (
     // 실종자들의 정원에서는 오른쪽 아래 '바람개비 꽂기' 버튼을 가리지 않게 위 가운데에 둠
@@ -56,7 +66,7 @@ export function DevViewerSwitch() {
         aria-expanded={open}
         className="rounded-full border border-dashed border-brand/60 bg-white/90 px-3 py-1 font-mono text-[10px] text-brand-fg shadow-sm backdrop-blur"
       >
-        {open ? "DEV 접기" : gardenTime || viewing ? "DEV ●" : "DEV"}
+        {open ? "DEV 접기" : gardenTime || gardenWeather || viewing ? "DEV ●" : "DEV"}
       </button>
     )}
     {inGarden && open && (
@@ -78,6 +88,32 @@ export function DevViewerSwitch() {
           className="bg-transparent text-[#5b4d3c] outline-none"
         >
           {GARDEN_TIMES.map(([v, label]) => (
+            <option key={v} value={v}>
+              {label}
+            </option>
+          ))}
+        </select>
+      </label>
+    )}
+    {inGarden && open && (
+      <label className="flex items-center gap-1 rounded-full border border-dashed border-brand/60 bg-white/90 py-1 pr-2 pl-1 text-xs shadow-sm backdrop-blur">
+        <span className="px-2 font-mono text-[10px] text-brand-fg">DEV</span>
+        <span className="text-muted">정원 날씨</span>
+        <select
+          value={gardenWeather}
+          onChange={(e) => {
+            setGardenWeather(e.target.value);
+            try {
+              if (e.target.value) localStorage.setItem(DEV_GARDEN_WEATHER_KEY, e.target.value);
+              else localStorage.removeItem(DEV_GARDEN_WEATHER_KEY);
+            } catch {
+              /* 무시 */
+            }
+            window.dispatchEvent(new Event(DEV_GARDEN_WEATHER_EVENT));
+          }}
+          className="bg-transparent text-[#5b4d3c] outline-none"
+        >
+          {GARDEN_WEATHERS.map(([v, label]) => (
             <option key={v} value={v}>
               {label}
             </option>

@@ -106,8 +106,8 @@
 .expo-root[data-phase=night] :is(.expo-toolbar button[aria-pressed=true],.expo-time-options button[aria-pressed=true],.garden-choice-options button[aria-pressed=true],.expo-garden-nav button[aria-current=location]) { background:#53696a; color:#fff2ce; }
 .expo-root[data-phase=night] :is(.expo-toolbar button,.expo-garden-nav button,.garden-choice-options button):hover { background:var(--garden-soft); }
 .expo-root[data-phase=night] .garden-person-tail { background:#202e3bf2; }
-.expo-root[data-phase=night] > div:has(>h1) { background:var(--garden-panel); border-color:var(--garden-line); color:var(--garden-ink); }
-.expo-root[data-phase=night] > div:has(>h1) :is(p,label,button) { color:#bbc8c7; }
+.expo-root[data-phase=night] > div:not(.pointer-events-none):has(>h1) { background:var(--garden-panel); border-color:var(--garden-line); color:var(--garden-ink); }
+.expo-root[data-phase=night] > div:not(.pointer-events-none):has(>h1) :is(p,label,button) { color:#bbc8c7; }
 main:has(.expo-root[data-phase=night]) .expo-header>span { background:#202e3bed; border-color:#52616a; color:#e4e4d7; }
 @media(prefers-reduced-motion:reduce) { .expo-root * { transition-duration:0s!important; } }
 
@@ -130,6 +130,7 @@ main:has(.expo-root[data-phase=night]) .expo-header>span { background:#202e3bed;
 .expo-root[data-phase=night] .garden-person-dialog a { color:#e7c991; }
 .expo-root[data-phase=night] .garden-person-dialog a.flex { background:#cda568; color:#172630; }
 .expo-root[data-phase=night] .garden-directory-dialog article :is(button,span) { color:#c9d5cf; }
+.expo-root[data-phase=night] .garden-directory-dialog article .garden-visited-badge { background:#3f5a4d; color:#e6f3d6; }
 
 /* Garden time owns this subtree, independently of the site's saved/system theme.
    Include the sibling header so its logo pill never inherits global dark overrides. */

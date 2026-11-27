@@ -1,8 +1,10 @@
 "use client";
 
+import { Billboards, planeSvg, wildSvg, treeKind, benchSvg, gateSvg, lampSvg, lighthouseSvg, paintTexture, sailsSvg, windmillSvg, rainbowSvg, storyTexture, bushSvg, flowerSvg, globeSvg, rexSvg, sauropodSvg, type BillboardItem } from "./Storybook";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { memo, useEffect, useMemo, useRef } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import type { Weather } from "@/lib/weather/types";
 import { Atmosphere, LighthouseBeam } from "./ExpoAtmosphere";
 import { ExpoWeather } from "./ExpoWeather";
@@ -15,11 +17,10 @@ const WIND_HILL = { x: -15, z: -36 };
 const LIGHT_HILL = { x: 40, z: -62 };
 const EYE = 4.4;
 const BASE_PITCH = -0.04; // 살짝 올려다봐 하늘과 구름이 보이게
-const MAX_YAW = 0.8; // 좌우 약 ±46°
 const MAX_PITCH = 0.16;
-const GATE_Z = 30;
+const GATE_Z = 46;
 const FIELD_Z = 36; // 비탈이 시작되는 자리
-const START_Z = 54;
+const START_Z = 70;
 
 /** 시드 기반 난수: 렌더마다 같은 정원 */
 function rng(seed: number) {
@@ -64,16 +65,78 @@ function makeView(name: string, z: number, look: Pt) {
   const pos = { x: pathX(z), z };
   return { name, ...pos, yaw: yawToward(pos, look) };
 }
+/** 구역 간판 자리: 이동점에서 조형물 쪽을 볼 때 살짝 왼쪽 앞 (zone: ZONES 인덱스) */
+function signSpot(zone: number, from: Pt) {
+  const l = ZONES[zone].l;
+  const dx = l.x - from.x;
+  const dz = l.z - from.z;
+  const len = Math.hypot(dx, dz) || 1;
+  const ux = dx / len;
+  const uz = dz / len;
+  const fwd = Math.min(12, len * 0.6);
+  return { x: from.x + ux * fwd + uz * 3.8, z: from.z + uz * fwd - ux * 3.8 };
+}
+/** 도착하면 간판과 조형물이 한 화면에 같이 보이게, 둘 사이를 바라봄 */
+function zoneView(name: string, z: number, zone: number) {
+  const pos = { x: pathX(z), z };
+  const sp = signSpot(zone, pos);
+  const l = ZONES[zone].l;
+  return makeView(name, z, { x: sp.x * 0.55 + l.x * 0.45, z: sp.z * 0.55 + l.z * 0.45 });
+}
 /** 이동점: 입구 → 아이들 → 바다 건너 → 어른들 → 오래 기다리는 (길을 따라 안쪽으로) */
 const VIEWS = [
   makeView("입구", START_Z, { x: pathX(GATE_Z), z: GATE_Z - 2 }),
-  makeView("아이들의 길", 24, { x: -22, z: 4 }),
-  makeView("바다 건너 길", 14, { x: 26, z: -8 }),
-  makeView("어른들의 길", 2, { x: -24, z: -34 }),
-  makeView("오래 기다리는 길", -28, { x: 36, z: -56 }),
+  zoneView("아이들의 길", 24, 0),
+  zoneView("바다 건너 길", 14, 3),
+  zoneView("어른들의 길", 2, 1),
+  zoneView("오래 기다리는 길", -28, 2),
 ];
 
 /** 세로 화면(폰)에서는 시야를 넓혀 풍차·등대·바람개비가 잘리지 않게 */
+
+const SIGN_SPOTS = [signSpot(0, VIEWS[1]), signSpot(3, VIEWS[2]), signSpot(1, VIEWS[3]), signSpot(2, VIEWS[4])];
+
+/** 샛길: 큰길에서 각 구역 조형물까지 */
+const ARCH_EXT = (() => {
+  // 아치를 지나 6칸 더 뻗은 곳: 길이 아치 밑을 그대로 통과함
+  const from = { x: pathX(20), z: 20 };
+  const l = ZONES[0].l;
+  const len = Math.hypot(l.x - from.x, l.z - from.z) || 1;
+  return { x: l.x + ((l.x - from.x) / len) * 7, z: l.z + ((l.z - from.z) / len) * 7 };
+})();
+/** 샛길은 끊기지 않고 조형물 둘레를 한 바퀴 도는 길로 이어짐 */
+const TRAILS: { from: Pt; ring: { c: Pt; r: number } }[] = [
+  { from: { x: pathX(20), z: 20 }, ring: { c: ARCH_EXT, r: 6 } },
+  { from: { x: pathX(10), z: 10 }, ring: { c: ZONES[3].l, r: 6.5 } },
+  { from: { x: pathX(-12), z: -12 }, ring: { c: ZONES[1].l, r: 9 } },
+  { from: { x: pathX(-28), z: -28 }, ring: { c: ZONES[2].l, r: 8 } },
+];
+const trailEnd = (t: (typeof TRAILS)[number]): Pt => {
+  const dx = t.from.x - t.ring.c.x;
+  const dz = t.from.z - t.ring.c.z;
+  const len = Math.hypot(dx, dz) || 1;
+  return { x: t.ring.c.x + (dx / len) * t.ring.r, z: t.ring.c.z + (dz / len) * t.ring.r };
+};
+// 큰길 끝에서도 길이 멈추지 않고 작은 고리로 이어짐
+const MAIN_LOOP = { c: { x: pathX(-54), z: -54 }, r: 6 };
+/** 아이들의 길의 공룡 친구들 (길 가까이에서 길을 바라봄) */
+const DINO_SPOTS: { at: Pt; face: number; kind: 0 | 1 }[] = [
+  { at: { x: -26, z: 19 }, face: Math.atan2(26, -3), kind: 0 },
+  { at: { x: -23, z: -3 }, face: Math.atan2(23, 19), kind: 1 },
+];
+function segDist(x: number, z: number, a: Pt, b: Pt) {
+  const dx = b.x - a.x;
+  const dz = b.z - a.z;
+  const t = THREE.MathUtils.clamp(((x - a.x) * dx + (z - a.z) * dz) / (dx * dx + dz * dz || 1), 0, 1);
+  return Math.hypot(x - (a.x + dx * t), z - (a.z + dz * t));
+}
+/** 길과 그 가장자리 여유 공간인지 (꽃·바람개비 금지 구역) */
+function nearPath(x: number, z: number, buf: number) {
+  if (z < 60 && z > -70 && Math.abs(x - pathX(z)) < buf) return true;
+  if (Math.abs(Math.hypot(x - MAIN_LOOP.c.x, z - MAIN_LOOP.c.z) - MAIN_LOOP.r) < buf + 1.2) return true;
+  return TRAILS.some(t => segDist(x, z, t.from, trailEnd(t)) < buf + 1.2 || Math.abs(Math.hypot(x - t.ring.c.x, z - t.ring.c.z) - t.ring.r) < buf + 1.2);
+}
+
 function ResponsiveFov() {
   useFrame(({ camera, size }) => {
     const c = camera as THREE.PerspectiveCamera;
@@ -87,16 +150,45 @@ function ResponsiveFov() {
 }
 
 /** 드래그로 둘러보기(손을 떼면 서서히 멈춤) + 이동점으로 부드럽게 걸어가기 */
-function DragLook({ paused, reducedMotion, view }: { paused: boolean; reducedMotion: boolean; view: number }) {
+function DragLook({ paused, reducedMotion, view, reset, walk, onLook, joy, solid }: { joy?: { current: { x: number; y: number } }; solid: (x: number, z: number) => { x: number; z: number }; paused: boolean; reducedMotion: boolean; view: number; reset: number; walk: { x: number; z: number; n: number; view: number; reset: number; keepYaw: boolean; cruise?: boolean; lift?: number } | null; onLook: (x: number, z: number, yaw: number) => void }) {
   const { gl } = useThree();
   const state = useRef({ yaw: 0, pitch: 0, vyaw: 0, vpitch: 0, drag: false, x: 0, y: 0 });
   const rig = useRef({ x: VIEWS[0].x, z: VIEWS[0].z, yaw: VIEWS[0].yaw });
-  const viewRef = useRef(view);
+  const slowRef = useRef(false);
+  const cruiseRef = useRef(false);
+  const speedRef = useRef(0);
+  const liftGoal = useRef(0);
+  const lift = useRef(0);
+  const goal = useRef({ x: VIEWS[0].x, z: VIEWS[0].z, yaw: VIEWS[0].yaw });
   useEffect(() => {
-    viewRef.current = view;
+    slowRef.current = false;
+    cruiseRef.current = false;
+    liftGoal.current = 0;
+    const v = VIEWS[view] ?? VIEWS[0];
+    // 지금 보고 있는 방향을 그대로 이어받아 화면이 튀지 않게 함
+    rig.current.yaw -= state.current.yaw;
     state.current.yaw = 0;
     state.current.vyaw = 0;
-  }, [view]);
+    goal.current = { x: v.x, z: v.z, yaw: v.yaw };
+  }, [view, reset]);
+  useEffect(() => {
+    if (!walk) return;
+    // 걷는 방향을 바라보며 이동
+    const from = { x: goal.current.x, z: goal.current.z };
+    const dist = Math.hypot(walk.x - from.x, walk.z - from.z);
+    // 보던 방향을 먼저 이어받음 (드래그로 돌려 둔 시선이 갑자기 튀지 않게)
+    rig.current.yaw -= state.current.yaw;
+    state.current.yaw = 0;
+    state.current.vyaw = 0;
+    // 앞쪽(±75° 안)으로 걸을 때만 그쪽을 바라봄. 뒤나 옆으로 갈 때는 몸을 돌리지 않음
+    const look = rig.current.yaw;
+    const want = yawToward(from, walk);
+    const diff = Math.atan2(Math.sin(want - look), Math.cos(want - look));
+    slowRef.current = walk.keepYaw;
+    cruiseRef.current = !!walk.cruise;
+    liftGoal.current = walk.lift ?? 0;
+    goal.current = { x: walk.x, z: walk.z, yaw: dist > 3 && !walk.keepYaw && Math.abs(diff) < 1.3 ? want : look };
+  }, [walk]);
 
   useEffect(() => {
     const el = gl.domElement;
@@ -111,12 +203,12 @@ function DragLook({ paused, reducedMotion, view }: { paused: boolean; reducedMot
     };
     const move = (e: PointerEvent) => {
       if (!state.current.drag) return;
-      const k = 0.0042; // 화면 폭 한 번 드래그 ≈ 시야 전체
+      const k = 0.0058; // 화면 폭 한 번 드래그 ≈ 시야 전체 이상
       const dx = e.clientX - state.current.x;
       const dy = e.clientY - state.current.y;
       state.current.x = e.clientX;
       state.current.y = e.clientY;
-      state.current.yaw = THREE.MathUtils.clamp(state.current.yaw + dx * k, -MAX_YAW, MAX_YAW);
+      state.current.yaw += dx * k; // 제한 없이 한 바퀴 이상 돌 수 있음
       state.current.pitch = THREE.MathUtils.clamp(state.current.pitch + dy * k * 0.5, -MAX_PITCH, MAX_PITCH);
       state.current.vyaw = dx * k * 60;
       state.current.vpitch = dy * k * 30;
@@ -143,47 +235,255 @@ function DragLook({ paused, reducedMotion, view }: { paused: boolean; reducedMot
       const decay = Math.exp(-dt * 3.2);
       state.current.vyaw *= decay;
       state.current.vpitch *= decay;
-      state.current.yaw = THREE.MathUtils.clamp(state.current.yaw + state.current.vyaw * dt, -MAX_YAW, MAX_YAW);
+      state.current.yaw += state.current.vyaw * dt;
       state.current.pitch = THREE.MathUtils.clamp(state.current.pitch + state.current.vpitch * dt, -MAX_PITCH, MAX_PITCH);
-      if (Math.abs(state.current.yaw) >= MAX_YAW) state.current.vyaw = 0;
     }
-    const v = VIEWS[viewRef.current] ?? VIEWS[0];
-    const a = reducedMotion ? 1 : 1 - Math.exp(-dt * 1.9);
-    rig.current.x += (v.x - rig.current.x) * a;
-    rig.current.z += (v.z - rig.current.z) * a;
+    const jv = joy?.current;
+    if (jv && !paused && Math.hypot(jv.x, jv.y) > 0.08) {
+      // 좌우로 밀면 그쪽으로 몸을 돌리고, 위·아래로 밀면 보는 방향으로 앞·뒤로 걸음
+      rig.current.yaw -= (Math.abs(jv.x) > 0.08 ? jv.x : 0) * 1.5 * dt;
+      const yawNow = rig.current.yaw - state.current.yaw;
+      const fwd = Math.abs(jv.y) > 0.12 ? jv.y : 0;
+      const nx = rig.current.x - Math.sin(yawNow) * fwd * 5.5 * dt;
+      const nz = rig.current.z - Math.cos(yawNow) * fwd * 5.5 * dt;
+      const ok = solid(nx, nz);
+      rig.current.x = ok.x;
+      rig.current.z = ok.z;
+      goal.current = { x: ok.x, z: ok.z, yaw: rig.current.yaw };
+      speedRef.current = 0;
+    }
+    const v = goal.current;
+    const a = reducedMotion ? 1 : 1 - Math.exp(-dt * 2.1);
+    // 가까울수록 부드럽게 멈추되, 먼 거리는 일정한 걷는 속도(초당 ~16칸)를 넘지 않음
+    const mx = v.x - rig.current.x;
+    const mz = v.z - rig.current.z;
+    const md = Math.hypot(mx, mz);
+    if (md > 0.001) {
+      // 목표 속도까지 서서히 가속·감속해서 훅 튀지 않게 함 (걷는 속도 상한: 일반 7, 한 걸음 5, 입장 9)
+      const cap = cruiseRef.current ? 9 : slowRef.current ? 5 : Math.min(18, 7 + md * 0.2);
+      const want = cruiseRef.current ? cap : Math.min(md * 2.1, cap);
+      speedRef.current += (want - speedRef.current) * Math.min(1, dt * 3.5);
+      const stepLen = reducedMotion ? md : Math.min(md, speedRef.current * dt);
+      rig.current.x += (mx / md) * stepLen;
+      rig.current.z += (mz / md) * stepLen;
+    } else speedRef.current = 0;
     const dy = Math.atan2(Math.sin(v.yaw - rig.current.yaw), Math.cos(v.yaw - rig.current.yaw));
     rig.current.yaw += dy * a;
     const t = performance.now() / 1000;
     const sway = reducedMotion ? 0 : Math.sin(t * 0.5) * 0.004;
     camera.position.set(rig.current.x, height(rig.current.x, rig.current.z) + EYE + (reducedMotion ? 0 : Math.sin(t * 0.9) * 0.02), rig.current.z);
+    onLook(rig.current.x, rig.current.z, rig.current.yaw - state.current.yaw);
+    lift.current += (liftGoal.current - lift.current) * a;
     camera.rotation.order = "YXZ";
-    camera.rotation.set(BASE_PITCH - state.current.pitch * 0.6 + sway, rig.current.yaw - state.current.yaw, 0);
+    camera.rotation.set(BASE_PITCH + lift.current - state.current.pitch * 0.6 + sway, rig.current.yaw - state.current.yaw, 0);
   });
   return null;
 }
 
 /** 언덕·들판. 정점 색으로 풀빛에 변화를 주고, 풀잎·들꽃을 인스턴스로 뿌림 */
-function Field({ phase, still }: { phase: GardenPhase; still: boolean }) {
-  const dot = useSoftDot();
+/** 꽃밭: 무리 지어 핀 들꽃 (줄기 + 꽃잎 + 노란 꽃술) */
+/** 동화책 그림 속 동글한 꽃덤불 */
+function Bushes({ snow }: { snow: boolean }) {
+  const ref = useRef<THREE.InstancedMesh>(null);
+  const dots = useRef<THREE.InstancedMesh>(null);
+  const N = 70;
+  const D = 12;
+  useEffect(() => {
+    const m = ref.current, dm = dots.current;
+    if (!m || !dm) return;
+    const r = rng(404);
+    const o = new THREE.Object3D();
+    const c = new THREE.Color();
+    const greens = snow ? ["#f0f5f8", "#e1ebf1"] : ["#6fae5e", "#88bf63", "#a3cc72", "#5c9c58"];
+    const flo = ["#ffffff", "#ffd54a", "#ff8fa8", "#ff7a59", "#c4a3f2"];
+    let n = 0, guard = 0;
+    while (n < N && guard++ < 3000) {
+      const x = (r() - 0.5) * 150, z = 34 - r() * 120;
+      if (nearPath(x, z, 3.6)) continue;
+      if (VIEWS.some(v => Math.hypot(x - v.x, z - v.z) < 5)) continue;
+      if (SIGN_SPOTS.some(q => Math.hypot(x - q.x, z - q.z) < 5)) continue;
+      if (TREE_SPOTS.some(([tx, tz]) => Math.hypot(x - tx, z - tz) < 7)) continue;
+      if (DINO_SPOTS.some(d => Math.hypot(x - d.at.x, z - d.at.z) < 6)) continue;
+      const sc = 0.9 + r() * 0.9;
+      const y = height(x, z);
+      o.position.set(x, y + 0.25 * sc, z);
+      o.rotation.set(0, r() * 6, 0);
+      o.scale.set(sc * 1.3, sc * 0.85, sc * 1.1);
+      o.updateMatrix();
+      m.setMatrixAt(n, o.matrix);
+      c.set(greens[Math.floor(r() * greens.length)]);
+      m.setColorAt(n, c);
+      const fc = new THREE.Color(flo[Math.floor(r() * flo.length)]);
+      for (let k = 0; k < D; k++) {
+        const a = r() * 6.28, u = Math.sqrt(r()) * 0.8, v = Math.acos(r() * 0.8 + 0.2);
+        const px = x + Math.cos(a) * u * sc * 1.2, pz = z + Math.sin(a) * u * sc * 1;
+        o.position.set(px, y + 0.25 * sc + Math.cos(v) * 0.85 * sc * (1 - u * u * 0.6) + 0.05, pz);
+        o.rotation.set(0, 0, 0);
+        o.scale.setScalar(snow ? 0.0001 : 0.17 + r() * 0.08);
+        o.updateMatrix();
+        dm.setMatrixAt(n * D + k, o.matrix);
+        dm.setColorAt(n * D + k, fc);
+      }
+      n++;
+    }
+    for (let i = n; i < N; i++) {
+      o.position.set(0, -60, 0); o.scale.setScalar(0.0001); o.updateMatrix();
+      m.setMatrixAt(i, o.matrix);
+      for (let k = 0; k < D; k++) dm.setMatrixAt(i * D + k, o.matrix);
+    }
+    [m, dm].forEach(x => { x.instanceMatrix.needsUpdate = true; if (x.instanceColor) x.instanceColor.needsUpdate = true; });
+  }, [snow]);
+  return (
+    <group>
+      <instancedMesh ref={ref} args={[undefined, undefined, N]} frustumCulled={false} raycast={() => null}>
+        <icosahedronGeometry args={[0.8, 2]} />
+        <meshStandardMaterial roughness={1} />
+      </instancedMesh>
+      <instancedMesh ref={dots} args={[undefined, undefined, N * D]} frustumCulled={false} raycast={() => null}>
+        <sphereGeometry args={[1, 8, 6]} />
+        <meshStandardMaterial roughness={0.8} emissive="#ffffff" emissiveIntensity={0.12} />
+      </instancedMesh>
+    </group>
+  );
+}
+
+function Flowers({ still, night }: { still: boolean; night: boolean }) {
+  const parts = useMemo(() => {
+    const stem = new THREE.CylinderGeometry(0.012, 0.018, 0.7, 4);
+    stem.translate(0, 0.35, 0);
+    const leaves: THREE.BufferGeometry[] = [stem];
+    for (let k = 0; k < 3; k++) {
+      const l = new THREE.SphereGeometry(1, 6, 4);
+      l.scale(0.2, 0.03, 0.07);
+      l.translate(0.17, 0, 0);
+      l.rotateZ(0.7);
+      l.rotateY(k * 2.1);
+      l.translate(0, 0.04 + k * 0.1, 0);
+      leaves.push(l);
+    }
+    const stemL = mergeGeometries(leaves)!;
+    const petals: THREE.BufferGeometry[] = [];
+    for (let k = 0; k < 6; k++) {
+      const g = new THREE.SphereGeometry(1, 6, 4);
+      g.scale(0.24, 0.05, 0.15);
+      g.translate(0.15, 0, 0);
+      g.rotateZ(0.35);
+      g.rotateY((k / 6) * Math.PI * 2);
+      g.translate(0, 0.7, 0);
+      petals.push(g);
+    }
+    const head = mergeGeometries(petals)!;
+    petals.forEach(g => g.dispose());
+    const eye = new THREE.SphereGeometry(0.06, 6, 4);
+    eye.scale(1, 0.6, 1);
+    eye.translate(0, 0.72, 0);
+    return { stem: stemL, head, eye };
+  }, []);
+  const wind = useRef({ value: 0 });
+  const mats = useMemo(() => {
+    const sway = (shader: { uniforms: Record<string, unknown>; vertexShader: string }) => {
+      shader.uniforms.fWind = wind.current;
+      shader.vertexShader = "uniform float fWind;\n" + shader.vertexShader.replace(
+        "#include <begin_vertex>",
+        "#include <begin_vertex>\ntransformed.x += sin(fWind + instanceMatrix[3].x * .35 + instanceMatrix[3].z * .25) * position.y * .16;",
+      );
+    };
+    const stem = new THREE.MeshStandardMaterial({ color: "#6a9a45", roughness: 1 });
+    stem.onBeforeCompile = sway;
+    const head = new THREE.MeshStandardMaterial({ color: "#ffffff", roughness: 0.9, emissive: "#ffffff", emissiveIntensity: 0.12, side: THREE.DoubleSide });
+    head.onBeforeCompile = sway;
+    const eye = new THREE.MeshStandardMaterial({ color: "#f6c640", roughness: 0.9, emissive: "#f6c640", emissiveIntensity: 0.2 });
+    eye.onBeforeCompile = sway;
+    return { stem, head, eye };
+  }, []);
+  const stemRef = useRef<THREE.InstancedMesh>(null);
+  const headRef = useRef<THREE.InstancedMesh>(null);
+  const eyeRef = useRef<THREE.InstancedMesh>(null);
+  const COUNT = 3600;
+  useEffect(() => {
+    const stemM = stemRef.current;
+    const headM = headRef.current;
+    const eyeM = eyeRef.current;
+    if (!stemM || !headM || !eyeM) return;
+    const m = [stemM, headM, eyeM];
+    const r = rng(77);
+    const d = new THREE.Object3D();
+    const col = new THREE.Color();
+    const palette = ["#ff9db8", "#ffd23f", "#ffffff", "#c9a8f0", "#ff8a5c", "#7fb8ff", "#ffb347"].map(c => new THREE.Color(c));
+    // 꽃무리 중심: 길과 이동점, 간판 자리는 피함
+    const centers: { x: number; z: number; c: number }[] = [];
+    let guard = 0;
+    while (centers.length < 90 && guard++ < 2000) {
+      const x = (r() - 0.5) * 150;
+      const z = 34 - r() * 120;
+      if (nearPath(x, z, 4.4)) continue;
+      if (VIEWS.some(v => Math.hypot(x - v.x, z - v.z) < 4)) continue;
+      if (SIGN_SPOTS.some(q => Math.hypot(x - q.x, z - q.z) < 4)) continue;
+      if (TREE_SPOTS.some(([tx, tz]) => Math.hypot(x - tx, z - tz) < 6)) continue;
+      if (DINO_SPOTS.some(d => Math.hypot(x - d.at.x, z - d.at.z) < 5)) continue;
+      centers.push({ x, z, c: Math.floor(r() * palette.length) });
+    }
+    for (let i = 0; i < COUNT; i++) {
+      const ctr = centers[i % centers.length];
+      const ang = r() * 6.283;
+      const rad = Math.sqrt(r()) * 2.1;
+      const x = ctr.x + Math.cos(ang) * rad;
+      const z = ctr.z + Math.sin(ang) * rad;
+      const near = nearPath(x, z, 2.6);
+      d.position.set(x, near ? -50 : height(x, z), z);
+      d.rotation.set(0, r() * 6.28, 0);
+      d.scale.setScalar(0.85 + r() * 0.6);
+      d.updateMatrix();
+      m.forEach(x2 => x2.setMatrixAt(i, d.matrix));
+      col.copy(palette[(ctr.c + (r() < 0.25 ? 1 : 0)) % palette.length]);
+      headM.setColorAt(i, col);
+    }
+    m.forEach(x => { x.instanceMatrix.needsUpdate = true; });
+    if (headM.instanceColor) headM.instanceColor.needsUpdate = true;
+  }, []);
+  useEffect(() => () => {
+    parts.stem.dispose(); parts.head.dispose(); parts.eye.dispose();
+    mats.stem.dispose(); mats.head.dispose(); mats.eye.dispose();
+  }, [parts, mats]);
+  useFrame((_, dt) => { if (!still) wind.current.value += Math.min(dt, 0.05) * 1.3; });
+  void night;
+  return (
+    <group>
+      <instancedMesh ref={stemRef} args={[parts.stem, mats.stem, COUNT]} frustumCulled={false} raycast={() => null} />
+      <instancedMesh ref={headRef} args={[parts.head, mats.head, COUNT]} frustumCulled={false} raycast={() => null} />
+      <instancedMesh ref={eyeRef} args={[parts.eye, mats.eye, COUNT]} frustumCulled={false} raycast={() => null} />
+    </group>
+  );
+}
+
+function Field({ phase, still, snow, onWalk }: { phase: GardenPhase; still: boolean; snow: boolean; onWalk: (x: number, z: number) => void }) {
   const grass = useRef<THREE.InstancedMesh>(null);
   const wind = useRef({ value: 0 });
+  const groundTex = useMemo(() => paintTexture("ground", 22, 18), []);
+  useEffect(() => () => groundTex.dispose(), [groundTex]);
   const ground = useMemo(() => {
     const g = new THREE.PlaneGeometry(320, 260, 150, 120);
     g.rotateX(-Math.PI / 2);
     const pos = g.getAttribute("position");
     const colors = new Float32Array(pos.count * 3);
-    const a = new THREE.Color("#8fb54a");
-    const b = new THREE.Color("#c4d25e");
-    const c = new THREE.Color("#a3bf4f");
+    const a = new THREE.Color("#93c25f");
+    const b = new THREE.Color("#d2de80");
+    const c = new THREE.Color("#9dbd62");
     const tmp = new THREE.Color();
+    const snowA = new THREE.Color("#f6f9fc");
+    const snowB = new THREE.Color("#dbe7f2");
+    const snowTone = new THREE.Color();
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i);
       const z = pos.getZ(i) - 50;
       pos.setXYZ(i, x, height(x, z), z);
       const n = (Math.sin(x * 0.21) + Math.cos(z * 0.17) + Math.sin((x + z) * 0.09)) / 3;
-      tmp.copy(a).lerp(n > 0 ? b : c, Math.abs(n));
+      const big = Math.sin(x * 0.045 + 1.3) * 0.6 + Math.cos(z * 0.038 - 0.4) * 0.5 + Math.sin((x - z) * 0.025) * 0.4;
+      tmp.copy(a).lerp(n > 0 ? b : c, Math.abs(n) * 0.7);
+      tmp.lerp(big > 0 ? b : c, Math.min(0.6, Math.abs(big) * 0.5));
       // 볕을 받는 언덕 위쪽일수록 노란빛
       tmp.lerp(b, THREE.MathUtils.clamp(pos.getY(i) / 14, 0, 0.7));
+      if (snow) tmp.lerp(snowTone.copy(snowA).lerp(snowB, (n + 1) / 2), 0.93);
       colors[i * 3] = tmp.r;
       colors[i * 3 + 1] = tmp.g;
       colors[i * 3 + 2] = tmp.b;
@@ -191,27 +491,66 @@ function Field({ phase, still }: { phase: GardenPhase; still: boolean }) {
     g.setAttribute("color", new THREE.BufferAttribute(colors, 3));
     g.computeVertexNormals();
     return g;
-  }, []);
+  }, [snow]);
 
   const bladeGeometry = useMemo(() => {
+    // 한 포기(tuft): 휘어진 가는 잎 7장, 밑동은 짙고 끝은 밝게
+    const r = rng(3);
+    const pos: number[] = [];
+    const col: number[] = [];
+    const idx: number[] = [];
+    const base = new THREE.Color("#4f7d33");
+    const tip = new THREE.Color("#d2e27c");
+    const tmp = new THREE.Color();
+    for (let k = 0; k < 7; k++) {
+      const ang = r() * Math.PI * 2;
+      const lean = 0.18 + r() * 0.35;
+      const h = 0.55 + r() * 0.5;
+      const w = 0.05 + r() * 0.025;
+      const ox = (r() - 0.5) * 0.18;
+      const oz = (r() - 0.5) * 0.18;
+      const dx = Math.cos(ang);
+      const dz = Math.sin(ang);
+      const nx = -dz;
+      const nz = dx;
+      const start = pos.length / 3;
+      const rows = 4;
+      for (let i = 0; i <= rows; i++) {
+        const t = i / rows;
+        const bend = lean * t * t * h;
+        const y = h * t;
+        const half = w * (1 - t * 0.92);
+        for (const sgn of [-1, 1]) {
+          pos.push(ox + dx * bend + nx * half * sgn, y, oz + dz * bend + nz * half * sgn);
+          tmp.copy(base).lerp(tip, Math.pow(t, 0.8));
+          col.push(tmp.r, tmp.g, tmp.b);
+        }
+      }
+      for (let i = 0; i < rows; i++) {
+        const q = start + i * 2;
+        idx.push(q, q + 1, q + 2, q + 1, q + 3, q + 2);
+      }
+    }
     const g = new THREE.BufferGeometry();
-    g.setAttribute("position", new THREE.Float32BufferAttribute([-0.035, 0, 0, 0.035, 0, 0, 0.01, 0.6, 0], 3));
+    g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+    g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+    g.setIndex(idx);
     g.computeVertexNormals();
     return g;
   }, []);
   const bladeMaterial = useMemo(() => {
-    const m = new THREE.MeshStandardMaterial({ color: "#a9c25a", roughness: 1, side: THREE.DoubleSide });
+    const m = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, side: THREE.DoubleSide });
     m.onBeforeCompile = shader => {
       shader.uniforms.lookWind = wind.current;
       shader.vertexShader = "uniform float lookWind;\n" + shader.vertexShader.replace(
         "#include <begin_vertex>",
-        "#include <begin_vertex>\ntransformed.x += sin(lookWind + instanceMatrix[3].x * .3 + instanceMatrix[3].z * .2) * position.y * .18;",
+        "#include <begin_vertex>\ntransformed.x += sin(lookWind + instanceMatrix[3].x * .3 + instanceMatrix[3].z * .2) * position.y * .22;",
       );
     };
     return m;
   }, []);
 
-  const COUNT = 9000;
+  const COUNT = 1500;
   useEffect(() => {
     const mesh = grass.current;
     if (!mesh) return;
@@ -219,48 +558,30 @@ function Field({ phase, still }: { phase: GardenPhase; still: boolean }) {
     const d = new THREE.Object3D();
     const col = new THREE.Color();
     for (let i = 0; i < COUNT; i++) {
-      const x = (r() - 0.5) * 120;
-      const z = 30 - r() * 100;
-      // 가운데 오솔길은 비워 둠
-      if (Math.abs(x - pathX(z)) < 1.6 && z > -40) {
+      const edge = i >= 900;
+      const zr = edge ? 54 - r() * 120 : 30 - r() * 100;
+      const side = r() < 0.5 ? -1 : 1;
+      const x = edge ? pathX(zr) + side * (1.85 + r() * 0.7) : (r() - 0.5) * 120;
+      const z = zr;
+      // 길 위는 비움 (가장자리 포기는 길 바깥에만)
+      if (!edge && nearPath(x, z, 2.2)) {
         d.scale.setScalar(0.001);
       } else {
         d.position.set(x, height(x, z - 40 + 40), z);
         d.rotation.set(0, r() * 6.28, 0);
-        d.scale.setScalar(0.8 + r() * 1.0);
+        d.scale.setScalar(edge ? 0.3 + r() * 0.3 : 0.4 + r() * 0.3);
       }
       d.position.set(d.scale.x < 0.01 ? 0 : x, d.scale.x < 0.01 ? -50 : height(x, z), z);
       d.updateMatrix();
       mesh.setMatrixAt(i, d.matrix);
-      col.setHSL(0.19 + r() * 0.06, 0.5 + r() * 0.15, 0.42 + r() * 0.18);
+      col.setHSL(0.2 + r() * 0.05, 0.12 + r() * 0.2, 0.72 + r() * 0.3);
       mesh.setColorAt(i, col);
     }
     mesh.instanceMatrix.needsUpdate = true;
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
   }, []);
 
-  // 들꽃: 앞쪽(내 가까이)일수록 빽빽하고 크게, 멀수록 색 점으로
-  const flowers = useMemo(() => {
-    const r = rng(29);
-    const count = 2600;
-    const pos = new Float32Array(count * 3);
-    const col = new Float32Array(count * 3);
-    const palette = ["#ffffff", "#ff8fa8", "#ffd84d", "#c9b3f2", "#ff7a4d", "#fff3c4", "#f5a3c7"].map(c => new THREE.Color(c));
-    for (let i = 0; i < count; i++) {
-      const near = r() < 0.55;
-      const x = near ? (r() - 0.5) * 34 : (r() - 0.5) * 120;
-      const z = near ? START_Z - 6 - r() * 22 : START_Z - r() * 120;
-      pos.set([x, height(x, z) + 0.3, z], i * 3);
-      const c = palette[i % palette.length];
-      col.set([c.r, c.g, c.b], i * 3);
-    }
-    const g = new THREE.BufferGeometry();
-    g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-    g.setAttribute("color", new THREE.BufferAttribute(col, 3));
-    return g;
-  }, []);
-
-  useEffect(() => () => { ground.dispose(); bladeGeometry.dispose(); bladeMaterial.dispose(); flowers.dispose(); }, [ground, bladeGeometry, bladeMaterial, flowers]);
+  useEffect(() => () => { ground.dispose(); bladeGeometry.dispose(); bladeMaterial.dispose(); }, [ground, bladeGeometry, bladeMaterial]);
   useFrame((state, dt) => {
     if (!still) wind.current.value += Math.min(dt, 0.05) * 1.3;
     void state;
@@ -269,48 +590,80 @@ function Field({ phase, still }: { phase: GardenPhase; still: boolean }) {
   const night = phase === "night";
   return (
     <group>
-      <mesh geometry={ground} receiveShadow raycast={() => null}>
-        <meshStandardMaterial vertexColors roughness={1} />
+      <mesh
+        geometry={ground}
+        receiveShadow
+        userData={{ ground: true }}
+        onClick={e => { if (e.delta <= 8) { e.stopPropagation(); onWalk(e.point.x, e.point.z); } }}
+      >
+        <meshStandardMaterial vertexColors map={groundTex} polygonOffset polygonOffsetFactor={-3} polygonOffsetUnits={-3} roughness={1} emissive={snow ? "#dce8f4" : "#000000"} emissiveIntensity={snow ? 0.34 : 0} />
       </mesh>
-      <instancedMesh ref={grass} args={[bladeGeometry, bladeMaterial, COUNT]} frustumCulled={false} raycast={() => null} />
-      <points geometry={flowers} raycast={() => null}>
-        <pointsMaterial size={0.7} sizeAttenuation vertexColors map={dot} alphaTest={0.45} transparent opacity={night ? 0.6 : 1} depthWrite={false} />
-      </points>
+      {!snow && <instancedMesh ref={grass} args={[bladeGeometry, bladeMaterial, COUNT]} frustumCulled={false} raycast={() => null} />}
     </group>
   );
 }
 
-/** 능선 위의 나무들 (원경). 등대·풍차 대신 조용한 나무 실루엣 */
-function Trees() {
-  const { geo, material } = useMemo(() => {
+const TREE_SPOTS: [number, number, number][] = [
+  [-48, -6, 0], [-53, -15, 0], [-44, -21, 1], [-57, -29, 0], [-46, -34, 0],
+  [52, 10, 0], [58, -2, 0], [50, -21, 1], [60, -36, 0], [54, 24, 0],
+  [-27, 40, 0], [-33, 35, 1], [22, 41, 0], [29, 38, 0],
+  [-20, -70, 0], [8, -76, 1], [-60, -48, 0], [64, -56, 0],
+];
+
+/** 나무 무리: 부드러운 다면체(플랫 셰이딩) 전나무와 둥근 활엽수 */
+function Trees({ snow }: { snow: boolean }) {
+  const parts = useMemo(() => {
     const r = rng(5);
-    const trunk = new THREE.CylinderGeometry(0.1, 0.16, 1.6, 6);
-    const crown = new THREE.SphereGeometry(1, 14, 10);
-    const items: { x: number; z: number; s: number; tone: number }[] = [];
-    // 멀리 언덕 가장자리에 작고 둥근 나무만 몇 그루
-    for (let i = 0; i < 14; i++) {
-      const side = i % 2 === 0 ? -1 : 1;
-      const x = side * (36 + r() * 30);
-      const z = -20 - r() * 70;
-      items.push({ x, z, s: 1.1 + r() * 0.8, tone: r() });
-    }
-    const crowns = ["#86ad55", "#98b95c", "#7aa04f"].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 1 }));
-    return { geo: { trunk, crown, items }, material: { trunk: new THREE.MeshStandardMaterial({ color: "#7a5a3c", roughness: 1 }), crowns } };
-  }, []);
-  useEffect(() => () => { geo.trunk.dispose(); geo.crown.dispose(); material.trunk.dispose(); material.crowns.forEach(m => m.dispose()); }, [geo, material]);
+    const trunk = new THREE.CylinderGeometry(0.16, 0.42, 2.8, 10);
+    trunk.translate(0, 1.4, 0);
+    const branch = new THREE.CylinderGeometry(0.05, 0.11, 1, 6);
+    branch.translate(0, 0.5, 0);
+    const blob = new THREE.IcosahedronGeometry(1, 3);
+    const mat = (c: string) => new THREE.MeshStandardMaterial({ color: c, roughness: 1 });
+    const leaf = (snow
+      ? ["#eef4f8", "#dce8ef", "#f6f9fb", "#cfdfe9", "#e6eff5"]
+      : ["#5f9d5a", "#79b162", "#9cc66e", "#4f8c58", "#b5d27a", "#6aa766"]).map(mat);
+    const bark = mat(snow ? "#9a8a7c" : "#7d5a3e");
+    const items = TREE_SPOTS.map(([x, z, kind]) => {
+      const s = 1.35 + r() * 0.6;
+      // 수채화 느낌: 크고 작은 둥근 잎덩이를 겹쳐 쌓음
+      const n = kind === 0 ? 7 : 9;
+      const puffs = Array.from({ length: n }, (_, k) => {
+        const t = k / (n - 1);
+        const a = r() * 6.28;
+        const rad = kind === 0 ? (1 - t) * 1.25 : 0.4 + r() * 1.3;
+        return {
+          p: [Math.cos(a) * rad, (kind === 0 ? 2.2 + t * 3.8 : 3.4 + r() * 2.2), Math.sin(a) * rad] as [number, number, number],
+          s: kind === 0 ? 1.45 - t * 0.85 + r() * 0.2 : 0.95 + r() * 0.55,
+          c: Math.floor(r() * leaf.length),
+        };
+      });
+      return { x, z, kind, s, rot: r() * 6.28, lean: (r() - 0.5) * 0.06, puffs };
+    });
+    return { trunk, branch, blob, leaf, bark, items };
+  }, [snow]);
+  useEffect(() => () => {
+    parts.trunk.dispose(); parts.branch.dispose(); parts.blob.dispose();
+    [...parts.leaf, parts.bark].forEach(m => m.dispose());
+  }, [parts]);
+  const nope = () => null;
   return (
     <group>
-      {geo.items.map((t, i) => (
-        <group key={i} position={[t.x, height(t.x, t.z), t.z]} scale={t.s}>
-          <mesh geometry={geo.trunk} material={material.trunk} position={[0, 0.8, 0]} raycast={() => null} />
-          <mesh geometry={geo.crown} material={material.crowns[Math.floor(t.tone * 3) % 3]} position={[0, 2.4, 0]} scale={[1.5, 1.25, 1.5]} raycast={() => null} />
+      {parts.items.map((t, i) => (
+        <group key={i} position={[t.x, height(t.x, t.z) - 0.1, t.z]} scale={t.s} rotation={[t.lean, t.rot, t.lean]}>
+          <mesh geometry={parts.trunk} material={parts.bark} raycast={nope} />
+          {t.kind === 1 && [[-0.9, 0.6], [0.9, -0.5], [0.2, 0.9]].map(([lx, lz], k) => (
+            <mesh key={k} geometry={parts.branch} material={parts.bark} position={[0, 2.4, 0]} rotation={[lz * 0.9, 0, -lx * 0.9]} scale={[1, 1.9, 1]} raycast={nope} />
+          ))}
+          {t.puffs.map((p, k) => (
+            <mesh key={k} geometry={parts.blob} material={parts.leaf[p.c]} position={p.p} scale={[p.s * 1.12, p.s * 0.92, p.s * 1.12]} raycast={nope} />
+          ))}
         </group>
       ))}
     </group>
   );
 }
 
-/** 잔잔하게 흐르는 옅은 바람결 선 */
 function WindStreaks({ still }: { still: boolean }) {
   const group = useRef<THREE.Group>(null);
   const lines = useMemo(() => {
@@ -497,39 +850,18 @@ function Airplane({ phase, still }: { phase: GardenPhase; still: boolean }) {
     }
   });
   const night = phase === "night";
+  const tex = useMemo(() => storyTexture(planeSvg()), []);
   return (
     <group ref={group} visible={false}>
-      {/* 기체: 진행 방향(+x)으로 길쭉하게, 날개는 옆으로 */}
+      {/* 동화책 그림 비행기: 카메라 쪽을 보는 판 */}
       <mesh raycast={() => null}>
-        <boxGeometry args={[9, 0.55, 0.55]} />
-        <meshBasicMaterial color={night ? "#0e1424" : "#f4f6f8"} fog={false} />
+        <planeGeometry args={[26, 13]} />
+        <meshBasicMaterial map={tex} color={night ? "#6c7ea3" : "#ffffff"} transparent alphaTest={0.3} side={THREE.DoubleSide} toneMapped={false} fog={false} />
       </mesh>
-      <mesh position={[0.5, 0, 0]} raycast={() => null}>
-        <boxGeometry args={[1.6, 0.1, 9]} />
-        <meshBasicMaterial color={night ? "#0e1424" : "#e4e8ec"} fog={false} />
-      </mesh>
-      <mesh position={[-3.8, 0.7, 0]} raycast={() => null}>
-        <boxGeometry args={[1, 1.4, 0.1]} />
-        <meshBasicMaterial color={night ? "#0e1424" : "#e4e8ec"} fog={false} />
-      </mesh>
-      <mesh ref={strobe} position={[0, 0.5, 0]} raycast={() => null}>
-        <sphereGeometry args={[0.5, 8, 8]} />
+      <mesh ref={strobe} position={[-4, 0.5, 0.2]} raycast={() => null}>
+        <sphereGeometry args={[night ? 0.5 : 0.001, 8, 8]} />
         <meshBasicMaterial color="#fff6e0" transparent fog={false} />
       </mesh>
-      <mesh position={[0.5, 0, 4.4]} raycast={() => null}>
-        <sphereGeometry args={[0.32, 8, 8]} />
-        <meshBasicMaterial color="#ff5a4f" fog={false} />
-      </mesh>
-      <mesh position={[0.5, 0, -4.4]} raycast={() => null}>
-        <sphereGeometry args={[0.32, 8, 8]} />
-        <meshBasicMaterial color="#59e08a" fog={false} />
-      </mesh>
-      {!night && (
-        <mesh position={[-34, 0, 0]} rotation={[0, 0, Math.PI / 2]} raycast={() => null}>
-          <cylinderGeometry args={[0.18, 0.9, 60, 6, 1, true]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={0.28} depthWrite={false} fog={false} />
-        </mesh>
-      )}
     </group>
   );
 }
@@ -585,81 +917,151 @@ function ChristmasTree({ still }: { still: boolean }) {
 }
 
 /** 구불구불 이어지는 오솔길 */
-function Path() {
-  const geo = useMemo(() => {
-    const g = new THREE.PlaneGeometry(3.2, 120, 2, 90);
-    g.rotateX(-Math.PI / 2);
-    const pos = g.getAttribute("position");
-    for (let i = 0; i < pos.count; i++) {
-      const z = pos.getZ(i) - 8;
-      const x = pos.getX(i) + pathX(z);
-      pos.setXYZ(i, x, height(x, z) + 0.04, z);
+/** 길 리본: 가운데가 살짝 볼록하고 가장자리는 풀색으로 번지며, 끝은 부드럽게 좁아져 사라짐 */
+function buildRibbon(pts: { x: number; z: number; w: number }[], snow: boolean) {
+  const U = [-1, -0.72, -0.4, 0, 0.4, 0.72, 1];
+  const mid = new THREE.Color(snow ? "#f3f6f9" : "#d8c8a4");
+  const side = new THREE.Color(snow ? "#eaf0f6" : "#c7b88f");
+  const rim = new THREE.Color(snow ? "#e6edf4" : "#a9b363");
+  const pos: number[] = [];
+  const col: number[] = [];
+  const idx: number[] = [];
+  const uvs: number[] = [];
+  let run = 0;
+  const tmp = new THREE.Color();
+  pts.forEach((pt, i) => {
+    if (i > 0) run += Math.hypot(pt.x - pts[i - 1].x, pt.z - pts[i - 1].z);
+    const a = pts[Math.max(0, i - 1)];
+    const b = pts[Math.min(pts.length - 1, i + 1)];
+    const dx = b.x - a.x;
+    const dz = b.z - a.z;
+    const len = Math.hypot(dx, dz) || 1;
+    const nx = -dz / len;
+    const nz = dx / len;
+    U.forEach(u => {
+      const x = pt.x + nx * pt.w * u;
+      const z = pt.z + nz * pt.w * u;
+      const crown = 0.07 * (1 - u * u);
+      pos.push(x, height(x, z) + 0.1 + crown, z);
+      const au = Math.abs(u);
+      if (au < 0.5) tmp.copy(mid).lerp(side, au * 1.2);
+      else tmp.copy(side).lerp(rim, (au - 0.5) * 2);
+      col.push(tmp.r, tmp.g, tmp.b);
+      uvs.push(u * pt.w * 0.14, run * 0.14);
+    });
+    if (i < pts.length - 1) {
+      for (let k = 0; k < U.length - 1; k++) {
+        const q = i * U.length + k;
+        idx.push(q, q + U.length, q + 1, q + 1, q + U.length, q + U.length + 1);
+      }
     }
-    g.computeVertexNormals();
-    return g;
+  });
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+  g.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+  g.setIndex(idx);
+  g.computeVertexNormals();
+  return g;
+}
+const smooth = (a: number, b: number, v: number) => { const t = THREE.MathUtils.clamp((v - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+/** 큰길의 반폭: 끝(안쪽)에서 부드럽게 좁아짐 */
+const MAIN_END = -48;
+const mainHalf = (z: number) => (z < MAIN_END ? 0 : 1.75);
+
+/** 중심 c, 반지름 r인 고리 길의 점들 (from 쪽에서 시작해 한 바퀴) */
+function ringPoints(c: Pt, r: number, from: Pt, w: number) {
+  const a0 = Math.atan2(from.z - c.z, from.x - c.x);
+  const pts: { x: number; z: number; w: number }[] = [];
+  const N = 56;
+  for (let i = 0; i <= N; i++) {
+    const a = a0 + (i / N) * Math.PI * 2;
+    pts.push({ x: c.x + Math.cos(a) * r, z: c.z + Math.sin(a) * r, w });
+  }
+  return pts;
+}
+
+let PATH_TEX: THREE.Texture | null = null;
+function getPathTex() {
+  if (!PATH_TEX) PATH_TEX = paintTexture("path", 1, 1);
+  return PATH_TEX;
+}
+
+function Path({ snow }: { snow: boolean }) {
+  const pathTex = getPathTex();
+  const geo = useMemo(() => {
+    const pts: { x: number; z: number; w: number }[] = [];
+    for (let z = 78; z >= MAIN_END; z -= 1.25) pts.push({ x: pathX(z), z, w: 1.75 });
+    return buildRibbon(pts, snow);
+  }, [snow]);
+  const loop = useMemo(() => buildRibbon(ringPoints(MAIN_LOOP.c, MAIN_LOOP.r, { x: pathX(MAIN_END), z: MAIN_END }, 1.25), snow), [snow]);
+  const stones = useRef<THREE.InstancedMesh>(null);
+  const STONES = 420;
+  useEffect(() => {
+    const m = stones.current;
+    if (!m) return;
+    const r = rng(61);
+    const d = new THREE.Object3D();
+    const col = new THREE.Color();
+    for (let i = 0; i < STONES; i++) {
+      const z = 56 - r() * 140;
+      const side = r() < 0.5 ? -1 : 1;
+      const hw = mainHalf(z);
+      if (hw < 0.5) { d.scale.setScalar(0.0001); d.position.set(0, -50, 0); d.updateMatrix(); m.setMatrixAt(i, d.matrix); continue; }
+      const x = pathX(z) + side * (hw * 0.9 + r() * 0.55);
+      d.position.set(x, height(x, z) + 0.05, z);
+      d.rotation.set(r() * 3, r() * 6, r() * 3);
+      const sc = 0.06 + r() * 0.1;
+      d.scale.set(sc * (1 + r() * 0.5), sc * 0.7, sc);
+      d.updateMatrix();
+      m.setMatrixAt(i, d.matrix);
+      col.setHSL(0.09 + r() * 0.03, 0.12, 0.62 + r() * 0.18);
+      m.setColorAt(i, col);
+    }
+    m.instanceMatrix.needsUpdate = true;
+    if (m.instanceColor) m.instanceColor.needsUpdate = true;
   }, []);
-  useEffect(() => () => geo.dispose(), [geo]);
+  useEffect(() => () => { geo.dispose(); loop.dispose(); }, [geo, loop]);
   return (
-    <mesh geometry={geo} raycast={() => null}>
-      <meshStandardMaterial color="#cdb998" roughness={1} />
-    </mesh>
+    <group>
+      <mesh geometry={loop} userData={{ ground: true }} raycast={() => null}>
+        <meshStandardMaterial vertexColors map={pathTex} polygonOffset polygonOffsetFactor={-6} polygonOffsetUnits={-6} roughness={1} side={THREE.DoubleSide} emissive={snow ? "#dce8f4" : "#000000"} emissiveIntensity={snow ? 0.3 : 0} />
+      </mesh>
+      <mesh geometry={geo} userData={{ ground: true }} raycast={() => null}>
+        <meshStandardMaterial vertexColors map={pathTex} polygonOffset polygonOffsetFactor={-6} polygonOffsetUnits={-6} roughness={1} side={THREE.DoubleSide} emissive={snow ? "#dce8f4" : "#000000"} emissiveIntensity={snow ? 0.3 : 0} />
+      </mesh>
+      <instancedMesh ref={stones} args={[undefined, undefined, STONES]} frustumCulled={false} raycast={() => null}>
+        <icosahedronGeometry args={[1, 0]} />
+        <meshStandardMaterial roughness={1} flatShading />
+      </instancedMesh>
+    </group>
   );
 }
 
 /** 사진 속 같은 따뜻한 나무 풍차: 위로 갈수록 좁은 몸통, 원뿔 지붕, 격자 날개 네 장 */
 function Windmill({ still }: { still: boolean }) {
-  const sails = useRef<THREE.Group>(null);
-  useFrame((_, delta) => {
-    if (!still && sails.current) sails.current.rotation.z -= Math.min(delta, 0.05) * 0.35;
+  const hub = useRef<THREE.Group>(null);
+  const sails = useRef<THREE.Mesh>(null);
+  const tex = useMemo(() => storyTexture(sailsSvg()), []);
+  useFrame(({ camera }, delta) => {
+    const g = hub.current;
+    if (g && g.parent) {
+      // 카메라 쪽으로 1.6칸 내밀어 몸통 그림 앞에 확실히 그려지게 함
+      const dx = camera.position.x - g.parent.position.x;
+      const dz = camera.position.z - g.parent.position.z;
+      const len = Math.hypot(dx, dz) || 1;
+      g.position.set((dx / len) * 1.6, 12.1, (dz / len) * 1.6);
+      g.rotation.y = Math.atan2(dx, dz);
+    }
+    if (!still && sails.current) sails.current.rotation.z -= Math.min(delta, 0.05) * 0.4;
   });
-  const wood = "#8a5a36";
-  const woodDark = "#6b4326";
+  // 풍차 몸통 그림은 StoryProps가 세움. 여기는 도는 날개 그림만(몸통 앞쪽 허브 높이)
   return (
-    <group>
-      <mesh position={[0, 4.2, 0]} raycast={() => null}>
-        <cylinderGeometry args={[1.9, 3.0, 8.4, 8]} />
-        <meshStandardMaterial color={wood} roughness={0.95} flatShading />
+    <group ref={hub} position={[0, 12.1, 1.6]}>
+      <mesh ref={sails} raycast={() => null} userData={{ noShadow: true }} renderOrder={5}>
+        <planeGeometry args={[14, 14]} />
+        <meshBasicMaterial map={tex} transparent alphaTest={0.3} side={THREE.DoubleSide} toneMapped={false} />
       </mesh>
-      {/* 널빤지 띠 */}
-      {[1.6, 4.0, 6.4].map(y => (
-        <mesh key={y} position={[0, y, 0]} raycast={() => null}>
-          <cylinderGeometry args={[2.62 - y * 0.16, 2.72 - y * 0.16, 0.14, 8]} />
-          <meshStandardMaterial color={woodDark} roughness={1} flatShading />
-        </mesh>
-      ))}
-      <mesh position={[0, 9.7, 0]} raycast={() => null}>
-        <coneGeometry args={[2.5, 2.8, 8]} />
-        <meshStandardMaterial color="#5a3b24" roughness={1} flatShading />
-      </mesh>
-      <mesh position={[0, 1.1, 2.95]} raycast={() => null}>
-        <boxGeometry args={[1.1, 2.1, 0.2]} />
-        <meshStandardMaterial color="#3d2615" roughness={1} />
-      </mesh>
-      {/* 날개: 가운데 축에 네 장, 각 장은 살대 + 가로살로 격자 */}
-      <group position={[0, 8.6, 3.0]} ref={sails}>
-        {[0, 1, 2, 3].map(i => (
-          <group key={i} rotation={[0, 0, (i * Math.PI) / 2 + 0.5]}>
-            <mesh position={[0, 3.6, 0]} raycast={() => null}>
-              <boxGeometry args={[0.16, 7.2, 0.16]} />
-              <meshStandardMaterial color={woodDark} roughness={1} />
-            </mesh>
-            <mesh position={[0.55, 4.4, 0]} raycast={() => null}>
-              <boxGeometry args={[1.1, 5.4, 0.05]} />
-              <meshStandardMaterial color="#e9d9b4" roughness={1} transparent opacity={0.55} side={THREE.DoubleSide} />
-            </mesh>
-            {[1.4, 2.4, 3.4, 4.4, 5.4, 6.4].map(y => (
-              <mesh key={y} position={[0.55, y, 0]} raycast={() => null}>
-                <boxGeometry args={[1.1, 0.07, 0.09]} />
-                <meshStandardMaterial color={woodDark} roughness={1} />
-              </mesh>
-            ))}
-          </group>
-        ))}
-        <mesh position={[0, 0, 0.2]} raycast={() => null}>
-          <sphereGeometry args={[0.38, 10, 8]} />
-          <meshStandardMaterial color="#3d2615" roughness={0.8} />
-        </mesh>
-      </group>
     </group>
   );
 }
@@ -667,33 +1069,17 @@ function Windmill({ still }: { still: boolean }) {
 /** 흰 몸통에 빨간 띠를 두른 등대. 밤엔 꼭대기 불빛이 따뜻하게 켜지고 빛줄기가 천천히 돎 */
 function Lighthouse({ phase, still }: { phase: GardenPhase; still: boolean }) {
   const night = phase === "night" || phase === "sunset";
-  const bands = [0, 1, 2, 3];
+  const dot = useSoftDot();
+  useEffect(() => () => dot.dispose(), [dot]);
+  // 몸통 그림은 StoryProps가 세움. 여기는 밤의 등불과 빛줄기만
   return (
     <group>
-      {bands.map(i => {
-        const y0 = i * 4.2;
-        const r0 = 2.6 - i * 0.28;
-        const r1 = 2.6 - (i + 1) * 0.28;
-        return (
-          <mesh key={i} position={[0, y0 + 2.1, 0]} raycast={() => null}>
-            <cylinderGeometry args={[r1, r0, 4.2, 14]} />
-            <meshStandardMaterial color={i % 2 === 0 ? "#f6efe2" : "#d9503f"} roughness={0.9} />
-          </mesh>
-        );
-      })}
-      <mesh position={[0, 16.9, 0]} raycast={() => null}>
-        <cylinderGeometry args={[2.1, 1.7, 0.4, 14]} />
-        <meshStandardMaterial color="#3b3a3a" roughness={0.9} />
-      </mesh>
-      <mesh position={[0, 18.1, 0]} raycast={() => null}>
-        <cylinderGeometry args={[1.1, 1.2, 2.0, 12]} />
-        <meshStandardMaterial color={night ? "#ffe2a0" : "#e8f1f4"} emissive={night ? "#ffcf70" : "#000000"} emissiveIntensity={night ? 1.4 : 0} transparent opacity={0.92} />
-      </mesh>
-      <mesh position={[0, 19.8, 0]} raycast={() => null}>
-        <coneGeometry args={[1.6, 1.8, 12]} />
-        <meshStandardMaterial color="#d9503f" roughness={0.9} />
-      </mesh>
-      <group position={[0, 18.1 - 4.9 * 0.5, 0]} scale={0.5}>
+      {night && (
+        <sprite position={[0, 21.3, 0.5]} scale={[8, 8, 1]} raycast={() => null}>
+          <spriteMaterial map={dot} color="#ffd58a" transparent opacity={0.8} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
+        </sprite>
+      )}
+      <group position={[0, 21.3, 0]} scale={0.6}>
         <LighthouseBeam night={phase === "night"} reducedMotion={still} />
       </group>
     </group>
@@ -701,63 +1087,135 @@ function Lighthouse({ phase, still }: { phase: GardenPhase; still: boolean }) {
 }
 
 const WOOD = "#9a6a42";
-const WOOD_DARK = "#6e4a2c";
+
 const FONT = '"Pretendard","Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif';
 
 /** 글자를 그려 나무 팻말 판에 붙임 */
-function useSignTexture(text: string, sub: string, bg: string) {
-  return useMemo(() => {
+function roundRectPath(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function roundedShape(w: number, h: number, r: number) {
+  const s = new THREE.Shape();
+  const x = -w / 2;
+  const y = -h / 2;
+  s.moveTo(x + r, y);
+  s.lineTo(x + w - r, y);
+  s.quadraticCurveTo(x + w, y, x + w, y + r);
+  s.lineTo(x + w, y + h - r);
+  s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  s.lineTo(x + r, y + h);
+  s.quadraticCurveTo(x, y + h, x, y + h - r);
+  s.lineTo(x, y + r);
+  s.quadraticCurveTo(x, y, x + r, y);
+  return s;
+}
+
+/** 구역 안내 간판: 둥글고 부드러운 손그림 느낌의 나무 팻말 */
+function ZoneSign({ at, face, name, color, count, still }: { at: Pt; face: number; name: string; color: string; count: number; still: boolean }) {
+  const tex = useMemo(() => {
     const c = document.createElement("canvas");
     c.width = 1024;
-    c.height = 320;
+    c.height = 512;
     const ctx = c.getContext("2d")!;
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, 1024, 320);
-    ctx.strokeStyle = "rgba(90,58,30,.6)";
-    ctx.lineWidth = 14;
-    ctx.strokeRect(10, 10, 1004, 300);
-    ctx.fillStyle = "#3a2714";
+    // 따뜻한 크림 바탕, 위에서 아래로 번지는 구역 색
+    roundRectPath(ctx, 0, 0, 1024, 512, 90);
+    ctx.clip();
+    const g = ctx.createLinearGradient(0, 0, 0, 512);
+    g.addColorStop(0, "#fff7e0");
+    g.addColorStop(1, "#f6e6bd");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 1024, 512);
+    const band = ctx.createLinearGradient(0, 0, 0, 190);
+    band.addColorStop(0, color);
+    band.addColorStop(1, "rgba(255,247,224,0)");
+    ctx.globalAlpha = 0.55;
+    ctx.fillStyle = band;
+    ctx.fillRect(0, 0, 1024, 190);
+    ctx.globalAlpha = 1;
+    // 모서리의 작은 잎과 꽃
+    const leaf = (x: number, y: number, a: number) => {
+      ctx.save(); ctx.translate(x, y); ctx.rotate(a);
+      ctx.fillStyle = "#8fb06a";
+      ctx.beginPath(); ctx.ellipse(0, 0, 38, 15, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    };
+    leaf(70, 70, -0.6); leaf(105, 48, 0.2); leaf(954, 70, 0.6); leaf(919, 48, -0.2);
+    ctx.fillStyle = "#ffffff";
+    for (const [x, y] of [[48, 110], [976, 110]]) {
+      for (let k = 0; k < 5; k++) { ctx.beginPath(); ctx.arc(x + Math.cos(k * 1.2566) * 14, y + Math.sin(k * 1.2566) * 14, 11, 0, Math.PI * 2); ctx.fill(); }
+      ctx.fillStyle = "#f6c640"; ctx.beginPath(); ctx.arc(x, y, 9, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = "#ffffff";
+    }
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    let size = sub ? 112 : 128;
-    ctx.font = `700 ${size}px ${FONT}`;
-    while (ctx.measureText(text).width > 900 && size > 40) {
-      size -= 6;
-      ctx.font = `700 ${size}px ${FONT}`;
-    }
-    ctx.fillText(text, 512, sub ? 120 : 165);
-    if (sub) {
-      ctx.font = `500 54px ${FONT}`;
-      ctx.fillStyle = "#5a4128";
-      ctx.fillText(sub, 512, 240);
-    }
+    ctx.fillStyle = "#5b4128";
+    let size = 150;
+    ctx.font = `800 ${size}px ${FONT}`;
+    while (ctx.measureText(name).width > 780 && size > 50) { size -= 6; ctx.font = `800 ${size}px ${FONT}`; }
+    ctx.fillText(name, 512, 230);
+    // 이름 밑 물결 줄
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 9;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    for (let x = 330; x <= 694; x += 4) { const y = 322 + Math.sin((x - 330) / 24) * 6; if (x === 330) ctx.moveTo(x, y); else ctx.lineTo(x, y); }
+    ctx.stroke();
+    ctx.fillStyle = "#7a6140";
+    ctx.font = `600 58px ${FONT}`;
+    ctx.fillText(count > 0 ? `바람개비 ${count}개가 돌고 있어요` : "바람을 기다리고 있어요", 512, 413);
     const t = new THREE.CanvasTexture(c);
     t.colorSpace = THREE.SRGBColorSpace;
     t.anisotropy = 4;
     return t;
-  }, [text, sub, bg]);
-}
-
-/** 이야기를 알려 주는 팻말 (보는 쪽을 향함) */
-function Sign({ at, face, text, sub = "", color, scale = 1 }: { at: Pt; face: number; text: string; sub?: string; color: string; scale?: number }) {
-  const tex = useSignTexture(text, sub, color);
-  useEffect(() => () => tex.dispose(), [tex]);
+  }, [name, color, count]);
+  const frame = useMemo(() => new THREE.ExtrudeGeometry(roundedShape(4.7, 2.5, 0.55), { depth: 0.16, bevelEnabled: true, bevelThickness: 0.06, bevelSize: 0.06, bevelSegments: 3, curveSegments: 10 }), []);
+  const face2 = useMemo(() => new THREE.ShapeGeometry(roundedShape(4.4, 2.2, 0.5), 10), []);
+  useEffect(() => () => { tex.dispose(); frame.dispose(); face2.dispose(); }, [tex, frame, face2]);
+  // 로컬 UV: 도형 좌표 → 0..1
+  useMemo(() => {
+    const p = face2.getAttribute("position");
+    const uv = face2.getAttribute("uv");
+    for (let i = 0; i < p.count; i++) uv.setXY(i, p.getX(i) / 4.4 + 0.5, p.getY(i) / 2.2 + 0.5);
+    uv.needsUpdate = true;
+  }, [face2]);
   return (
-    <group position={[at.x, height(at.x, at.z), at.z]} rotation={[0, face, 0]} scale={scale}>
-      {[-1.45, 1.45].map(x => (
-        <mesh key={x} position={[x, 1.4, -0.05]} raycast={() => null}>
-          <boxGeometry args={[0.16, 2.8, 0.16]} />
-          <meshStandardMaterial color={WOOD_DARK} roughness={1} />
+    <group position={[at.x, height(at.x, at.z), at.z]} rotation={[0, face, 0]} scale={0.9}>
+      {/* 굵은 기둥 하나, 위에 안전하게 꽂힌 작은 바람개비 */}
+      <mesh position={[0, 1.7, -0.25]} raycast={() => null}>
+        <cylinderGeometry args={[0.2, 0.28, 3.4, 10]} />
+        <meshStandardMaterial color="#a77c52" roughness={1} />
+      </mesh>
+      <mesh position={[0, 3.55, -0.25]} raycast={() => null}>
+        <sphereGeometry args={[0.24, 10, 8]} />
+        <meshStandardMaterial color="#a77c52" roughness={1} />
+      </mesh>
+      <mesh position={[0, 3.9, -0.25]} raycast={() => null}>
+        <cylinderGeometry args={[0.03, 0.035, 0.8, 6]} />
+        <meshStandardMaterial color="#b78c60" roughness={1} />
+      </mesh>
+      <MiniPinwheel at={[0, 4.4, -0.17]} color={color} scale={1.05} still={still} />
+      {/* 기둥에 달린 둥근 팻말 */}
+      <group position={[0, 2.35, 0]}>
+        <mesh geometry={frame} position={[0, 0, -0.18]} raycast={() => null}>
+          <meshStandardMaterial color="#c79a68" roughness={1} />
+        </mesh>
+        <mesh geometry={face2} position={[0, 0, 0.12]} raycast={() => null}>
+          <meshStandardMaterial map={tex} roughness={0.95} />
+        </mesh>
+      </group>
+      {/* 발치의 작은 꽃 */}
+      {[[-0.7, 0.2, 0.1], [0.6, 0.3, 0.15], [0.2, -0.4, 0.2], [-0.35, -0.5, 0.1]].map(([x, z, h], i) => (
+        <mesh key={i} position={[x, 0.18 + h, z + 0.35]} raycast={() => null}>
+          <sphereGeometry args={[0.14, 8, 6]} />
+          <meshStandardMaterial color={["#ffb7c9", "#fff0b8", "#ffffff", "#d9c4f5"][i]} roughness={0.9} emissive={["#ffb7c9", "#fff0b8", "#ffffff", "#d9c4f5"][i]} emissiveIntensity={0.15} />
         </mesh>
       ))}
-      <mesh position={[0, 2.25, -0.06]} raycast={() => null}>
-        <boxGeometry args={[3.5, 1.15, 0.1]} />
-        <meshStandardMaterial color={WOOD} roughness={1} />
-      </mesh>
-      <mesh position={[0, 2.25, 0.0]} raycast={() => null}>
-        <planeGeometry args={[3.3, 1.02]} />
-        <meshStandardMaterial map={tex} roughness={0.9} />
-      </mesh>
     </group>
   );
 }
@@ -786,97 +1244,73 @@ function MiniPinwheel({ at, color = "#ff8a65", scale = 1, still }: { at: [number
 function Gate({ night, still, dot }: { night: boolean; still: boolean; dot: THREE.Texture }) {
   const cx = pathX(GATE_Z);
   const y = height(cx, GATE_Z);
-  const tex = useSignTexture("실종자들의 정원", "천천히 걸으며 기억해 주세요", "#f4e3bf");
-  useEffect(() => () => tex.dispose(), [tex]);
+  const tex = useMemo(() => {
+    const c = document.createElement("canvas");
+    c.width = 1024;
+    c.height = 320;
+    const ctx = c.getContext("2d")!;
+    roundRectPath(ctx, 0, 0, 1024, 320, 70);
+    ctx.clip();
+    const g = ctx.createLinearGradient(0, 0, 0, 320);
+    g.addColorStop(0, "#fff7e0");
+    g.addColorStop(1, "#f6e6bd");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 1024, 320);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#5b4128";
+    ctx.font = `800 112px ${FONT}`;
+    ctx.fillText("실종자들의 정원", 512, 130);
+    ctx.fillStyle = "#7a6140";
+    ctx.font = `600 52px ${FONT}`;
+    ctx.fillText("천천히 걸으며 기억해 주세요", 512, 245);
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.anisotropy = 4;
+    return t;
+  }, []);
+  const gateTex = useMemo(() => storyTexture(gateSvg()), []);
+  const frame = useMemo(() => new THREE.ExtrudeGeometry(roundedShape(6.5, 2.1, 0.6), { depth: 0.16, bevelEnabled: true, bevelThickness: 0.06, bevelSize: 0.06, bevelSegments: 3, curveSegments: 10 }), []);
+  const face = useMemo(() => {
+    const g = new THREE.ShapeGeometry(roundedShape(6.2, 1.8, 0.55), 10);
+    const p = g.getAttribute("position");
+    const uv = g.getAttribute("uv");
+    for (let i = 0; i < p.count; i++) uv.setXY(i, p.getX(i) / 6.2 + 0.5, p.getY(i) / 1.8 + 0.5);
+    return g;
+  }, []);
+  useEffect(() => () => { tex.dispose(); frame.dispose(); face.dispose(); }, [tex, frame, face]);
   return (
     <group>
       <group position={[cx, y, GATE_Z]}>
-        {[-4, 4].map(x => (
-          <group key={x} position={[x, 0, 0]}>
-            <mesh position={[0, 3, 0]} raycast={() => null}>
-              <boxGeometry args={[0.55, 6, 0.55]} />
-              <meshStandardMaterial color={WOOD} roughness={1} />
-            </mesh>
-            <mesh position={[0, 6.15, 0]} raycast={() => null}>
-              <boxGeometry args={[0.85, 0.3, 0.85]} />
-              <meshStandardMaterial color={WOOD_DARK} roughness={1} />
-            </mesh>
-            <MiniPinwheel at={[0, 7.1, 0.1]} color={x < 0 ? "#ff8a65" : "#6fd0c0"} scale={1.5} still={still} />
-          </group>
-        ))}
-        <mesh position={[0, 5.7, 0]} raycast={() => null}>
-          <boxGeometry args={[9.4, 0.45, 0.7]} />
-          <meshStandardMaterial color={WOOD_DARK} roughness={1} />
+        <mesh position={[0, 5.4, 0]} raycast={() => null} userData={{ noShadow: true }}>
+          <planeGeometry args={[14.85, 10.8]} />
+          <meshBasicMaterial map={gateTex} transparent alphaTest={0.3} side={THREE.DoubleSide} toneMapped={false} />
         </mesh>
-        <mesh position={[0, 6.35, 0]} rotation={[0, 0, 0]} raycast={() => null}>
-          <boxGeometry args={[10.2, 0.28, 1.5]} />
-          <meshStandardMaterial color="#b4543a" roughness={0.95} />
-        </mesh>
-        {/* 걸린 팻말 */}
-        <mesh position={[0, 4.35, 0.02]} raycast={() => null}>
-          <boxGeometry args={[6.3, 1.7, 0.12]} />
-          <meshStandardMaterial color={WOOD} roughness={1} />
-        </mesh>
-        <mesh position={[0, 4.35, 0.09]} raycast={() => null}>
-          <planeGeometry args={[6.0, 1.5]} />
-          <meshStandardMaterial map={tex} roughness={0.9} />
-        </mesh>
-        {[-2.4, 2.4].map(x => (
-          <mesh key={x} position={[x, 5.3, 0.02]} raycast={() => null}>
-            <cylinderGeometry args={[0.035, 0.035, 0.6, 5]} />
-            <meshStandardMaterial color={WOOD_DARK} />
+        <group position={[0, 5.75, 0.12]}>
+          <mesh geometry={frame} position={[0, 0, -0.18]} raycast={() => null}>
+            <meshStandardMaterial color="#c79a68" roughness={1} />
           </mesh>
-        ))}
+          <mesh geometry={face} position={[0, 0, 0.12]} raycast={() => null}>
+            <meshStandardMaterial map={tex} roughness={0.95} />
+          </mesh>
+        </group>
         {/* 문 양옆 등 */}
         {[-3.5, 3.5].map(x => (
-          <sprite key={x} position={[x, 4.9, 0.5]} scale={[night ? 3.2 : 0.01, night ? 3.2 : 0.01, 1]} raycast={() => null}>
+          <sprite key={x} position={[x, 4.0, 0.5]} scale={[night ? 3.2 : 0.01, night ? 3.2 : 0.01, 1]} raycast={() => null}>
             <spriteMaterial map={dot} color="#ffd58a" transparent opacity={0.85} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
           </sprite>
         ))}
       </group>
-      {/* 낮은 울타리 */}
-      {[-1, 1].map(side =>
-        [0, 1, 2, 3, 4, 5].map(i => {
-          const x = cx + side * (5.2 + i * 1.5);
-          return (
-            <group key={`${side}${i}`} position={[x, height(x, GATE_Z), GATE_Z]}>
-              <mesh position={[0, 0.55, 0]} raycast={() => null}>
-                <boxGeometry args={[0.14, 1.1, 0.14]} />
-                <meshStandardMaterial color={WOOD} roughness={1} />
-              </mesh>
-              <mesh position={[side * -0.75, 0.85, 0]} raycast={() => null}>
-                <boxGeometry args={[1.5, 0.1, 0.07]} />
-                <meshStandardMaterial color={WOOD_DARK} roughness={1} />
-              </mesh>
-              <mesh position={[side * -0.75, 0.45, 0]} raycast={() => null}>
-                <boxGeometry args={[1.5, 0.1, 0.07]} />
-                <meshStandardMaterial color={WOOD_DARK} roughness={1} />
-              </mesh>
-            </group>
-          );
-        }),
-      )}
     </group>
   );
 }
 
-/** 길가 가로등: 밤엔 따뜻하게 빛남 */
 function LampPost({ at, night, dot }: { at: Pt; night: boolean; dot: THREE.Texture }) {
+  // 기둥 그림은 StoryProps가 세움. 여기는 밤의 불빛만
+  if (!night) return null;
   return (
     <group position={[at.x, height(at.x, at.z), at.z]}>
-      <mesh position={[0, 1.6, 0]} raycast={() => null}>
-        <cylinderGeometry args={[0.06, 0.09, 3.2, 8]} />
-        <meshStandardMaterial color="#4b3a2c" roughness={0.9} />
-      </mesh>
-      <mesh position={[0, 3.35, 0]} raycast={() => null}>
-        <sphereGeometry args={[0.26, 12, 10]} />
-        <meshStandardMaterial color="#ffe6b0" emissive="#ffc766" emissiveIntensity={night ? 2.4 : 0.15} />
-      </mesh>
-      <mesh position={[0, 3.7, 0]} raycast={() => null}>
-        <coneGeometry args={[0.34, 0.26, 10]} />
-        <meshStandardMaterial color="#4b3a2c" roughness={0.9} />
-      </mesh>
-      <sprite position={[0, 3.35, 0]} scale={[night ? 3.4 : 0.01, night ? 3.4 : 0.01, 1]} raycast={() => null}>
+      <sprite position={[0, 3.7, 0.2]} scale={[3.4, 3.4, 1]} raycast={() => null}>
         <spriteMaterial map={dot} color="#ffd18a" transparent opacity={0.75} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
       </sprite>
     </group>
@@ -885,85 +1319,64 @@ function LampPost({ at, night, dot }: { at: Pt; night: boolean; dot: THREE.Textu
 
 /** 쉬어 가는 벤치 (길 쪽을 향함) */
 function Bench({ at, face }: { at: Pt; face: number }) {
+  const seat = "#c99a62";
+  const frame = "#8f6a43";
   return (
-    <group position={[at.x, height(at.x, at.z), at.z]} rotation={[0, face, 0]}>
-      <mesh position={[0, 0.5, 0]} raycast={() => null}>
-        <boxGeometry args={[2, 0.12, 0.6]} />
-        <meshStandardMaterial color={WOOD} roughness={1} />
-      </mesh>
-      <mesh position={[0, 0.95, -0.27]} rotation={[-0.12, 0, 0]} raycast={() => null}>
-        <boxGeometry args={[2, 0.5, 0.08]} />
-        <meshStandardMaterial color={WOOD} roughness={1} />
-      </mesh>
-      {[-0.85, 0.85].map(x => (
-        <mesh key={x} position={[x, 0.25, 0]} raycast={() => null}>
-          <boxGeometry args={[0.1, 0.5, 0.5]} />
-          <meshStandardMaterial color={WOOD_DARK} roughness={1} />
+    <group position={[at.x, height(at.x, at.z) - 0.02, at.z]} rotation={[0, face, 0]} scale={1.6}>
+      {/* 좌판: 나무판 세 장 */}
+      {[-0.19, 0, 0.19].map(z => (
+        <mesh key={z} position={[0, 0.52, z]} raycast={() => null}>
+          <boxGeometry args={[2.2, 0.07, 0.17]} />
+          <meshStandardMaterial color={seat} roughness={1} />
         </mesh>
+      ))}
+      {/* 등받이: 약간 뒤로 눕힌 나무판 세 장 */}
+      {[0.7, 0.86, 1.02].map(y => (
+        <mesh key={y} position={[0, y, -0.3 - (y - 0.7) * 0.18]} rotation={[-0.2, 0, 0]} raycast={() => null}>
+          <boxGeometry args={[2.2, 0.12, 0.04]} />
+          <meshStandardMaterial color={seat} roughness={1} />
+        </mesh>
+      ))}
+      {/* 양옆 다리·팔걸이 */}
+      {[-1, 1].map(side => (
+        <group key={side} position={[side * 1.02, 0, 0]}>
+          <mesh position={[0, 0.25, 0.22]} raycast={() => null}>
+            <boxGeometry args={[0.09, 0.5, 0.09]} />
+            <meshStandardMaterial color={frame} roughness={1} />
+          </mesh>
+          <mesh position={[0, 0.5, -0.24]} rotation={[-0.2, 0, 0]} raycast={() => null}>
+            <boxGeometry args={[0.09, 1.04, 0.09]} />
+            <meshStandardMaterial color={frame} roughness={1} />
+          </mesh>
+          <mesh position={[0, 0.75, -0.02]} raycast={() => null}>
+            <boxGeometry args={[0.1, 0.05, 0.56]} />
+            <meshStandardMaterial color={frame} roughness={1} />
+          </mesh>
+          <mesh position={[0, 0.62, 0.22]} raycast={() => null}>
+            <boxGeometry args={[0.07, 0.25, 0.07]} />
+            <meshStandardMaterial color={frame} roughness={1} />
+          </mesh>
+        </group>
       ))}
     </group>
   );
 }
 
 /** 아이들의 길: 무지개 아치와 양쪽 작은 바람개비 */
+/** 아이들의 길: 파스텔 무지개 아치 (양쪽 발치에 구름 뭉치) */
 function RainbowArch({ still }: { still: boolean }) {
-  const colors = ["#ff8a65", "#ffd166", "#6fd0c0", "#74b6ff"];
+  const tex = useMemo(() => storyTexture(rainbowSvg()), []);
+  void still;
+  // 걸어서 통과하는 그림 무지개: 양쪽 발치는 구름
   return (
-    <group>
-      {colors.map((c, i) => (
-        <mesh key={c} position={[0, 0.2, 0]} raycast={() => null}>
-          <torusGeometry args={[3.9 - i * 0.42, 0.17, 8, 36, Math.PI]} />
-          <meshStandardMaterial color={c} roughness={0.7} />
-        </mesh>
-      ))}
-      {[-3.9, 3.9].map((x, i) => (
-        <MiniPinwheel key={x} at={[x, 1.1, 0.2]} color={i ? "#ffd166" : "#ff7aa8"} scale={1.25} still={still} />
-      ))}
-      <mesh position={[0, 0.06, 0]} raycast={() => null}>
-        <cylinderGeometry args={[4.6, 4.9, 0.14, 24]} />
-        <meshStandardMaterial color="#e9d8a8" roughness={1} />
-      </mesh>
-    </group>
+    <mesh position={[0, 2.8, 0]} raycast={() => null} userData={{ noShadow: true }}>
+      <planeGeometry args={[11, 6.1]} />
+      <meshBasicMaterial map={tex} transparent alphaTest={0.3} side={THREE.DoubleSide} toneMapped={false} />
+    </mesh>
   );
 }
 
-/** 바다 건너 길: 받침대 위 지구본 */
-function Globe({ still }: { still: boolean }) {
-  const spin = useRef<THREE.Group>(null);
-  useFrame((_, dt) => {
-    if (!still && spin.current) spin.current.rotation.y += Math.min(dt, 0.05) * 0.25;
-  });
-  return (
-    <group>
-      <mesh position={[0, 0.5, 0]} raycast={() => null}>
-        <cylinderGeometry args={[1.5, 1.9, 1, 14]} />
-        <meshStandardMaterial color="#d8c9a8" roughness={1} />
-      </mesh>
-      <group position={[0, 3.2, 0]} rotation={[0, 0, 0.4]}>
-        <group ref={spin}>
-          <mesh raycast={() => null}>
-            <sphereGeometry args={[1.75, 24, 18]} />
-            <meshStandardMaterial color="#79b9de" roughness={0.7} />
-          </mesh>
-          {[[0.6, 0.9, 0.9, 0.9], [-0.9, 0.2, 1.3, 0.6], [0.2, -0.9, 1.4, 0.7], [-0.4, 1.4, 0.5, 0.5]].map(([a, b, c, d], i) => (
-            <mesh key={i} position={[Math.sin(a) * 1.58, Math.sin(b) * 1.2, Math.cos(a) * 1.58 * Math.cos(c * 0.3)]} scale={d} raycast={() => null}>
-              <icosahedronGeometry args={[0.55, 0]} />
-              <meshStandardMaterial color="#8fbf6a" roughness={1} flatShading />
-            </mesh>
-          ))}
-        </group>
-        <mesh rotation={[Math.PI / 2, 0, 0]} raycast={() => null}>
-          <torusGeometry args={[2.05, 0.05, 8, 40]} />
-          <meshStandardMaterial color="#d9b25b" metalness={0.4} roughness={0.5} />
-        </mesh>
-        <mesh raycast={() => null}>
-          <torusGeometry args={[2.05, 0.05, 8, 40]} />
-          <meshStandardMaterial color="#d9b25b" metalness={0.4} roughness={0.5} />
-        </mesh>
-      </group>
-    </group>
-  );
-}
+/** 둥글고 귀여운 공룡 (직접 만든 모양). kind 0 = 목 긴 초식 공룡, 1 = 뿔 세 개 공룡 */
 
 /** 광장 한가운데 큰 바람개비 조형물 */
 function PlazaPinwheel({ still }: { still: boolean }) {
@@ -999,58 +1412,47 @@ function PlazaPinwheel({ still }: { still: boolean }) {
 }
 
 /** 샛길: 본 길에서 각 구역으로 갈라지는 길 */
-function Trail({ from, to }: { from: Pt; to: Pt }) {
+function Trail({ t, snow }: { t: (typeof TRAILS)[number]; snow: boolean }) {
+  const pathTex = getPathTex();
   const geo = useMemo(() => {
-    const segs = 18;
-    const w = 1.1;
-    const dx = to.x - from.x;
-    const dz = to.z - from.z;
+    const to = trailEnd(t);
+    const segs = 26;
+    const dx = to.x - t.from.x;
+    const dz = to.z - t.from.z;
     const len = Math.hypot(dx, dz) || 1;
     const nx = -dz / len;
     const nz = dx / len;
-    const pos: number[] = [];
-    const idx: number[] = [];
+    const pts: { x: number; z: number; w: number }[] = [];
     for (let i = 0; i <= segs; i++) {
-      const t = i / segs;
-      const cx = from.x + dx * t + Math.sin(t * Math.PI * 2) * 1.2 * nx;
-      const cz = from.z + dz * t + Math.sin(t * Math.PI * 2) * 1.2 * nz;
-      const ww = w * (1 - t * 0.35);
-      for (const side of [-1, 1]) {
-        const x = cx + nx * ww * side;
-        const z = cz + nz * ww * side;
-        pos.push(x, height(x, z) + 0.05, z);
-      }
-      if (i < segs) {
-        const k = i * 2;
-        idx.push(k, k + 2, k + 1, k + 1, k + 2, k + 3);
-      }
+      const u = i / segs;
+      pts.push({ x: t.from.x + dx * u + Math.sin(u * Math.PI * 2) * 1.2 * nx, z: t.from.z + dz * u + Math.sin(u * Math.PI * 2) * 1.2 * nz, w: 1.25 });
     }
-    const g = new THREE.BufferGeometry();
-    g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
-    g.setIndex(idx);
-    g.computeVertexNormals();
-    return g;
-  }, [from, to]);
-  useEffect(() => () => geo.dispose(), [geo]);
+    const ring = ringPoints(t.ring.c, t.ring.r, to, 1.25);
+    return [buildRibbon(pts, snow), buildRibbon(ring, snow)];
+  }, [t, snow]);
+  useEffect(() => () => { geo.forEach(g => g.dispose()); }, [geo]);
   return (
-    <mesh geometry={geo} raycast={() => null}>
-      <meshStandardMaterial color="#d2bf94" roughness={1} side={THREE.DoubleSide} />
-    </mesh>
+    <>
+      {geo.map((g, i) => (
+        <mesh key={i} geometry={g} userData={{ ground: true }} raycast={() => null}>
+          <meshStandardMaterial vertexColors map={pathTex} polygonOffset polygonOffsetFactor={-3} polygonOffsetUnits={-3} roughness={1} side={THREE.DoubleSide} emissive={snow ? "#dce8f4" : "#000000"} emissiveIntensity={snow ? 0.3 : 0} />
+        </mesh>
+      ))}
+    </>
   );
 }
 
 /** 이동점: 바닥의 빛나는 고리와 떠 있는 표식. 누르면 그 구역으로 걸어감 */
-function Hotspots({ view, onView, still }: { view: number; onView: (i: number) => void; still: boolean }) {
+function Hotspots({ view, onView, still, dot }: { view: number; onView: (i: number) => void; still: boolean; dot: THREE.Texture }) {
   const refs = useRef<(THREE.Group | null)[]>([]);
   useFrame(() => {
     if (still) return;
     const t = performance.now() / 1000;
     refs.current.forEach((g, i) => {
       if (!g) return;
-      const k = 1 + Math.sin(t * 2 + i) * 0.06;
-      g.scale.set(k, k, k);
-      g.children[2].position.y = 3.3 + Math.sin(t * 1.6 + i) * 0.22;
-      g.children[2].rotation.y = t * 0.8;
+      const k = 1 + Math.sin(t * 2 + i) * 0.05;
+      g.children[0].scale.set(k, k, k);
+      g.children[2].position.y = 2.2 + Math.sin(t * 1.6 + i) * 0.18;
     });
   });
   return (
@@ -1061,18 +1463,13 @@ function Hotspots({ view, onView, still }: { view: number; onView: (i: number) =
         const color = ZONES[zoneIdx]?.color ?? "#fff0c4";
         return (
           <group key={v.name} position={[v.x, height(v.x, v.z), v.z]} ref={el => { refs.current[i] = el; }}>
-            <mesh position={[0, 0.12, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
-              <ringGeometry args={[1.05, 1.5, 32]} />
-              <meshBasicMaterial color="#fff6d8" transparent opacity={0.92} depthWrite={false} />
-            </mesh>
-            <mesh position={[0, 0.1, 0]} rotation={[-Math.PI / 2, 0, 0]} raycast={() => null}>
-              <circleGeometry args={[1.05, 32]} />
-              <meshBasicMaterial color={color} transparent opacity={0.5} depthWrite={false} />
-            </mesh>
-            <mesh position={[0, 3.3, 0]} raycast={() => null}>
-              <octahedronGeometry args={[0.42, 0]} />
-              <meshBasicMaterial color={color} />
-            </mesh>
+            <sprite position={[0, 0.3, 0]} scale={[1.8, 1.8, 1]} raycast={() => null}>
+              <spriteMaterial map={dot} color={color} transparent opacity={0.28} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
+            </sprite>
+            {/* 위에 떠 있는 작고 따뜻한 빛 */}
+            <sprite position={[0, 2.2, 0]} scale={[0.7, 0.7, 1]} raycast={() => null}>
+              <spriteMaterial map={dot} color="#fff3cf" transparent opacity={0.95} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
+            </sprite>
             <mesh
               position={[0, 1.6, 0]}
               onClick={e => { e.stopPropagation(); if (e.delta <= 6) onView(i); }}
@@ -1090,55 +1487,102 @@ function Hotspots({ view, onView, still }: { view: number; onView: (i: number) =
 }
 
 /** 전시 공간 전체: 입구, 길, 구역 조형물과 팻말, 광장, 벤치, 가로등 */
-function Scenery({ phase, still, view, onView }: { phase: GardenPhase; still: boolean; view: number; onView: (i: number) => void }) {
+/** 동화책 그림 소품: 나무, 꽃무더기, 꽃덤불, 공룡, 지구본을 그림 판으로 세움 */
+function StoryProps({ phase, snow, still, avoid }: { phase: GardenPhase; snow: boolean; still: boolean; avoid: { x: number; z: number }[] }) {
+  const tint = snow ? "#eef3fb" : phase === "night" ? "#6c7ea3" : phase === "sunset" ? "#ffd2b0" : phase === "morning" ? "#fff0e4" : "#ffffff";
+  const items = useMemo(() => {
+    const out: BillboardItem[] = [];
+    const r = rng(2024);
+    const kinds = [0, 2, 1, 3, 4, 0, 2, 3, 4, 1, 0, 2];
+    TREE_SPOTS.forEach(([x, z], i) => {
+      const t = treeKind(kinds[i % kinds.length], 7 + i);
+      out.push({ svg: t.svg, x, z, y: height(x, z) - 0.15, h: t.h, aspect: t.aspect, sway: 0.012 });
+    });
+    if (!snow) {
+      const fl = Array.from({ length: 8 }, (_, i) => wildSvg(40 + i));
+      const fc = Array.from({ length: 10 }, (_, i) => flowerSvg(31 + i, i));
+      const bu = [0, 1, 2, 3].map(i => bushSvg(77 + i, i));
+      const ok = (x: number, z: number, pad: number) =>
+        !nearPath(x, z, 3.4) &&
+        !VIEWS.some(v => Math.hypot(x - v.x, z - v.z) < 5) &&
+        !SIGN_SPOTS.some(q => Math.hypot(x - q.x, z - q.z) < 5) &&
+        !TREE_SPOTS.some(([tx, tz]) => Math.hypot(x - tx, z - tz) < pad) &&
+        !DINO_SPOTS.some(d => Math.hypot(x - d.at.x, z - d.at.z) < 6) &&
+        !ZONES.some(zn => Math.hypot(x - zn.l.x, z - zn.l.z) < 8) &&
+        !avoid.some(q => Math.hypot(x - q.x, z - q.z) < 2.6);
+      let n = 0, guard = 0;
+      while (n < 260 && guard++ < 6000) {
+        const x = (r() - 0.5) * 160, z = GATE_Z - 3 - r() * 128;
+        if (!ok(x, z, 6)) continue;
+        if (r() < 0.65) out.push({ svg: fl[Math.floor(r() * fl.length)], x, z, y: height(x, z) - 0.05, h: 1.5 + r() * 1.0, aspect: 260 / 200, flip: r() < 0.5, sway: 0.03 });
+        else out.push({ svg: fc[Math.floor(r() * fc.length)], x, z, y: height(x, z) - 0.05, h: 1.8 + r() * 1.0, aspect: 300 / 280, flip: r() < 0.5, sway: 0.03 });
+        n++;
+      }
+      n = 0; guard = 0;
+      while (n < 45 && guard++ < 4000) {
+        const x = (r() - 0.5) * 160, z = GATE_Z - 3 - r() * 128;
+        if (!ok(x, z, 7)) continue;
+        out.push({ svg: bu[Math.floor(r() * bu.length)], x, z, y: height(x, z) - 0.05, h: 1.7 + r() * 1.0, aspect: 360 / 240, flip: r() < 0.5 });
+        n++;
+      }
+    }
+    const sauro = sauropodSvg();
+    const rex = rexSvg();
+    DINO_SPOTS.forEach(d => {
+      out.push(d.kind === 0
+        ? { svg: sauro, x: d.at.x, z: d.at.z, y: height(d.at.x, d.at.z), h: 6.6, aspect: 520 / 460, sway: 0.01 }
+        : { svg: rex, x: d.at.x, z: d.at.z, y: height(d.at.x, d.at.z), h: 5.4, aspect: 440 / 520, sway: 0.015 });
+    });
+      const Wm = ZONES[1].l, Lh = ZONES[2].l;
+    out.push({ svg: windmillSvg(), x: Wm.x, z: Wm.z, y: height(Wm.x, Wm.z) - 0.3, h: 17, aspect: 400 / 560 });
+    out.push({ svg: lighthouseSvg(), x: Lh.x, z: Lh.z, y: height(Lh.x, Lh.z) - 0.3, h: 26, aspect: 300 / 800 });
+    const bench = benchSvg();
+    [[pathX(-4) + 3.6, -4], [pathX(-15) - 3.6, -15], [pathX(-22) + 3.4, -22]].forEach(([x, z]) => {
+      out.push({ svg: bench, x, z, y: height(x, z), h: 2.6, aspect: 420 / 300 });
+    });
+    const lamp = lampSvg();
+    [52, 19, 7, -10, -17].forEach((z, i) => {
+      const x = pathX(z) + (i % 2 ? 3.4 : -3.4 * (z === 52 ? 1.9 : 1));
+      out.push({ svg: lamp, x, z, y: height(x, z), h: 4.4, aspect: 140 / 420 });
+    });
+    const G = ZONES[3].l;
+    out.push({ svg: globeSvg(), x: G.x, z: G.z, y: height(G.x, G.z) - 0.1, h: 7.2, aspect: 420 / 480 });
+    return out;
+  }, [snow, avoid]);
+  return <Billboards items={items} tint={tint} still={still} />;
+}
+
+function Scenery({ phase, still, view, onView, counts, snow }: { phase: GardenPhase; still: boolean; view: number; onView: (i: number) => void; counts: number[]; snow: boolean }) {
   const dot = useSoftDot();
   useEffect(() => () => dot.dispose(), [dot]);
   const night = phase === "night" || phase === "sunset";
   const W = ZONES[1].l;
   const L = ZONES[2].l;
   const A = ZONES[0].l;
-  const G = ZONES[3].l;
   // 팻말: 조형물 바로 앞쪽, 길에서 보이도록 옆으로 비껴 세워 이동점을 향하게 함
-  const signAt = [0, 3, 1, 2].map((zone, k) => {
-    const viewIdx = [1, 2, 3, 4][k];
-    const v = VIEWS[viewIdx];
-    const l = ZONES[zone].l;
-    const dx = l.x - v.x;
-    const dz = l.z - v.z;
-    const len = Math.hypot(dx, dz) || 1;
-    // 조형물에서 이동점 쪽으로 9, 옆으로 7 (길에서 먼 쪽)
-    const side = l.x > v.x ? 1 : -1;
-    return { zone, viewIdx, at: { x: l.x - (dx / len) * 9 + (-dz / len) * 7 * side * -1, z: l.z - (dz / len) * 9 + (dx / len) * 7 * side * -1 } };
-  });
+  const signAt = [0, 3, 1, 2].map((zone, k) => ({ zone, viewIdx: k + 1, at: SIGN_SPOTS[k] }));
   return (
     <group>
       <Gate night={night} still={still} dot={dot} />
       {/* 샛길 */}
-      <Trail from={{ x: pathX(20), z: 20 }} to={A} />
-      <Trail from={{ x: pathX(10), z: 10 }} to={G} />
-      <Trail from={{ x: pathX(-12), z: -12 }} to={{ x: W.x + 4, z: W.z + 6 }} />
-      <Trail from={{ x: pathX(-28), z: -28 }} to={{ x: L.x - 6, z: L.z + 8 }} />
+      {TRAILS.map((t, i) => <Trail key={i} t={t} snow={snow} />)}
       {/* 구역 조형물 */}
-      <group position={[A.x, height(A.x, A.z), A.z]} rotation={[0, Math.atan2(VIEWS[1].x - A.x, VIEWS[1].z - A.z), 0]}><RainbowArch still={still} /></group>
-      <group position={[G.x, height(G.x, G.z) - 0.2, G.z]}><Globe still={still} /></group>
-      <group position={[W.x, height(W.x, W.z) - 0.3, W.z]} rotation={[0, 0.5, 0]} scale={1.15}><Windmill still={still} /></group>
-      <group position={[L.x, height(L.x, L.z) - 0.3, L.z]} scale={1.2}><Lighthouse phase={phase} still={still} /></group>
+      <group position={[A.x, height(A.x, A.z), A.z]} rotation={[0, Math.atan2(VIEWS[1].x - A.x, VIEWS[1].z - A.z), 0]} scale={1.5}><RainbowArch still={still} /></group>
+      <group position={[W.x, height(W.x, W.z) - 0.3, W.z]} rotation={[0, 0, 0]} scale={1}><Windmill still={still} /></group>
+      <group position={[L.x, height(L.x, L.z) - 0.3, L.z]} scale={1}><Lighthouse phase={phase} still={still} /></group>
       {/* 광장 */}
       <group position={[8, height(8, -20), -20]}><PlazaPinwheel still={still} /></group>
       {/* 구역 팻말 */}
       {signAt.map(s => {
         const v = VIEWS[s.viewIdx];
         const face = Math.atan2(v.x - s.at.x, v.z - s.at.z);
-        return <Sign key={s.zone} at={s.at} face={face} text={ZONES[s.zone].name} color="#f4e3bf" scale={1.5} />;
+        return <ZoneSign key={s.zone} at={s.at} face={face} name={ZONES[s.zone].name} color={ZONES[s.zone].color} count={counts[s.zone] ?? 0} still={still} />;
       })}
       {/* 벤치와 가로등 */}
-      <Bench at={{ x: pathX(2) + 3.2, z: 2 }} face={-Math.PI / 2 + 0.1} />
-      <Bench at={{ x: pathX(-6) - 3.2, z: -6 }} face={Math.PI / 2 - 0.1} />
-      <Bench at={{ x: pathX(-22) + 3.4, z: -22 }} face={-Math.PI / 2} />
-      {[40, 19, 7, -10, -17, -40].map((z, i) => (
-        <LampPost key={z} at={{ x: pathX(z) + (i % 2 ? 3.4 : -3.4), z }} night={night} dot={dot} />
+      {[52, 19, 7, -10, -17].map((z, i) => (
+        <LampPost key={z} at={{ x: pathX(z) + (i % 2 ? 3.4 : -3.4 * (z === 52 ? 1.9 : 1)), z }} night={night} dot={dot} />
       ))}
-      <Hotspots view={view} onView={onView} still={still} />
+      <Hotspots view={view} onView={onView} still={still} dot={dot} />
     </group>
   );
 }
@@ -1168,54 +1612,90 @@ function getBlade() {
 }
 
 const PALETTES = [
-  ["#ff8a65", "#ffe0a3", "#ff8a65", "#ffe0a3"],
-  ["#6fd0c0", "#fff3d6", "#6fd0c0", "#fff3d6"],
-  ["#b79bf0", "#ffdbe8", "#b79bf0", "#ffdbe8"],
-  ["#ffc145", "#fff7dc", "#ffc145", "#fff7dc"],
-  ["#74b6ff", "#fff3e6", "#74b6ff", "#fff3e6"],
-  ["#ff7aa8", "#ffe9b8", "#ff7aa8", "#ffe9b8"],
+  ["#ff5f45", "#ffc94a", "#ff5f45", "#ffc94a"],
+  ["#17b8a6", "#ffe27a", "#17b8a6", "#ffe27a"],
+  ["#8d6ce8", "#ff9ec4", "#8d6ce8", "#ff9ec4"],
+  ["#ffb300", "#ff6f91", "#ffb300", "#ff6f91"],
+  ["#2f8cff", "#ffd966", "#2f8cff", "#ffd966"],
+  ["#ff4d88", "#ffd166", "#ff4d88", "#ffd166"],
 ];
 
 /** 실종자 한 분당 바람개비 하나. 누르면 사연 카드, 응원하면 한동안 세차게 돎 */
-function Pinwheels({ people, boost, still, onSelect }: { people: LookPerson[]; boost: LookBoost | null; still: boolean; onSelect: (id: string) => void }) {
+function Pinwheels({ people, boost, still, onSelect, onSpots }: { people: LookPerson[]; boost: LookBoost | null; still: boolean; onSelect: (id: string) => void; onSpots: (list: { x: number; z: number }[]) => void }) {
   const blade = getBlade();
   // 구역별 정돈: 실종자는 자기 구역 조형물 둘레에 해바라기 씨앗 배열로 고르게(서로 떨어지게), 길목과 조형물 자리는 비움
   const spots = useMemo(() => {
     const out: ({ x: number; y: number; z: number; scale: number } | undefined)[] = new Array(people.length);
+    // 구역 경계: 가까운 조형물 기준(아이들의 길은 가중치를 더 줘 넓게)으로 정원을 나누고, 구역 사이엔 빈 틈을 둠
+    const W = [1.6, 1.0, 1.0, 1.0];
+    const cand: { x: number; z: number; zi: number; d: number }[] = [];
+    const cr = rng(909);
+    const STEP = 5.4;
+    for (let gx = -88; gx <= 88; gx += STEP) {
+      for (let gz = GATE_Z - 5; gz >= -98; gz -= STEP) {
+        const x = gx + (cr() - 0.5) * STEP * 0.7;
+        const z = gz + (cr() - 0.5) * STEP * 0.7;
+        if (nearPath(x, z, 3.6)) continue;
+        // 입구에서 길 안쪽으로 걸어 들어가는 길목에는 바람개비를 두지 않음
+        if (z > 18 && Math.abs(x - pathX(z)) < 11) continue;
+        if (Math.abs(x) > 92 || z < -100) continue;
+        if (ZONES.some(zn => Math.hypot(x - zn.l.x, z - zn.l.z) < 8)) continue;
+        if (VIEWS.some(v => Math.hypot(x - v.x, z - v.z) < 8)) continue;
+        if (SIGN_SPOTS.some(q => Math.hypot(x - q.x, z - q.z) < 8)) continue;
+        if (TREE_SPOTS.some(([tx, tz]) => Math.hypot(x - tx, z - tz) < 8)) continue;
+        if (DINO_SPOTS.some(d => Math.hypot(x - d.at.x, z - d.at.z) < 7)) continue;
+        // 구역 중심뿐 아니라 그 구역으로 뻗은 갈래길 근처도 그 구역으로 침 (바다 건너 길 입구에 아이들 바람개비가 오지 않게)
+        const TZ = [0, 3, 1, 2];
+        const ds = ZONES.map((zn, i) => {
+          const ti = TZ.indexOf(i);
+          const dt = ti >= 0 ? segDist(x, z, TRAILS[ti].from, trailEnd(TRAILS[ti])) + 4 : Infinity;
+          return Math.min(Math.hypot(x - zn.c.x, z - zn.c.z), dt) / W[i];
+        });
+        const best = ds.indexOf(Math.min(...ds));
+        const second = Math.min(...ds.filter((_, i) => i !== best));
+        if ((second - ds[best]) / ds[best] < 0.1) continue; // 구역 사이 완충
+        // 다른 구역 간판 둘레는 비워 두어, 간판 앞 바람개비가 그 구역 것으로 보이게 함
+        if (SIGN_SPOTS.some((q, qi) => [0, 3, 1, 2][qi] !== best && Math.hypot(x - q.x, z - q.z) < 14)) continue;
+        cand.push({ x, z, zi: best, d: ds[best] });
+      }
+    }
     ZONES.forEach((zone, zi) => {
       const idx: number[] = [];
       people.forEach((p, i) => { if (p.garden === zi) idx.push(i); });
       const m = idx.length;
       if (!m) return;
+      const mine = cand.filter(c => c.zi === zi).sort((p, q) => p.d - q.d);
       const r = rng(404 + zi * 31);
-      const gap = m > 160 ? 3.0 : 3.7;
-      const total = Math.ceil(m * 1.7);
-      const R = gap * Math.sqrt(total / Math.PI);
-      let placed = 0;
-      for (let a = 0; a < total * 3 && placed < m; a++) {
-        const rad = Math.sqrt(((a % total) + 0.5) / total) * R;
-        const th = a * 2.399963;
-        const x = zone.c.x + Math.cos(th) * rad * 1.25 + (r() - 0.5) * gap * 0.3;
-        const z = zone.c.z + Math.sin(th) * rad + (r() - 0.5) * gap * 0.3;
-        if (Math.abs(x - pathX(z)) < 2.6 && z < GATE_Z + 4) continue; // 길
-        if (Math.hypot(x - zone.l.x, z - zone.l.z) < 7.5) continue; // 조형물 자리
-        if (z > GATE_Z - 3 || Math.abs(x) > 90) continue; // 입구 앞
-        if (VIEWS.some(v => Math.hypot(x - v.x, z - v.z) < 8)) continue; // 이동점 가까이는 비움
-        const dist = Math.hypot(x - VIEWS[0].x, z - VIEWS[0].z);
-        out[idx[placed]] = { x, z, y: height(x, z), scale: THREE.MathUtils.clamp(dist / 36, 0.8, 1.45) * (1 + r() * 0.15) };
-        placed++;
+      // 중심 쪽에 몰리지 않도록, 구역 전체에서 고르게 솎아 고름
+      const stride = Math.max(1, mine.length / m);
+      for (let k = 0; k < m && k * stride < mine.length; k++) {
+        const c = mine[Math.floor(k * stride)];
+        const dist = Math.hypot(c.x - VIEWS[0].x, c.z - VIEWS[0].z);
+        out[idx[k]] = { x: c.x, z: c.z, y: height(c.x, c.z), scale: THREE.MathUtils.clamp(dist / 36, 0.8, 1.45) * 1.3 * (1 + r() * 0.15) };
       }
+      void zone;
     });
     return out;
   }, [people]);
 
   const rotors = useRef<(THREE.Group | null)[]>([]);
+  const faces = useRef<(THREE.Group | null)[]>([]);
+  useEffect(() => { onSpots(spots.filter((q): q is NonNullable<typeof q> => !!q).map(q => ({ x: q.x, z: q.z }))); }, [spots, onSpots]);
   const boostRef = useRef<LookBoost | null>(boost);
   useEffect(() => { boostRef.current = boost; }, [boost]);
   const peopleRef = useRef(people);
   useEffect(() => { peopleRef.current = people; }, [people]);
 
-  useFrame((_, delta) => {
+  useFrame(({ camera }, delta) => {
+    // 바람개비 앞면이 항상 보는 사람(카메라) 쪽을 향함
+    faces.current.forEach((g, i) => {
+      const sp = spots[i];
+      if (!g || !sp) return;
+      g.rotation.y = Math.atan2(camera.position.x - sp.x, camera.position.z - sp.z);
+      // 가까이 다가가면 작아져서 시야를 가리지 않음
+      const d = Math.hypot(camera.position.x - sp.x, camera.position.z - sp.z);
+      g.scale.setScalar(sp.scale * THREE.MathUtils.clamp((d - 1.5) / 6, 0.22, 1));
+    });
     if (still) return;
     const dt = Math.min(delta, 0.05);
     const b = boostRef.current;
@@ -1224,7 +1704,7 @@ function Pinwheels({ people, boost, still, onSelect }: { people: LookPerson[]; b
       const rotor = rotors.current[i];
       if (!rotor) return;
       // 응원 수가 많을수록 평소에도 조금 더 빨리 돎
-      let speed = 0.55 + Math.min(p.lightCount ?? 0, 40) * 0.03;
+      let speed = 1.5 + Math.min(p.lightCount ?? 0, 40) * 0.03;
       if (b && b.id === p.id && age < 9) speed += 9 * Math.exp(-age / 3.2);
       rotor.rotation.z -= speed * dt;
     });
@@ -1237,7 +1717,7 @@ function Pinwheels({ people, boost, still, onSelect }: { people: LookPerson[]; b
         if (!sp) return null;
         const palette = PALETTES[i % PALETTES.length];
         return (
-          <group key={p.id} position={[sp.x, sp.y, sp.z]} scale={sp.scale} >
+          <group key={p.id} position={[sp.x, sp.y, sp.z]} scale={sp.scale} ref={el => { faces.current[i] = el; }}>
             <mesh position={[0, 0.88, 0]} raycast={() => null}>
               <cylinderGeometry args={[0.025, 0.03, 1.76, 8]} />
               <meshStandardMaterial color="#b78c60" roughness={0.95} />
@@ -1245,7 +1725,7 @@ function Pinwheels({ people, boost, still, onSelect }: { people: LookPerson[]; b
             <group position={[0, 1.75, 0.05]} ref={el => { rotors.current[i] = el; }}>
               {palette.map((color, k) => (
                 <mesh key={k} geometry={blade} rotation={[0, 0, (k * Math.PI) / 2]} raycast={() => null}>
-                  <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.28} roughness={0.8} side={THREE.DoubleSide} />
+                  <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.18} roughness={0.8} side={THREE.DoubleSide} />
                 </mesh>
               ))}
               <mesh position={[0, 0, 0.22]} raycast={() => null}>
@@ -1283,30 +1763,207 @@ export interface LookSceneProps {
   /** 지금 보는 이동점(0=입구) */
   view: number;
   onView: (i: number) => void;
+  /** 같은 이동점을 다시 눌러도 그 자리로 되돌리기 위한 값 (눌릴 때마다 올림) */
+  resetKey?: number;
+  /** 앞으로(1)/뒤로(-1) 한 걸음 (누를 때마다 n을 올림) */
+  step?: { dir: 1 | -1; n: number } | null;
+  /** 조이스틱 값: x(좌우)·y(앞뒤) -1~1. 값이 있으면 그만큼 자유롭게 걸음 */
+  joy?: { current: { x: number; y: number } };
+  /** 지금 서 있는 곳의 길 이름 번호(0=입구, 1=아이들, 2=바다 건너, 3=어른들, 4=오래 기다리는) */
+  onArea?: (i: number) => void;
+  /** 올릴 때마다 아치 문을 지나 길로 걸어 들어감 */
+  enterKey?: number;
+  /** 입장 걷기를 어디서 멈출지: 아치 정중앙("gate") 또는 길 안쪽("path") */
+  enterEnd?: "gate" | "path";
   onReady?: () => void;
 }
 
-function Content({ phase, weather, reducedMotion, paused, december, people, boost, onSelect, view, onView, onReady }: LookSceneProps) {
+/** 첫 몇 프레임 뒤 정지 오브젝트가 그림자를 드리우게 표시 (바람개비·꽃은 제외) */
+function ShadowPass({ phase }: { phase: GardenPhase }) {
+  const done = useRef(0);
+  useFrame(({ scene, gl }) => {
+    if (done.current > 3 || phase === "night") { done.current = 99; return; }
+    done.current += 1;
+    if (done.current !== 3) return;
+    const walk = (o: THREE.Object3D) => {
+      if (o.userData.noShadow) return;
+      const m = o as THREE.Mesh;
+      if (m.isMesh && !(m as THREE.InstancedMesh).isInstancedMesh) {
+        const mt = m.material as THREE.Material & { isShaderMaterial?: boolean };
+        m.receiveShadow = true;
+        if (o.userData.ground !== true && !mt.transparent && !mt.isShaderMaterial) m.castShadow = true;
+      }
+      if ((o as THREE.DirectionalLight).isDirectionalLight) {
+        const l = o as THREE.DirectionalLight;
+        l.shadow.mapSize.set(2048, 2048);
+        l.shadow.map?.dispose();
+        l.shadow.map = null;
+        l.shadow.camera.left = -100; l.shadow.camera.right = 100; l.shadow.camera.top = 105; l.shadow.camera.bottom = -85;
+        l.shadow.camera.updateProjectionMatrix();
+        l.shadow.radius = 5;
+      }
+      o.children.forEach(walk);
+    };
+    walk(scene);
+    gl.shadowMap.needsUpdate = true;
+  });
+  return null;
+}
+
+/** 입장 경로: 문 앞에서 정렬 → 아치 정중앙 통과 → 길 안쪽 */
+const ENTER_WAYPOINTS: Pt[] = [
+  { x: pathX(GATE_Z + 21), z: GATE_Z + 21 },
+  { x: pathX(GATE_Z), z: GATE_Z },
+  { x: pathX(GATE_Z - 7), z: GATE_Z - 7 },
+];
+
+function Content({ phase, weather, reducedMotion, paused, december, people, boost, onSelect, view, onView, resetKey = 0, step = null, joy, onArea, enterKey = 0, enterEnd = "path", onReady }: LookSceneProps) {
   const player = useRef({ x: 0, z: 8 });
+  const [walk, setWalk] = useState<{ x: number; z: number; n: number; view: number; reset: number; keepYaw: boolean; cruise?: boolean; lift?: number } | null>(null);
+  const walked = walk !== null && walk.view === view && walk.reset === resetKey;
+  const snowy = weather?.kind === "snow";
+  const wet = snowy || weather?.kind === "rain";
+  const pinSpots = useRef<{ x: number; z: number }[]>([]);
+  const onWalk = useCallback((x: number, z: number, keepYaw = false) => {
+    // 정원 안쪽만 걸을 수 있음 (입구 앞 들판부터 가장 안쪽까지)
+    const nx = THREE.MathUtils.clamp(x, -72, 72);
+    const nz = THREE.MathUtils.clamp(z, -86, START_Z);
+    let wx = nx;
+    let wz = nz;
+    for (const [tx, tz] of TREE_SPOTS) {
+      const d = Math.hypot(wx - tx, wz - tz);
+      if (d < 8) { wx = tx + ((wx - tx) / (d || 1)) * 8; wz = tz + ((wz - tz) / (d || 1)) * 8; }
+    }
+    // 바람개비에 너무 붙어 서면 화면을 가리므로, 가까운 곳 중 바람개비와 3.4칸 이상 떨어진 자리를 고름
+    const clear = (px: number, pz: number) => {
+      let m = 3.4;
+      for (const q of pinSpots.current) { const d = Math.hypot(px - q.x, pz - q.z); if (d < m) m = d; }
+      return m;
+    };
+    if (clear(wx, wz) < 3.4) {
+      let bx = wx, bz = wz, bs = -Infinity;
+      for (let ox = -9; ox <= 9; ox += 1.5) {
+        for (let oz = -9; oz <= 9; oz += 1.5) {
+          const cx = THREE.MathUtils.clamp(wx + ox, -72, 72), cz = THREE.MathUtils.clamp(wz + oz, -86, START_Z);
+          const sc = clear(cx, cz) * 3 - Math.hypot(ox, oz);
+          if (sc > bs) { bs = sc; bx = cx; bz = cz; }
+        }
+      }
+      wx = bx; wz = bz;
+    }
+    setWalk(w => ({ x: wx, z: wz, n: (w?.n ?? 0) + 1, view, reset: resetKey, keepYaw }));
+  }, [view, resetKey]);
+  // 조이스틱으로 걸을 때: 정원 안쪽 경계, 나무·바람개비 몸통은 통과하지 못함
+  const solid = useCallback((x: number, z: number) => {
+    let wx = THREE.MathUtils.clamp(x, -72, 72);
+    let wz = THREE.MathUtils.clamp(z, -86, START_Z);
+    for (const [tx, tz] of TREE_SPOTS) {
+      const d = Math.hypot(wx - tx, wz - tz);
+      if (d < 3) { wx = tx + ((wx - tx) / (d || 1)) * 3; wz = tz + ((wz - tz) / (d || 1)) * 3; }
+    }
+    for (const q of pinSpots.current) {
+      const d = Math.hypot(wx - q.x, wz - q.z);
+      if (d < 1.6) { wx = q.x + ((wx - q.x) / (d || 1)) * 1.6; wz = q.z + ((wz - q.z) / (d || 1)) * 1.6; }
+    }
+    return { x: wx, z: wz };
+  }, []);
+  const lookRef = useRef({ x: 0, z: 0, yaw: 0 });
+  const areaRef = useRef(0);
+  const enterStage = useRef(0);
+  const enterEndRef = useRef<"gate" | "path">("path");
+  const lastEnter = useRef(0);
+  const onLook = useCallback((x: number, z: number, yaw: number) => {
+    lookRef.current = { x, z, yaw };
+    // 서 있는 곳에서 가장 가까운 길 이름 (경계에서 깜빡이지 않게 여유를 둠)
+    if (onArea) {
+      const LABEL = [1, 3, 4, 2];
+      let next = areaRef.current;
+      if (z > 30) next = 0;
+      else {
+        const TZ = [0, 3, 1, 2];
+        const ds = ZONES.map((zn, zi) => Math.min(Math.hypot(x - zn.l.x, z - zn.l.z), Math.hypot(x - SIGN_SPOTS[[0, 2, 3, 1][zi]].x, z - SIGN_SPOTS[[0, 2, 3, 1][zi]].z), segDist(x, z, TRAILS[TZ.indexOf(zi)].from, trailEnd(TRAILS[TZ.indexOf(zi)])) + 3));
+        const best = ds.indexOf(Math.min(...ds));
+        const cur = areaRef.current === 0 ? -1 : LABEL.indexOf(areaRef.current);
+        if (cur < 0 || ds[best] + 6 < ds[cur]) next = LABEL[best];
+      }
+      if (next !== areaRef.current) { areaRef.current = next; onArea(next); }
+    }
+    // 입장: 문 앞 → 아치 정중앙 → 길 안쪽 순서로 이어 걷기
+    if (joy && Math.hypot(joy.current.x, joy.current.y) > 0.08) enterStage.current = 0;
+    if (enterStage.current > 0) {
+      const wp = ENTER_WAYPOINTS[enterStage.current - 1];
+      if (Math.hypot(x - wp.x, z - wp.z) < 1.2) {
+        if (enterStage.current < (enterEndRef.current === "gate" ? 1 : ENTER_WAYPOINTS.length)) {
+          const nx = ENTER_WAYPOINTS[enterStage.current];
+          enterStage.current += 1;
+          setWalk(w => ({ x: nx.x, z: nx.z, n: (w?.n ?? 0) + 1, view, reset: resetKey, keepYaw: false, cruise: true }));
+        } else {
+          enterStage.current = 0;
+        }
+      }
+    }
+    // 비·눈 입자가 항상 보는 사람 둘레 전체에 내리게 함
+    player.current = { x, z };
+  }, [onArea, view, resetKey, joy]);
+  const [spotList, setSpotList] = useState<{ x: number; z: number }[]>([]);
+  const onSpots = useCallback((list: { x: number; z: number }[]) => { pinSpots.current = list; setSpotList(list); }, []);
+  useEffect(() => {
+    if (!enterKey || enterKey === lastEnter.current) return;
+    lastEnter.current = enterKey;
+    enterStage.current = 1;
+    enterEndRef.current = enterEnd;
+    setWalk(w => ({ x: ENTER_WAYPOINTS[0].x, z: ENTER_WAYPOINTS[0].z, n: (w?.n ?? 0) + 1, view, reset: resetKey, keepYaw: false, cruise: true, lift: enterEnd === "gate" ? 0.1 : 0 }));
+  }, [enterKey, enterEnd, view, resetKey]);
+  const lastStep = useRef(0);
+  useEffect(() => {
+    if (!step || step.n === lastStep.current) return;
+    lastStep.current = step.n;
+    const L = lookRef.current;
+    // 진행 방향(앞/뒤) 부채꼴 안에서 가장 가까운 바람개비를 찾아, 그 앞 7칸에 서서 바람개비 전체가 한눈에 보이게 함
+    const fx = -Math.sin(L.yaw) * step.dir;
+    const fz = -Math.cos(L.yaw) * step.dir;
+    let best: { x: number; z: number } | null = null;
+    let bd = Infinity;
+    for (const q of pinSpots.current) {
+      const dx = q.x - L.x;
+      const dz = q.z - L.z;
+      const d = Math.hypot(dx, dz);
+      if (d < 8 || d > 40) continue;
+      if ((dx * fx + dz * fz) / d < 0.8) continue;
+      if (d < bd) { bd = d; best = q; }
+    }
+    if (best) {
+      const d = Math.hypot(best.x - L.x, best.z - L.z);
+      onWalk(best.x - ((best.x - L.x) / d) * 5, best.z - ((best.z - L.z) / d) * 5, true);
+    } else {
+      onWalk(L.x + fx * 6, L.z + fz * 6, true);
+    }
+  }, [step, onWalk]);
   useEffect(() => { onReady?.(); }, [onReady]);
   const still = reducedMotion || paused;
   const night = phase === "night";
+  const counts = useMemo(() => {
+    const c = [0, 0, 0, 0];
+    for (const p of people) if (c[p.garden] !== undefined) c[p.garden] += 1;
+    return c;
+  }, [people]);
   return (
     <>
       <ResponsiveFov />
-      <DragLook paused={paused} reducedMotion={reducedMotion} view={view} />
+      <DragLook paused={paused} reducedMotion={reducedMotion} view={view} reset={resetKey} walk={walk} onLook={onLook} joy={joy} solid={solid} />
       <Atmosphere phase={phase} overview={false} weather={weather?.kind} exponential />
-      <Field phase={phase} still={still} />
-      <Path />
-      <Trees />
-      <Scenery phase={phase} still={still} view={view} onView={onView} />
-      <Pinwheels people={people} boost={boost} still={reducedMotion} onSelect={onSelect} />
+      <ShadowPass phase={phase} />
+      <Field phase={phase} still={still} snow={snowy} onWalk={onWalk} />
+      <Path snow={snowy} />
+      <StoryProps phase={phase} snow={snowy} still={reducedMotion || paused ? true : false} avoid={spotList} />
+      <Scenery phase={phase} still={still} view={walked ? -1 : view} onView={onView} counts={counts} snow={snowy} />
+      <group userData={{ noShadow: true }}><Pinwheels people={people} boost={boost} still={reducedMotion} onSelect={onSelect} onSpots={onSpots} /></group>
       {!night && <WindStreaks still={still} />}
-      <Motes phase={phase} still={still} />
+      {!wet && night && <Motes phase={phase} still={still} />}
       <Clouds phase={phase} still={still} />
       <Airplane phase={phase} still={still} />
       <ExpoWeather weather={weather} player={player} paused={still} />
-      {december && <ChristmasTree still={still} />}
+      {(december || snowy) && <ChristmasTree still={still} />}
     </>
   );
 }
@@ -1315,7 +1972,7 @@ function LookScene(props: LookSceneProps) {
   return (
     <Canvas
       dpr={[1, 1.5]}
-      shadows={false}
+      shadows
       camera={{ position: [VIEWS[0].x, height(VIEWS[0].x, VIEWS[0].z) + EYE, VIEWS[0].z], fov: 52, near: 0.5, far: 1200 }}
       gl={{ antialias: true, powerPreference: "high-performance", toneMapping: THREE.ACESFilmicToneMapping }}
       style={{ touchAction: "none" }}

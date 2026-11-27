@@ -4,13 +4,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { groupByGarden, type GardenPathKey } from "@/lib/missing/garden-paths";
 import { regionLabel } from "@/lib/missing/regions";
 import type { MissingSummary } from "@/lib/missing/types";
-import { LANTERN_GROUP_SIZE, placeGardenLanterns } from "./garden/ExpoLanterns";
+import { LANTERN_GROUP_SIZE, placeGardenLanterns } from "./garden/expo-placement";
 
 import { dailyGardenOrder, gardenDay } from "@/lib/missing/daily-garden";
 
 const KEYS:GardenPathKey[]=["children","village","waiting","abroad"];
 const VIEWED_KEY="wishwind-opened-lanterns-v1";
-export function useGardenLanterns() {
+export function useGardenLanterns(scene = true) {
   const [day,setDay]=useState(0);
   useEffect(()=>{const update=()=>setDay(gardenDay());update();const timer=setInterval(update,30000);document.addEventListener("visibilitychange",update);return()=>{clearInterval(timer);document.removeEventListener("visibilitychange",update);};},[]);
   useEffect(()=>setPages([0,0,0,0]),[day]);
@@ -37,7 +37,7 @@ export function useGardenLanterns() {
   const groups=useMemo(()=>grouped.map(rows=>rows.filter(p=>`${p.name} ${p.region} ${regionLabel(p.region)} ${p.lastSeenPlace??""}`.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()))),[grouped,query]);
   const pageCounts=groups.map(g=>Math.max(1,Math.ceil(g.length/LANTERN_GROUP_SIZE)));
   const visibleGroups=useMemo(()=>groups.map((g,i)=>{const start=(pages[i]%Math.max(1,Math.ceil(g.length/LANTERN_GROUP_SIZE)))*LANTERN_GROUP_SIZE;return g.slice(start,start+LANTERN_GROUP_SIZE);}),[groups,pages]);
-  const lanterns=useMemo(()=>placeGardenLanterns(visibleGroups),[visibleGroups]);
+  const lanterns=useMemo(()=>scene?placeGardenLanterns(visibleGroups):[],[visibleGroups,scene]);
   const nextGroup=(garden:number)=>setPages(p=>p.map((v,i)=>i===garden?(v+1)%pageCounts[i]:v));
   const reveal=(id:string)=>{
     for(let garden=0;garden<grouped.length;garden++){

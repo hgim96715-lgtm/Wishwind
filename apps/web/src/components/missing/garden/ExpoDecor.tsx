@@ -1,14 +1,13 @@
 "use client";
 
 import { useFrame } from "@react-three/fiber";
-import { Suspense, memo, useEffect, useMemo, useRef, useState } from "react";
-import { Html } from "@react-three/drei";
+import { Suspense, memo, useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { mapPoint } from "./expo-layout";
 import { ExpoLandscape } from "./ExpoLandscape";
 import { ExpoPlaces } from "./ExpoPlaces";
 import { ExpoVegetation } from "./ExpoPlants";
-import { WaterSurface } from "./ExpoWater";
+import { FountainReflection, WaterSurface } from "./ExpoWater";
 import { FountainWater, LighthouseBeam } from "./ExpoAtmosphere";
 
 type V3 = [number, number, number];
@@ -77,14 +76,14 @@ function Hanok({ x,y }: {x:number;y:number}) {
 export function Fountain({reducedMotion}:{reducedMotion:boolean}) {
   return <group>
     <Cylinder p={[0,0.18,0]} r={2.5} h={0.35} color="#bbaa89" />
-    <WaterSurface y={.49} rx={2.2} rz={2.2} still={reducedMotion} />
+    <FountainReflection still={reducedMotion} /><WaterSurface y={.495} rx={2.2} rz={2.2} still={reducedMotion} overlay />
     <mesh position={[0,0.52,0]} rotation={[-Math.PI/2,0,0]} castShadow><torusGeometry args={[2.3,0.18,8,64]} /><meshStandardMaterial color="#e5d5b7" /></mesh>
     <Cylinder p={[0,1,0]} r={0.35} h={1.2} color="#d9c9aa" />
     <Cylinder p={[0,1.65,0]} r={1.05} h={0.23} color="#e6d7bc" />
     <WaterSurface y={1.82} rx={.93} rz={.93} still={reducedMotion} />
     <Cylinder p={[0,2.12,0]} r={0.16} h={0.65} color="#e3d5b9" />
     <Ball p={[0,2.5,0]} s={[0.22,0.28,0.22]} color="#a4d8dd" />
-    <FountainWater reducedMotion={reducedMotion} />
+    <FountainWater still={reducedMotion} />
   </group>;
 }
 
@@ -105,7 +104,7 @@ function Lighthouse({night,reducedMotion}:{night:boolean;reducedMotion:boolean})
 function Bench({ x,y,turn=0 }: {x:number;y:number;turn?:number}) {
   const p=mapPoint(x,y);
   return <group position={[p.x,0,p.z]} rotation={[0,turn,0]}>
-    {[-0.24,0,0.24].map(z=><Box key={z} p={[0,0.52,z]} s={[1.9,0.1,0.2]} color="#b99470" />)}
+    {[-0.18,0,0.18].map(z=><Box key={z} p={[0,0.52,z]} s={[1.9,0.1,0.16]} color="#b99470" />)}
     {[0.82,1.05].map(y=><Box key={y} p={[0,y,-0.32]} s={[1.9,0.17,0.09]} color="#bfa080" />)}
     {[-0.72,0.72].map(x=><group key={x}><Box p={[x,0.26,0]} s={[0.1,0.52,0.48]} color="#788574" /><Box p={[x,0.8,-0.32]} s={[0.08,0.65,0.08]} color="#788574" /></group>)}
   </group>;
@@ -113,23 +112,14 @@ function Bench({ x,y,turn=0 }: {x:number;y:number;turn?:number}) {
 
 function Sign({ text,x,y }: {text:string;x:number;y:number}) {
   const p=mapPoint(x,y);
-  const [near,setNear]=useState(false);
-  const visibility=useRef({elapsed:0,near:false});
-  useFrame(({camera},dt)=>{
-    visibility.current.elapsed+=dt;if(visibility.current.elapsed<.25)return;
-    visibility.current.elapsed=0;
-    const visible=Math.hypot(camera.position.x-p.x,camera.position.z-p.z)<18&&camera.position.y<15;
-    if(visible!==visibility.current.near){visibility.current.near=visible;setNear(visible);}
-  });
   const texture=useMemo(()=>{
-    const canvas=document.createElement("canvas");canvas.width=768;canvas.height=160;
-    const ctx=canvas.getContext("2d")!;ctx.fillStyle="#f8edcf";ctx.fillRect(0,0,768,160);
-    ctx.strokeStyle="#bca277";ctx.lineWidth=8;ctx.strokeRect(8,8,752,144);ctx.fillStyle="#405b4a";ctx.font="700 58px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(text,384,82,700);
+    const canvas=document.createElement("canvas");canvas.width=1536;canvas.height=320;
+    const ctx=canvas.getContext("2d")!;ctx.fillStyle="#f8edcf";ctx.fillRect(0,0,1536,320);
+    ctx.strokeStyle="#bca277";ctx.lineWidth=12;ctx.strokeRect(12,12,1512,296);ctx.fillStyle="#405b4a";ctx.font="700 116px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(text,768,164,1400);
     const t=new THREE.CanvasTexture(canvas);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;return t;
   },[text]);
   useEffect(()=>()=>texture.dispose(),[texture]);
   return <group position={[p.x,0,p.z]}>
-    {near&&<Html center position={[0,2.05,0]} zIndexRange={[8,0]} style={{pointerEvents:"none"}}><span className="garden-sign-label">{text}</span></Html>}
     {[-0.95,0.95].map(x=><Cylinder key={x} p={[x,0.7,0]} r={0.06} h={1.4} color="#a08a67" />)}
     <Box p={[0,1.35,0]} s={[2.7,0.65,0.12]} color="#b59b72" />
     {[0,Math.PI].map(turn=><mesh key={turn} position={[0,1.35,turn===0?0.065:-0.065]} rotation={[0,turn,0]}><planeGeometry args={[2.7,0.6]} /><meshBasicMaterial map={texture} /></mesh>)}

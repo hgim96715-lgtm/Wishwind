@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { HomeLogo } from "@/components/common/HomeLogo";
-import { GardenExpo } from "@/components/missing/GardenExpo";
+import { ExhibitionView } from "@/components/missing/ExhibitionView";
 import { getMissing } from "@/lib/missing/api";
 import { formatMissingDate } from "@/lib/missing/regions";
 import { displayName } from "@/lib/og/helpers";
@@ -50,7 +50,7 @@ export default function MissingPage() {
         <HomeLogo onSky />
         <span className="hidden sm:block rounded-full border border-white/70 bg-[#fbfaf1]/90 px-4 py-2 text-xs">함께 기다리는 바람개비 정원</span>
       </header>
-      <GardenExpo />
+      <ExhibitionView />
       <Suspense fallback={null}><RequestMetadata /></Suspense>
     </main>
   );
