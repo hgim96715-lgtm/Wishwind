@@ -1358,7 +1358,7 @@ function RainbowArch({ still }: { still: boolean }) {
   void still;
   // 걸어서 통과하는 그림 무지개: 양쪽 발치는 구름
   return (
-    <mesh position={[0, 2.8, 0]} raycast={() => null} userData={{ noShadow: true }}>
+    <mesh position={[0, 3.35, 0]} raycast={() => null} userData={{ noShadow: true }}>
       <planeGeometry args={[11, 6.1]} />
       <meshBasicMaterial map={tex} transparent alphaTest={0.3} side={THREE.DoubleSide} toneMapped={false} />
     </mesh>
@@ -1439,9 +1439,13 @@ function Hotspots({ view, onView, still, dot }: { view: number; onView: (i: numb
     const t = performance.now() / 1000;
     refs.current.forEach((g, i) => {
       if (!g) return;
-      const k = 1 + Math.sin(t * 2 + i) * 0.05;
-      g.children[0].scale.set(k, k, k);
-      g.children[2].position.y = 2.2 + Math.sin(t * 1.6 + i) * 0.18;
+      // 바닥에 박힌 느낌이 나지 않게: 빛이 공중에서 천천히 떠다님
+      const y = 2.5 + Math.sin(t * 1.3 + i) * 0.38;
+      const x = Math.sin(t * 0.7 + i * 2) * 0.22;
+      const k = 1 + Math.sin(t * 2 + i) * 0.08;
+      g.children[0].position.set(x, y, 0);
+      g.children[0].scale.set(2.6 * k, 2.6 * k, 1);
+      g.children[1].position.set(x, y, 0);
     });
   });
   return (
@@ -1452,11 +1456,11 @@ function Hotspots({ view, onView, still, dot }: { view: number; onView: (i: numb
         const color = ZONES[zoneIdx]?.color ?? "#fff0c4";
         return (
           <group key={v.name} position={[v.x, height(v.x, v.z), v.z]} ref={el => { refs.current[i] = el; }}>
-            <sprite position={[0, 0.3, 0]} scale={[1.8, 1.8, 1]} raycast={() => null}>
-              <spriteMaterial map={dot} color={color} transparent opacity={0.28} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
+            <sprite position={[0, 2.5, 0]} scale={[2.6, 2.6, 1]} raycast={() => null}>
+              <spriteMaterial map={dot} color={color} transparent opacity={0.22} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
             </sprite>
-            {/* 위에 떠 있는 작고 따뜻한 빛 */}
-            <sprite position={[0, 2.2, 0]} scale={[0.7, 0.7, 1]} raycast={() => null}>
+            {/* 공중에 떠 있는 작고 따뜻한 빛 */}
+            <sprite position={[0, 2.5, 0]} scale={[0.7, 0.7, 1]} raycast={() => null}>
               <spriteMaterial map={dot} color="#fff3cf" transparent opacity={0.95} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
             </sprite>
             <mesh
