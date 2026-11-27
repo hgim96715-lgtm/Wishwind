@@ -122,8 +122,8 @@ const MAIN_LOOP = { c: { x: pathX(-54), z: -54 }, r: 6 };
 /** 길 따라 흩어 놓은 소품 자리: 문 안쪽 꽃수레, 중간쯤 우체국·우체통, 안쪽 그네 */
 const PROP_SPOTS = {
   cart: { x: -6, z: 38 },
-  postOffice: { x: -14, z: -16 },
-  postbox: { x: -9.5, z: -13 },
+  postOffice: { x: -20, z: -16 },
+  postbox: { x: -15, z: -12 },
   swing: { x: 14, z: -30 },
 };
 /** 아이들의 길의 공룡 친구들 (길 가까이에서 길을 바라봄) */

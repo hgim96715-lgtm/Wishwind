@@ -355,7 +355,7 @@ export function rainbowSvg() {
     bands += `<path d="M${450 - r} 440 A${r} ${r} 0 0 1 ${450 + r} 440" fill="none" stroke="${c}" stroke-width="26" stroke-linecap="round" opacity="0.9"/>`;
   });
   const cloud = (cx: number) => `<g fill="#ffffff" opacity="0.96" filter="url(#wc2)"><ellipse cx="${cx}" cy="446" rx="78" ry="32"/><ellipse cx="${cx - 40}" cy="432" rx="42" ry="30"/><ellipse cx="${cx + 20}" cy="420" rx="50" ry="36"/><ellipse cx="${cx + 56}" cy="438" rx="38" ry="26"/></g>`;
-  return svg(W, H, `<g filter="url(#wc)">${bands}</g>${cloud(78)}${cloud(822)}`);
+  return svg(W, H, `<g filter="url(#wc)">${bands}</g>${cloud(108)}${cloud(792)}`);
 }
 
 /** 수채화 종이 질감(땅·길에 곱해지는 밝은 무늬) */
