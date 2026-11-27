@@ -1953,7 +1953,13 @@ function Content({ phase, weather, reducedMotion, paused, december, people, boos
     }
     for (const q of pinSpots.current) {
       const d = Math.hypot(wx - q.x, wz - q.z);
-      if (d < 1.6) { wx = q.x + ((wx - q.x) / (d || 1)) * 1.6; wz = q.z + ((wz - q.z) / (d || 1)) * 1.6; }
+      if (d < 1.6) {
+        // 바람개비 정중앙을 향해 똑바로 다가오면 제자리에 멈춰버리므로, 바람개비마다 고정된 방향으로 살짝 비껴 세워 옆으로 흘러가게 함(막힌 느낌 방지)
+        const frac = Math.sin(q.x * 12.9898 + q.z * 78.233) * 43758.5453; const bias = frac - Math.floor(frac);
+        const ang = Math.atan2(wz - q.z, wx - q.x) + (bias - 0.5) * 0.7;
+        wx = q.x + Math.cos(ang) * 1.6;
+        wz = q.z + Math.sin(ang) * 1.6;
+      }
     }
     return { x: wx, z: wz };
   }, []);

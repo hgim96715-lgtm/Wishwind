@@ -84,7 +84,7 @@ export function MissingPictureBook() {
         <div className="wall-grid">{rows.slice(0,limits[i]).map(p=>card(p))}</div>
         {rows.length>limits[i] && <button className="wall-more" onClick={()=>setLimits(l=>l.map((n,k)=>k===i?n+PAGE:n))}>{path.name} 더 보기 <small>({rows.length-limits[i]}분 더)</small></button>}
       </section>;}) :
-      <p role="status">{lights.status==="error"?<button onClick={lights.retry}>목록 다시 불러오기</button>:lights.status==="loading"?"전시를 여는 중…":"조건에 맞는 공개 정보가 없음."}</p>}
+      <p role="status">{lights.status==="error"?<button onClick={lights.retry}>목록 다시 불러오기</button>:lights.status==="loading"?"":"조건에 맞는 공개 정보가 없음."}</p>}
     </section>
     {notice && <p key={notice.n} role="status" className="wall-notice">{notice.text}</p>}
     {lights.selected && <><div className="fixed inset-0 z-40 bg-black/30" onClick={lights.close}/><MissingCard id={lights.selected} key={lights.selected} regionLabel={regionLabel(lights.people.find(p=>p.id===lights.selected)?.region??"")} onClose={lights.close} onViewed={lights.remember} onLighting={lights.updateLighting} onSupported={name=>setNotice(n=>({text:`${name}님의 바람개비가 힘차게 돌아가요`,n:(n?.n??0)+1}))}/></>}
