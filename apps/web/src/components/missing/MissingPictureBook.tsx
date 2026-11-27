@@ -10,6 +10,8 @@ import { GardenCorner } from "./GardenCorner";
 import { useAmbientSound } from "./useAmbientSound";
 import { useWeather } from "./useWeather";
 import { useOverriddenWeather } from "./dev-garden-weather";
+import { currentHour } from "./time-of-day";
+import { phaseAt, type GardenPhase } from "./garden/expo-environment";
 
 /** 걷는 정원은 누를 때만 불러옴 */
 const ExhibitionView = dynamic(() => import("./ExhibitionView").then(m => m.ExhibitionView), { ssr: false });
@@ -61,11 +63,12 @@ export function MissingPictureBook() {
   const [query,setQuery]=useState("");
   const [limits,setLimits]=useState([PAGE,PAGE,PAGE,PAGE]);
   const [memory,setMemory]=useState<string[]>([]);
-  const [light,setLight]=useState("day");
+  // 위쪽 물결(정원 입구)과 같은 시간대 기준을 써서 카드 목록 배경도 경계 없이 이어짐
+  const [phase,setPhase]=useState<GardenPhase>("day");
   const [season,setSeason]=useState(0);
   useEffect(()=>{
     try {const ids:unknown=JSON.parse(localStorage.getItem(MEMORY_KEY)??"[]");if(Array.isArray(ids))setMemory(ids.filter((x):x is string=>typeof x==="string"));} catch {}
-    const update=()=>{const now=new Date();const hour=now.getHours();setLight(hour<6||hour>=20?"night":hour<9||hour>=16?"gold":"day");setSeason(Math.floor(((now.getMonth()+1)%12)/3));};
+    const update=()=>{setPhase(phaseAt(currentHour()));setSeason(Math.floor(((new Date().getMonth()+1)%12)/3));};
     update();const timer=setInterval(update,60000);return()=>clearInterval(timer);
   },[]);
   const choices=useMemo(()=>groupByRegion(lights.people),[lights.people]);
@@ -79,7 +82,7 @@ export function MissingPictureBook() {
   const remember=(id:string)=>{const p=lights.people.find(x=>x.id===id);if(!memory.includes(id)){const next=[...memory,id];setMemory(next);try{localStorage.setItem(MEMORY_KEY,JSON.stringify(next));}catch{}}setNotice(n=>({text:`${p?.name??""}님의 바람개비가 힘차게 돌아가요`,n:(n?.n??0)+1}));};
   const card=(p:MissingSummary)=><Portrait key={p.id} person={p} featured={false} remembered={memory.includes(p.id)} onRemember={()=>remember(p.id)} onSelect={()=>lights.select(p.id)}/>;
   const total=sections.reduce((n,s)=>n+s.length,0);
-  return <div className="garden-wall" data-light={light} data-season={season}>
+  return <div className="garden-wall" data-phase={phase} data-season={season}>
     <div inert={!!lights.selected||walking}><GardenHero grouped={lights.grouped} onWalk={startWalk} covered={walking} weather={heroWeather}/></div>
     {walking&&<div className="garden-walk-layer"><ExhibitionView onList={toList} sound={sound} weather={weather}/></div>}
     <GardenCorner sound={sound} weather={weather} className={walking?"garden-corner-fixed garden-corner-walking":scrolled?"garden-corner-fixed garden-corner-hidden":"garden-corner-fixed"}/>
@@ -89,7 +92,7 @@ export function MissingPictureBook() {
       {total>0 ? GARDEN_PATHS.map((path,i)=>{const rows=sections[i]??[];if(!rows.length)return null;return <section key={path.key} className="wall-path-section" style={{"--tape":path.signTone} as React.CSSProperties}>
         <header className="wall-path-head"><h2>{path.name}</h2><p>{path.mood}</p><span>{rows.length}분</span></header>
         <div className="wall-grid">{rows.slice(0,limits[i]).map(p=>card(p))}</div>
-        {rows.length>limits[i] && <button className="wall-more" onClick={()=>setLimits(l=>l.map((n,k)=>k===i?n+PAGE:n))}>{path.name} 더 보기 <small>({rows.length-limits[i]}분 더)</small></button>}
+        {rows.length>limits[i] && <button className="wall-more" onClick={()=>setLimits(l=>l.map((n,k)=>k===i?n+PAGE:n))}>{path.name} 더 보기</button>}
       </section>;}) :
       <p role="status">{lights.status==="error"?<button onClick={lights.retry}>목록 다시 불러오기</button>:lights.status==="loading"?"":"조건에 맞는 공개 정보가 없음."}</p>}
     </section>

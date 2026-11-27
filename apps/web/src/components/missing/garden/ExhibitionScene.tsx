@@ -1961,6 +1961,8 @@ function Content({ phase, weather, reducedMotion, paused, december, people, boos
   const wet = snowy || weather?.kind === "rain";
   const pinSpots = useRef<{ x: number; z: number }[]>([]);
   const onWalk = useCallback((x: number, z: number, keepYaw = false) => {
+    // 카드 위 정원 입구(lockLook)는 보기만 하는 미리보기라 터치해도 걸어가면 안 됨
+    if (lockLook) return;
     // 정원 안쪽만 걸을 수 있음 (입구 앞 들판부터 가장 안쪽까지)
     const nx = THREE.MathUtils.clamp(x, -72, 72);
     const nz = THREE.MathUtils.clamp(z, -86, START_Z);

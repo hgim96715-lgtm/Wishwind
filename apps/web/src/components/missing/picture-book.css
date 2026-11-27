@@ -7,6 +7,15 @@
 
 /* ===== 그림책 온기 (2026-11-27): 위쪽 정원 그림, 종이 질감, 길 색 마스킹테이프, 잔잔한 움직임 ===== */
 .garden-wall{position:relative;isolation:isolate;padding-top:0;background-color:#f1e8d4;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .38 0 0 0 0 .27 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");background-size:220px;background-repeat:repeat}
+/* 카드 목록 배경도 위쪽 물결(.garden-gate::after)과 정확히 같은 색으로, 같은 시간대 기준(data-phase)을 써서 경계가 안 생기게 함 */
+.garden-wall[data-phase=morning]{background-color:#fde8d7}
+.garden-wall[data-phase=sunset]{background-color:#f3c493}
+.garden-wall[data-phase=night]{background-color:#243456;color:#e4dfd0}
+.garden-wall[data-phase=night] .wall-path-head p{color:#a9aec4}
+.garden-wall[data-phase=night] .wall-path-head span{color:color-mix(in srgb,var(--tape) 70%,#d8d2bd)}
+.garden-wall[data-phase=night] .wall-filters label{background:#2c3550ee}
+.garden-wall[data-phase=night] .wall-more{background:#2c3550;border-color:#4a5578;color:#e4dfd0}
+
 .wall-filters label{background:#fffaeeee;box-shadow:0 4px 14px #5a4a2a1f;backdrop-filter:blur(6px)}
 
 /* 카드: 종이 카드 + 위쪽에 길 색 마스킹테이프, 손으로 붙인 듯 아주 조금 기울어짐 */
