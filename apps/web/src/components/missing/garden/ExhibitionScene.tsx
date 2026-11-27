@@ -119,8 +119,15 @@ const trailEnd = (t: (typeof TRAILS)[number]): Pt => {
 };
 // 큰길 끝에서도 길이 멈추지 않고 작은 고리로 이어짐
 const MAIN_LOOP = { c: { x: pathX(-54), z: -54 }, r: 6 };
-/** 입구 앞 넓은 풀밭의 작은 광장: 분수를 가운데 두고 우체국·우체통·꽃수레·그네가 둘러섬 */
-const PLAZA = { x: 10, z: 54, r: 6.5 };
+/** 길 따라 흩어 놓은 소품 자리: 문 안쪽 분수·꽃수레, 중간쯤 우체국·우체통, 안쪽 그네 */
+const PLAZA = { x: 13, z: 36, r: 5 }; // 분수 광장(바닥을 깖)
+const PROP_SPOTS = {
+  fountain: PLAZA as Pt,
+  cart: { x: -6, z: 38 },
+  postOffice: { x: -11, z: -3 },
+  postbox: { x: -5.5, z: -1 },
+  swing: { x: 14, z: -30 },
+};
 /** 아이들의 길의 공룡 친구들 (길 가까이에서 길을 바라봄) */
 const DINO_SPOTS: { at: Pt; face: number; kind: 0 | 1 }[] = [
   { at: { x: -26, z: 19 }, face: Math.atan2(26, -3), kind: 0 },
@@ -136,7 +143,7 @@ function segDist(x: number, z: number, a: Pt, b: Pt) {
 function nearPath(x: number, z: number, buf: number) {
   if (z < 60 && z > -70 && Math.abs(x - pathX(z)) < buf) return true;
   if (Math.abs(Math.hypot(x - MAIN_LOOP.c.x, z - MAIN_LOOP.c.z) - MAIN_LOOP.r) < buf + 1.2) return true;
-  if (Math.hypot(x - PLAZA.x, z - PLAZA.z) < PLAZA.r + 9 + buf * 0.3) return true;
+  if (Object.values(PROP_SPOTS).some(q => Math.hypot(x - q.x, z - q.z) < 6 + buf * 0.3)) return true;
   return TRAILS.some(t => segDist(x, z, t.from, trailEnd(t)) < buf + 1.2 || Math.abs(Math.hypot(x - t.ring.c.x, z - t.ring.c.z) - t.ring.r) < buf + 1.2);
 }
 
@@ -1536,14 +1543,13 @@ function StoryProps({ phase, snow, still, avoid }: { phase: GardenPhase; snow: b
     [[pathX(-4) + 3.6, -4], [pathX(-15) - 3.6, -15], [pathX(-22) + 3.4, -22]].forEach(([x, z]) => {
       out.push({ svg: bench, x, z, y: height(x, z), h: 2.6, aspect: 420 / 300 });
     });
-    // 입구 광장: 분수가 가운데, 둘레에 우체국·우체통·꽃수레·그네
-    const at = (dx: number, dz: number) => ({ x: PLAZA.x + dx, z: PLAZA.z + dz });
+    // 소품: 길 따라 흩어 둠 (분수·꽃수레는 문 안쪽, 우체국·우체통은 중간, 그네는 안쪽)
     const put = (svg: string, p: Pt, h: number, aspect: number) => out.push({ svg, x: p.x, z: p.z, y: height(p.x, p.z), h, aspect });
-    put(fountainSvg(), at(0, 0), 4.2, 460 / 400);
-    put(postOfficeSvg(), at(4.5, -9), 5.2, 520 / 440);
-    put(postboxSvg(), at(-3.6, -5.6), 2.5, 170 / 300);
-    put(flowerCartSvg(), at(-4, 3.4), 2.2, 380 / 280);
-    put(swingSvg(), at(10.5, 1), 4.4, 420 / 400);
+    put(fountainSvg(), PROP_SPOTS.fountain, 4.2, 460 / 400);
+    put(flowerCartSvg(), PROP_SPOTS.cart, 2.2, 380 / 280);
+    put(postOfficeSvg(), PROP_SPOTS.postOffice, 5.2, 520 / 440);
+    put(postboxSvg(), PROP_SPOTS.postbox, 2.5, 170 / 300);
+    put(swingSvg(), PROP_SPOTS.swing, 4.4, 420 / 400);
     const lamp = lampSvg();
     [52, 19, 7, -10, -17].forEach((z, i) => {
       const x = pathX(z) + (i % 2 ? 3.4 : -3.4 * (z === 52 ? 1.9 : 1));
