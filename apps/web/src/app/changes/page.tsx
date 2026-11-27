@@ -62,10 +62,10 @@ async function ChangeList() {
 function ChangeItem({ c }: { c: CaseChangeWithCase }) {
   const meta = [c.year ? `${c.year}년` : null, c.country ? COUNTRY_LABEL[c.country] : null, observedLabel(c.observedOn)].filter(Boolean);
   return (
-    <li className="rounded-xl border border-line bg-surface p-4">
+    <li className="min-w-0 rounded-xl border border-line bg-surface p-4">
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
         <span className="rounded-full bg-jade/15 px-2 py-0.5 text-xs font-medium text-jade-ink">{CHANGE_KIND_LABEL[c.kind]}</span>
-        <h3 className="font-semibold">{c.name}</h3>
+        <h3 className="min-w-0 max-w-full break-words font-semibold [overflow-wrap:anywhere]">{c.name}</h3>
         {meta.length > 0 && <span className="text-xs text-subtle">{meta.join(" · ")}</span>}
       </div>
       <p className="mt-2 text-sm leading-6 text-muted">{c.description}</p>
