@@ -81,7 +81,7 @@ export function ExhibitionView() {
   const [entered, setEntered] = useState(false);
   const [enterKey, setEnterKey] = useState(0);
   const [enterEnd, setEnterEnd] = useState<"gate" | "path">("path");
-  const goView = useCallback((i: number) => { setView(i); setResetKey(k => k + 1); setEntered(false); }, []);
+  const goView = useCallback((i: number) => { setView(i); setArea(i); setResetKey(k => k + 1); setEntered(false); }, []);
   const enterGarden = useCallback(() => { setZoneMenu(false); setEntered(true); setEnterEnd("path"); setEnterKey(k => k + 1); }, []);
   // 입구 버튼: 아치 정중앙에 서서 길을 바라봄
   const { weather: realWeather, mine, loading, askMyLocation, clearWeather } = useWeather();

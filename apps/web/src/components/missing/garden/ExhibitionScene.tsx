@@ -1,6 +1,6 @@
 "use client";
 
-import { Billboards, planeSvg, wildSvg, treeKind, benchSvg, gateSvg, lampSvg, lighthouseSvg, paintTexture, sailsSvg, windmillSvg, rainbowSvg, storyTexture, bushSvg, flowerSvg, globeSvg, rexSvg, sauropodSvg, type BillboardItem } from "./Storybook";
+import { cloudSvg, Billboards, planeSvg, wildSvg, treeKind, benchSvg, gateSvg, lampSvg, lighthouseSvg, paintTexture, sailsSvg, windmillSvg, rainbowSvg, storyTexture, bushSvg, flowerSvg, globeSvg, rexSvg, sauropodSvg, type BillboardItem } from "./Storybook";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
@@ -774,44 +774,33 @@ function Motes({ phase, still }: { phase: GardenPhase; still: boolean }) {
   );
 }
 
-/** 큼직한 뭉게구름: 부드러운 점 여러 장을 뭉쳐 놓고 아주 천천히 흘려보냄 */
+/** 동화책 구름: 수채 그림 구름 그림을 하늘 높이 천천히 흘려보냄 */
 function Clouds({ phase, still }: { phase: GardenPhase; still: boolean }) {
-  const dot = useSoftDot();
   const group = useRef<THREE.Group>(null);
+  const texes = useMemo(() => Array.from({ length: 10 }, (_, k) => storyTexture(cloudSvg(k))), []);
   const clusters = useMemo(() => {
     const r = rng(612);
-    return Array.from({ length: 9 }, () => {
-      const cx = (r() - 0.5) * 520;
-      const cy = 55 + r() * 70;
-      const cz = -260 - r() * 160;
-      const puffs = Array.from({ length: 9 }, () => ({
-        x: (r() - 0.5) * 60,
-        y: (r() - 0.35) * 14,
-        z: (r() - 0.5) * 20,
-        s: 34 + r() * 36,
-        shade: r(),
-      }));
-      return { cx, cy, cz, puffs };
-    });
+    return Array.from({ length: 10 }, (_, i) => ({
+      x: (r() - 0.5) * 560,
+      y: 95 + r() * 85,
+      z: -270 - r() * 150,
+      w: 110 + r() * 80,
+      k: i % 10,
+    }));
   }, []);
-  const tint = phase === "night" ? "#6c7ea3" : phase === "sunset" ? "#ffd2b0" : phase === "morning" ? "#fff0e4" : "#ffffff";
-  const shadeTint = phase === "night" ? "#3c4a6b" : phase === "sunset" ? "#c98d8c" : "#cfdcec";
-  useEffect(() => () => dot.dispose(), [dot]);
+  const tint = phase === "night" ? "#7f8fb8" : phase === "sunset" ? "#ffe0c8" : phase === "morning" ? "#fff6ec" : "#ffffff";
+  useEffect(() => () => texes.forEach(t => t.dispose()), [texes]);
   useFrame((_, delta) => {
     if (still || !group.current) return;
     group.current.position.x += Math.min(delta, 0.05) * 1.2;
-    if (group.current.position.x > 260) group.current.position.x = -260;
+    if (group.current.position.x > 280) group.current.position.x = -280;
   });
   return (
     <group ref={group}>
       {clusters.map((c, i) => (
-        <group key={i} position={[c.cx, c.cy, c.cz]}>
-          {c.puffs.map((p, k) => (
-            <sprite key={k} position={[p.x, p.y, p.z]} scale={[p.s, p.s * 0.62, 1]} raycast={() => null}>
-              <spriteMaterial map={dot} color={p.shade > 0.6 ? shadeTint : tint} transparent opacity={phase === "night" ? 0.35 : 0.8} depthWrite={false} fog={false} />
-            </sprite>
-          ))}
-        </group>
+        <sprite key={i} position={[c.x, c.y, c.z]} scale={[c.w, c.w * 0.46, 1]} raycast={() => null}>
+          <spriteMaterial map={texes[c.k]} color={tint} transparent opacity={phase === "night" ? 0.45 : 0.95} depthWrite={false} fog={false} toneMapped={false} />
+        </sprite>
       ))}
     </group>
   );
@@ -833,7 +822,7 @@ function Airplane({ phase, still }: { phase: GardenPhase; still: boolean }) {
         f.active = true;
         f.t = 0;
         f.dir = Math.random() < 0.5 ? 1 : -1;
-        f.y = 38 + Math.random() * 25;
+        f.y = 100 + Math.random() * 25;
         f.z = -190 - Math.random() * 60;
       }
       return;
@@ -1546,7 +1535,7 @@ function StoryProps({ phase, snow, still, avoid }: { phase: GardenPhase; snow: b
       out.push({ svg: lamp, x, z, y: height(x, z), h: 4.4, aspect: 140 / 420 });
     });
     const G = ZONES[3].l;
-    out.push({ svg: globeSvg(), x: G.x, z: G.z, y: height(G.x, G.z) - 0.1, h: 7.2, aspect: 420 / 480 });
+    out.push({ svg: globeSvg(), x: G.x, z: G.z, y: height(G.x, G.z) + 0.3, h: 7.2, aspect: 420 / 480 });
     return out;
   }, [snow, avoid]);
   return <Billboards items={items} tint={tint} still={still} />;
@@ -1869,6 +1858,8 @@ function Content({ phase, weather, reducedMotion, paused, december, people, boos
   }, []);
   const lookRef = useRef({ x: 0, z: 0, yaw: 0 });
   const areaRef = useRef(0);
+  const goingView = useRef(false);
+  useEffect(() => { goingView.current = true; }, [view, resetKey]);
   const enterStage = useRef(0);
   const enterEndRef = useRef<"gate" | "path">("path");
   const lastEnter = useRef(0);
@@ -1878,7 +1869,13 @@ function Content({ phase, weather, reducedMotion, paused, december, people, boos
     if (onArea) {
       const LABEL = [1, 3, 4, 2];
       let next = areaRef.current;
-      if (z > 30) next = 0;
+      const vv = VIEWS[view] ?? VIEWS[0];
+      const toView = Math.hypot(x - vv.x, z - vv.z);
+      if (goingView.current && toView < 4) goingView.current = false;
+      if (joy && Math.hypot(joy.current.x, joy.current.y) > 0.08) goingView.current = false;
+      if (view > 0 && (goingView.current || toView < 4)) next = view;
+      else if (view === 0 && goingView.current) next = 0;
+      else if (z > 30) next = 0;
       else {
         const TZ = [0, 3, 1, 2];
         const ds = ZONES.map((zn, zi) => Math.min(Math.hypot(x - zn.l.x, z - zn.l.z), Math.hypot(x - SIGN_SPOTS[[0, 2, 3, 1][zi]].x, z - SIGN_SPOTS[[0, 2, 3, 1][zi]].z), segDist(x, z, TRAILS[TZ.indexOf(zi)].from, trailEnd(TRAILS[TZ.indexOf(zi)])) + 3));

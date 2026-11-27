@@ -259,18 +259,25 @@ ${eyeSvg(232, 118, 1.5)}${eyeSvg(300, 118, 1.5)}
 
 /** 지구본: 파란 바다, 둥근 초록 대륙, 굵은 흰 받침 */
 export function globeSvg() {
+  // 책상 위 지구본: 왼쪽을 감싸는 금속 반원 고리, 기울어진 지구, 가는 받침대와 둥근 바닥
+  const CX = 210, CY = 196, R = 138;
   return svg(420, 480, `
-<ellipse cx="210" cy="464" rx="120" ry="12" fill="#7a9a5a" opacity="0.28"/>
-<rect x="196" y="380" width="28" height="64" fill="#fbfaf2" ${OUT}/>
-<ellipse cx="210" cy="448" rx="92" ry="22" fill="#fbfaf2" ${OUT}/>
-<circle cx="210" cy="200" r="150" fill="#6cc4f4" ${OUT}/>
-<g fill="#79d156" stroke="#4aa83a" stroke-width="4" stroke-linejoin="round" filter="url(#wc2)">
-<path d="M110 140 C130 90 190 80 214 112 C226 138 190 166 176 196 C170 226 140 244 118 222 C90 200 94 166 110 140Z"/>
-<path d="M244 184 C280 160 324 170 336 206 C344 244 312 276 288 290 C262 296 242 262 238 232 C236 212 238 194 244 184Z"/>
-<path d="M232 84 C256 70 292 78 296 100 C284 114 252 116 232 84Z"/></g>
-<path d="M92 112 C110 66 168 40 214 52" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
-<path d="M60 300 C80 380 190 400 262 360 C320 330 360 260 366 190" fill="none" stroke="#fbfaf2" stroke-width="22" stroke-linecap="round"/>
-<path d="M60 300 C80 380 190 400 262 360 C320 330 360 260 366 190" fill="none" stroke="#6a5a45" stroke-width="3" stroke-linecap="round" opacity="0.5" transform="translate(0 -1)"/>`);
+<ellipse cx="210" cy="466" rx="112" ry="11" fill="#7a9a5a" opacity="0.28"/>
+<ellipse cx="210" cy="448" rx="86" ry="20" fill="#c99d68" ${OUT}/><ellipse cx="210" cy="443" rx="62" ry="10" fill="#dcb98a"/>
+<rect x="198" y="360" width="24" height="84" rx="8" fill="#c99d68" ${OUT}/>
+<path d="M${CX} ${CY + R + 26} A ${R + 26} ${R + 26} 0 0 1 ${CX} ${CY - R - 26}" fill="none" stroke="#6a5a45" stroke-width="22" stroke-linecap="round"/>
+<path d="M${CX} ${CY + R + 26} A ${R + 26} ${R + 26} 0 0 1 ${CX} ${CY - R - 26}" fill="none" stroke="#c99d68" stroke-width="15" stroke-linecap="round"/>
+<g transform="rotate(-20 ${CX} ${CY})">
+<circle cx="${CX}" cy="${CY}" r="${R}" fill="#74c6f2" ${OUT}/>
+<g fill="#86d05e" stroke="#4aa83a" stroke-width="3.5" stroke-linejoin="round" filter="url(#wc2)">
+<path d="M118 138 C136 96 192 90 214 120 C224 144 192 168 180 196 C174 224 146 240 126 220 C100 200 104 164 118 138Z"/>
+<path d="M240 184 C274 164 312 174 322 208 C328 242 300 270 278 282 C254 286 238 256 234 230 C232 212 234 194 240 184Z"/>
+<path d="M232 92 C254 80 284 86 288 106 C276 118 250 120 232 92Z"/></g>
+<ellipse cx="${CX}" cy="${CY}" rx="${R}" ry="30" fill="none" stroke="#fff" stroke-width="3" opacity="0.4"/>
+<ellipse cx="${CX}" cy="${CY}" rx="62" ry="${R}" fill="none" stroke="#fff" stroke-width="3" opacity="0.35"/>
+<path d="M${CX - 100} ${CY - 96} C${CX - 60} ${CY - 132} ${CX - 10} ${CY - 138} ${CX + 30} ${CY - 132}" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
+<circle cx="${CX}" cy="${CY - R}" r="7" fill="#e9d9b6" ${OUT}/>
+</g>`);
 }
 
 const cache = new Map<string, THREE.Texture>();
@@ -551,4 +558,28 @@ export function planeSvg() {
 <circle cx="262" cy="118" r="14" fill="#cfe9fb" ${O}/>
 <circle cx="392" cy="130" r="8" fill="#6a5a45"/>
 <path d="M392 92 L392 168" stroke="#6a5a45" stroke-width="7" stroke-linecap="round" opacity="0.55"/>`);
+}
+
+/** 동화책 구름: 종류마다 뭉치 수·크기·모양이 다른 하얀 구름 (kind 0~9) */
+export function cloudSvg(kind: number) {
+  let a = (kind + 1) * 2654435761;
+  const r = () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const flat = kind % 5 === 4; // 길게 퍼진 구름
+  const wide = flat ? 300 : 140 + r() * 260;
+  const n = flat ? 3 : 4 + Math.floor(r() * 3);
+  const x0 = 280 - wide / 2;
+  const base = 168;
+  let puffs = "";
+  let shade = "";
+  for (let i = 0; i < n; i++) {
+    const t = n === 1 ? 0.5 : i / (n - 1);
+    const mid = 1 - Math.abs(t - 0.5) * 1.4;
+    const rx = flat ? 60 + r() * 40 : 26 + mid * 44 + r() * 26;
+    const ry = flat ? 20 + r() * 12 : 20 + mid * 34 + r() * 26;
+    const cx = x0 + t * wide + (r() - 0.5) * 18;
+    const cy = base - ry * 0.7 - (kind % 2 ? r() * 26 : r() * 8);
+    puffs += `<ellipse cx="${cx.toFixed(0)}" cy="${cy.toFixed(0)}" rx="${rx.toFixed(0)}" ry="${ry.toFixed(0)}" fill="#ffffff"/>`;
+  }
+  shade = `<ellipse cx="280" cy="${base - 2}" rx="${(wide / 2 + 50).toFixed(0)}" ry="${flat ? 16 : 24}" fill="#e6effa"/><ellipse cx="280" cy="${base - 10}" rx="${(wide / 2 + 36).toFixed(0)}" ry="${flat ? 12 : 20}" fill="#f4f8fd"/>`;
+  return svg(560, 240, `<g filter="url(#wc2)">${shade}${puffs}</g>`);
 }
