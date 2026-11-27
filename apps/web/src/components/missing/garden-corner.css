@@ -1,6 +1,12 @@
 /* 오른쪽 위 모서리: 정원 시계 + 소리 (사진첩·걷는 정원 같은 자리) */
-.garden-corner{display:flex;align-items:center;gap:.4rem;z-index:25}
-.garden-corner-fixed{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:14px}
+.garden-corner{display:flex;align-items:center;gap:.4rem}
+/* .garden-corner는 position:static이라 z-index를 줘도 fixed 부모(.garden-corner-wrap) 밖과는 비교가 안 됨
+   실제 겹침 순서는 fixed 요소인 wrap 쪽 z-index로 정해야 함: 평소엔 #garden-list(스크롤되는 카드 목록, z-index:2)보다
+   낮게, 걷는 정원(.garden-walk-layer, z-index:15)일 땐 그보다 높게 */
+.garden-corner-fixed{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:14px;z-index:1}
+.garden-corner-fixed.garden-corner-walking{z-index:16}
+/* 정원 입구 지나 스크롤해 내려가면(사진첩 카드 목록) 통째로 숨김 */
+.garden-corner-fixed.garden-corner-hidden{display:none}
 .garden-corner-abs{position:absolute;top:calc(env(safe-area-inset-top,0px) + 14px);right:14px}
 .garden-clock{display:inline-flex;align-items:center;gap:.35rem;height:38px;padding:0 .8rem;border-radius:2rem;border:2px solid #c99560;background:#fffaf0;color:#5b4630;font-size:.82rem;font-weight:700;font-variant-numeric:tabular-nums;box-shadow:0 2px 0 #a5784e,0 8px 18px -8px #3b2a1688}
 .garden-sound{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;border:2px solid #c99560;background:#fffaf0;color:#8f6240;font-size:1.05rem;cursor:pointer;box-shadow:0 2px 0 #a5784e,0 8px 18px -8px #3b2a1688;transition:transform .15s}

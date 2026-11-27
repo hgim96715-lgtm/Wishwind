@@ -9,6 +9,7 @@ import { RegionPicker } from "./RegionPicker";
 import { GardenCorner } from "./GardenCorner";
 import { useAmbientSound } from "./useAmbientSound";
 import { useWeather } from "./useWeather";
+import { useOverriddenWeather } from "./dev-garden-weather";
 
 /** 걷는 정원은 누를 때만 불러옴 */
 const ExhibitionView = dynamic(() => import("./ExhibitionView").then(m => m.ExhibitionView), { ssr: false });
@@ -46,7 +47,12 @@ export function MissingPictureBook() {
   const [walking,setWalking]=useState(false);
   const sound=useAmbientSound();
   const weather=useWeather();
+  // 카드 위 정원 입구도 걷는 정원과 같은 DEV 날씨 선택을 보게 함
+  const heroWeather=useOverriddenWeather(weather.weather);
   useEffect(()=>{const pop=()=>setWalking(location.hash==="#garden-walk");addEventListener("popstate",pop);return()=>removeEventListener("popstate",pop);},[]);
+  // 정원 입구 지나서 스크롤해 내려가면 시계·날씨·소리는 통째로 숨김 (사진첩 카드 위에 떠 있을 이유가 없음)
+  const [scrolled,setScrolled]=useState(false);
+  useEffect(()=>{const onScroll=()=>setScrolled(window.scrollY>24);onScroll();addEventListener("scroll",onScroll,{passive:true});return()=>removeEventListener("scroll",onScroll);},[]);
   useEffect(()=>{if(!walking)return;const prev=document.documentElement.style.overflow;document.documentElement.style.overflow="hidden";return()=>{document.documentElement.style.overflow=prev;};},[walking]);
   const startWalk=()=>{history.pushState(null,"","#garden-walk");setWalking(true);};
   // 화면 잠금(overflow)이 풀린 다음에 카드 목록으로 내려감
@@ -73,9 +79,9 @@ export function MissingPictureBook() {
   const card=(p:MissingSummary)=><Portrait key={p.id} person={p} featured={false} remembered={memory.includes(p.id)} onRemember={()=>remember(p.id)} onSelect={()=>lights.select(p.id)}/>;
   const total=sections.reduce((n,s)=>n+s.length,0);
   return <div className="garden-wall" data-light={light} data-season={season}>
-    <div inert={!!lights.selected||walking}><GardenHero grouped={lights.grouped} onWalk={startWalk} covered={walking}/></div>
+    <div inert={!!lights.selected||walking}><GardenHero grouped={lights.grouped} onWalk={startWalk} covered={walking} weather={heroWeather}/></div>
     {walking&&<div className="garden-walk-layer"><ExhibitionView onList={toList} sound={sound} weather={weather}/></div>}
-    <GardenCorner sound={sound} weather={weather} className="garden-corner-fixed"/>
+    <GardenCorner sound={sound} weather={weather} className={walking?"garden-corner-fixed garden-corner-walking":scrolled?"garden-corner-fixed garden-corner-hidden":"garden-corner-fixed"}/>
     <section id="garden-list" className="wall-inner" inert={!!lights.selected||walking}>
       <div className="wall-filters"><RegionPicker value={region} choices={choices} onChange={r=>{setRegion(r);setLimits([PAGE,PAGE,PAGE,PAGE]);}}/>
       <label><LuSearch/><input aria-label="이름 또는 장소 찾기" placeholder="이름 또는 장소" type="search" value={query} onChange={e=>{setQuery(e.target.value);setLimits([PAGE,PAGE,PAGE,PAGE]);}}/></label></div>

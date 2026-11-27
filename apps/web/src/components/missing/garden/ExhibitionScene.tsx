@@ -1,6 +1,6 @@
 "use client";
 
-import { balloonArt, benchArt, boatArt, cottageArt, flowerPatch, orchardArt, swingArt } from "./MeadowArt";
+import { balloonArt, benchArt, boatArt, flowerPatch, orchardArt, swingArt } from "./MeadowArt";
 import { meadowDinosaur, cloudSvg, Billboards, planeSvg, gateSvg, lampSvg, lighthouseSvg, paintTexture, sailsSvg, windmillSvg, rainbowSvg, storyTexture, bushSvg, postboxSvg, flowerCartSvg, type BillboardItem } from "./Storybook";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -1607,7 +1607,6 @@ function StoryProps({ phase, snow, still, avoid }: { phase: GardenPhase; snow: b
     // 소품: 길 따라 흩어 둠 (꽃수레는 문 안쪽, 우체국·우체통은 중간, 그네는 안쪽)
     const put = (svg: string, p: Pt, h: number, aspect: number) => out.push({ svg, x: p.x, z: p.z, y: height(p.x, p.z), h, aspect });
     put(flowerCartSvg(), PROP_SPOTS.cart, 2.2, 380 / 280);
-    put(cottageArt, PROP_SPOTS.postOffice, 5.6, 1.2);
     put(postboxSvg(), PROP_SPOTS.postbox, 2.5, 170 / 300);
     put(swingArt, PROP_SPOTS.swing, 4.2, 1.2);
     const lamp = lampSvg();
@@ -1707,7 +1706,7 @@ const PALETTES = [
 ];
 
 /** 실종자 한 분당 바람개비 하나. 누르면 사연 카드, 응원하면 한동안 세차게 돎 */
-function Pinwheels({ people, boost, still, onSelect, onSpots }: { people: LookPerson[]; boost: LookBoost | null; still: boolean; onSelect: (id: string) => void; onSpots: (list: { x: number; z: number }[]) => void }) {
+function Pinwheels({ people, boost, still, onSpots }: { people: LookPerson[]; boost: LookBoost | null; still: boolean; onSpots: (list: { x: number; z: number }[]) => void }) {
   const blade = getBlade();
   // 구역별 정돈: 실종자는 자기 구역 조형물 둘레에 해바라기 씨앗 배열로 고르게(서로 떨어지게), 길목과 조형물 자리는 비움
   const spots = useMemo(() => {
@@ -1764,74 +1763,120 @@ function Pinwheels({ people, boost, still, onSelect, onSpots }: { people: LookPe
     return out;
   }, [people]);
 
-  const rotors = useRef<(THREE.Group | null)[]>([]);
-  const faces = useRef<(THREE.Group | null)[]>([]);
+  const count = people.length;
   useEffect(() => { onSpots(spots.filter((q): q is NonNullable<typeof q> => !!q).map(q => ({ x: q.x, z: q.z }))); }, [spots, onSpots]);
   const boostRef = useRef<LookBoost | null>(boost);
   useEffect(() => { boostRef.current = boost; }, [boost]);
   const peopleRef = useRef(people);
   useEffect(() => { peopleRef.current = people; }, [people]);
+  const spotsRef = useRef(spots);
+  useEffect(() => { spotsRef.current = spots; }, [spots]);
+  // 사람별 바람개비 회전 누적값(계속 돎) — 사람 수가 바뀔 때만 새로 만듦(이후로는 useFrame에서 계속 덮어씀)
+  const spinRef = useRef<Float32Array>(new Float32Array(0));
+  useEffect(() => { spinRef.current = new Float32Array(count); }, [count]);
 
+  // 바람개비 하나당 '몸통·중심 캡·날개4장·눌리는 범위' 다섯 가지를, 사람 수만큼 개별 메시로 그리면
+  // (약 450명 x 6개 = 2700개 가까운 draw call) 저사양 기기에서 버벅임의 원인이 될 수 있어
+  // 자리·색이 같은 부품끼리 InstancedMesh 하나로 묶어서 그림(겉보기는 동일, draw call만 크게 줄어듦)
+  const trunkRef = useRef<THREE.InstancedMesh>(null);
+  const capRef = useRef<THREE.InstancedMesh>(null);
+  const bladeRefs = useRef<(THREE.InstancedMesh | null)[]>([null, null, null, null]);
+  const bladeMaterial = useMemo(() => {
+    const mat = new THREE.MeshStandardMaterial({ roughness: 0.8, side: THREE.DoubleSide });
+    // instanceColor(날개마다 다른 색)를 diffuse뿐 아니라 emissive(은은한 자체 발광)에도 그대로 적용
+    mat.onBeforeCompile = shader => {
+      shader.fragmentShader = shader.fragmentShader.replace(
+        "#include <emissivemap_fragment>",
+        "#include <emissivemap_fragment>\n#ifdef USE_INSTANCING_COLOR\n totalEmissiveRadiance *= vColor.rgb * 0.18;\n#endif"
+      );
+    };
+    return mat;
+  }, []);
+  useEffect(() => {
+    for (let i = 0; i < count; i++) {
+      const p = people[i];
+      const palette = PALETTES[p?.garden ?? 0] ?? PALETTES[0];
+      bladeRefs.current.forEach((b, k) => { if (b) b.setColorAt(i, new THREE.Color(palette[k])); });
+    }
+    bladeRefs.current.forEach(b => { if (b?.instanceColor) b.instanceColor.needsUpdate = true; });
+  }, [people, count]);
+
+  // 매 프레임: 자리별 위치·회전(보는 쪽 향하기)·거리별 축소·날개 회전을 합성 행렬로 계산해 instance 행렬만 갱신
+  const mOuter = useMemo(() => new THREE.Matrix4(), []);
+  const mLocal = useMemo(() => new THREE.Matrix4(), []);
+  const mSpin = useMemo(() => new THREE.Matrix4(), []);
+  const mFinal = useMemo(() => new THREE.Matrix4(), []);
+  const vPos = useMemo(() => new THREE.Vector3(), []);
+  const vScale = useMemo(() => new THREE.Vector3(), []);
+  const qBillboard = useMemo(() => new THREE.Quaternion(), []);
+  const Y_AXIS = useMemo(() => new THREE.Vector3(0, 1, 0), []);
+  const zero = useMemo(() => new THREE.Matrix4().makeScale(0, 0, 0), []);
   useFrame(({ camera }, delta) => {
-    // 바람개비 앞면이 항상 보는 사람(카메라) 쪽을 향함
-    faces.current.forEach((g, i) => {
-      const sp = spots[i];
-      if (!g || !sp) return;
-      g.rotation.y = Math.atan2(camera.position.x - sp.x, camera.position.z - sp.z);
+    const dt = Math.min(delta, 0.05);
+    if (!still) {
+      const b = boostRef.current;
+      const age = b ? (Date.now() - b.at) / 1000 : 99;
+      const spin = spinRef.current;
+      for (let i = 0; i < count; i++) {
+        const p = peopleRef.current[i];
+        if (!p) continue;
+        // 응원 수가 많을수록 평소에도 조금 더 빨리 돎
+        let speed = 1.5 + Math.min(p.lightCount ?? 0, 40) * 0.03;
+        if (b && b.id === p.id && age < 9) speed += 9 * Math.exp(-age / 3.2);
+        spin[i] -= speed * dt;
+      }
+    }
+    const trunk = trunkRef.current, cap = capRef.current;
+    const blades = bladeRefs.current;
+    const spin = spinRef.current;
+    const curSpots = spotsRef.current;
+    for (let i = 0; i < count; i++) {
+      const sp = curSpots[i];
+      if (!sp) {
+        trunk?.setMatrixAt(i, zero); cap?.setMatrixAt(i, zero);
+        blades.forEach(b => b?.setMatrixAt(i, zero));
+        continue;
+      }
+      // 바람개비 앞면이 항상 보는 사람(카메라) 쪽을 향함
+      const billboard = Math.atan2(camera.position.x - sp.x, camera.position.z - sp.z);
+      qBillboard.setFromAxisAngle(Y_AXIS, billboard);
       // 가까이 다가가면 작아져서 시야를 가리지 않음
       const d = Math.hypot(camera.position.x - sp.x, camera.position.z - sp.z);
-      g.scale.setScalar(sp.scale * THREE.MathUtils.clamp((d - 1.5) / 6, 0.22, 1));
-    });
-    if (still) return;
-    const dt = Math.min(delta, 0.05);
-    const b = boostRef.current;
-    const age = b ? (Date.now() - b.at) / 1000 : 99;
-    peopleRef.current.forEach((p, i) => {
-      const rotor = rotors.current[i];
-      if (!rotor) return;
-      // 응원 수가 많을수록 평소에도 조금 더 빨리 돎
-      let speed = 1.5 + Math.min(p.lightCount ?? 0, 40) * 0.03;
-      if (b && b.id === p.id && age < 9) speed += 9 * Math.exp(-age / 3.2);
-      rotor.rotation.z -= speed * dt;
-    });
+      const s = sp.scale * THREE.MathUtils.clamp((d - 1.5) / 6, 0.22, 1);
+      vPos.set(sp.x, sp.y, sp.z);
+      vScale.setScalar(s);
+      mOuter.compose(vPos, qBillboard, vScale);
+      if (trunk) { mLocal.makeTranslation(0, 0.88, 0); mFinal.multiplyMatrices(mOuter, mLocal); trunk.setMatrixAt(i, mFinal); }
+      mLocal.makeTranslation(0, 1.75, 0.05);
+      mSpin.makeRotationZ(spin[i]);
+      mFinal.multiplyMatrices(mOuter, mLocal).multiply(mSpin);
+      if (cap) { mLocal.makeTranslation(0, 0, 0.22); const capM = new THREE.Matrix4().multiplyMatrices(mFinal, mLocal); cap.setMatrixAt(i, capM); }
+      blades.forEach((b, k) => {
+        if (!b) return;
+        mLocal.makeRotationZ((k * Math.PI) / 2);
+        const bladeM = new THREE.Matrix4().multiplyMatrices(mFinal, mLocal);
+        b.setMatrixAt(i, bladeM);
+      });
+    }
+    if (trunk) trunk.instanceMatrix.needsUpdate = true;
+    if (cap) cap.instanceMatrix.needsUpdate = true;
+    blades.forEach(b => { if (b) b.instanceMatrix.needsUpdate = true; });
   });
 
+  if (!count) return null;
   return (
     <group>
-      {people.map((p, i) => {
-        const sp = spots[i];
-        if (!sp) return null;
-        const palette = PALETTES[p.garden] ?? PALETTES[0];
-        return (
-          <group key={p.id} position={[sp.x, sp.y, sp.z]} scale={sp.scale} ref={el => { faces.current[i] = el; }}>
-            <mesh position={[0, 0.88, 0]} raycast={() => null}>
-              <cylinderGeometry args={[0.025, 0.03, 1.76, 8]} />
-              <meshStandardMaterial color="#b78c60" roughness={0.95} />
-            </mesh>
-            <group position={[0, 1.75, 0.05]} ref={el => { rotors.current[i] = el; }}>
-              {palette.map((color, k) => (
-                <mesh key={k} geometry={blade} rotation={[0, 0, (k * Math.PI) / 2]} raycast={() => null}>
-                  <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.18} roughness={0.8} side={THREE.DoubleSide} />
-                </mesh>
-              ))}
-              <mesh position={[0, 0, 0.22]} raycast={() => null}>
-                <sphereGeometry args={[0.07, 10, 8]} />
-                <meshStandardMaterial color="#d6ae68" roughness={0.5} metalness={0.25} />
-              </mesh>
-            </group>
-            {/* 눌리는 범위: 보이지 않는 큰 구 (손가락으로도 잘 눌리게) */}
-            <mesh
-              position={[0, 1.65, 0.1]}
-              onClick={e => { e.stopPropagation(); if (e.delta <= 6) onSelect(p.id); }}
-              onPointerOver={e => { e.stopPropagation(); document.body.style.cursor = "pointer"; }}
-              onPointerOut={() => { document.body.style.cursor = ""; }}
-            >
-              <sphereGeometry args={[0.9, 10, 8]} />
-              <meshBasicMaterial transparent opacity={0} depthWrite={false} />
-            </mesh>
-          </group>
-        );
-      })}
+      <instancedMesh ref={trunkRef} args={[undefined, undefined, count]} raycast={() => null} frustumCulled={false}>
+        <cylinderGeometry args={[0.025, 0.03, 1.76, 8]} />
+        <meshStandardMaterial color="#b78c60" roughness={0.95} />
+      </instancedMesh>
+      <instancedMesh ref={capRef} args={[undefined, undefined, count]} raycast={() => null} frustumCulled={false}>
+        <sphereGeometry args={[0.07, 10, 8]} />
+        <meshStandardMaterial color="#d6ae68" roughness={0.5} metalness={0.25} />
+      </instancedMesh>
+      {[0, 1, 2, 3].map(k => (
+        <instancedMesh key={k} ref={el => { bladeRefs.current[k] = el; }} args={[blade, bladeMaterial, count]} raycast={() => null} frustumCulled={false} />
+      ))}
     </group>
   );
 }
@@ -1907,7 +1952,7 @@ const ENTER_WAYPOINTS: Pt[] = [
   { x: pathX(24), z: 24 },
 ];
 
-function Content({ phase, weather, reducedMotion, paused, december, people, boost, onSelect, view, onView, resetKey = 0, step = null, joy, onArea, enterKey = 0, enterEnd = "path", onReady, lockLook = false }: LookSceneProps) {
+function Content({ phase, weather, reducedMotion, paused, december, people, boost, view, onView, resetKey = 0, step = null, joy, onArea, enterKey = 0, enterEnd = "path", onReady, lockLook = false }: LookSceneProps) {
   const player = useRef({ x: 0, z: 8 });
   const [walk, setWalk] = useState<{ x: number; z: number; n: number; view: number; reset: number; keepYaw: boolean; cruise?: boolean; lift?: number } | null>(null);
   const walked = walk !== null && walk.view === view && walk.reset === resetKey;
@@ -1943,7 +1988,9 @@ function Content({ phase, weather, reducedMotion, paused, december, people, boos
     }
     setWalk(w => ({ x: wx, z: wz, n: (w?.n ?? 0) + 1, view, reset: resetKey, keepYaw }));
   }, [view, resetKey]);
-  // 조이스틱으로 걸을 때: 정원 안쪽 경계, 나무·바람개비 몸통은 통과하지 못함(파고드는 방향만 막고, 옆으로 스치는 움직임·뒷걸음질은 그대로 둠)
+  // 조이스틱으로 걸을 때: 정원 안쪽 경계, 나무 몸통은 통과하지 못함(파고드는 방향만 막고, 옆으로 스치는 움직임·뒷걸음질은 그대로 둠)
+  // 바람개비는 충돌 처리에서 뺌: 밀집한 구역에서 겹친 원들이 서로 되밀어내면서 이동량이 거의 0으로
+  // 수렴해 제자리에 멈추는 문제가 있었고, 이제 클릭 기능도 없어 순전히 장식이라 그냥 통과해도 됨
   const solid = useCallback((x: number, z: number, fromX: number, fromZ: number) => {
     let wx = THREE.MathUtils.clamp(x, -72, 72);
     let wz = THREE.MathUtils.clamp(z, -86, START_Z);
@@ -1962,10 +2009,6 @@ function Content({ phase, weather, reducedMotion, paused, december, people, boos
       if (Math.hypot(sx - cx, sz - cz) < r) { wx = cx + nxv * r; wz = cz + nzv * r; } else { wx = sx; wz = sz; }
     };
     for (const [tx, tz] of TREE_SPOTS) bump(tx, tz, 3, 0.12);
-    for (const q of pinSpots.current) {
-      const frac = Math.sin(q.x * 12.9898 + q.z * 78.233) * 43758.5453;
-      bump(q.x, q.z, 1.6, ((frac - Math.floor(frac)) - 0.5) * 0.2);
-    }
     return { x: wx, z: wz };
   }, []);
   const lookRef = useRef({ x: 0, z: 0, yaw: 0 });
@@ -2071,7 +2114,7 @@ function Content({ phase, weather, reducedMotion, paused, december, people, boos
       <Path snow={snowy} />
       <StoryProps phase={phase} snow={snowy} still={reducedMotion || paused ? true : false} avoid={spotList} />
       <Scenery phase={phase} still={still} view={walked ? -1 : view} onView={onView} counts={counts} snow={snowy} />
-      <group userData={{ noShadow: true }}><Pinwheels people={people} boost={boost} still={reducedMotion} onSelect={onSelect} onSpots={onSpots} /></group>
+      <group userData={{ noShadow: true }}><Pinwheels people={people} boost={boost} still={reducedMotion} onSpots={onSpots} /></group>
       {!night && <WindStreaks still={still} />}
       {!wet && night && <Motes phase={phase} still={still} />}
       <Clouds phase={phase} still={still} />

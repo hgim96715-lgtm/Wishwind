@@ -12,7 +12,7 @@ import { useGardenLanterns } from "./useGardenLanterns";
 import { useAmbientSound } from "./useAmbientSound";
 import { useWeather } from "./useWeather";
 import { currentHour } from "./time-of-day";
-import { useDevGardenWeather } from "./dev-garden-weather";
+import { useOverriddenWeather } from "./dev-garden-weather";
 import type { WeatherApi } from "./GardenCorner";
 import { phaseAt, type GardenPhase } from "./garden/expo-environment";
 import "./garden-mobile.css";
@@ -30,34 +30,59 @@ const navOn = "!bg-[#7f9a6e] !text-[#fffdf4] shadow-[inset_0_-2px_0_#5f7a50]";
 function Joystick({ onMove }: { onMove: (x: number, y: number) => void }) {
   const [knob, setKnob] = useState({ x: 0, y: 0 });
   const R = 32;
-  // 일부 브라우저(특히 모바일)에서 setPointerCapture 직후에도 hasPointerCapture가 false로 나와,
-  // 그 값만 믿고 움직임을 걸러내면 드래그가 통째로 씹히는 문제가 있어 자체 ref로 드래그 여부를 따로 추적함
+  const baseRef = useRef<HTMLDivElement>(null);
+  // 일부 브라우저에서 setPointerCapture 직후에도 hasPointerCapture가 false로 나오고,
+  // 마우스로 크게 드래그하면 손잡이가 100px짜리 div 밖으로 바로 나가버려 onPointerMove/onPointerLeave가
+  // 씹히는 문제가 있어, 드래그 중에는 window 레벨 리스너로 직접 추적함
   const dragging = useRef(false);
-  const move = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragging.current) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    let dx = e.clientX - (r.left + r.width / 2);
-    let dy = e.clientY - (r.top + r.height / 2);
+  const pointerId = useRef<number | null>(null);
+  const update = useCallback((clientX: number, clientY: number) => {
+    const el = baseRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    let dx = clientX - (r.left + r.width / 2);
+    let dy = clientY - (r.top + r.height / 2);
     const d = Math.hypot(dx, dy);
     if (d > R) { dx = (dx / d) * R; dy = (dy / d) * R; }
     setKnob({ x: dx, y: dy });
     onMove(dx / R, -dy / R);
-  };
+  }, [onMove]);
+  const end = useCallback(() => {
+    dragging.current = false;
+    pointerId.current = null;
+    setKnob({ x: 0, y: 0 });
+    onMove(0, 0);
+  }, [onMove]);
+  useEffect(() => {
+    const onWindowMove = (e: PointerEvent) => {
+      if (!dragging.current || e.pointerId !== pointerId.current) return;
+      update(e.clientX, e.clientY);
+    };
+    const onWindowUp = (e: PointerEvent) => {
+      if (!dragging.current || e.pointerId !== pointerId.current) return;
+      end();
+    };
+    window.addEventListener("pointermove", onWindowMove);
+    window.addEventListener("pointerup", onWindowUp);
+    window.addEventListener("pointercancel", onWindowUp);
+    return () => {
+      window.removeEventListener("pointermove", onWindowMove);
+      window.removeEventListener("pointerup", onWindowUp);
+      window.removeEventListener("pointercancel", onWindowUp);
+    };
+  }, [end, update]);
   const start = (e: React.PointerEvent<HTMLDivElement>) => {
     dragging.current = true;
+    pointerId.current = e.pointerId;
     try { e.currentTarget.setPointerCapture(e.pointerId); } catch {}
-    move(e);
+    update(e.clientX, e.clientY);
   };
-  const end = () => { dragging.current = false; setKnob({ x: 0, y: 0 }); onMove(0, 0); };
   return (
     <div
+      ref={baseRef}
       role="group"
       aria-label="걷기 조이스틱"
       onPointerDown={start}
-      onPointerMove={move}
-      onPointerUp={end}
-      onPointerCancel={end}
-      onPointerLeave={e => { if (dragging.current && !e.currentTarget.hasPointerCapture(e.pointerId)) end(); }}
       className="pointer-events-auto relative h-[100px] w-[100px] touch-none select-none rounded-full border-2 border-[#c99560] bg-[#fffaf0]/90 shadow-[0_3px_0_#a5784e,0_12px_26px_rgba(60,40,15,.3)]"
     >
       <LuChevronUp aria-hidden="true" size={14} className="absolute left-1/2 top-1.5 -translate-x-1/2 text-[#b08a60]" />
@@ -95,11 +120,8 @@ export function ExhibitionView({ onList, sound: shared, weather: sharedWeather }
   // 카드 화면 안에 떠 있을 때는(sharedWeather) 그 날씨 상태를 그대로 씀. 따로 열렸을 때만 제 날씨를 가짐
   const ownWeather = useWeather();
   const weatherApi = sharedWeather ?? ownWeather;
-  // 개발 모드: DEV 메뉴에서 고른 날씨로 덮어써 비·눈을 미리 봄
-  const devWeather = useDevGardenWeather();
-  const weather = devWeather.kind === "clear" || devWeather.kind === "rain" || devWeather.kind === "snow"
-    ? ({ kind: devWeather.kind, intensity: devWeather.kind === "clear" ? 0 : 0.85, place: "정원" } as typeof weatherApi.weather)
-    : weatherApi.weather;
+  // 개발 모드: DEV 메뉴에서 고른 날씨로 덮어써 비·눈을 미리 봄 (카드 위 정원 입구와 같은 훅을 씀)
+  const weather = useOverriddenWeather(weatherApi.weather);
   const [december, setDecember] = useState(false);
   const [boost, setBoost] = useState<{ id: string; at: number } | null>(null);
   const [notice, setNotice] = useState("");
