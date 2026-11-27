@@ -163,3 +163,8 @@
   color: #152d2a;
 }
 .garden-wall[data-phase="night"] .region-chip[aria-pressed="true"] small { color: #243f37; }
+
+/* 고정된 걷기 화면의 가장자리도 정원 하늘과 같은 색으로 채운다. */
+.garden-wall[data-phase="night"] .garden-walk-layer {
+  background: #0f172a;
+}

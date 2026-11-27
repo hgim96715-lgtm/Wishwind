@@ -351,3 +351,7 @@ main:has(.expo-root[data-phase=night]) .expo-header>span { background:#202e3bed;
 .garden-theme-scope:has(.expo-root[data-phase=sunset]) :is(.garden-avatar-dialog,.garden-person-dialog,.garden-directory-dialog,.garden-wish-panel,.garden-map-panel) :is(.garden-choice-trigger,.garden-choice-options) { background:#85705e; color:#fff6e6; border-color:#c0a584; }
 .garden-theme-scope:has(.expo-root[data-phase=sunset]) :is(.garden-avatar-dialog,.garden-person-dialog,.garden-directory-dialog,.garden-wish-panel,.garden-map-panel) .garden-choice-trigger * { color:#fff6e6; }
 .garden-theme-scope:has(.expo-root[data-phase=sunset]) :is(.garden-avatar-dialog,.garden-person-dialog,.garden-directory-dialog,.garden-wish-panel,.garden-map-panel) button:not(.garden-primary-action):not([class*="bg-[#e9a94f]"]):not([class*="bg-[#f2c77a]"]) { background:#85705e; color:#fff4e0; border-color:#c0a584; }
+
+.expo-root.pinwheel-study[data-phase="night"] {
+  background-color: #0f172a;
+}
