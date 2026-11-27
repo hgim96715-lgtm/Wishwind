@@ -1357,8 +1357,8 @@ function Gate({ night, still, dot }: { night: boolean; still: boolean; dot: THRE
         </group>
         {/* 문 양옆 등 */}
         {[-3.5, 3.5].map(x => (
-          <sprite key={x} position={[x, 4.0, 0.5]} scale={[night ? 3.2 : 0.01, night ? 3.2 : 0.01, 1]} raycast={() => null}>
-            <spriteMaterial map={dot} color="#ffd58a" transparent opacity={0.85} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
+          <sprite key={x} position={[x, 4.0, 0.5]} scale={[night ? 1.6 : 0.01, night ? 1.6 : 0.01, 1]} raycast={() => null}>
+            <spriteMaterial map={dot} color="#ffd58a" transparent opacity={0.65} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
           </sprite>
         ))}
       </group>
@@ -1371,8 +1371,9 @@ function LampPost({ at, night, dot }: { at: Pt; night: boolean; dot: THREE.Textu
   if (!night) return null;
   return (
     <group position={[at.x, height(at.x, at.z), at.z]}>
-      <sprite position={[0, 3.55, 0.2]} scale={[3.4, 3.4, 1]} raycast={() => null}>
-        <spriteMaterial map={dot} color="#ffd18a" transparent opacity={0.75} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
+      {/* 전구 불빛(1.6)만큼만 퍼지게 함: 전엔 3.4라 가로등 하나하나가 안개/먼지 뭉치처럼 보였음 */}
+      <sprite position={[0, 3.55, 0.2]} scale={[1.6, 1.6, 1]} raycast={() => null}>
+        <spriteMaterial map={dot} color="#ffd18a" transparent opacity={0.6} depthWrite={false} blending={THREE.AdditiveBlending} fog={false} />
       </sprite>
     </group>
   );
