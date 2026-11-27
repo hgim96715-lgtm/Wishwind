@@ -20,14 +20,15 @@ export function GardenHero({ grouped, onWalk, covered = false, weather = null }:
   const [visible, setVisible] = useState(true);
   const [still, setStill] = useState(false);
   useEffect(() => {
-    const update = () => setPhase(phaseAt(currentHour()));
+    // 로고를 밤엔 밝은 색으로 바꾸는 CSS(globals.css)가 이 값을 봄: 정원 하늘 시간대와 같은 기준으로 맞춤
+    const update = () => { const p = phaseAt(currentHour()); setPhase(p); document.documentElement.dataset.expoPhase = p; };
     const media = matchMedia("(prefers-reduced-motion: reduce)");
     // 첫 값은 다음 프레임에 맞춤 (서버 렌더와 어긋나지 않게)
     const first = requestAnimationFrame(() => { update(); setStill(media.matches); });
     const timer = setInterval(update, 60_000);
     const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting), { threshold: 0.02 });
     if (box.current) io.observe(box.current);
-    return () => { cancelAnimationFrame(first); clearInterval(timer); io.disconnect(); };
+    return () => { cancelAnimationFrame(first); clearInterval(timer); io.disconnect(); delete document.documentElement.dataset.expoPhase; };
   }, []);
   const people = useMemo(() => grouped.flatMap((rows, garden) => rows.map(p => ({ id: p.id, lightCount: p.lightCount, garden }))), [grouped]);
   const noop = useMemo(() => () => {}, []);
