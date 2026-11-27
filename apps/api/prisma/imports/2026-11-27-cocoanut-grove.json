@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "slug": "cocoanut-grove-fire",
+      "content": {
+        "title": "코코넛 그로브 나이트클럽 화재",
+        "summary": "1942년 11월 28일 밤 미국 보스턴의 나이트클럽 코코넛 그로브에서 불이 나 492명이 숨졌습니다. 회전문이 사람들로 막히고 다른 출구는 안쪽으로 열리거나 잠겨 있었던 이 화재는, 비상구가 바깥으로 열리게 하고 회전문 옆에 여닫이문을 두는 규정이 퍼지는 계기가 됐습니다",
+        "overview": "1942년 11월 28일 밤, 미국 보스턴의 나이트클럽 코코넛 그로브에서 불이 나 492명이 숨졌습니다. 자료에 따라 사망자를 490명으로 적기도 합니다. 이 가게의 법적 수용 인원은 460명이었지만 그날 밤에는 800명에서 1,000명 가까운 사람이 있었다고 전해집니다. 불은 지하의 멜로디 라운지에서 시작해 번졌습니다. 많은 사람이 하나뿐인 정문 회전문으로 몰렸고, 회전문이 사람들로 막혔습니다. 다른 출구는 안쪽으로 열리거나 잠겨 있었습니다. 불을 낸 것으로 몰렸던 종업원은 조사 끝에 책임이 없다고 판단됐고, 가게 주인은 과실치사로 감옥에서 3년 6개월 남짓을 보냈습니다. 이 화재 뒤 미국 여러 주가 출구 규정을 고쳐, 비상구 문이 바깥으로 열리게 하고 출구로 쓰는 회전문 옆에 일반 여닫이문을 두게 했습니다. 지금 미국의 화재안전 기준 NFPA 101에도 그 내용이 이어집니다. 이 화재로 화상 환자를 치료하는 방법도 크게 발전했습니다.",
+        "victimCountNote": "사망 492명 (자료에 따라 490명)",
+        "country": "US",
+        "category": "OTHER",
+        "status": "SOLVED",
+        "location": "미국 매사추세츠주 보스턴",
+        "occurredAt": "1942-11-28",
+        "occurredAtPrecision": "DAY",
+        "timeline": [
+          {
+            "occurredAt": "1942-11-28",
+            "occurredAtPrecision": "DAY",
+            "title": "지하 멜로디 라운지에서 불이 번짐",
+            "description": "정원 460명인 가게에 800명이 넘는 사람이 있던 토요일 밤이었습니다."
+          },
+          {
+            "occurredAt": "1942-11-28",
+            "occurredAtPrecision": "DAY",
+            "title": "회전문이 막히고 출구가 닫힘",
+            "description": "정문 회전문이 사람들로 막혔고, 다른 출구는 안쪽으로 열리거나 잠겨 있었습니다."
+          },
+          {
+            "occurredAt": "1942-12-02",
+            "occurredAtPrecision": "DAY",
+            "title": "보스턴 시청 회전문 두 곳 철거",
+            "description": "화재 나흘 뒤 보스턴 시청의 회전문 두 곳을 떼어 냈습니다."
+          },
+          {
+            "occurredAt": "1943-01-01",
+            "occurredAtPrecision": "YEAR",
+            "title": "이듬해까지 출구 규정이 고쳐짐",
+            "description": "매사추세츠를 비롯한 여러 주가 비상구 문과 회전문, 출구 표시에 관한 규정을 새로 만들었습니다."
+          }
+        ],
+        "victims": [],
+        "suspects": [
+          {
+            "alias": "코코넛 그로브 주인",
+            "status": "CONVICTED",
+            "charges": "과실치사",
+            "description": "화재 전 안전 위반을 바로잡지 않았다는 이유로 과실치사 유죄를 받고 3년 6개월 남짓 복역했습니다.",
+            "sentences": [
+              {
+                "courtLevel": "OTHER",
+                "type": "IMPRISONMENT",
+                "verdict": "과실치사 유죄로 감옥에 갔습니다.",
+                "penalty": "복역 3년 6개월 남짓",
+                "isFinal": true
+              }
+            ]
+          }
+        ],
+        "questions": [
+          {
+            "question": "사람이 가득 찬 가게에서 모든 출구가 대피 방향으로 열리고 잠기지 않았는지, 누가 어떻게 확인해야 할까요?"
+          },
+          {
+            "question": "정해진 수용 인원보다 많은 손님을 받지 못하게 하려면 어떤 장치가 필요할까요?"
+          },
+          {
+            "question": "규정이 사고 뒤에야 바뀌는 일을 줄이려면 평소 어떤 점검이 필요할까요?"
+          }
+        ],
+        "circumstances": []
+      },
+      "sources": [
+        {
+          "url": "https://www.britannica.com/print/article/2090142",
+          "title": "Cocoanut Grove fire",
+          "publisher": "Encyclopaedia Britannica",
+          "type": "OTHER",
+          "accessedAt": "2026-11-27"
+        },
+        {
+          "url": "https://www.nfpa.org/-/media/Files/Public-Education/By-topic/Occupancies/NFPA-Journal-2007_CocoanutGrove-small.pdf",
+          "title": "The Cocoanut Grove fire (NFPA Journal, 2007)",
+          "publisher": "NFPA (미국화재예방협회)",
+          "type": "OTHER",
+          "accessedAt": "2026-11-27"
+        },
+        {
+          "url": "https://www.csemag.com/assembly-occupancy-fires-that-wrote-nfpa-101/",
+          "title": "Assembly occupancy fires that wrote NFPA 101",
+          "publisher": "Consulting-Specifying Engineer",
+          "type": "NEWS",
+          "accessedAt": "2026-11-27"
+        }
+      ],
+      "claims": [],
+      "changes": [
+        {
+          "kind": "LAW",
+          "name": "출구용 회전문 옆 여닫이문 규정 (코코넛 그로브 화재 뒤)",
+          "year": null,
+          "country": "US",
+          "description": "화재 때 회전문이 사람들로 막힌 뒤, 미국에서는 회전문을 출구로 쓰려면 그 옆에 일반 여닫이문을 두도록 했습니다. 당시 화재안전 단체 NFPA는 회전문을 출구로 인정하지 않고 일반 출구문이 곁에 있어야 한다고 밝혔습니다. 지금 NFPA 101도 회전문 곁에 여닫이문을 두고 회전문 날개가 접히게 하도록 정합니다.",
+          "sourceUrl": "https://www.nfpa.org/-/media/Files/Public-Education/By-topic/Occupancies/NFPA-Journal-2007_CocoanutGrove-small.pdf",
+          "sourceTitle": "The Cocoanut Grove fire (NFPA Journal, 2007)"
+        },
+        {
+          "kind": "LAW",
+          "name": "비상구 문은 바깥으로 열기·출구 표시등 (코코넛 그로브 화재 뒤)",
+          "year": null,
+          "country": "US",
+          "description": "많은 출구가 안쪽으로 열리거나 잠겨 있던 이 화재 뒤, 미국에서는 비상구 문이 대피 방향(바깥)으로 열리게 하고 출구 표시가 잘 보이게 하는 규정이 만들어졌습니다. 지금 NFPA 101은 다중이용시설의 비상문이 대피 방향으로 열리고 비상 출구 표시등이 켜져 있도록 요구합니다.",
+          "sourceUrl": "https://www.csemag.com/assembly-occupancy-fires-that-wrote-nfpa-101/",
+          "sourceTitle": "Assembly occupancy fires that wrote NFPA 101 (Consulting-Specifying Engineer)"
+        }
+      ]
+    }
+  ]
+}
