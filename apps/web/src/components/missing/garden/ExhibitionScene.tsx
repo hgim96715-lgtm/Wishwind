@@ -172,7 +172,7 @@ function ResponsiveFov() {
 }
 
 /** 드래그로 둘러보기(손을 떼면 서서히 멈춤) + 이동점으로 부드럽게 걸어가기 */
-function DragLook({ paused, reducedMotion, view, reset, walk, onLook, joy, solid, lockLook = false }: { lockLook?: boolean; joy?: { current: { x: number; y: number } }; solid: (x: number, z: number) => { x: number; z: number }; paused: boolean; reducedMotion: boolean; view: number; reset: number; walk: { x: number; z: number; n: number; view: number; reset: number; keepYaw: boolean; cruise?: boolean; lift?: number } | null; onLook: (x: number, z: number, yaw: number) => void }) {
+function DragLook({ paused, reducedMotion, view, reset, walk, onLook, joy, solid, lockLook = false }: { lockLook?: boolean; joy?: { current: { x: number; y: number } }; solid: (x: number, z: number, fromX: number, fromZ: number) => { x: number; z: number }; paused: boolean; reducedMotion: boolean; view: number; reset: number; walk: { x: number; z: number; n: number; view: number; reset: number; keepYaw: boolean; cruise?: boolean; lift?: number } | null; onLook: (x: number, z: number, yaw: number) => void }) {
   const { gl } = useThree();
   const state = useRef({ yaw: 0, pitch: 0, vyaw: 0, vpitch: 0, drag: false, x: 0, y: 0 });
   const rig = useRef({ x: VIEWS[0].x, z: VIEWS[0].z, yaw: VIEWS[0].yaw });
@@ -300,7 +300,7 @@ function DragLook({ paused, reducedMotion, view, reset, walk, onLook, joy, solid
       const fwd = jv.y;
       const nx = rig.current.x - Math.sin(yawNow) * fwd * 5.5 * dt;
       const nz = rig.current.z - Math.cos(yawNow) * fwd * 5.5 * dt;
-      const ok = solid(nx, nz);
+      const ok = solid(nx, nz, rig.current.x, rig.current.z);
       rig.current.x = ok.x;
       rig.current.z = ok.z;
       goal.current = { x: ok.x, z: ok.z, yaw: rig.current.yaw };
@@ -1943,23 +1943,28 @@ function Content({ phase, weather, reducedMotion, paused, december, people, boos
     }
     setWalk(w => ({ x: wx, z: wz, n: (w?.n ?? 0) + 1, view, reset: resetKey, keepYaw }));
   }, [view, resetKey]);
-  // 조이스틱으로 걸을 때: 정원 안쪽 경계, 나무·바람개비 몸통은 통과하지 못함
-  const solid = useCallback((x: number, z: number) => {
+  // 조이스틱으로 걸을 때: 정원 안쪽 경계, 나무·바람개비 몸통은 통과하지 못함(파고드는 방향만 막고, 옆으로 스치는 움직임·뒷걸음질은 그대로 둠)
+  const solid = useCallback((x: number, z: number, fromX: number, fromZ: number) => {
     let wx = THREE.MathUtils.clamp(x, -72, 72);
     let wz = THREE.MathUtils.clamp(z, -86, START_Z);
-    for (const [tx, tz] of TREE_SPOTS) {
-      const d = Math.hypot(wx - tx, wz - tz);
-      if (d < 3) { wx = tx + ((wx - tx) / (d || 1)) * 3; wz = tz + ((wz - tz) / (d || 1)) * 3; }
-    }
+    const bump = (cx: number, cz: number, r: number, nudge: number) => {
+      const dx = wx - cx, dz = wz - cz;
+      const d = Math.hypot(dx, dz);
+      if (d >= r) return;
+      const nxv = dx / (d || 1), nzv = dz / (d || 1);
+      let mx = wx - fromX, mz = wz - fromZ;
+      // 거의 정면으로 파고드는 움직임이면, 제자리에 멈춰버리지 않도록 살짝 옆으로도 흘러가게 함
+      const tangentX = -nzv, tangentZ = nxv;
+      if (Math.abs(mx * tangentX + mz * tangentZ) < 0.02) { mx += tangentX * nudge; mz += tangentZ * nudge; }
+      const into = mx * nxv + mz * nzv;
+      let sx = fromX + mx, sz = fromZ + mz;
+      if (into < 0) { sx -= into * nxv; sz -= into * nzv; }
+      if (Math.hypot(sx - cx, sz - cz) < r) { wx = cx + nxv * r; wz = cz + nzv * r; } else { wx = sx; wz = sz; }
+    };
+    for (const [tx, tz] of TREE_SPOTS) bump(tx, tz, 3, 0.12);
     for (const q of pinSpots.current) {
-      const d = Math.hypot(wx - q.x, wz - q.z);
-      if (d < 1.6) {
-        // 바람개비 정중앙을 향해 똑바로 다가오면 제자리에 멈춰버리므로, 바람개비마다 고정된 방향으로 살짝 비껴 세워 옆으로 흘러가게 함(막힌 느낌 방지)
-        const frac = Math.sin(q.x * 12.9898 + q.z * 78.233) * 43758.5453; const bias = frac - Math.floor(frac);
-        const ang = Math.atan2(wz - q.z, wx - q.x) + (bias - 0.5) * 0.7;
-        wx = q.x + Math.cos(ang) * 1.6;
-        wz = q.z + Math.sin(ang) * 1.6;
-      }
+      const frac = Math.sin(q.x * 12.9898 + q.z * 78.233) * 43758.5453;
+      bump(q.x, q.z, 1.6, ((frac - Math.floor(frac)) - 0.5) * 0.2);
     }
     return { x: wx, z: wz };
   }, []);
