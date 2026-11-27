@@ -218,31 +218,6 @@ export function lampSvg() {
 <circle cx="70" cy="22" r="6" fill="#5a4636" stroke="#4a3a2c" stroke-width="3"/>`);
 }
 
-/** 광장의 돌 분수: 넓은 물받이, 기둥, 위쪽 그릇, 솟아오르는 물줄기 */
-export function fountainSvg() {
-  return svg(460, 400, `
-<ellipse cx="230" cy="388" rx="200" ry="12" fill="#7a9a5a" opacity="0.3"/>
-<g stroke="#6a6a5c" stroke-width="4" stroke-linejoin="round">
-<path d="M30 310 Q30 372 230 372 Q430 372 430 310 L430 286 L30 286 Z" fill="#d9d2c0"/>
-<ellipse cx="230" cy="286" rx="200" ry="52" fill="#e9e3d2"/>
-<ellipse cx="230" cy="288" rx="178" ry="40" fill="#a9d4ea" stroke="#7aa6c0" stroke-width="3"/>
-<path d="M206 290 L212 168 L248 168 L254 290 Z" fill="#cfc8b4"/>
-<path d="M150 170 Q150 214 230 214 Q310 214 310 170 Z" fill="#d9d2c0"/>
-<ellipse cx="230" cy="170" rx="80" ry="20" fill="#e9e3d2"/>
-<ellipse cx="230" cy="171" rx="66" ry="14" fill="#a9d4ea" stroke="#7aa6c0" stroke-width="2.5"/>
-<path d="M214 168 L218 100 L242 100 L246 168 Z" fill="#cfc8b4"/>
-<ellipse cx="230" cy="98" rx="26" ry="8" fill="#e9e3d2"/>
-</g>
-<g fill="none" stroke="#bfe3f4" stroke-width="7" stroke-linecap="round" opacity="0.95">
-<path d="M230 96 Q230 40 230 40"/><path d="M230 98 Q180 40 150 130"/><path d="M230 98 Q280 40 310 130"/>
-<path d="M170 172 Q130 190 96 262" stroke-width="5"/><path d="M290 172 Q330 190 364 262" stroke-width="5"/>
-</g>
-<g fill="#ffffff" opacity="0.9"><circle cx="230" cy="34" r="6"/><circle cx="198" cy="62" r="5"/><circle cx="262" cy="62" r="5"/><circle cx="150" cy="134" r="5"/><circle cx="310" cy="134" r="5"/></g>
-<g stroke="#8fc7e2" stroke-width="2.5" fill="none" opacity="0.8"><ellipse cx="120" cy="296" rx="26" ry="6"/><ellipse cx="340" cy="296" rx="26" ry="6"/><ellipse cx="230" cy="310" rx="40" ry="8"/></g>
-<g fill="#f6a5bd" stroke="#8a7a66" stroke-width="1.2"><circle cx="90" cy="300" r="7"/><circle cx="372" cy="300" r="7"/></g>
-<g fill="#fff" opacity="0.7"><ellipse cx="150" cy="276" rx="22" ry="4"/></g>`);
-}
-
 const OUT = `stroke="#6a5a45" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"`;
 const eyeSvg = (x: number, y: number, s = 1) =>
   `<g transform="translate(${x} ${y}) scale(${s})"><circle r="14" fill="#fff" stroke="#6a5a45" stroke-width="2.5"/><circle cx="2" cy="1" r="8.5" fill="#2a2220"/><circle cx="5" cy="-3" r="3" fill="#fff"/></g>`;

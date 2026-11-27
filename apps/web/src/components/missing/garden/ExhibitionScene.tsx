@@ -1,6 +1,6 @@
 "use client";
 
-import { cloudSvg, Billboards, planeSvg, wildSvg, treeKind, benchSvg, gateSvg, lampSvg, lighthouseSvg, paintTexture, sailsSvg, windmillSvg, rainbowSvg, storyTexture, bushSvg, flowerSvg, globeSvg, rexSvg, sauropodSvg, postOfficeSvg, postboxSvg, fountainSvg, swingSvg, flowerCartSvg, type BillboardItem } from "./Storybook";
+import { cloudSvg, Billboards, planeSvg, wildSvg, treeKind, benchSvg, gateSvg, lampSvg, lighthouseSvg, paintTexture, sailsSvg, windmillSvg, rainbowSvg, storyTexture, bushSvg, flowerSvg, globeSvg, rexSvg, sauropodSvg, postOfficeSvg, postboxSvg, swingSvg, flowerCartSvg, type BillboardItem } from "./Storybook";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
@@ -119,10 +119,8 @@ const trailEnd = (t: (typeof TRAILS)[number]): Pt => {
 };
 // 큰길 끝에서도 길이 멈추지 않고 작은 고리로 이어짐
 const MAIN_LOOP = { c: { x: pathX(-54), z: -54 }, r: 6 };
-/** 길 따라 흩어 놓은 소품 자리: 문 안쪽 분수·꽃수레, 중간쯤 우체국·우체통, 안쪽 그네 */
-const PLAZA = { x: 13, z: 36, r: 5 }; // 분수 광장(바닥을 깖)
+/** 길 따라 흩어 놓은 소품 자리: 문 안쪽 꽃수레, 중간쯤 우체국·우체통, 안쪽 그네 */
 const PROP_SPOTS = {
-  fountain: PLAZA as Pt,
   cart: { x: -6, z: 38 },
   postOffice: { x: -11, z: -3 },
   postbox: { x: -5.5, z: -1 },
@@ -1543,9 +1541,8 @@ function StoryProps({ phase, snow, still, avoid }: { phase: GardenPhase; snow: b
     [[pathX(-4) + 3.6, -4], [pathX(-15) - 3.6, -15], [pathX(-22) + 3.4, -22]].forEach(([x, z]) => {
       out.push({ svg: bench, x, z, y: height(x, z), h: 2.6, aspect: 420 / 300 });
     });
-    // 소품: 길 따라 흩어 둠 (분수·꽃수레는 문 안쪽, 우체국·우체통은 중간, 그네는 안쪽)
+    // 소품: 길 따라 흩어 둠 (꽃수레는 문 안쪽, 우체국·우체통은 중간, 그네는 안쪽)
     const put = (svg: string, p: Pt, h: number, aspect: number) => out.push({ svg, x: p.x, z: p.z, y: height(p.x, p.z), h, aspect });
-    put(fountainSvg(), PROP_SPOTS.fountain, 4.2, 460 / 400);
     put(flowerCartSvg(), PROP_SPOTS.cart, 2.2, 380 / 280);
     put(postOfficeSvg(), PROP_SPOTS.postOffice, 5.2, 520 / 440);
     put(postboxSvg(), PROP_SPOTS.postbox, 2.5, 170 / 300);
@@ -1560,28 +1557,6 @@ function StoryProps({ phase, snow, still, avoid }: { phase: GardenPhase; snow: b
     return out;
   }, [snow, avoid]);
   return <Billboards items={items} tint={tint} still={still} />;
-}
-
-/** 입구 광장 바닥: 언덕 높이를 따라 깔린 연한 돌바닥 */
-function PlazaGround() {
-  const geo = useMemo(() => {
-    const g = new THREE.CircleGeometry(PLAZA.r, 56, 0, Math.PI * 2);
-    g.rotateX(-Math.PI / 2);
-    const pos = g.getAttribute("position") as THREE.BufferAttribute;
-    for (let i = 0; i < pos.count; i++) {
-      const x = PLAZA.x + pos.getX(i);
-      const z = PLAZA.z + pos.getZ(i);
-      pos.setY(i, height(x, z) + 0.04);
-    }
-    g.computeVertexNormals();
-    return g;
-  }, []);
-  useEffect(() => () => geo.dispose(), [geo]);
-  return (
-    <mesh geometry={geo} position={[PLAZA.x, 0, PLAZA.z]} userData={{ ground: true }} raycast={() => null}>
-      <meshStandardMaterial color="#e1d3ad" roughness={1} polygonOffset polygonOffsetFactor={-2} polygonOffsetUnits={-2} />
-    </mesh>
-  );
 }
 
 function Scenery({ phase, still, view, onView, counts, snow }: { phase: GardenPhase; still: boolean; view: number; onView: (i: number) => void; counts: number[]; snow: boolean }) {
@@ -1602,7 +1577,6 @@ function Scenery({ phase, still, view, onView, counts, snow }: { phase: GardenPh
       <group position={[A.x, height(A.x, A.z), A.z]} rotation={[0, Math.atan2(VIEWS[1].x - A.x, VIEWS[1].z - A.z), 0]} scale={1.5}><RainbowArch still={still} /></group>
       <group position={[W.x, height(W.x, W.z) - 0.3, W.z]} rotation={[0, 0, 0]} scale={1}><Windmill still={still} /></group>
       <group position={[L.x, height(L.x, L.z) - 0.3, L.z]} scale={1}><Lighthouse phase={phase} still={still} /></group>
-      <PlazaGround />
       {/* 광장 */}
       <group position={[8, height(8, -20), -20]}><PlazaPinwheel still={still} /></group>
       {/* 구역 팻말 */}
