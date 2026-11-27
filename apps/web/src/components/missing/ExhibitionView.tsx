@@ -160,7 +160,7 @@ export function ExhibitionView() {
         </div>
       )}
       {weatherMenu && (
-        <div role="dialog" aria-label="날씨" className="flex w-[min(86vw,260px)] flex-col items-center gap-3 rounded-[28px] border-2 border-dashed border-[#e0cc9e] bg-[#f8edd3]/85 px-5 py-4 text-[#4a3522] shadow-[0_10px_34px_rgba(40,30,10,.3)] backdrop-blur-md">
+        <div role="dialog" aria-label="날씨" className="garden-weather-panel flex w-[min(86vw,260px)] flex-col items-center gap-3 rounded-[28px] border-2 border-dashed border-[#e0cc9e] bg-[#f8edd3]/85 px-5 py-4 text-[#4a3522] shadow-[0_10px_34px_rgba(40,30,10,.3)] backdrop-blur-md">
           <WeatherIcon kind={weather?.kind ?? "clear"} night={isNight} />
           <p className="text-[18px] font-bold leading-none">{WEATHER_LABEL[weather?.kind ?? "clear"] ?? "맑음"}<span className="ml-2 text-[12px] font-semibold text-[#786650]">{mine ? "내 위치" : "정원"}</span></p>
           <button type="button" disabled={loading} onClick={() => void (mine ? clearWeather() : askMyLocation())} className="inline-flex min-h-10 w-full items-center justify-center rounded-full border-2 border-[#d9b87a] bg-[#f2c77a] px-4 text-[13px] font-bold text-[#4a3522] shadow-[0_2px_0_#c99a52] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4a3522]/50 active:translate-y-px disabled:opacity-50">{loading ? "날씨 확인 중" : mine ? "정원 날씨로 돌아가기" : "내 위치 날씨 보기"}</button>

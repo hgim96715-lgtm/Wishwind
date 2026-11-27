@@ -180,7 +180,7 @@ export function WishPanel({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 16 }}
       transition={{ duration: .2 }}
-      className="absolute inset-x-0 bottom-0 z-50 mx-auto max-h-[75dvh] max-w-lg overflow-y-auto rounded-t-3xl border border-[#f1dfc4] bg-[#fffaf2]/95 p-6 shadow-[0_20px_60px_rgb(120_90_50/0.25)] backdrop-blur"
+      className="garden-wish-panel absolute inset-x-0 bottom-0 z-50 mx-auto max-h-[75dvh] max-w-lg overflow-y-auto rounded-t-3xl border border-[#f1dfc4] bg-[#fffaf2]/95 p-6 shadow-[0_20px_60px_rgb(120_90_50/0.25)] backdrop-blur"
     >
       <button
         ref={closeRef}

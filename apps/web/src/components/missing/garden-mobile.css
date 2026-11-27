@@ -235,3 +235,15 @@ main:has(.expo-root[data-phase=night]) .expo-header>span { background:#202e3bed;
  .expo-footer [aria-label="걷기 조이스틱"] > div { width:76px; height:76px; border:1px solid #ffffff50; }
  .expo-footer [aria-label="걷기 조이스틱"] > div > div { width:32px; height:32px; }
 }
+
+/* 밤에는 바람개비 꽂기 창과 날씨 패널도 어둡게 (낮의 크림색이 눈부심) */
+.garden-theme-scope:has(.expo-root[data-phase=night]) .garden-wish-panel { background:#202e3bfa; border-color:#52616a; color:#e8e6dc; box-shadow:0 -10px 50px #0006; }
+.garden-theme-scope:has(.expo-root[data-phase=night]) .garden-wish-panel :is(h2,h3,strong) { color:#f0e9d6; }
+.garden-theme-scope:has(.expo-root[data-phase=night]) .garden-wish-panel :is([class*="bg-[#f6eee2]"],[class*="bg-[#f3e6d2]"]) { background:#2b3c48; color:#e2e7db; border-color:#4b5b64; }
+.garden-theme-scope:has(.expo-root[data-phase=night]) .garden-wish-panel textarea { background:#2b3c48; border-color:#596b73; color:#f0ece0; }
+.garden-theme-scope:has(.expo-root[data-phase=night]) .garden-wish-panel textarea::placeholder { color:#a1b1b5; }
+.expo-root[data-phase=night] .garden-weather-panel { background:#202e3bf2; border-color:#52616a; color:#f0e9d6; box-shadow:0 10px 34px #0006; }
+.expo-root[data-phase=night] .garden-weather-panel span { color:#bdc9c9; }
+.garden-theme-scope:has(.expo-root[data-phase=night]) .garden-map-panel { background:#202e3bfa; border-color:#52616a; color:#e8e6dc; }
+.garden-theme-scope:has(.expo-root[data-phase=night]) .garden-map-panel :is(h2,h3,p,span,li,button) { color:#d6dccf; }
+.garden-theme-scope:has(.expo-root[data-phase=night]) .garden-map-panel h2 { color:#f0e9d6; }

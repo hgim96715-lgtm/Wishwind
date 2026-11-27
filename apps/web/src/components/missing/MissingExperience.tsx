@@ -454,7 +454,7 @@ const MAP_POSITIONS: Record<GardenPathKey, { left: string; top: string }> = {
 function GardenMapPanel({ onClose, onOpenPath }: { onClose: () => void; onOpenPath: (pathKey: GardenPathKey) => void }) {
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-[#354b4b]/30 px-4 backdrop-blur-sm">
-      <section role="dialog" aria-modal="true" aria-labelledby="garden-map-title" className="relative w-full max-w-xl rounded-[2rem] border border-[#dbc49e] bg-[#fffaf0] p-5 text-[#5b4d3c] shadow-2xl">
+      <section role="dialog" aria-modal="true" aria-labelledby="garden-map-title" className="garden-map-panel relative w-full max-w-xl rounded-[2rem] border border-[#dbc49e] bg-[#fffaf0] p-5 text-[#5b4d3c] shadow-2xl">
         <button type="button" onClick={onClose} aria-label="정원 지도 닫기" className="absolute top-4 right-4 rounded-full bg-[#f3e6cf] px-3 py-1 text-sm hover:bg-[#ead8b8]">
           닫기
         </button>
