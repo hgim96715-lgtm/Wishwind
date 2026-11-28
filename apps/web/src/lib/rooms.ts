@@ -48,6 +48,39 @@ export const ROOMS: readonly Room[] = [
   },
 ] as const;
 
+export const ROOMS_EN: readonly Room[] = [
+  {
+    slug: "cases",
+    href: "/cases",
+    title: "Case Files",
+    subtitle: "Case Files",
+    description: "Closed cases and cold cases, side by side",
+    icon: LuFolderSearch,
+    accent: "#c46a4b",
+    badge: "Cold cases to closed",
+  },
+  {
+    slug: "missing",
+    href: "/missing",
+    title: "Garden of the Missing",
+    subtitle: "Missing Persons",
+    description: "Stories of people someone is still waiting for",
+    icon: LuUserRoundSearch,
+    accent: "#3f8f84",
+    badge: "3D Windmill Garden",
+  },
+  {
+    slug: "briefing",
+    href: "/briefing",
+    title: "Briefing Room",
+    subtitle: "Briefing Room",
+    description: "Today's news, new cases, and crime statistics in one place",
+    icon: LuClipboardList,
+    accent: "#4f78a8",
+    badge: "News · Stats",
+  },
+] as const;
+
 export function getRoom(slug: RoomSlug): Room {
   const room = ROOMS.find((r) => r.slug === slug);
   if (!room) throw new Error(`Unknown room: ${slug}`);

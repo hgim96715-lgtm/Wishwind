@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LuHeartHandshake } from "react-icons/lu";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
+import { RoomGrid } from "@/components/home/RoomGrid";
 import { INSTAGRAM_URL } from "@/lib/site";
 
 type Lang = "ko" | "en";
@@ -83,6 +84,9 @@ export function HomeContent({ children, accountLink }: { children: React.ReactNo
       </section>
 
       {children}
+
+      {/* 3개 방 카드 */}
+      <RoomGrid lang={lang} />
 
       {/* Help banner */}
       <div className="mt-10 flex flex-col gap-3 rounded-xl border border-[#d9cdb8] bg-[#fbf6ea] px-4 py-3 sm:flex-row sm:items-center sm:gap-4 sm:px-5">

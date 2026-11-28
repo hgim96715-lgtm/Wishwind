@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import { AccountLink } from "@/components/home/AccountLink";
 import { DidYouKnow } from "@/components/home/DidYouKnow";
 import { ReelCases } from "@/components/home/ReelCases";
-import { RoomGrid } from "@/components/home/RoomGrid";
 import { AccountLinkSkeleton, DidYouKnowSkeleton, ReelCasesSkeleton } from "@/components/home/HomeSkeletons";
 import { HomeContent } from "@/components/home/HomeContent";
 
@@ -28,9 +27,6 @@ export default function Home() {
       <Suspense fallback={<DidYouKnowSkeleton />}>
         <DidYouKnow />
       </Suspense>
-
-      {/* 3개 방 카드 */}
-      <RoomGrid />
     </HomeContent>
   );
 }

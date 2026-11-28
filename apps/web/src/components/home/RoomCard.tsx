@@ -18,9 +18,10 @@ const cardVariants: Variants = {
 
 interface RoomCardProps {
   room: Room;
+  enterLabel?: string;
 }
 
-export function RoomCard({ room }: RoomCardProps) {
+export function RoomCard({ room, enterLabel = "들어가기" }: RoomCardProps) {
   const badge = room.badge;
 
   return (
@@ -52,7 +53,7 @@ export function RoomCard({ room }: RoomCardProps) {
             {room.description}
           </p>
           <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-(--accent)">
-            들어가기
+            {enterLabel}
           </span>
         </div>
       </div>
