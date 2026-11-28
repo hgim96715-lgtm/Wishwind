@@ -1,14 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { LuHeartHandshake } from "react-icons/lu";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
 import { RoomGrid } from "@/components/home/RoomGrid";
+import { HomeLangProvider, useLang } from "@/components/home/HomeLangContext";
 import { INSTAGRAM_URL } from "@/lib/site";
-
-type Lang = "ko" | "en";
 
 const KO = {
   headline: (
@@ -48,11 +46,12 @@ const EN = {
   instagram: "Instagram @wishwind.official",
 };
 
-function LangToggle({ lang, onToggle }: { lang: Lang; onToggle: () => void }) {
+function LangToggleButton() {
+  const { lang, toggle } = useLang();
   return (
     <button
       type="button"
-      onClick={onToggle}
+      onClick={toggle}
       aria-label={lang === "ko" ? "Switch to English" : "한국어로 보기"}
       className="inline-flex items-center rounded-full border border-line bg-transparent px-2.5 py-1 text-xs font-medium text-muted transition-colors hover:border-foreground/30 hover:text-foreground"
     >
@@ -61,14 +60,14 @@ function LangToggle({ lang, onToggle }: { lang: Lang; onToggle: () => void }) {
   );
 }
 
-export function HomeContent({ children, accountLink }: { children: React.ReactNode; accountLink?: React.ReactNode }) {
-  const [lang, setLang] = useState<Lang>("ko");
+function HomeContentInner({ children, accountLink }: { children: React.ReactNode; accountLink?: React.ReactNode }) {
+  const { lang } = useLang();
   const t = lang === "ko" ? KO : EN;
 
   return (
     <main className="relative mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-6 pb-16 pt-24">
       <div className="absolute top-6 right-6 flex items-center gap-2">
-        <LangToggle lang={lang} onToggle={() => setLang(lang === "ko" ? "en" : "ko")} />
+        <LangToggleButton />
         <ThemeToggle />
         {accountLink}
       </div>
@@ -130,5 +129,13 @@ export function HomeContent({ children, accountLink }: { children: React.ReactNo
         </a>
       </footer>
     </main>
+  );
+}
+
+export function HomeContent({ children, accountLink }: { children: React.ReactNode; accountLink?: React.ReactNode }) {
+  return (
+    <HomeLangProvider>
+      <HomeContentInner accountLink={accountLink}>{children}</HomeContentInner>
+    </HomeLangProvider>
   );
 }
